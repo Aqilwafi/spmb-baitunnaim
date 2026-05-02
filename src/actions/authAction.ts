@@ -79,50 +79,40 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 
 export async function forgotPasswordAction(email: string) {
   const supabase = await createSupabaseServer();
-  
+
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`,
+    // ✅ Lewat callback untuk exchange code → session
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/auth/reset-password`,
   });
 
   if (error) {
-    // Audit Log (Staging/Production)
-    // Di sini kamu panggil fungsi logger kamu
-    // logAudit({ action: 'FORGOT_PASSWORD', status: 'FAILURE', detail: error.message, identifier: email });
-    
-    // Kita tidak mengembalikan error.message ke user untuk security
     console.error("Reset Password Error:", error.message);
   }
 
-  // Selalu kembalikan success: true dan pesan generik
-  return { 
-    success: true, 
-    message: "Instruksi pemulihan telah dikirim ke email Anda jika akun tersebut terdaftar." 
+  // ✅ Selalu pesan generik (tidak bocorkan apakah email terdaftar)
+  return {
+    success: true,
+    message: "Instruksi pemulihan telah dikirim ke email Anda jika akun tersebut terdaftar.",
   };
 }
 
 export async function updatePasswordAction(password: string) {
-  // 1. Validasi Kekuatan Password (Penting untuk Security!)
   if (!password || password.length < 6) {
     return { error: "Password minimal harus 6 karakter." };
   }
 
   const supabase = await createSupabaseServer();
-  
-  // 2. Cek apakah ada session user yang aktif
-  // getUser() lebih aman daripada getSession() karena memvalidasi token ke server Supabase
+
+  // ✅ getUser() lebih aman dari getSession() — validasi token ke Supabase server
   const { data: { user }, error: userError } = await supabase.auth.getUser();
-  
+
   if (userError || !user) {
     return { error: "Sesi tidak ditemukan. Silakan klik ulang link dari email Anda." };
   }
 
-  // 3. Eksekusi update
-  const { error } = await supabase.auth.updateUser({
-    password: password
-  });
+  const { error } = await supabase.auth.updateUser({ password });
 
   if (error) {
-    // Log error asli untuk internal
     console.error("Update Password Error:", error.message);
     return { error: "Gagal memperbarui password. Silakan coba lagi." };
   }
