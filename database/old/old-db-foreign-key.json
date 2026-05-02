@@ -1,0 +1,74 @@
+[
+  {
+    "table_name": "csb_profile",
+    "column_name": "id",
+    "foreign_table": "users",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "dokumen",
+    "column_name": "user_id",
+    "foreign_table": "csb_profile",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "tempat_tinggal",
+    "column_name": "id_siswa",
+    "foreign_table": "biodata_siswa",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "pendidikan_sebelumnya",
+    "column_name": "id_siswa",
+    "foreign_table": "biodata_siswa_new",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "admin_audit_logs",
+    "column_name": "actor_id",
+    "foreign_table": "admins",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "biodata_wali",
+    "column_name": "id_siswa",
+    "foreign_table": "biodata_siswa",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "biodata_siswa_new",
+    "column_name": "user_id",
+    "foreign_table": "users_tes",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "user_step_status",
+    "column_name": "user_id",
+    "foreign_table": "csb_profile",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "user_step_status",
+    "column_name": "step_number_id",
+    "foreign_table": "registration_steps",
+    "foreign_column": "step_number_id"
+  },
+  {
+    "table_name": "reset_tokens",
+    "column_name": "user_id",
+    "foreign_table": "users",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "biodata_siswa",
+    "column_name": "id",
+    "foreign_table": "csb_profile",
+    "foreign_column": "id"
+  },
+  {
+    "table_name": "biodata_ortu",
+    "column_name": "id_siswa",
+    "foreign_table": "biodata_siswa",
+    "foreign_column": "id"
+  }
+]

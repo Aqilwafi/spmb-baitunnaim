@@ -1,0 +1,78 @@
+[
+  {
+    "table_name": "users",
+    "column_name": "id"
+  },
+  {
+    "table_name": "users",
+    "column_name": "id"
+  },
+  {
+    "table_name": "csb_profile",
+    "column_name": "id"
+  },
+  {
+    "table_name": "users_tes",
+    "column_name": "id"
+  },
+  {
+    "table_name": "pendidikan_sebelumnya",
+    "column_name": "id"
+  },
+  {
+    "table_name": "publikasi",
+    "column_name": "id"
+  },
+  {
+    "table_name": "biodata_ortu",
+    "column_name": "id"
+  },
+  {
+    "table_name": "biodata_wali",
+    "column_name": "id"
+  },
+  {
+    "table_name": "tempat_tinggal",
+    "column_name": "id"
+  },
+  {
+    "table_name": "dokumen",
+    "column_name": "id"
+  },
+  {
+    "table_name": "admin_audit_logs",
+    "column_name": "id"
+  },
+  {
+    "table_name": "biodata_siswa",
+    "column_name": "id"
+  },
+  {
+    "table_name": "biodata_siswa_new",
+    "column_name": "id"
+  },
+  {
+    "table_name": "media",
+    "column_name": "id"
+  },
+  {
+    "table_name": "user_step_status",
+    "column_name": "id"
+  },
+  {
+    "table_name": "reset_tokens",
+    "column_name": "id"
+  },
+  {
+    "table_name": "admins",
+    "column_name": "id"
+  },
+  {
+    "table_name": "registration_steps",
+    "column_name": "step_number_id"
+  },
+  {
+    "table_name": "registration_steps_new",
+    "column_name": "step_number_id"
+  }
+]

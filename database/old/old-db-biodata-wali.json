@@ -1,0 +1,123 @@
+[
+  {
+    "column_name": "id",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null,
+    "character_maximum_length": null,
+    "numeric_precision": 64,
+    "numeric_scale": 0,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "nama_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 100,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "nik_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 20,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "tempat_lahir_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 100,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "tanggal_lahir_wali",
+    "data_type": "date",
+    "udt_name": "date",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": 0
+  },
+  {
+    "column_name": "pendidikan_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 100,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "pekerjaan_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 100,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "penghasilan_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 100,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "no_telp_wali",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": 20,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  },
+  {
+    "column_name": "created_at",
+    "data_type": "timestamp without time zone",
+    "udt_name": "timestamp",
+    "is_nullable": "YES",
+    "column_default": "now()",
+    "character_maximum_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": 6
+  },
+  {
+    "column_name": "id_siswa",
+    "data_type": "uuid",
+    "udt_name": "uuid",
+    "is_nullable": "YES",
+    "column_default": null,
+    "character_maximum_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "datetime_precision": null
+  }
+]

@@ -36,9 +36,6 @@ yarn-error.log*
 .env.staging
 .env.production
 
-# my draft
-/todo/
-
 
 # vercel
 .vercel
@@ -46,8 +43,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-/migration-script/
-ANALISIS TRANSFORM.docx
 
 
