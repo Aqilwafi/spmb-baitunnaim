@@ -1,36 +1,170 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏫 Web Pendaftaran LPI
 
-## Getting Started
+Aplikasi web pendaftaran siswa berbasis **Next.js 16** dengan autentikasi dan manajemen pendaftaran multi-step. Dibangun menggunakan Supabase sebagai backend dan dapat di-deploy menggunakan Docker.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🛠️ Tech Stack
+
+| Teknologi | Versi |
+|---|---|
+| Next.js | 16.2.3 |
+| React | 19.x |
+| TypeScript | 5.x |
+| Tailwind CSS | 4.x |
+| Supabase (Auth + DB) | 2.x |
+| Framer Motion | 12.x |
+| Zod | 4.x |
+| Docker | - |
+
+---
+
+## 📁 Struktur Proyek
+
+```
+.
+├── database/               # SQL schema, fungsi, dan data lama
+│   ├── functions/          # PL/pgSQL functions (auth, bisnis, system, validasi)
+│   ├── table/              # DDL tabel utama dan lookup
+│   └── old/                # Data migrasi dari sistem lama
+├── docker/                 # Konfigurasi Docker & Compose
+│   └── development/
+├── public/                 # Aset statis (logo, gambar)
+└── src/
+    ├── actions/            # Server Actions (auth, pendaftaran)
+    ├── app/                # Next.js App Router
+    │   ├── (admin)/        # Halaman admin
+    │   ├── (auth)/         # Login, register, reset password
+    │   ├── (conditional)/  # Halaman forbidden, maintenance, unauthorized
+    │   └── (user)/         # Dashboard & alur pendaftaran
+    ├── components/         # Komponen UI
+    │   ├── auth/           # Form login & register
+    │   ├── dashboards/     # Dashboard & step pendaftaran
+    │   ├── headers/        # Header per halaman
+    │   └── others/         # Komponen umum (popup, maintenance)
+    ├── config/             # Konfigurasi step pendaftaran
+    ├── helpers/            # Helper logika pendaftaran
+    ├── lib/supabase/       # Klien Supabase (admin, client, server, proxy)
+    ├── services/           # Layer service (dashboard, pendaftaran)
+    ├── types/              # TypeScript type definitions
+    └── utils/              # Utilitas (format tanggal, status mapper)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚡ Memulai
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prasyarat
 
-## Learn More
+- **Node.js** >= 20
+- **npm** atau **yarn**
+- Akun **Supabase** (atau instance self-hosted)
+- **Docker** (opsional, untuk deployment)
 
-To learn more about Next.js, take a look at the following resources:
+### Instalasi
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone repositori**
+   ```bash
+   git clone <url-repo>
+   cd web
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Install dependensi**
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+3. **Konfigurasi environment**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   Salin file `.env.example` menjadi `.env` lalu isi variabel yang dibutuhkan:
+   ```bash
+   cp .env.example .env
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Variabel yang diperlukan (sesuaikan dengan project Supabase Anda):
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
+   SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+   ```
+
+4. **Setup database**
+
+   Jalankan SQL berikut secara berurutan di Supabase SQL Editor:
+   ```
+   database/table/lookup_table.sql
+   database/table/main_table.sql
+   database/function.sql
+   ```
+
+5. **Jalankan development server**
+   ```bash
+   npm run dev
+   ```
+
+   Aplikasi berjalan di `http://localhost:3000`
+
+---
+
+## 🐳 Menjalankan dengan Docker
+
+```bash
+cd docker
+docker compose up --build
+```
+
+---
+
+## 📜 Scripts
+
+| Script | Perintah | Deskripsi |
+|---|---|---|
+| Development | `npm run dev` | Menjalankan server dev di port 3000 |
+| Build | `npm run build` | Build aplikasi untuk production |
+| Start | `npm run start` | Menjalankan build production |
+| Lint | `npm run lint` | Menjalankan ESLint |
+
+---
+
+## 🔐 Fitur Autentikasi
+
+- Login & Register dengan email/password
+- Reset & lupa password via email
+- Auth callback handler (`/auth/callback`)
+- Middleware berbasis Supabase SSR untuk proteksi rute
+
+---
+
+## 📋 Alur Pendaftaran
+
+Pendaftaran siswa dilakukan secara multi-step:
+
+1. **Daftar Akun** — Pembuatan akun pengguna
+2. **Lembaga Tujuan** — Pemilihan lembaga/sekolah tujuan
+3. **Pembayaran** — Konfirmasi dan pembayaran pendaftaran
+
+Setiap step dikonfigurasi melalui `src/config/stepConfig.ts` dan dapat dilanjutkan dari langkah terakhir yang telah diselesaikan.
+
+---
+
+## 🗂️ Halaman Aplikasi
+
+| Route | Deskripsi |
+|---|---|
+| `/` | Halaman utama / landing |
+| `/login` | Halaman login |
+| `/register` | Halaman registrasi |
+| `/lupa-password` | Formulir lupa password |
+| `/reset-password` | Reset password via link email |
+| `/dashboard` | Dashboard pengguna |
+| `/dashboard/pendaftaran/[id]` | Detail & lanjut pendaftaran |
+| `/admin` | Panel admin |
+| `/forbidden` | Akses ditolak |
+| `/unauthorized` | Tidak terautentikasi |
+| `/maintanance` | Mode maintenance |
+
+---
+
+## 📄 Lisensi
+
+Proyek ini bersifat privat dan tidak untuk didistribusikan secara publik.
