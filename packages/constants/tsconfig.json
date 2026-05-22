@@ -1,5 +1,5 @@
 {
-  "extends": "@bn/tsconfig/next.json",
+  "extends": "@bn/tsconfig/base.json",
   "compilerOptions": {
     "noEmit": false,
     "declaration": true,
@@ -7,6 +7,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../ui/src/stats.tsx"],
   "exclude": ["node_modules", "dist"]
 }
