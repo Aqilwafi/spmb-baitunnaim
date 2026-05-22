@@ -1,0 +1,16 @@
+{
+  "name": "@bn/validators",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@bn/tsconfig": "workspace:*"
+  }
+}
