@@ -2,36 +2,26 @@
   "name": "@bn/supabase",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=20"
-  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.js"
     }
   },
+  "files": ["dist"],
   "scripts": {
-    "dev": "next dev -p 3000 -H 0.0.0.0",
-    "build": "tsc",
-    "start": "next start",
-    "lint": "eslint"
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@bn/types": "workspace:*",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.1",
+    "next": "^16.2.6"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
     "@types/node": "^25.9.1"
-  },
-  "dependencies": {
-    "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.106.1",
-    "next": "^16.2.6",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
-  },
-  "overrides": {
-    "postcss": "^8.5.10"
   }
 }

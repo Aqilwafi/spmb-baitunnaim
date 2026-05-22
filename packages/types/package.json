@@ -2,20 +2,21 @@
   "name": "@bn/types",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=20"
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
+  "files": ["dist"],
   "scripts": {
-    "dev": "next dev -p 3000 -H 0.0.0.0",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@bn/supabase": "workspace:*"
+    "build": "tsc"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
+    "@types/node": "^25.9.1",
     "supabase": "^2.101.0"
   }
 }
