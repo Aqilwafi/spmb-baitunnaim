@@ -1,10 +1,10 @@
 {
   "extends": "@bn/tsconfig/base.json",
   "compilerOptions": {
-    "noEmit": false,          /* Wajib false agar menghasilkan output build */
-    "declaration": true,      /* Menghasilkan file .d.ts untuk tipe data */
-    "declarationMap": true,   /* Mempermudah navigasi 'Go to Definition' di VS Code */
-    "outDir": "./dist",        /* Hasil compile ditaruh di folder dist */
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
     "rootDir": "./src"
   },
   "include": ["src/**/*"],
