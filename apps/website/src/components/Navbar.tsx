@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { links, lembagaLinks } from "@/const/links";
+import { links, lembagaLinks } from "@bn/constants/links";
 
 export default function Navbar({ transparent = false }) {
   const [open, setOpen] = useState(false);

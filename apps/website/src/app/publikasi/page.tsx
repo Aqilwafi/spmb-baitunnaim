@@ -1,6 +1,6 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PublikasiComponent from "@/components/PublikasiContent";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import PublikasiComponent from "../components/PublikasiContent";
 
 
 export default function PublikasiPage() {

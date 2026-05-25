@@ -1,7 +1,7 @@
 "use client";
 
 import { PendaftaranStepProps } from "@/types/typeProps"; 
-import MaintenancePage from "@/components/others/Maintanance"; 
+import MaintenancePage from "../components/others/Maintanance"; 
 import DaftarAkunStep from "./step/DaftarAkunStep";
 import PembayaranStep from "./step/pembayaranStep";
 // Import LembagaTujuanStep jika sudah ada, jika belum bisa pakai placeholder

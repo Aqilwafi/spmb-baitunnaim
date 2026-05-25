@@ -1,4 +1,4 @@
-import { stats } from "@/const/stats"
+import { stats } from "@bn/constants/stats"
 
 export default function Hero3() {
 

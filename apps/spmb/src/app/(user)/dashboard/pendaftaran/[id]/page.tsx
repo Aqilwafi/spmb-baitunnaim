@@ -1,6 +1,6 @@
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
-import ClientDetailPendaftaran from "@/components/dashboards/pendaftaran/ClientDetailPendaftaran";
+import ClientDetailPendaftaran from "../components/dashboards/pendaftaran/ClientDetailPendaftaran";
 import { 
   getDetailPendaftaranService, 
   getStepBisnisService 

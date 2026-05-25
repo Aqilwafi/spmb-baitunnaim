@@ -1,6 +1,6 @@
 "use client";
 
-import { heroimages } from "@/const/hero";
+import { heroimages } from "@bn/constants";
 import { useState, useEffect } from "react";
 
 export default function Hero() {
@@ -41,7 +41,7 @@ export default function Hero() {
       <div className="absolute inset-0">
         <div className="absolute right-3 bottom-3 sm:right-6 sm:bottom-10 lg:right-6 lg:bottom-6">
           <a
-            href="https://spmbbaitunnaim.com/"
+            href={process.env.NEXT_PUBLIC_SPMB_URL ?? "/"}
             target="_blank"
             rel="noopener noreferrer"
             className="

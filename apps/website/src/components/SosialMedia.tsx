@@ -1,6 +1,6 @@
 "use client"
 
-import { socials } from "@/const/sosmed"
+import { socials } from "@bn/constants/sosmed"
 
 export default function SocialMedia() {
   return (

@@ -1,7 +1,7 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "../components/Navbar";
 import Hero from '@/components/Hero';
-import Footer from "@/components/Footer";
-import PostDetail from "@/components/PostDetail";
+import Footer from "../components/Footer";
+import PostDetail from "../components/PostDetail";
 
 interface Props {
   params: Promise<{ slug: string }>; // ← params adalah Promise

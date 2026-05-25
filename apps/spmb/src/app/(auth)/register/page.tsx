@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import RegisterForm from "@/components/auth/registerForm";
+import RegisterForm from "../components/auth/registerForm";
 
 export default function RegisterPage() {
   return (

@@ -1,6 +1,6 @@
- import Navbar from "@/components/Navbar";
- import Footer from "@/components/Footer";
- import LpiContent from "@/components/LpiContent";
+ import Navbar from "../components/Navbar";
+ import Footer from "../components/Footer";
+ import LpiContent from "../components/LpiContent";
  
  
  export default function LpiPage() {

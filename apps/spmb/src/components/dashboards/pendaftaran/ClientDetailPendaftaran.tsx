@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import PendaftaranStep from "@/components/dashboards/pendaftaran/PendaftaranStep";
+import PendaftaranStep from "../components/dashboards/pendaftaran/PendaftaranStep";
 import { ChevronUp, ChevronLeft, ChevronDown, Lock } from "lucide-react";
 import { ClientDetailProps } from "@/types/typeApplicationDetail";
 

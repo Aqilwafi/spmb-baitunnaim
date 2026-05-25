@@ -10,8 +10,8 @@ import { getMasterRegistrationData } from "@/services/servicePendaftaran";
 import { RegistrationCard } from "@/types/typeDashboard";
 
 // Components
-import DashboardHeader from "@/components/headers/dashboardHeader";
-import NewRegistrationTrigger from "@/components/dashboards/NewRegistrationTrigger";
+import DashboardHeader from "../components/headers/dashboardHeader";
+import NewRegistrationTrigger from "../components/dashboards/NewRegistrationTrigger";
 
 // Utils
 import { getStatusConfig } from "@/utils/statusMapper";

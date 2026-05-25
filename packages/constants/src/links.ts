@@ -4,6 +4,7 @@ type LinkType = {
   isDropdown?: boolean;
   external?: boolean;
 }; 
+
  
 export const links: LinkType[] = [
     { name: "HOME", href: "/" },
@@ -11,7 +12,7 @@ export const links: LinkType[] = [
     { name: "lembaga", isDropdown: true },
     { name: "PUBLIKASI", href: "/publikasi" },
     { name: "HUBUNGI KAMI", href: "/contact" },
-    { name: "SPMB", href: "https://spmbbaitunnaim.com/", external: true },
+    { name: "SPMB", href: process.env.NEXT_PUBLIC_SPMB_URL ?? "/", external: true },
 ];
 
 export const lembagaLinks: LinkType[] = [

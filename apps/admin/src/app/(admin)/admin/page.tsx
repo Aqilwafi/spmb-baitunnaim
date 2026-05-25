@@ -1,5 +1,5 @@
 // src/app/admin/pendaftaran/page.tsx
-import DashboardHeader from "@/components/headers/dashboardHeader";
+import DashboardHeader from "../components/headers/dashboardHeader";
 import React from "react";
 import { 
   Users, 
