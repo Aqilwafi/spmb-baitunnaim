@@ -2,27 +2,37 @@
 
 import { createSupabaseServer } from "@bn/supabase";
 import { RegisterResponse, LoginResponse, LogoutResponse, BaseResponse, AuthUser } from "@bn/types";
+import { registerSchema } from "@bn/validators"; // 💡 1. Import skema Zod terpusat
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
-  const username = formData.get("username") as string; // Ambil username jika ada di form register
+  // 💡 2. Konversi FormData murni ke Objek Polosan untuk dibaca Zod
+  const rawFields = Object.fromEntries(formData.entries());
 
-  // 1. Validasi Password (Server Side)
-  if (password !== confirmPassword) {
-    return { success: false, message: "Password dan Konfirmasi Password tidak cocok." };
+  // 💡 3. Jalankan Validasi Zod
+  const validatedFields = registerSchema.safeParse(rawFields);
+
+  // 💡 4. Jika Zod mendeteksi error (Sandi tidak cocok, email salah, dsb.), langsung potong jalur
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: validatedFields.error.message[0] || "Validasi data gagal."
+    };
   }
+
+  // 💡 5. Ambil data yang sudah lolos sensor dan terjamin strongly-typed
+  const { email, password, nama_lengkap } = validatedFields.data;
 
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // Menyimpan data tambahan ke user_metadata Supabase
-      data: { username } 
+      // Menyimpan data nama lengkap asli hasil Zod ke user_metadata Supabase
+      data: { 
+        full_name: nama_lengkap 
+      } 
     }
   });
 
@@ -35,7 +45,6 @@ export async function registerAction(prevState: any, formData: FormData): Promis
     };
   }
 
-  // Jika Anda mengembalikan user, lakukan casting ke AuthUser (atau sesuaikan kebutuhan)
   return { 
     success: true, 
     message: "Registrasi berhasil. Silakan cek email Anda untuk konfirmasi.",
@@ -66,7 +75,6 @@ export async function loginAction(prevState: any, formData: FormData): Promise<L
     };
   }
 
-  // REFRESH & REDIRECT (Wajib dipanggil di luar blok penanganan error)
   revalidatePath("/", "layout"); 
   redirect("/dashboard");
 }
@@ -82,12 +90,9 @@ export async function logoutAction(): Promise<LogoutResponse | void> {
 export async function getCurrentUser(): Promise<AuthUser | null> {
   const supabase = await createSupabaseServer();
   
-  // 1. Ambil user object dasar dari Supabase Auth
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) return null;
 
-  // 2. Ambil data profil & relasi tabel internal (Profiles, UserRoles, dst)
-  // Sesuaikan nama query ini dengan nama tabel database Anda
   const { data: profileData } = await supabase
     .from("profiles")
     .select(`
@@ -104,7 +109,6 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     .eq("id", user.id)
     .single();
 
-  // Mapping ke dalam struktur AuthUser kustom Anda
   const accesses = profileData?.user_roles?.map((ur: any) => ({
     role: ur.master_roles,
     domain: ur.master_domains,
@@ -115,7 +119,7 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   })) || [];
 
   return {
-    ...user, // Menyertakan field bawaan Supabase User (id, email, app_metadata, dll)
+    ...user,
     profile: profileData ? { id: profileData.id, updated_at: profileData.updated_at, username: profileData.username, avatar_url: profileData.avatar_url } : null,
     accesses,
   } as AuthUser;
@@ -130,7 +134,6 @@ export async function forgotPasswordAction(email: string): Promise<BaseResponse>
 
   if (error) {
     console.error("Reset Password Error:", error.message);
-    // Tetap kembalikan pesan sukses terselubung demi keamanan agar penyerang tidak bisa mendeteksi email terdaftar
   }
 
   return {
@@ -146,7 +149,6 @@ export async function updatePasswordAction(password: string): Promise<BaseRespon
 
   const supabase = await createSupabaseServer();
 
-  // Validasi token langsung ke server Supabase
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
   if (userError || !user) {

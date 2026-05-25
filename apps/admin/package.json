@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/auth": "workspace:*",
     "@bn/ui": "workspace:*",

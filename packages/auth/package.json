@@ -15,6 +15,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/types": "workspace:*"
   },
