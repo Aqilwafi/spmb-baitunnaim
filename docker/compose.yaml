@@ -1,30 +1,54 @@
-version: "3.9"
-
 services:
-  db:
-    image: postgres:latest
-    container_name: postgres_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    
-  nextjs:
+  # -------------------------------------------------------
+  # 1) Aplikasi Utama / Website (Port 3000)
+  # -------------------------------------------------------
+  website:
     build:
       context: ../
-      dockerfile: Dockerfile
-    container_name: nextjs_start
+      dockerfile: ./docker/Dockerfile
+      args:
+        APP_NAME: website # 💡 Mengarah ke apps/website
+    container_name: bn_app_website
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
+    environment:
+      - NODE_ENV=production
     env_file:
-      - .env.local
+      - ../.env # Membaca file .env di root monorepo
+    restart: always
 
-volumes:
-  node_modules:
-  db_data:
+  # -------------------------------------------------------
+  # 2) Aplikasi SPMB (Port 3001)
+  # -------------------------------------------------------
+  spmb:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      args:
+        APP_NAME: spmb # 💡 Mengarah ke apps/spmb
+    container_name: bn_app_spmb
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ../.env # Membaca file .env di root monorepo
+    restart: always
+
+  # -------------------------------------------------------
+  # 3) Aplikasi Admin (Port 3002)
+  # -------------------------------------------------------
+  admin:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      args:
+        APP_NAME: admin # 💡 Mengarah ke apps/admin
+    container_name: bn_app_admin
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ../.env # Membaca file .env di root monorepo
+    restart: always

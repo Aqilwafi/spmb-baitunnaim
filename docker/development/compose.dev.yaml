@@ -1,0 +1,83 @@
+# File: ./docker/compose.dev.yaml
+services:
+  # -------------------------------------------------------
+  # Database Service (PostgreSQL Lokal untuk Dev)
+  # -------------------------------------------------------
+  db:
+    image: postgres:17-alpine
+    container_name: bn_postgres_db_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data_dev:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-bn_database_dev}
+    restart: unless-stopped
+
+  # -------------------------------------------------------
+  # Aplikasi Utama / Website (Port 3000 - Mode Dev)
+  # -------------------------------------------------------
+  website:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.dev
+      args:
+        APP_NAME: website
+    container_name: bn_app_website_dev
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../.env
+    volumes:
+      - ../:/app                   # 💡 Mount kode laptop ke container agar HMR aktif
+      - /app/node_modules           # Proteksi node_modules biar gak bentrok OS
+      - /app/apps/website/.next     # Isolasi cache Next.js lokal
+    depends_on:
+      - db
+
+  # -------------------------------------------------------
+  # Aplikasi SPMB (Port 3001 - Mode Dev)
+  # -------------------------------------------------------
+  spmb:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.dev
+      args:
+        APP_NAME: spmb
+    container_name: bn_app_spmb_dev
+    ports:
+      - "3001:3001" # Pastikan script dev di package.json apps/spmb diset ke port 3001
+    env_file:
+      - ../.env
+    volumes:
+      - ../:/app
+      - /app/node_modules
+      - /app/apps/spmb/.next
+    depends_on:
+      - db
+
+  # -------------------------------------------------------
+  # Aplikasi Admin (Port 3002 - Mode Dev)
+  # -------------------------------------------------------
+  admin:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.dev
+      args:
+        APP_NAME: admin
+    container_name: bn_app_admin_dev
+    ports:
+      - "3002:3002" # Pastikan script dev di package.json apps/admin diset ke port 3002
+    env_file:
+      - ../.env
+    volumes:
+      - ../:/app
+      - /app/node_modules
+      - /app/apps/admin/.next
+    depends_on:
+      - db
+
+volumes:
+  db_data_dev:
