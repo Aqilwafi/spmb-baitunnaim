@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@bn/supabase": "workspace:*",
+    "@bn/auth": "workspace:*",
+    "@bn/ui": "workspace:*",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.58.0",
     "framer-motion": "^12.38.0",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
+    "@bn/types": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19.2.14",

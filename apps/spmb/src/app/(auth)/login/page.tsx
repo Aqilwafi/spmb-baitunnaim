@@ -1,34 +1,44 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import LoginForm from "../components/auth/loginForm";
+import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
+import LoginForm from "../../../components/auth/loginForm";
 
 export default function LoginPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen gap-8 bg-gray-50">
-      <div className="flex flex-col items-center gap-4 max-w-md w-full mx-auto mt-10 p-4">
-        <Image
-          src="/logo_lpi.jpg"
-          alt="Logo LPI"
-          width={120}
-          height={120}
-          priority
-          className="rounded-full -mt-7"
-        />
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <div className="flex flex-col items-center gap-6 max-w-md w-full mx-auto">
+        
+        {/* Header Area (Logo & Nama Aplikasi) */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <Image
+            src="/logo_lpi.jpg"
+            alt="Logo LPI"
+            width={100}
+            height={100}
+            priority
+            className="rounded-full shadow-sm"
+          />
+          <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
+            {"BAITUN NA'IM"}
+          </h1>
+        </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 text-center">
-          BAITUN NA&apos;IM
-        </h1>
-        <h2 className="text-xl font-bold text-gray-900 text-center">LOGIN</h2>
+        {/* Kotak Form Utama menggunakan Shared Component Card */}
+        <Card className="w-full p-6 shadow-md bg-white rounded-2xl flex flex-col gap-5">
+          <div className="text-center border-b border-gray-100 pb-3">
+            <h2 className="text-lg font-bold text-gray-800 tracking-wider">LOGIN</h2>
+            <p className="text-xs text-gray-400 mt-1">Silakan masuk ke akun Anda</p>
+          </div>
 
-        <LoginForm />
+          {/* Form Login */}
+          <LoginForm />
+        </Card>
 
-       {/* Navigasi Tambahan: Lupa Password & Register */}
-        <div className="flex flex-col gap-2 text-center">
+        {/* Navigasi Tambahan: Lupa Password & Register */}
+        <div className="flex flex-col gap-2 text-center mt-2">
           <Link
-            href="/auth/lupa-password" // Sesuaikan dengan route lupa password kamu
-            className="text-sm text-blue-600 hover:text-blue-800 transition-colors font-medium"
+            href="/auth/lupa-password"
+            className="text-sm text-blue-600 hover:text-blue-800 transition-colors font-medium hover:underline"
           >
             Lupa password?
           </Link>
@@ -36,13 +46,14 @@ export default function LoginPage() {
           <p className="text-sm text-gray-500">
             Belum punya akun?{" "}
             <Link
-              href="/register" // Sesuaikan dengan route register kamu
-              className="text-blue-600 hover:text-blue-800 transition-colors font-semibold"
+              href="/register"
+              className="text-blue-600 hover:text-blue-800 transition-colors font-semibold hover:underline"
             >
               Daftar di sini
             </Link>
           </p>
         </div>
+
       </div>
     </main>
   );

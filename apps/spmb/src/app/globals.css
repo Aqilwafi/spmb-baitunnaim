@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* 💡 Tambahkan baris ini di sini */
+@source "../../../../packages/ui/dist/**/*.{js,ts,jsx,tsx}";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

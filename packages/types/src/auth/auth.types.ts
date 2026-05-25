@@ -1,113 +1,94 @@
 // packages/types/src/auth/auth.types.ts
 
 import type { Tables } from '../base.types';
-import type { Session, User } from '@bn/supabase';
+import type { Session, User } from '@bn/supabase'; // Pastikan package ini mengekspor tipe asli Supabase
 
-export type Profile =
-  Tables<'profiles'>
-
-export type MasterRole =
-  Tables<'master_roles'>
-
-export type MasterDomain =
-  Tables<'master_domains'>
-
-export type UserRole =
-  Tables<'user_roles'>
+export type Profile = Tables<'profiles'>;
+export type MasterRole = Tables<'master_roles'>;
+export type MasterDomain = Tables<'master_domains'>;
+export type UserRole = Tables<'user_roles'>;
 
 export type UserAccess = {
-  role: MasterRole
-  domain: MasterDomain
-  assigned_at: string | null
-  assigned_by: string | null
-  suspended_at: string | null
-  suspended_by: string | null
-}
+  role: MasterRole;
+  domain: MasterDomain;
+  assigned_at: string | null;
+  assigned_by: string | null;
+  suspended_at: string | null;
+  suspended_by: string | null;
+};
 
-export type AuthUser = {
-  id: string
-  email: string
-  email_verified: boolean
-  profile: Profile | null
-  accesses: UserAccess[]
-}
+// Meng-extend User asli Supabase dengan data relasional internal kita
+export type AuthUser = User & {
+  profile: Profile | null;
+  accesses: UserAccess[];
+};
 
-export type AuthSession = {
-  access_token: string
-  refresh_token: string
-  expires_at: number
-  expires_in: number
-  token_type: string
-  user: AuthUser
-}
+// Meng-extend Session asli Supabase dengan AuthUser kustom kita
+export type AuthSession = Omit<Session, 'user'> & {
+  user: AuthUser;
+};
 
+// Struktur JWT Custom Claims yang aman dan sesuai dengan app_metadata Supabase
 export type AuthClaims = {
-  sub: string
-  email: string
-  role_codes: string[]
-  domain_codes: string[]
-  exp?: number
-  iat?: number
-}
+  sub: string;
+  email?: string;
+  app_metadata: {
+    provider?: string;
+    providers?: string[];
+    role_codes: string[];
+    domain_codes: string[];
+  };
+  user_metadata: {
+    username?: string;
+  };
+  exp?: number;
+  iat?: number;
+};
 
+/**
+ * Payload & Actions Types
+ */
 export type RegisterPayload = {
-  email: string
-  username: string
-  password: string
-  confirm_password: string
-}
+  email: string;
+  username: string;
+  password: string;
+  confirm_password: string;
+};
 
-export type RegisterResponse = {
-  success: boolean
-  message: string
-  user?: AuthUser
-}
-
-export type LoginPayload = {
-  email: string
-  password: string
-}
-
-export type LoginResponse = {
-  success: boolean
-  message: string
-  session?: AuthSession
-}
-
-export type LogoutResponse = {
-  success: boolean
-  message: string
-}
+export type LoginPayload = Pick<RegisterPayload, 'email' | 'password'>;
 
 export type ResetPasswordPayload = {
-  email: string
-  new_password: string
-  confirm_new_password: string
-}
+  email: string;
+  new_password: string;
+  confirm_new_password: string;
+};
 
-export type ResetPasswordResponse = {
-  success: boolean
-  message: string
-}
+/**
+ * API / Server Actions Responses (Menggunakan Generic Pattern)
+ */
+export type BaseResponse<T = undefined> = {
+  success: boolean;
+  message: string;
+} & (T extends undefined ? {} : T);
 
-export type GetUserResponse = {
-  user: AuthUser | null
-}
+export type RegisterResponse = BaseResponse<{ user?: AuthUser }>;
+export type LoginResponse = BaseResponse<{ session?: AuthSession }>;
+export type LogoutResponse = BaseResponse;
+export type ResetPasswordResponse = BaseResponse;
 
-export type GetSessionResponse = {
-  session: AuthSession | null
-}
+export type GetUserResponse = { user: AuthUser | null };
+export type GetSessionResponse = { session: AuthSession | null };
+export type GetClaimsResponse = { claims: AuthClaims | null };
 
-export type GetClaimsResponse = {
-  claims: AuthClaims | null
-}
-
+/**
+ * Middleware / Guard Options
+ */
 export type RequireAuthOptions = {
-  redirect_to?: string
-}
+  redirect_to?: string;
+};
 
 export type RequireAccessOptions = {
-  role_codes?: string[]
-  domain_codes?: string[] 
-  redirect_to?: string
-}
+  role_codes?: string[];
+  domain_codes?: string[]; 
+  redirect_to?: string;
+};

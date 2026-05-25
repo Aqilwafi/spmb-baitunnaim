@@ -12,7 +12,7 @@ export function Textarea({
       className={`
         w-full
         rounded-md
-        border
+        border-black
         px-3
         py-2
         outline-none

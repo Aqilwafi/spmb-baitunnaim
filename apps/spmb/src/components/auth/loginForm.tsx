@@ -1,64 +1,82 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { loginAction } from "@/actions/authAction";
+import { loginAction } from "@bn/auth";
 import Link from "next/link";
+import { Button, Input, Label } from "@bn/ui"; 
 
 export default function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <section className="p-6 max-w-md mx-auto w-full">
-      <form action={formAction} className="flex flex-col gap-4">
-        
-        <div className="flex flex-col">
-          <label className="mb-1 font-medium text-gray-700">Email</label>
-          <input
-            name="identifier" // Harus sama dengan formData.get("identifier")
-            type="email"
-            required
-            placeholder="email@example.com"
-            className="border rounded-lg px-3 py-2 text-gray-500 focus:outline-blue-500"
-          />
-        </div>
+    <form action={formAction} className="text-black flex flex-col gap-4 w-full">
+      
+      {/* Input Email */}
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="identifier">Email</Label>
+        <Input
+          id="identifier"
+          name="identifier"
+          type="email"
+          required
+          placeholder="email@example.com"
+          className="px-4 py-4"
+        />
+      </div>
 
-        <div className="flex flex-col relative">
-          <label className="mb-1 font-medium text-gray-700">Password</label>
-          <input
-            name="password" // Harus sama dengan formData.get("password")
-            type={showPassword ? "text" : "password"}
-            required
-            className="border rounded-lg px-3 py-2 pr-10 text-gray-500 focus:outline-blue-500"
-          />
+      {/* Input Password */}
+      <div className="flex flex-col gap-1.5 w-full">
+        <Label htmlFor="password">Password</Label>
+      
+        <div className="flex items-center gap-2 w-full">
+          
+          <div className="flex-1">
+            <Input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required
+              className="w-full px-4 py-4" 
+            />
+          </div>
+
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-3 top-9 text-sm text-gray-400 cursor-pointer"
+            className="px-3 py-4 h-full text-xs font-semibold text-gray-500 hover:text-black bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors cursor-pointer border border-transparent min-w-[60px] text-center"
           >
             {showPassword ? "Hide" : "Show"}
           </button>
+
         </div>
+      </div>
 
-        {state?.error && <p className="text-red-500 text-sm">{state.error}</p>}
+      {/* Pesan Error */}
+      {state?.message && (
+        <p className="text-red-500 text-sm font-medium mt-1">{state.message}</p>
+      )}
 
-        <div className="flex gap-3 mt-2">
-          <Link href="/" className="flex-1">
-            <button type="button" className="w-full px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors">
-              Kembali
-            </button>
-          </Link>
+      {/* Tombol Aksi */}
+      <div className="flex gap-3 mt-3">
+        <Link href="/" className="flex-1">
+          <Button type="button" variant="secondary" className="w-full py-2.5">
+            Kembali
+          </Button>
+        </Link>
 
-          <button
-            type="submit"
-            disabled={isPending}
-            className="flex-[2] bg-blue-600 text-white py-2 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            {isPending && <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4" />}
-            {isPending ? "Logging in..." : "Login"}
-          </button>
-        </div>
-      </form>
-    </section>
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={isPending}
+          className="flex-[2] py-2.5 flex items-center justify-center gap-2"
+        >
+          {isPending && (
+            <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4" />
+          )}
+          {isPending ? "Logging in..." : "Login"}
+        </Button>
+      </div>
+    </form>
   );
 }

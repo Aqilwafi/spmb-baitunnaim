@@ -1,13 +1,7 @@
 "use server";
 
 import { createSupabaseServer } from "@bn/supabase";
-import { 
-  RegisterResponse, 
-  LoginResponse, 
-  LogoutResponse, 
-  BaseResponse, 
-  AuthUser 
-} from "@bn/types";
+import { RegisterResponse, LoginResponse, LogoutResponse, BaseResponse, AuthUser } from "@bn/types";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

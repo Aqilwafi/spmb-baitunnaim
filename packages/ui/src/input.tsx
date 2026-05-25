@@ -9,7 +9,7 @@ export function Input({
 }: InputProps) {
   return (
     <input
-      className={className}
+      className={`border border-gray-400 rounded-md ${className}`}
       {...props}
     />
   );

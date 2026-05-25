@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* 💡 Tambahkan baris ini di sini */
+@source "../../../../packages/ui/dist/**/*.{js,ts,jsx,tsx}";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -8,12 +11,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-
-  --font-quicksand: var(--font-quicksand);
-  --font-poppins: var(--font-poppins);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,4 +25,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-geist-sans);
 }
