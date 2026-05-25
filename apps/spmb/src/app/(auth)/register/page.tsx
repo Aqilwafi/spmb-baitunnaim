@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@bn/ui";
-import RegisterForm from "../../../components/auth/registerForm";
+import RegisterForm from "@/components/auth/registerForm";
 
 export default function RegisterPage() {
   return (
