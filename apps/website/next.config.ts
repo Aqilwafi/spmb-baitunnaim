@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  transpilePackages: [
+    "@bn/ui",
+    "@bn/supabase",
+    "@bn/utils",
+    "@bn/validators",
+  ],
 };
 
 export default nextConfig;

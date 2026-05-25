@@ -12,17 +12,19 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@bn/supabase": "workspace:*",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.58.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.544.0",
-    "next": "16.2.3",
+    "next": "16.2.6",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "server-only": "^0.0.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@bn/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19.2.14",

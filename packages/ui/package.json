@@ -1,5 +1,5 @@
 {
-  "name": "@bn/utils",
+  "name": "@bn/ui",
   "version": "1.0.0",
   "private": true,
   "main": "./dist/index.js",
@@ -13,6 +13,11 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc"
+  },
+   "dependencies": {
+    "react": "^19",
+    "react-dom": "^19",
+    "lucide-react": "^0.553.0"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"
