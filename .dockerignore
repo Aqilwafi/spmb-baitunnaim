@@ -1,1 +1,26 @@
-database/
+# Abaikan dependensi lokal laptop
+node_modules
+**/node_modules
+
+# Abaikan hasil build lokal laptop agar tidak bentrok dengan build Docker
+.next
+**/.next
+out
+**/out
+dist
+**/dist
+.turbo
+
+# Abaikan git dan dokumentasi
+.git
+.gitignore
+.dockerignore
+docker
+README.md
+*.docx
+/todo/
+/documents/
+/notes/
+
+# Abaikan log debug
+*.log
