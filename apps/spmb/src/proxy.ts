@@ -1,7 +1,7 @@
 import { updateSession } from "@bn/supabase";
 import { type NextRequest, type NextResponse } from "next/server";
 
-export async function proxy(request: NextRequest,): Promise<NextResponse> {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   return await updateSession(request);
 }
 
