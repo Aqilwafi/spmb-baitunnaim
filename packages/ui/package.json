@@ -20,6 +20,8 @@
     "lucide-react": "^0.553.0"
   },
   "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@bn/tsconfig": "workspace:*"
   }
 }

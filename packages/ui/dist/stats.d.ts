@@ -1,5 +1,5 @@
 export declare const stats: {
-    icon: any;
+    icon: import("react/jsx-runtime").JSX.Element;
     number: number;
     label: string;
 }[];
