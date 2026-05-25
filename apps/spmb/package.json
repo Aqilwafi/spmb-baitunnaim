@@ -25,15 +25,6 @@
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
     "@bn/types": "workspace:*",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "autoprefixer": "^10.5.0",
-    "eslint": "^9",
-    "eslint-config-next": "^16.2.3",
-    "postcss": "^8.5.9",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^5"
+    "eslint-config-next": "^16.2.3"
   }
 }

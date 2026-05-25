@@ -4,7 +4,7 @@
   "private": true,
   "files": [
     "base.json",
-    "nextjs.json"
+    "next.json"
   ],
   "exports": {
     "./base.json": "./base.json",
