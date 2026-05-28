@@ -35,8 +35,8 @@ export type AuthClaims = {
   app_metadata: {
     provider?: string;
     providers?: string[];
-    role_codes: string[];
-    domain_codes: string[];
+    roles: string[];
+    domains: string[];
   };
   user_metadata: {
     username?: string;
@@ -71,8 +71,8 @@ export type BaseResponse<T = undefined> = {
   message: string;
 } & (T extends undefined ? {} : T);
 
-export type RegisterResponse = BaseResponse<{ user?: AuthUser }>;
-export type LoginResponse = BaseResponse<{ session?: AuthSession }>;
+export type RegisterResponse = BaseResponse;
+export type LoginResponse = BaseResponse<{ user: User, session: Session }>;
 export type LogoutResponse = BaseResponse;
 export type ResetPasswordResponse = BaseResponse;
 

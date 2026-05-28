@@ -1,2 +1,2 @@
 // packages/supabase/src/types.ts
-export {};
+export { isAuthError } from "@supabase/supabase-js";

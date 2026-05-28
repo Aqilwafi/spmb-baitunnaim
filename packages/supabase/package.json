@@ -2,12 +2,14 @@
   "name": "@bn/supabase",
   "version": "1.0.0",
   "private": true,
+  "type": "module", 
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js" 
     }
   },
   "files": ["dist"],
@@ -15,7 +17,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@bn/types": "workspace:*",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
     "next": "^16.2.6"

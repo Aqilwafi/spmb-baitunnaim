@@ -1,3 +1,4 @@
+// packages/supabase/src/proxy.ts
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 export async function updateSession(request) {

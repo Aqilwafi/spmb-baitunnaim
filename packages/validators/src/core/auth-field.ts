@@ -1,4 +1,4 @@
-// packages/validators/src/core/auth-fields.ts
+// packages/validators/src/core/auth-field.ts
 import { z } from "zod";
 
 export const emailField = z

@@ -56,11 +56,10 @@ export type BaseResponse<T = undefined> = {
     success: boolean;
     message: string;
 } & (T extends undefined ? {} : T);
-export type RegisterResponse = BaseResponse<{
-    user?: AuthUser;
-}>;
+export type RegisterResponse = BaseResponse;
 export type LoginResponse = BaseResponse<{
-    session?: AuthSession;
+    user: User;
+    session: Session;
 }>;
 export type LogoutResponse = BaseResponse;
 export type ResetPasswordResponse = BaseResponse;

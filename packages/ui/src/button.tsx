@@ -1,30 +1,48 @@
+// packages/ui/src/Button.tsx
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "danger"; // Menambahkan pilihan variant
+  // 💡 1. Tambahkan 'ghost' ke dalam opsi tipe variant
+  variant?: "primary" | "secondary" | "danger" | "ghost"; 
+  // 💡 2. Opsional: Tambahkan properti isLoading agar tombol bisa memunculkan status loading otomatis
+  isLoading?: boolean;
 }
 
 export function Button({
   children,
   className = "",
-  variant = "primary", // Default-nya primary
+  variant = "primary",
+  isLoading = false,
+  disabled,
   ...props
 }: ButtonProps) {
   
-  // Menentukan warna berdasarkan variant
+  // 💡 3. Pisahkan gaya dasar tombol agar tidak menumpuk di tag return
+  const baseStyles = "px-6 py-3 rounded-2xl font-medium transition duration-200 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+
+  // 💡 4. Definisikan gaya untuk varian 'ghost'
   const variantStyles = {
-    primary: "bg-blue-500 hover:bg-blue-700 text-white",
-    secondary: "bg-gray-200 hover:bg-gray-300 text-gray-800",
-    danger: "bg-red-500 hover:bg-red-700 text-white",
+    primary: "bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-100",
+    secondary: "bg-gray-100 hover:bg-gray-200 text-gray-800",
+    danger: "bg-red-600 hover:bg-red-700 text-white",
+    ghost: "bg-transparent hover:bg-gray-100 text-gray-600 hover:text-gray-900 shadow-none", // ✨ Varian hantu kita!
   };
 
   return (
     <button
-      className={`px-6 py-3 rounded-2xl shadow transition cursor-pointer ${variantStyles[variant]} ${className}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
+      disabled={disabled || isLoading} // Otomatis disabled jika sedang loading
       {...props}
     >
-      {children}
+      {/* 💡 5. Jika sedang loading, teks bisa otomatis menyesuaikan atau ditambah spinner nanti */}
+      {isLoading ? (
+        <>
+          <span className="opacity-70">Memproses...</span>
+        </>
+      ) : (
+        children
+      )}
     </button>
   );
 }
