@@ -67,48 +67,6 @@ export async function logoutAction(): Promise<LogoutResponse> {
   redirect("/login");
 }
 
-export async function getCurrentUser(): Promise<AuthUser | null> {
-  const supabase = await createSupabaseServer();
-  
-  // 1. Ambil user object dasar dari Supabase Auth
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-  if (authError || !user) return null;
-
-  // 2. Ambil data profil & relasi tabel internal (Profiles, UserRoles, dst)
-  // Sesuaikan nama query ini dengan nama tabel database Anda
-  const { data: profileData } = await supabase
-    .from("profiles")
-    .select(`
-      *,
-      user_roles (
-        assigned_at,
-        assigned_by,
-        suspended_at,
-        suspended_by,
-        master_roles (*),
-        master_domains (*)
-      )
-    `)
-    .eq("id", user.id)
-    .single();
-
-  // Mapping ke dalam struktur AuthUser kustom Anda
-  const accesses = profileData?.user_roles?.map((ur: any) => ({
-    role: ur.master_roles,
-    domain: ur.master_domains,
-    assigned_at: ur.assigned_at,
-    assigned_by: ur.assigned_by,
-    suspended_at: ur.suspended_at,
-    suspended_by: ur.suspended_by,
-  })) || [];
-
-  return {
-    ...user, // Menyertakan field bawaan Supabase User (id, email, app_metadata, dll)
-    profile: profileData ? { id: profileData.id, updated_at: profileData.updated_at, username: profileData.username, avatar_url: profileData.avatar_url } : null,
-    accesses,
-  } as AuthUser;
-}
-
 export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
   

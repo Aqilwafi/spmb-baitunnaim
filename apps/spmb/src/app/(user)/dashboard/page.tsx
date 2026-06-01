@@ -10,7 +10,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-[#f8f9fa]">
-      
+      <h1>DASHBOARD</h1>
     </main>
   );
 }

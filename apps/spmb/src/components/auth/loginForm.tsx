@@ -11,8 +11,8 @@ export default function LoginForm() {
     <form action={formAction} className="flex flex-col gap-4 w-full">
       
       {/* ✨ Semua input diurus oleh 1 komponen */}
-      <EmailInput />
-      <PasswordInput />
+      <EmailInput required/>
+      <PasswordInput required/>
 
       {state?.message && <p className="text-red-500 text-sm">{state.message}</p>}
       
