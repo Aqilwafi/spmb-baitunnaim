@@ -36,7 +36,7 @@ export async function getMasterLembaga (userId: string): Promise<MasterLembaga[]
     return masterLembaga || [];
 }
 
-export async function getMasterTahunAjaran (userId: string): Promise<MasterTahunAjaran[]> {
+export async function getMasterTahunAjaran (userId: string): Promise<MasterTahunAjaran> {
     const supabase = await createSupabaseServer();
     const { data: masterTahunAjaran, error } = await supabase
         .from('master_tahun_ajaran')
@@ -44,7 +44,7 @@ export async function getMasterTahunAjaran (userId: string): Promise<MasterTahun
         .eq('is_active', true)
         .single();
     if (error) throw new Error("Gagal mengambil data master tahun ajaran");
-    return masterTahunAjaran || [];
+    return masterTahunAjaran;
 }
 
 export async function getMasterStatusRumah (userId: string): Promise<MasterStatusRumah[]> {
