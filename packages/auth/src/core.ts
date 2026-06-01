@@ -29,7 +29,7 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
     return handleAuthError(error, { email: validation.data.email });
   }
   if (!data.user || !data.session) {
-    return { success: false, message: "Data sesi pengguna tidak ditemukan." };
+    return { success: false, message: "Data sesi pengguna tidak ditemukan.", data: { email: validation.data.email } };
   }
 
   return {
@@ -47,11 +47,17 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
   const supabase = await createSupabaseServer();
 
   const validation = registerSchema.safeParse(payload);
+
+  console.log("Register validation result:", validation);
   
   if (!validation.success) {
+   const fieldErrors = validation.error.flatten((issue) => issue.message).fieldErrors;
+   const allErrors = Object.values(fieldErrors).flat();
+   const displayMessage = allErrors[0] || "Data tidak valid";
+
     return { 
       success: false, 
-      message: "Data tidak valid",
+      message: displayMessage, // ✨ Sekarang isinya seperti "Password minimal harus 8 karakter", dll.
       data: {
         email: payload.email,
         username: payload.username
@@ -68,6 +74,8 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
       } 
     }
   })
+
+  console.log("Supabase signUp result:", { data, error });
 
     if (error) {
       return handleAuthError(error, { email: validation.data.email, username: validation.data.username });

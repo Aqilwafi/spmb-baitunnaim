@@ -24,7 +24,10 @@ export async function registerAction(prevState: any, formData: FormData): Promis
     confirm_password: formData.get("confirmPassword") as string,
   };
 
+  console.log("Register payload:", payload);
+
   const result = await executeSharedRegister(payload);
+  console.log("Register result:", result);
 
   if (!result.success) {
     return result; // Mengembalikan error (success: false)

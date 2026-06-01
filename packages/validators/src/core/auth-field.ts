@@ -1,14 +1,20 @@
 // packages/validators/src/core/auth-field.ts
 import { z } from "zod";
 
+// --- FIELD GENERAL / LOGIN (Aturan Dasar) ---
 export const emailField = z
   .string()
+  .min(1, "Email wajib diisi")
   .trim()
   .toLowerCase()
-  .pipe(z.email({ error: "Format email tidak valid" }));
+  .email("Format email tidak valid");
 
-export const passwordField = z
+export const loginPasswordField = z
   .string()
+  .min(1, "Password wajib diisi"); // Untuk login, tidak kosong saja sudah cukup
+
+// --- FIELD KHUSUS REGISTER (Aturan Ketat) ---
+export const registerPasswordField = loginPasswordField
   .min(8, "Password minimal harus 8 karakter")
   .max(72, "Password terlalu panjang, maksimal 72 karakter")
   .regex(/[A-Z]/, "Password harus mengandung minimal satu huruf kapital")
@@ -19,4 +25,5 @@ export const usernameField = z
   .trim()
   .toLowerCase()
   .min(3, "Username minimal harus 3 karakter")
-  .max(50, "Username terlalu panjang");
+  .max(25, "Username terlalu panjang")
+  .or(z.literal(""));

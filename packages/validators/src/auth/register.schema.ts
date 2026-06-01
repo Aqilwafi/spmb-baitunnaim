@@ -1,16 +1,16 @@
 import { z } from "zod";
-import { emailField, passwordField, usernameField } from "../core/auth-field";
+import { emailField, registerPasswordField, usernameField } from "../core/auth-field";
 
 export const registerSchema = z
   .object({
     username: usernameField,
     email:emailField,     
-    password: passwordField,
-    confirmPassword: z.string(),
+    password: registerPasswordField,
+    confirm_password: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirm_password, {
     message: "Password dan Konfirmasi Password tidak cocok",
-    path: ["confirmPassword"],
+    path: ["confirm_password"],
   });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

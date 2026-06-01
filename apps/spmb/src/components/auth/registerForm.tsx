@@ -24,13 +24,13 @@ export default function RegisterForm() {
   return (
     <form action={formAction} onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
       
-      <EmailInput required />
-      <TextInput id="username" name="username" label="Username" placeholder="(opsional) silahkan isi sebagai nama akun anda"/>
-      <PasswordInput required/>
+      <EmailInput required defaultValue={state?.data?.email || ""}/>
+      <TextInput id="username" name="username" defaultValue={state?.data?.username || ""} label="Username" placeholder="(opsional) silahkan isi sebagai nama akun anda"/>
+      <PasswordInput name="password" required/>
       
       <PasswordInput 
         id="confirmPassword" 
-        name="confirmPassword" 
+        name="confirmPassword"
         label="Konfirmasi Password" 
         required 
       />

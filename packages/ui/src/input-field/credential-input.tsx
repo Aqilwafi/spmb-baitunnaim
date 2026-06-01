@@ -12,7 +12,7 @@ interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement>
 export const EmailInput = ({ label = "Email", ...props }: { label?: string } & React.InputHTMLAttributes<HTMLInputElement>) => (
   <div className="flex flex-col gap-2 text-black">
     <Label htmlFor={props.id}>{label}</Label>
-    <Input {...props} type="email" placeholder="email@example.com" className="px-4 py-3 text-base" />
+    <Input {...props} name="email" type="email" placeholder="email@example.com" className="px-4 py-3 text-base" />
   </div>
 );
 
@@ -25,10 +25,11 @@ export function PasswordInput({ label = "Password", ...props }: PasswordInputPro
       <Label htmlFor={props.id}>{label}</Label>
       
       <div className="flex items-center gap-2">
-        <Input 
-          {...props} 
+        <Input
+          name="password"
           type={show ? "text" : "password"} 
-          className="w-full px-4 py-3 text-base" 
+          className="w-full px-4 py-3 text-base"
+          {...props}  
         />
         <Button 
           type="button" 
