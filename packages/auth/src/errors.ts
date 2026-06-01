@@ -10,7 +10,7 @@ export function handleAuthError<E = never>(error: unknown, dataFails?: E): BaseR
 
     // 2. Petakan pesan string statis dari GoTrue Backend
     const errorMap: Record<string, string> = {
-      "Invalid login credentials": "Email, nomor HP, atau password salah.",
+      "Invalid login credentials": "Email atau password salah.",
       "Email not confirmed": "Email Anda belum dikonfirmasi. Silakan cek kotak masuk Anda.",
       "Phone not confirmed": "Nomor HP Anda belum diverifikasi.",
       "User is banned": "Akun Anda telah ditangguhkan oleh administrator.",

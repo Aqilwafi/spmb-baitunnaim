@@ -214,6 +214,22 @@ importers:
         specifier: ^25.9.1
         version: 25.9.1
 
+  packages/services:
+    dependencies:
+      '@bn/supabase':
+        specifier: workspace:*
+        version: link:../supabase
+      '@bn/types':
+        specifier: workspace:*
+        version: link:../types
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+    devDependencies:
+      '@bn/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/supabase:
     dependencies:
       '@supabase/ssr':
@@ -281,11 +297,14 @@ importers:
       lucide-react:
         specifier: ^0.553.0
         version: 0.553.0(react@19.2.6)
+      next:
+        specifier: 16.2.6
+        version: 16.2.6(@babel/core@7.29.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react:
-        specifier: ^19
+        specifier: ^19.2.5
         version: 19.2.6
       react-dom:
-        specifier: ^19
+        specifier: ^19.2.5
         version: 19.2.6(react@19.2.6)
     devDependencies:
       '@bn/tsconfig':

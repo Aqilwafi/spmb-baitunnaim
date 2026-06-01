@@ -9,6 +9,7 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
 
   // Validate the login payload
   const validation = loginSchema.safeParse(payload);
+  console.log("Login validation result:", validation);
   
   if (!validation.success) {
     return { 
@@ -24,6 +25,7 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
     email: validation.data.email,
     password: validation.data.password,
   });
+  console.log("Supabase signInWithPassword result:", { data, error });
 
   if (error) {
     return handleAuthError(error, { email: validation.data.email });

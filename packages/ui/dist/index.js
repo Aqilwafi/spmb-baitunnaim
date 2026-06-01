@@ -11,3 +11,4 @@ export * from "./core/modal";
 export * from "./core/tabel";
 export * from "./input-field/credential-input";
 export * from "./input-field/general";
+export * from "./images/company-logo";

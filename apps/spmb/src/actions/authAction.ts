@@ -40,23 +40,21 @@ export async function registerAction(prevState: any, formData: FormData): Promis
 }
 
 export async function loginAction(prevState: any, formData: FormData): Promise<LoginResponse> {
-  // 1. Ekstrak data dari FormData
+
   const payload = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
 
-  // 2. Panggil Shared Core
   const result = await executeSharedLogin(payload);
 
-  // 3. Handle hasil
   if (!result.success) {
-    return result; // Kembalikan error agar bisa ditangkap oleh useFormState
-  }
+    return result;
+  } 
 
-  // 4. Sukses: Refresh & Redirect
   revalidatePath("/", "layout");
   redirect("/dashboard");
+
 }
 
 export async function logoutAction(): Promise<LogoutResponse> {
