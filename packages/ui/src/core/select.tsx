@@ -21,11 +21,14 @@ export function Select({
     <select
       className={`
         w-full
+        appearance-none
         rounded-md
         border
         px-3
         py-2
-        outline-none
+        pr-10
+        text-black
+        cursor-pointer
         ${className}
       `}
       {...props}
