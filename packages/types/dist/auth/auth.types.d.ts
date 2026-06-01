@@ -1,5 +1,28 @@
-import type { Tables } from '../base.types';
+import type { Tables } from '../shared/base.types';
 import type { Session, User } from '@bn/supabase';
+import { BaseResponse } from '../shared/core.types';
+export type Credetials = {
+    email: string;
+    password: string;
+};
+export type RegisterPayload = Credetials & {
+    username: string;
+    confirm_password: string;
+};
+export type LoginPayload = Credetials;
+export type ForgotPasswordPayload = Pick<Credetials, 'email'>;
+export type ResetPasswordPayload = Pick<Credetials, 'email'> & {
+    new_password: string;
+    confirm_new_password: string;
+};
+export type RegisterResponse = BaseResponse<undefined, Pick<RegisterPayload, 'email' | 'username'>>;
+export type LoginResponse = BaseResponse<{
+    user: User;
+    session: Session;
+}, Pick<LoginPayload, 'email'>>;
+export type LogoutResponse = BaseResponse;
+export type ForgotPasswordResponse = BaseResponse<undefined, Pick<ForgotPasswordPayload, 'email'>>;
+export type ResetPasswordResponse = BaseResponse<undefined, Pick<ResetPasswordPayload, 'email'>>;
 export type Profile = Tables<'profiles'>;
 export type MasterRole = Tables<'master_roles'>;
 export type MasterDomain = Tables<'master_domains'>;
@@ -25,8 +48,8 @@ export type AuthClaims = {
     app_metadata: {
         provider?: string;
         providers?: string[];
-        role_codes: string[];
-        domain_codes: string[];
+        roles: string[];
+        domains: string[];
     };
     user_metadata: {
         username?: string;
@@ -34,35 +57,6 @@ export type AuthClaims = {
     exp?: number;
     iat?: number;
 };
-/**
- * Payload & Actions Types
- */
-export type RegisterPayload = {
-    email: string;
-    username: string;
-    password: string;
-    confirm_password: string;
-};
-export type LoginPayload = Pick<RegisterPayload, 'email' | 'password'>;
-export type ResetPasswordPayload = {
-    email: string;
-    new_password: string;
-    confirm_new_password: string;
-};
-/**
- * API / Server Actions Responses (Menggunakan Generic Pattern)
- */
-export type BaseResponse<T = undefined> = {
-    success: boolean;
-    message: string;
-} & (T extends undefined ? {} : T);
-export type RegisterResponse = BaseResponse;
-export type LoginResponse = BaseResponse<{
-    user: User;
-    session: Session;
-}>;
-export type LogoutResponse = BaseResponse;
-export type ResetPasswordResponse = BaseResponse;
 export type GetUserResponse = {
     user: AuthUser | null;
 };
@@ -72,9 +66,6 @@ export type GetSessionResponse = {
 export type GetClaimsResponse = {
     claims: AuthClaims | null;
 };
-/**
- * Middleware / Guard Options
- */
 export type RequireAuthOptions = {
     redirect_to?: string;
 };

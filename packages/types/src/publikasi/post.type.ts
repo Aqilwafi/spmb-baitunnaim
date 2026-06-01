@@ -4,7 +4,7 @@ import type {
   Tables,
   TablesInsert,
   TablesUpdate,
-} from '../base.types'
+} from '../shared/base.types'
 
 /**
  * =========================

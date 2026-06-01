@@ -1,7 +1,33 @@
 // packages/types/src/auth/auth.types.ts
 
-import type { Tables } from '../base.types';
+import type { Tables } from '../shared/base.types';
 import type { Session, User } from '@bn/supabase'; // Pastikan package ini mengekspor tipe asli Supabase
+import { BaseResponse } from '../shared/core.types';
+
+export type Credetials = {
+  email: string;
+  password: string;
+};  
+
+export type RegisterPayload = Credetials & {
+  username: string;
+  confirm_password: string;
+};
+
+export type LoginPayload = Credetials;
+
+export type ForgotPasswordPayload = Pick<Credetials, 'email'>;
+
+export type ResetPasswordPayload = Pick<Credetials, 'email'> & {
+  new_password: string;
+  confirm_new_password: string;
+};
+
+export type RegisterResponse = BaseResponse<undefined, Pick<RegisterPayload, 'email' | 'username'>>;
+export type LoginResponse = BaseResponse<{ user: User, session: Session }, Pick<LoginPayload, 'email'>>;
+export type LogoutResponse = BaseResponse;
+export type ForgotPasswordResponse = BaseResponse<undefined, Pick<ForgotPasswordPayload, 'email'>>;
+export type ResetPasswordResponse = BaseResponse<undefined, Pick<ResetPasswordPayload, 'email'>>;
 
 export type Profile = Tables<'profiles'>;
 export type MasterRole = Tables<'master_roles'>;
@@ -17,18 +43,15 @@ export type UserAccess = {
   suspended_by: string | null;
 };
 
-// Meng-extend User asli Supabase dengan data relasional internal kita
 export type AuthUser = User & {
   profile: Profile | null;
   accesses: UserAccess[];
 };
 
-// Meng-extend Session asli Supabase dengan AuthUser kustom kita
 export type AuthSession = Omit<Session, 'user'> & {
   user: AuthUser;
 };
 
-// Struktur JWT Custom Claims yang aman dan sesuai dengan app_metadata Supabase
 export type AuthClaims = {
   sub: string;
   email?: string;
@@ -45,44 +68,10 @@ export type AuthClaims = {
   iat?: number;
 };
 
-/**
- * Payload & Actions Types
- */
-export type RegisterPayload = {
-  email: string;
-  username: string;
-  password: string;
-  confirm_password: string;
-};
-
-export type LoginPayload = Pick<RegisterPayload, 'email' | 'password'>;
-
-export type ResetPasswordPayload = {
-  email: string;
-  new_password: string;
-  confirm_new_password: string;
-};
-
-/**
- * API / Server Actions Responses (Menggunakan Generic Pattern)
- */
-export type BaseResponse<T = undefined> = {
-  success: boolean;
-  message: string;
-} & (T extends undefined ? {} : T);
-
-export type RegisterResponse = BaseResponse;
-export type LoginResponse = BaseResponse<{ user: User, session: Session }>;
-export type LogoutResponse = BaseResponse;
-export type ResetPasswordResponse = BaseResponse;
-
 export type GetUserResponse = { user: AuthUser | null };
 export type GetSessionResponse = { session: AuthSession | null };
 export type GetClaimsResponse = { claims: AuthClaims | null };
 
-/**
- * Middleware / Guard Options
- */
 export type RequireAuthOptions = {
   redirect_to?: string;
 };

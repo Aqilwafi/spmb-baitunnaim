@@ -1,7 +1,14 @@
 export const formatDateTimeId = (dateString) => {
+    // 1. Tangani nilai null, undefined, atau string kosong
     if (!dateString)
         return "-";
-    return new Date(dateString).toLocaleDateString('id-ID', {
+    // 2. Konversi ke objek Date
+    const date = new Date(dateString);
+    // 3. Validasi apakah tanggal valid (menghindari "Invalid Date")
+    if (isNaN(date.getTime()))
+        return "-";
+    // 4. Format menggunakan Intl (Native API browser/Node.js)
+    return date.toLocaleDateString('id-ID', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',

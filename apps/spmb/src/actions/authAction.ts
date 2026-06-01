@@ -10,77 +10,56 @@ import {
 } from "@bn/types";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { executeSharedLogin, executeSharedRegister, executeSharedLogout } from "@bn/auth";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
-  const username = formData.get("username") as string; // Ambil username jika ada di form register
+  
+  const payload = {
+    email: formData.get("email") as string,
+    username: formData.get("username") as string,
+    password: formData.get("password") as string,
+    confirm_password: formData.get("confirmPassword") as string,
+  };
 
-  // 1. Validasi Password (Server Side)
-  if (password !== confirmPassword) {
-    return { success: false, message: "Password dan Konfirmasi Password tidak cocok." };
+  const result = await executeSharedRegister(payload);
+
+  if (!result.success) {
+    return result; // Mengembalikan error (success: false)
   }
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      // Menyimpan data tambahan ke user_metadata Supabase
-      data: { username } 
-    }
-  });
-
-  if (error) {
-    return { 
-      success: false, 
-      message: error.message === "User already registered" 
-        ? "Email sudah terdaftar." 
-        : error.message 
-    };
-  }
-
-  // Jika Anda mengembalikan user, lakukan casting ke AuthUser (atau sesuaikan kebutuhan)
   return { 
-    success: true, 
-    message: "Registrasi berhasil. Silakan cek email Anda untuk konfirmasi.",
-    user: data.user ? (data.user as unknown as AuthUser) : undefined
+    success: true,
+    message: "Registrasi berhasil. Silakan cek email Anda untuk verifikasi."
   };
 }
 
-export async function loginAction(prevState: any, formData: FormData): Promise<LoginResponse | void> {
-  const identifier = formData.get("identifier") as string;
-  const password = formData.get("password") as string;
+export async function loginAction(prevState: any, formData: FormData): Promise<LoginResponse> {
+  // 1. Ekstrak data dari FormData
+  const payload = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
 
-  const supabase = await createSupabaseServer();
+  // 2. Panggil Shared Core
+  const result = await executeSharedLogin(payload);
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: identifier,
-    password: password,
-  });
-
-  if (error) {
-    const errorMessages: Record<string, string> = {
-      "Invalid login credentials": "Email atau password salah.",
-      "Email not confirmed": "Email belum dikonfirmasi.",
-      "Too many requests": "Terlalu banyak percobaan. Coba lagi nanti.",
-    };
-    return { 
-      success: false, 
-      message: errorMessages[error.message] || "Terjadi kesalahan saat login." 
-    };
+  // 3. Handle hasil
+  if (!result.success) {
+    return result; // Kembalikan error agar bisa ditangkap oleh useFormState
   }
 
-  // REFRESH & REDIRECT (Wajib dipanggil di luar blok penanganan error)
-  revalidatePath("/", "layout"); 
+  // 4. Sukses: Refresh & Redirect
+  revalidatePath("/", "layout");
   redirect("/dashboard");
 }
 
-export async function logoutAction(): Promise<LogoutResponse | void> {
-  const supabase = await createSupabaseServer();
-  await supabase.auth.signOut();
-  
+export async function logoutAction(): Promise<LogoutResponse> {
+
+  const result = await executeSharedLogout();
+  if (!result) {
+    return result; // Mengembalikan error jika gagal logout
+  }
+
   revalidatePath("/", "layout");
   redirect("/login");
 }
@@ -127,7 +106,13 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   } as AuthUser;
 }
 
-export async function forgotPasswordAction(email: string): Promise<BaseResponse> {
+// @/actions/authAction.ts
+
+// Pastikan urutan argumen: (prevState, formData)
+export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<BaseResponse> {
+  // Ambil email dari formData (sesuai dengan name="email" di input)
+  const email = formData.get("email") as string;
+  
   const supabase = await createSupabaseServer();
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -136,7 +121,7 @@ export async function forgotPasswordAction(email: string): Promise<BaseResponse>
 
   if (error) {
     console.error("Reset Password Error:", error.message);
-    // Tetap kembalikan pesan sukses terselubung demi keamanan agar penyerang tidak bisa mendeteksi email terdaftar
+    // Tetap kembalikan sukses agar aman dari enumerasi user
   }
 
   return {

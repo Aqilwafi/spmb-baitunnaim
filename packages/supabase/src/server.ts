@@ -1,17 +1,14 @@
 // packages/supabase/src/server.ts
 
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 
 export async function createSupabaseServer() {
+  // Gunakan dynamic import untuk cookies agar tidak error di Pages Router
+  const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!url || !key) {
-    throw new Error("Missing Supabase environment variables (server)");
-  }
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
   return createServerClient(url, key, {
     cookies: {
@@ -20,11 +17,12 @@ export async function createSupabaseServer() {
       },
       setAll(cookiesToSet) {
         try {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
-          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options)
+          );
         } catch {
-          // no-op in Server Components; middleware handles session refresh
+          // The `set` method was called from a Server Component.
+          // This can be ignored if you have middleware refreshing user sessions.
         }
       },
     },

@@ -1,4 +1,4 @@
-import type { Tables, TablesInsert, TablesUpdate } from '../base.types';
+import type { Tables, TablesInsert, TablesUpdate } from '../shared/base.types';
 /**
  * =========================
  * Database Types
