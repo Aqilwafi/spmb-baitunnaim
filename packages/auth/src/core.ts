@@ -1,5 +1,5 @@
 import { createSupabaseServer } from "@bn/supabase";
-import { LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, LogoutResponse, BaseResponse } from "@bn/types";
+import { LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, LogoutResponse } from "@bn/types";
 import { handleAuthError } from "./errors";
 import { loginSchema, registerSchema } from "@bn/validators";
 
@@ -13,7 +13,10 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
   if (!validation.success) {
     return { 
       success: false, 
-      message: "Data tidak valid"
+      message: "Data tidak valid",
+      data: {
+        email: payload.email
+      }
     };
   }
 
@@ -23,13 +26,12 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
   });
 
   if (error) {
-    return handleAuthError(error) as LoginResponse;
+    return handleAuthError(error, { email: validation.data.email });
   }
   if (!data.user || !data.session) {
-    return { success: false, message: "Data sesi pengguna tidak ditemukan." } as LoginResponse;
+    return { success: false, message: "Data sesi pengguna tidak ditemukan." };
   }
 
-  // 💡 JANGAN LUPA TAMBAHKAN INI DI AKHIR FUNCTION SHARED
   return {
     success: true,
     message: "Login berhasil.",
@@ -49,7 +51,11 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
   if (!validation.success) {
     return { 
       success: false, 
-      message: "Data tidak valid"
+      message: "Data tidak valid",
+      data: {
+        email: payload.email,
+        username: payload.username
+      }
     };
   }
 
@@ -64,7 +70,7 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
   })
 
     if (error) {
-      return handleAuthError(error) as RegisterResponse;
+      return handleAuthError(error, { email: validation.data.email, username: validation.data.username });
     }
 
   return {
@@ -73,14 +79,13 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
   };
 }
 
-// Di @bn/auth/src/core.ts
 export async function executeSharedLogout(): Promise<LogoutResponse> {
   const supabase = await createSupabaseServer();
   const { error } = await supabase.auth.signOut();
 
   // Selalu kembalikan objek yang memenuhi kontrak LogoutResponse
   if (error) {
-    return handleAuthError(error) as LogoutResponse;
+    return handleAuthError(error);
   }
     
   return {

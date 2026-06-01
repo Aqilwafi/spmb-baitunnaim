@@ -1,10 +1,10 @@
 // packages/auth/src/errors.ts
-import { AuthError, isAuthError } from "@bn/supabase";
+import { isAuthError } from "@bn/supabase";
 import { BaseResponse } from "@bn/types";
 
-export function handleAuthError(error: unknown): BaseResponse {
+export function handleAuthError<E = never>(error: unknown, dataFails?: E): BaseResponse<undefined, E> {
   // 1. Pastikan ini adalah error dari SDK Supabase
-if (isAuthError(error)) {
+  if (isAuthError(error)) {
     const msg = error.message;
     const status = error.status;
 
@@ -19,25 +19,23 @@ if (isAuthError(error)) {
       "User already registered": "Email atau nomor HP sudah terdaftar.",
     };
 
+    let finalMessage = errorMap[msg] || msg || "Terjadi kesalahan pada sistem autentikasi.";
+
+    // Kondisi khusus jika format email bawaan supabase bermasalah
     if (msg.toLowerCase().includes("email address") && msg.toLowerCase().includes("is invalid")) {
-      return {
-        success: false,
-        message: "Terjadi kesalahan pada email.",
-      };
+      finalMessage = "Terjadi kesalahan pada email.";
     }
 
-    // 3. Tangani skenario khusus berdasarkan HTTP Status (misal Rate Limit / Code 429)
+    // 3. Tangani skenario khusus berdasarkan HTTP Status (Rate Limit)
     if (status === 429 || msg.toLowerCase().includes("too many requests")) {
-      return {
-        success: false,
-        message: "Terlalu banyak percobaan. Silakan coba lagi dalam beberapa menit.",
-      };
+      finalMessage = "Terlalu banyak percobaan. Silakan coba lagi dalam beberapa menit.";
     }
 
-    // 4. Kembalikan hasil pemetaan, atau gunakan fallback jika ada error baru dari Supabase
+    // 4. Kembalikan hasil pemetaan beserta bundle data yang gagal
     return {
       success: false,
-      message: errorMap[msg] || msg || "Terjadi kesalahan pada sistem autentikasi.",
+      message: finalMessage,
+      data: dataFails, 
     };
   }
 
@@ -45,5 +43,6 @@ if (isAuthError(error)) {
   return {
     success: false,
     message: error instanceof Error ? error.message : "Terjadi kesalahan server internal.",
+    data: dataFails,
   };
 }

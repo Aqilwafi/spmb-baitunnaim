@@ -5,12 +5,15 @@ import {
   RegisterResponse, 
   LoginResponse, 
   LogoutResponse, 
-  BaseResponse, 
-  AuthUser 
+  AuthUser, 
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
+  ForgotPasswordPayload,
+  ResetPasswordPayload
 } from "@bn/types";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { executeSharedLogin, executeSharedRegister, executeSharedLogout } from "@bn/auth";
+import { executeSharedLogin, executeSharedRegister, executeSharedLogout, executeSharedForgotPassword, executeSharedResetPassword } from "@bn/auth";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
   
@@ -106,50 +109,16 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   } as AuthUser;
 }
 
-// @/actions/authAction.ts
-
-// Pastikan urutan argumen: (prevState, formData)
-export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<BaseResponse> {
-  // Ambil email dari formData (sesuai dengan name="email" di input)
-  const email = formData.get("email") as string;
+export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
+  const rawPayload = Object.fromEntries(formData);
   
-  const supabase = await createSupabaseServer();
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/callback?next=/auth/reset-password`,
-  });
-
-  if (error) {
-    console.error("Reset Password Error:", error.message);
-    // Tetap kembalikan sukses agar aman dari enumerasi user
-  }
-
-  return {
-    success: true,
-    message: "Instruksi pemulihan telah dikirim ke email Anda jika akun tersebut terdaftar.",
-  };
+  // Langsung oper ke Shared Service
+  return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload);
 }
 
-export async function updatePasswordAction(password: string): Promise<BaseResponse> {
-  if (!password || password.length < 6) {
-    return { success: false, message: "Password minimal harus 6 karakter." };
-  }
+export async function resetPasswordAction(prevState: any, formData: FormData): Promise<ResetPasswordResponse> {
+  const rawPayload = Object.fromEntries(formData);
 
-  const supabase = await createSupabaseServer();
-
-  // Validasi token langsung ke server Supabase
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    return { success: false, message: "Sesi tidak ditemukan atau kedaluwarsa. Silakan klik ulang link dari email Anda." };
-  }
-
-  const { error } = await supabase.auth.updateUser({ password });
-
-  if (error) {
-    console.error("Update Password Error:", error.message);
-    return { success: false, message: "Gagal memperbarui password. Silakan coba lagi." };
-  }
-
-  return { success: true, message: "Password Anda berhasil diperbarui." };
+  // Langsung oper ke Shared Service
+  return await executeSharedResetPassword(rawPayload as ResetPasswordPayload);
 }

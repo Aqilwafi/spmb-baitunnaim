@@ -1,22 +1,38 @@
-import { createSupabaseServer, User } from "@bn/supabase";
-import { BaseResponse, LoginPayload } from "@bn/types";
+// packages/auth/src/services.ts
+import { createSupabaseServer } from "@bn/supabase";
+import { forgotPasswordSchema, resetPasswordSchema } from "@bn/validators"; 
+import { 
+  ForgotPasswordPayload, ForgotPasswordResponse, 
+  ResetPasswordPayload, ResetPasswordResponse 
+} from "@bn/types";
+import { handleAuthError } from "./errors";
 
-export async function forgotPassword(email: string): Promise<BaseResponse> {
+export async function executeSharedForgotPassword(payload: ForgotPasswordPayload): Promise<ForgotPasswordResponse> {
   const supabase = await createSupabaseServer();
 
-  // Memastikan URL callback dinamis berdasarkan env host yang sedang aktif
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  // Validasi Zod terpusat
+  const validation = forgotPasswordSchema.safeParse(payload);
+  if (!validation.success) {
+    return { 
+      success: false, 
+      message: "Format email tidak valid.",
+      data: { email: payload.email } // Selamatkan input form
+    };
+  }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001";
+
+  const { error } = await supabase.auth.resetPasswordForEmail(validation.data.email, {
     redirectTo: `${siteUrl}/auth/callback?next=/auth/reset-password`,
   });
 
   if (error) {
-    console.error("Reset Password Error:", error.message);
-    return {
-      success: false,
-      message: error.message, // Mengembalikan pesan error asli agar UI bisa mengelolanya
-    };
+    console.error("Shared Forgot Password Error:", error.message);
+    // 💡 Skenario Keamanan (User Enumeration Protection):
+    // Jika email tidak terdaftar, Supabase tetap melempar sukses/error tertentu tergantung setting.
+    // Demi UX & Keamanan, kita bisa lempar ke handleAuthError ATAU manipulasi agar tetap terlihat sukses.
+    // Mari kita gunakan handleAuthError yang aman, jika mau disembunyikan tinggal return sukses di bawah.
+    return handleAuthError(error, { email: validation.data.email });
   }
 
   return {
@@ -25,58 +41,42 @@ export async function forgotPassword(email: string): Promise<BaseResponse> {
   };
 }
 
-export async function selfUpdatePassword(password: string): Promise<BaseResponse> {
-  if (!password || password.length < 6) {
-    return { success: false, message: "Password minimal harus 6 karakter." };
-  }
-
+export async function executeSharedResetPassword(payload: ResetPasswordPayload): Promise<ResetPasswordResponse> {
   const supabase = await createSupabaseServer();
 
-  // Menggunakan getUser() di sini sudah sangat tepat karena ini adalah mutasi data sensitif 
-  // yang wajib divalidasi ke server Supabase, bukan sekadar claims JWT biasa.
+  // Validasi Zod terpusat
+  const validation = resetPasswordSchema.safeParse(payload);
+  if (!validation.success) {
+    return {
+      success: false,
+      message: "Data yang dimasukkan tidak memenuhi syarat keamanan.",
+      data: { email: payload.email } // Selamatkan email, buang password barunya demi keamanan
+    };
+  }
+
+  // Cek apakah user memiliki sesi aktif dari link email (AccessToken di cookie)
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
   if (userError || !user) {
     return { 
       success: false, 
-      message: "Sesi tidak ditemukan atau kedaluwarsa. Silakan klik ulang link dari email Anda." 
+      message: "Sesi tidak ditemukan atau kedaluwarsa. Silakan klik ulang link dari email Anda.",
+      data: { email: validation.data.email }
     };
   }
 
-  const { error } = await supabase.auth.updateUser({ password });
+  // Eksekusi update password baru
+  const { error } = await supabase.auth.updateUser({ 
+    password: validation.data.new_password 
+  });
 
   if (error) {
-    console.error("Update Password Error:", error.message);
-    return { success: false, message: "Gagal memperbarui password. Silakan coba lagi." };
+    console.error("Shared Update Password Error:", error.message);
+    return handleAuthError(error, { email: validation.data.email });
   }
 
-  return { success: true, message: "Password Anda berhasil diperbarui." };
-}
-
-export async function adminUpdatePassword(password: string): Promise<BaseResponse> {
-  if (!password || password.length < 6) {
-    return { success: false, message: "Password minimal harus 6 karakter." };
-  }
-
-  const supabase = await createSupabaseServer();
-
-  // Menggunakan getUser() di sini sudah sangat tepat karena ini adalah mutasi data sensitif 
-  // yang wajib divalidasi ke server Supabase, bukan sekadar claims JWT biasa.
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    return { 
-      success: false, 
-      message: "Sesi tidak ditemukan atau kedaluwarsa. Silakan klik ulang link dari email Anda." 
-    };
-  }
-
-//   const { data, error } = await supabase.auth.admin.updateUserById(target: string,{ password: 'new_password' })
-
-//   if (error) {
-//     console.error("Update Password Error:", error.message);
-//     return { success: false, message: "Gagal memperbarui password. Silakan coba lagi." };
-//   }
-
-  return { success: true, message: "Password Anda berhasil diperbarui." };
+  return { 
+    success: true, 
+    message: "Password Anda berhasil diperbarui." 
+  };
 }
