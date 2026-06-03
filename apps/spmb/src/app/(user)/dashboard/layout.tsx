@@ -10,7 +10,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const sessions = await getCurrentSession();
   const user = await getCurrentUser();
 
-  console.log("getClaims():", claims.data.claims);
+  console.log("getClaims():", claims?.data.claims);
   console.log("getSession():", sessions);
   console.log("getUser():", user);
   

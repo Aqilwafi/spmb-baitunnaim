@@ -1,22 +1,20 @@
 // app/dashboard/page.tsx
 import { getMasterKelas, getMasterLembaga, getMasterTahunAjaran } from '@bn/services';
-import { getCurrentUser, validateAccess } from '@bn/auth';
+import { getCurrentClaims } from '@bn/auth';
 import { Button, Card, CardContent, CardHeader, CardTitle,  } from '@bn/ui';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaftaranModal';
+import { getPendaftaran } from '@/services/serviceDashboard';
 
 export default async function DashboardPage() {
   
-  const user = await getCurrentUser();
-  
-  if (!user) redirect('/unauthorized');
-
-  const userid = user.data.user.id;
-  
-  const dataKelas = await getMasterKelas(userid);
-  const dataLembaga = await getMasterLembaga(userid);
-  const dataTahunAjaran = await getMasterTahunAjaran(userid);
+  const [dataLembaga, dataKelas, dataTahunAjaran, dataPendaftaran] = await Promise.all([
+    getMasterLembaga(),
+    getMasterKelas(),
+    getMasterTahunAjaran(),
+    getPendaftaran()
+  ]);
 
   return (
     <main className="min-h-screen bg-[#f8f9fa] ">

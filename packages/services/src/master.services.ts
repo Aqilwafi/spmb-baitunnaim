@@ -3,9 +3,7 @@ import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
 import { MasterKelas, MasterLembaga, MasterStatusRumah, MasterTipeDokumen, MasterTahunAjaran, MasterTinggalBersama, MasterRole, MasterDomains } from "@bn/types";
 
-export async function getMasterKelas(userId: string): Promise<MasterKelas[]> {
-
-    if (!userId) throw new Error("User ID tidak ditemukan. Pastikan pengguna sudah login.");
+export async function getMasterKelas(): Promise<MasterKelas[]> {
 
     const supabase = await createSupabaseServer();
     const { data: masterKelas, error } = await supabase
@@ -13,20 +11,12 @@ export async function getMasterKelas(userId: string): Promise<MasterKelas[]> {
         .select('*');
 
     if (error) {
-  // 💡 Tambahkan log ini agar kelihatan penyakit aslinya di terminal:
-  console.error("🚨 Detail Error Supabase:", {
-    code: error.code,
-    message: error.message,
-    details: error.details,
-    hint: error.hint
-  });
-  
-  throw new Error(`Gagal mengambil data master kelas: ${error.message}`);
-}
+        throw new Error(`Gagal mengambil data master kelas: ${error.message}`);
+    }
     return masterKelas || [];
 }
 
-export async function getMasterLembaga (userId: string): Promise<MasterLembaga[]> {
+export async function getMasterLembaga (): Promise<MasterLembaga[]> {
     const supabase = await createSupabaseServer();
     const { data: masterLembaga, error } = await supabase
         .from('master_lembaga')
@@ -36,7 +26,7 @@ export async function getMasterLembaga (userId: string): Promise<MasterLembaga[]
     return masterLembaga || [];
 }
 
-export async function getMasterTahunAjaran (userId: string): Promise<MasterTahunAjaran> {
+export async function getMasterTahunAjaran (): Promise<MasterTahunAjaran> {
     const supabase = await createSupabaseServer();
     const { data: masterTahunAjaran, error } = await supabase
         .from('master_tahun_ajaran')
@@ -47,7 +37,7 @@ export async function getMasterTahunAjaran (userId: string): Promise<MasterTahun
     return masterTahunAjaran;
 }
 
-export async function getMasterStatusRumah (userId: string): Promise<MasterStatusRumah[]> {
+export async function getMasterStatusRumah (): Promise<MasterStatusRumah[]> {
     const supabase = await createSupabaseServer();
     const { data: masterStatusRumah, error } = await supabase
         .from('master_status_rumah')
@@ -56,7 +46,7 @@ export async function getMasterStatusRumah (userId: string): Promise<MasterStatu
     return masterStatusRumah || [];
 }
 
-export async function getMasterTinggalBersama (userId: string): Promise<MasterTinggalBersama[]> {
+export async function getMasterTinggalBersama (): Promise<MasterTinggalBersama[]> {
     const supabase = await createSupabaseServer();
     const { data: masterTinggalBersama, error } = await supabase
         .from('master_tinggal_bersama')
@@ -65,7 +55,7 @@ export async function getMasterTinggalBersama (userId: string): Promise<MasterTi
     return masterTinggalBersama || [];
 }
 
-export async function getMasterTipeDokumen (userId: string): Promise<MasterTipeDokumen[]> {
+export async function getMasterTipeDokumen (): Promise<MasterTipeDokumen[]> {
     const supabase = await createSupabaseServer();
     const { data: masterTipeDokumen, error } = await supabase
         .from('master_tipe_dokumen')
@@ -74,7 +64,7 @@ export async function getMasterTipeDokumen (userId: string): Promise<MasterTipeD
     return masterTipeDokumen || [];
 }
 
-export async function getMasterRoles (userId: string): Promise<MasterRole[]> {
+export async function getMasterRoles (): Promise<MasterRole[]> {
     const supabase = await createSupabaseServer();
     const { data: masterRoles, error } = await supabase
         .from('master_roles')
@@ -83,7 +73,7 @@ export async function getMasterRoles (userId: string): Promise<MasterRole[]> {
     return masterRoles || [];
 }
 
-export async function getMasterDomains (userId: string): Promise<MasterDomains[]> {
+export async function getMasterDomains (): Promise<MasterDomains[]> {
     const supabase = await createSupabaseServer();
     const { data: masterDomains, error } = await supabase
         .from('master_domains')

@@ -1,56 +1,36 @@
 import { createSupabaseServer } from "@bn/supabase";
-import { BaseResponse, GetClaimsResponse } from "@bn/types";
-import { handleAuthError } from "./errors";
+import { GetUserResponse, GetClaimsResponse, GetSessionResponse } from "@bn/types";
 
-export async function getCurrentSession(): Promise<BaseResponse<any>> {
+export async function getCurrentSession(): Promise<GetSessionResponse | null> {
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.auth.getSession();
 
-  if (error) {
-    return handleAuthError(error);
+  if (error ||!data.session) {
+    return null;
   }
 
-  return {
-    success: true,
-    message: "Sesi berhasil diambil.",
-    data: data 
-  };
+  return data as unknown as GetSessionResponse;
 }
 
-export async function getCurrentUser(): Promise<GetUserResponse<any>> {
+export async function getCurrentUser(): Promise<GetUserResponse | null> {
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.auth.getUser();
 
-  if (error) {
-    return handleAuthError(error); // ✨ Wajib pakai RETURN
+  if (error ||!data.user) {
+    return null;
   }
 
-  // Proteksi jika user kosong tanpa memicu objek error
-  if (!data.user) {
-    return {
-      success: false,
-      message: "Pengguna tidak terautentikasi atau sesi telah habis."
-    };
-  }
-
-  return {
-    success: true,
-    message: "Data pengguna berhasil diambil.",
-    data: data
-  };
+  return data as unknown as GetUserResponse;
 }
 
 export async function getCurrentClaims(): Promise<GetClaimsResponse | null> {
   const supabase = await createSupabaseServer();
   
-  // Mengambil claims dari server
   const { data, error } = await supabase.auth.getClaims(); 
 
-  // Jika error atau claims kosong, return null
   if (error || !data?.claims) {
     return null;
   }
 
-  // Cast data.claims ke tipe GetClaimsResponse agar TypeScript tenang
   return data.claims as unknown as GetClaimsResponse;
 }
