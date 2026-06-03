@@ -1,5 +1,5 @@
 import { createSupabaseServer } from "@bn/supabase";
-import { BaseResponse } from "@bn/types";
+import { BaseResponse, GetClaimsResponse } from "@bn/types";
 import { handleAuthError } from "./errors";
 
 export async function getCurrentSession(): Promise<BaseResponse<any>> {
@@ -7,17 +7,17 @@ export async function getCurrentSession(): Promise<BaseResponse<any>> {
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
-    return handleAuthError(error); // ✨ Wajib pakai RETURN agar fungsi berhenti di sini jika error
+    return handleAuthError(error);
   }
 
   return {
     success: true,
     message: "Sesi berhasil diambil.",
-    data: data.session // 👈 ✨ Kembalikan objek session-nya!
+    data: data 
   };
 }
 
-export async function getCurrentUser(): Promise<BaseResponse<any>> {
+export async function getCurrentUser(): Promise<GetUserResponse<any>> {
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.auth.getUser();
 
@@ -36,24 +36,21 @@ export async function getCurrentUser(): Promise<BaseResponse<any>> {
   return {
     success: true,
     message: "Data pengguna berhasil diambil.",
-    data: data.user // 👈 ✨ Kembalikan objek user-nya!
+    data: data
   };
 }
 
-export async function getCurrentClaims(): Promise<BaseResponse<any>> {
+export async function getCurrentClaims(): Promise<GetClaimsResponse | null> {
   const supabase = await createSupabaseServer();
   
-  // Jika SDK Supabase versimu tidak punya .getClaims(), 
-  // biasanya kita membaca dari getUser() lalu mengambil app_metadata / user_metadata.
+  // Mengambil claims dari server
   const { data, error } = await supabase.auth.getClaims(); 
 
-  if (error) {
-    return handleAuthError(error); // ✨ Wajib pakai RETURN
+  // Jika error atau claims kosong, return null
+  if (error || !data?.claims) {
+    return null;
   }
 
-  return {
-    success: true,
-    message: "Claims pengguna berhasil diambil.",
-    data: data // 👈 ✨ Kembalikan datanya!
-  };
+  // Cast data.claims ke tipe GetClaimsResponse agar TypeScript tenang
+  return data.claims as unknown as GetClaimsResponse;
 }

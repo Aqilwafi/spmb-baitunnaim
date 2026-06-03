@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react"; // 1. Tambahkan ini
-import { forgotPasswordAction } from "@/actions/authAction";
+import { forgotPasswordAction } from "@/actions/auth/auth.actions";
 import Link from "next/link";
 import Image from "next/image";
 

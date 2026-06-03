@@ -51,7 +51,7 @@ async function jalankanTesLogin() {
         return;
       }
       console.log("\n🎫 [SESSION]");
-      console.log( sessionData.session?.user.app_metadata )
+      console.log( sessionData )
 
       const { data: userData , error: errorUser } = await supabase.auth.getUser();
 
@@ -60,7 +60,7 @@ async function jalankanTesLogin() {
         return;
       }
       console.log("\n🎫 [USER]");
-      console.log( userData.user?.app_metadata )
+      console.log( userData )
 
       const { data: claimsData , error: errorClaims } = await supabase.auth.getClaims();
 
@@ -69,7 +69,7 @@ async function jalankanTesLogin() {
         return;
       }
       console.log("\n🎫 [CLAIMS]");
-      console.log( claimsData?.claims.app_metadata )
+      console.log( claimsData?.claims )
 
 
     } catch (err) {

@@ -1,7 +1,7 @@
 // 📄 File: packages/auth/src/utils/rbac.ts
 
 // 1. Definisikan tipe data struktur User dari Supabase/Auth kamu
-interface UserSessionData {
+interface UserData {
   app_metadata?: {
     access_rights?: string[];
   };
@@ -22,11 +22,11 @@ function parseAccessRight(right: string) {
  * Fungsi ini yang akan di-import oleh aplikasi-aplikasi kamu.
  */
 export function validateAccess(
-  sessionUser: UserSessionData | undefined | null,
+  userData: UserData | undefined | null,
   currentDomain: string | string[], // 💡 Ubah ini agar bisa menerima string tunggal atau Array
   policyCheck: (roles: string[]) => boolean
 ): boolean {
-  if (!sessionUser?.app_metadata?.access_rights) return false;
+  if (!userData?.app_metadata?.access_rights) return false;
 
   // Ubah input domain menjadi array agar seragam saat diproses
   const domainsToCheck = Array.isArray(currentDomain)
@@ -34,7 +34,7 @@ export function validateAccess(
     : [currentDomain.toUpperCase()];
 
   // Proses Saringan: Ambil semua role yang cocok dengan domain-domain yang diizinkan
-  const userRolesInDomain = sessionUser.app_metadata.access_rights
+  const userRolesInDomain = userData.app_metadata.access_rights
     .map(parseAccessRight)
     .filter((item) => domainsToCheck.includes(item.domain)) // 💡 Sekarang mengecek apakah ada di dalam list array
     .map((item) => item.role);

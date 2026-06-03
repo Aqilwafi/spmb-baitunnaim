@@ -9,7 +9,6 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
 
   // Validate the login payload
   const validation = loginSchema.safeParse(payload);
-  console.log("Login validation result:", validation);
   
   if (!validation.success) {
     return { 
@@ -25,7 +24,6 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
     email: validation.data.email,
     password: validation.data.password,
   });
-  console.log("Supabase signInWithPassword result:", { data, error });
 
   if (error) {
     return handleAuthError(error, { email: validation.data.email });
@@ -47,10 +45,7 @@ export async function executeSharedLogin(payload: LoginPayload): Promise<LoginRe
 export async function executeSharedRegister(payload: RegisterPayload): Promise<RegisterResponse> {
 
   const supabase = await createSupabaseServer();
-
   const validation = registerSchema.safeParse(payload);
-
-  console.log("Register validation result:", validation);
   
   if (!validation.success) {
    const fieldErrors = validation.error.flatten((issue) => issue.message).fieldErrors;
@@ -76,9 +71,7 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
       } 
     }
   })
-
-  console.log("Supabase signUp result:", { data, error });
-
+  
     if (error) {
       return handleAuthError(error, { email: validation.data.email, username: validation.data.username });
     }

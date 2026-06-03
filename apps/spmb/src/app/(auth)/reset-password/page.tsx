@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { updatePasswordAction } from "@/actions/authAction";
+import { updatePasswordAction } from "@/actions/auth/auth.actions";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 

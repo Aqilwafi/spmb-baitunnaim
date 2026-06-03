@@ -1,5 +1,5 @@
 import type { Tables } from '../shared/base.types';
-import type { Session, User } from '@bn/supabase';
+import type { Session, User, JwtPayload } from '@bn/supabase';
 import { BaseResponse } from '../shared/core.types';
 export type Credetials = {
     email: string;
@@ -28,7 +28,7 @@ export type MasterRole = Tables<'master_roles'>;
 export type MasterDomain = Tables<'master_domains'>;
 export type UserRole = Tables<'user_roles'>;
 export type UserAccess = {
-    role: MasterRole;
+    AccessRights: AuthClaims['app_metadata']['access_rights'];
     domain: MasterDomain;
     assigned_at: string | null;
     assigned_by: string | null;
@@ -42,29 +42,28 @@ export type AuthUser = User & {
 export type AuthSession = Omit<Session, 'user'> & {
     user: AuthUser;
 };
-export type AuthClaims = {
-    sub: string;
-    email?: string;
+export type AuthClaims = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {
     app_metadata: {
+        access_rights: string[];
         provider?: string;
         providers?: string[];
-        roles: string[];
-        domains: string[];
     };
-    user_metadata: {
+    user_metadata?: {
         username?: string;
     };
-    exp?: number;
-    iat?: number;
 };
-export type GetUserResponse = {
-    user: AuthUser | null;
-};
-export type GetSessionResponse = {
-    session: AuthSession | null;
-};
-export type GetClaimsResponse = {
-    claims: AuthClaims | null;
+export type GetUserResponse = User;
+export type GetSessionResponse = Session;
+export type GetClaimsResponse = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {
+    app_metadata: {
+        access_rights: string[];
+        provider?: string;
+        providers?: string[];
+    };
+    user_metadata?: {
+        email_verified?: boolean;
+        username?: string;
+    };
 };
 export type RequireAuthOptions = {
     redirect_to?: string;

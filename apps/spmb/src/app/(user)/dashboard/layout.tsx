@@ -1,5 +1,5 @@
 // 📄 File: apps/dashboard/src/app/dashboard/layout.tsx
-import { getCurrentClaims, validateAccess } from '@bn/auth'; // 💡 Import mesin global dari shared
+import { getCurrentClaims, getCurrentSession, getCurrentUser, validateAccess } from '@bn/auth'; // 💡 Import mesin global dari shared
 import { CURRENT_DOMAIN, isPendaftar } from '@/utils/policies'; // 💡 Import aturan lokal kita
 import { redirect } from 'next/navigation';
 import DashboardHeader from '@/components/headers/dashboardHeader';
@@ -7,7 +7,12 @@ import DashboardHeader from '@/components/headers/dashboardHeader';
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // 1. Ambil session user dari server
   const claims = await getCurrentClaims();
-  console.log("Fetched Claims in Layout:", claims);
+  const sessions = await getCurrentSession();
+  const user = await getCurrentUser();
+
+  console.log("getClaims():", claims.data.claims);
+  console.log("getSession():", sessions);
+  console.log("getUser():", user);
   
   // 2. Jika expire, langsung tendang ke halaman unauthorized
   if (!claims || !claims.data) redirect('/unauthorized');

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { loginAction } from "@/actions/authAction";
+import { loginAction } from "@/actions/auth/auth.actions";
 import { Button, EmailInput, PasswordInput } from "@bn/ui"; 
 
 export default function LoginForm() {

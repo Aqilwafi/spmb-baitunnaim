@@ -1,15 +1,15 @@
 "use server";
 
-import { createSupabaseServer } from "@bn/supabase";
 import { 
   RegisterResponse, 
   LoginResponse, 
-  LogoutResponse, 
-  AuthUser, 
+  LogoutResponse,  
   ForgotPasswordResponse,
   ResetPasswordResponse,
   ForgotPasswordPayload,
-  ResetPasswordPayload
+  ResetPasswordPayload,
+  RegisterPayload,
+  LoginPayload
 } from "@bn/types";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -17,17 +17,9 @@ import { executeSharedLogin, executeSharedRegister, executeSharedLogout, execute
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
   
-  const payload = {
-    email: formData.get("email") as string,
-    username: formData.get("username") as string,
-    password: formData.get("password") as string,
-    confirm_password: formData.get("confirmPassword") as string,
-  };
-
-  console.log("Register payload:", payload);
+  const payload = Object.fromEntries(formData) as RegisterPayload;
 
   const result = await executeSharedRegister(payload);
-  console.log("Register result:", result);
 
   if (!result.success) {
     return result; // Mengembalikan error (success: false)
@@ -41,10 +33,7 @@ export async function registerAction(prevState: any, formData: FormData): Promis
 
 export async function loginAction(prevState: any, formData: FormData): Promise<LoginResponse> {
 
-  const payload = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+  const payload = Object.fromEntries(formData) as LoginPayload;
 
   const result = await executeSharedLogin(payload);
 
