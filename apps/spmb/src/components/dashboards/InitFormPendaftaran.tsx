@@ -6,24 +6,25 @@ import { Label } from '@bn/ui';
 import { Select } from '@bn/ui';
 import { User, School, GraduationCap, Lock } from 'lucide-react';
 import { checkIsMI, isClassFieldLocked } from '@/helpers/registrationHelper';
-import { MasterKelas, MasterLembaga } from '@bn/types';
+import { SelectOption } from '@bn/types';
 
 interface InitFormPendaftaranProps {
-  masterLembaga: MasterLembaga[];
-  masterKelas: MasterKelas[];
+  lembaga: SelectOption[];
+  kelas: SelectOption[];
   selectedLembagaCode: string;
   onLembagaChange: (code: string) => void;
 }
 
 export function InitFormPendaftaran({
-  masterLembaga,
-  masterKelas,
+  lembaga,
+  kelas,
   selectedLembagaCode,
   onLembagaChange,
 }: InitFormPendaftaranProps) {
+
   const isMI = useMemo(
-    () => checkIsMI(selectedLembagaCode, masterLembaga),
-    [selectedLembagaCode, masterLembaga]
+    () => checkIsMI(selectedLembagaCode, lembaga),
+    [selectedLembagaCode, kelas]
   );
   const isLocked = useMemo(
     () => isClassFieldLocked(selectedLembagaCode, isMI),
@@ -36,7 +37,7 @@ export function InitFormPendaftaran({
   }));
 
   const kelasOptions = masterKelas
-    .filter((k) => k.id)
+    .filter((k) => k.code)
     .map((item) => ({ value: String(item.code), label: item.label ?? item.code }));
     
   return (

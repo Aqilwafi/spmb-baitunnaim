@@ -1,1 +1,2 @@
-export * from './master.services';
+export * from './master/master.services';
+export * from './siswa/siswa.services'; 

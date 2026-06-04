@@ -1,44 +1,44 @@
-// services/masterService.ts
+// @bn/services/src/master/masterService.ts
+
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import type { AppSupabaseClient } from "@bn/supabase";
 import { MasterKelas, MasterLembaga, MasterStatusRumah, MasterTipeDokumen, MasterTahunAjaran, MasterTinggalBersama, MasterRole, MasterDomains } from "@bn/types";
 
-export async function getMasterKelas(): Promise<MasterKelas[]> {
+export async function getMasterKelas(supabase: AppSupabaseClient): Promise<MasterKelas[]> {
 
-    const supabase = await createSupabaseServer();
-    const { data: masterKelas, error } = await supabase
-        .from('master_kelas')
-        .select('*');
+  const { data: masterKelas, error } = await supabase
+    .from("master_kelas")
+    .select("*");
 
-    if (error) {
-        throw new Error(`Gagal mengambil data master kelas: ${error.message}`);
-    }
-    return masterKelas || [];
+  if (error) {
+    throw new Error(
+      `Gagal mengambil data master kelas: ${error.message}`
+    );
+  }
+
+  return masterKelas;
 }
 
-export async function getMasterLembaga (): Promise<MasterLembaga[]> {
-    const supabase = await createSupabaseServer();
+export async function getMasterLembaga (supabase: AppSupabaseClient): Promise<MasterLembaga[]> {
     const { data: masterLembaga, error } = await supabase
         .from('master_lembaga')
         .select('*');
         
     if (error) throw new Error("Gagal mengambil data master lembaga");
-    return masterLembaga || [];
+    return masterLembaga;
 }
 
-export async function getMasterTahunAjaran (): Promise<MasterTahunAjaran> {
-    const supabase = await createSupabaseServer();
+export async function getMasterTahunAjaran (supabase: AppSupabaseClient): Promise<MasterTahunAjaran | null> {
     const { data: masterTahunAjaran, error } = await supabase
         .from('master_tahun_ajaran')
         .select('*')
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
     if (error) throw new Error("Gagal mengambil data master tahun ajaran");
     return masterTahunAjaran;
 }
 
-export async function getMasterStatusRumah (): Promise<MasterStatusRumah[]> {
-    const supabase = await createSupabaseServer();
+export async function getMasterStatusRumah (supabase: AppSupabaseClient): Promise<MasterStatusRumah[]> {
     const { data: masterStatusRumah, error } = await supabase
         .from('master_status_rumah')
         .select('*');
@@ -46,8 +46,7 @@ export async function getMasterStatusRumah (): Promise<MasterStatusRumah[]> {
     return masterStatusRumah || [];
 }
 
-export async function getMasterTinggalBersama (): Promise<MasterTinggalBersama[]> {
-    const supabase = await createSupabaseServer();
+export async function getMasterTinggalBersama (supabase: AppSupabaseClient): Promise<MasterTinggalBersama[]> {
     const { data: masterTinggalBersama, error } = await supabase
         .from('master_tinggal_bersama')
         .select('*');
@@ -55,29 +54,26 @@ export async function getMasterTinggalBersama (): Promise<MasterTinggalBersama[]
     return masterTinggalBersama || [];
 }
 
-export async function getMasterTipeDokumen (): Promise<MasterTipeDokumen[]> {
-    const supabase = await createSupabaseServer();
+export async function getMasterTipeDokumen (supabase: AppSupabaseClient): Promise<MasterTipeDokumen[]> {
     const { data: masterTipeDokumen, error } = await supabase
         .from('master_tipe_dokumen')
         .select('*');
     if (error) throw new Error("Gagal mengambil data master tipe dokumen");
-    return masterTipeDokumen || [];
+    return masterTipeDokumen;
 }
 
-export async function getMasterRoles (): Promise<MasterRole[]> {
-    const supabase = await createSupabaseServer();
+export async function getMasterRoles (supabase: AppSupabaseClient): Promise<MasterRole[]> {
     const { data: masterRoles, error } = await supabase
         .from('master_roles')
         .select('*');
     if (error) throw new Error("Gagal mengambil data master roles");
-    return masterRoles || [];
+    return masterRoles;
 }
 
-export async function getMasterDomains (): Promise<MasterDomains[]> {
-    const supabase = await createSupabaseServer();
+export async function getMasterDomains (supabase: AppSupabaseClient): Promise<MasterDomains[]> {
     const { data: masterDomains, error } = await supabase
         .from('master_domains')
         .select('*');
     if (error) throw new Error("Gagal mengambil data master domains");
-    return masterDomains || [];
+    return masterDomains;
 }

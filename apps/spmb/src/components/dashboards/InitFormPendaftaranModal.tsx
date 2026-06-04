@@ -6,14 +6,14 @@ import { Button, Modal } from '@bn/ui';
 import { X, Save, Loader2 } from 'lucide-react';
 import { initFormPendaftaranAction } from '@/actions/core/init-form.actions';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
-import { MasterKelas, MasterLembaga } from '@bn/types';
+import { SelectOption } from '@bn/types';
 
 interface InitFormPendaftaranModalProps {
-  masterLembaga: MasterLembaga[];
-  masterKelas: MasterKelas[];
+  lembaga: SelectOption[];
+  kelas: SelectOption[];
 }
 
-export function InitFormPendaftaranModal({ masterLembaga, masterKelas }: InitFormPendaftaranModalProps) {
+export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaranModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLembagaCode, setSelectedLembagaCode] = useState('');
@@ -57,8 +57,8 @@ export function InitFormPendaftaranModal({ masterLembaga, masterKelas }: InitFor
 
         <form action={action} className="space-y-6">
           <InitFormPendaftaran
-            masterLembaga={masterLembaga}
-            masterKelas={masterKelas}
+            lembaga={lembaga}
+            kelas={kelas}
             selectedLembagaCode={selectedLembagaCode}
             onLembagaChange={setSelectedLembagaCode}
           />

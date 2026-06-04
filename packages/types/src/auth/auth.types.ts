@@ -1,7 +1,7 @@
 // packages/types/src/auth/auth.types.ts
 
 import type { Tables } from '../shared/base.types';
-import type { Session, User, JwtPayload } from '@bn/supabase'; // Pastikan package ini mengekspor tipe asli Supabase
+import type { Session, User, JwtPayload } from '../shared/core.types'; // Pastikan package ini mengekspor tipe asli Supabase
 import { BaseResponse } from '../shared/core.types';
 
 export type Credetials = {

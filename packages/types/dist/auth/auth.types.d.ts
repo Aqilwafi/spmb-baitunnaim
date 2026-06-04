@@ -1,5 +1,5 @@
 import type { Tables } from '../shared/base.types';
-import type { Session, User, JwtPayload } from '@bn/supabase';
+import type { Session, User, JwtPayload } from '../shared/core.types';
 import { BaseResponse } from '../shared/core.types';
 export type Credetials = {
     email: string;

@@ -17,6 +17,7 @@
   "dependencies": {
     "@bn/supabase": "workspace:*",
     "@bn/types": "workspace:*",
+    "@bn/auth": "workspace:*",
     "server-only": "^0.0.1"
   },
   "devDependencies": {

@@ -8,7 +8,24 @@ const pendaftaranQuery = (supabase: any) =>
 
 type PendaftaranData = QueryData<ReturnType<typeof pendaftaranQuery>>;
 
-export async function getPendaftaran(): Promise<PendaftaranData>{
+export async function getFormPendaftaran(): Promise<PendaftaranData>{
+
+    const claims = await getCurrentClaims();
+    if (!claims) {
+        throw new Error("Unauthorized");
+    }
+
+    const supabase = await createSupabaseServer();
+    const { data, error } = await pendaftaranQuery(supabase).eq('user_id', claims.sub);
+
+    if (error) {
+        throw new Error("Failed to fetch pendaftaran data");
+    }
+
+    return data;
+}
+
+export async function getDetailFormPendaftaran(): Promise<PendaftaranData>{
 
     const claims = await getCurrentClaims();
     if (!claims) {

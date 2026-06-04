@@ -219,6 +219,9 @@ importers:
 
   packages/services:
     dependencies:
+      '@bn/auth':
+        specifier: workspace:*
+        version: link:../auth
       '@bn/supabase':
         specifier: workspace:*
         version: link:../supabase
@@ -235,6 +238,9 @@ importers:
 
   packages/supabase:
     dependencies:
+      '@bn/types':
+        specifier: workspace:*
+        version: link:../types
       '@supabase/ssr':
         specifier: ^0.10.3
         version: 0.10.3(@supabase/supabase-js@2.106.1)
@@ -281,9 +287,9 @@ importers:
 
   packages/types:
     dependencies:
-      '@bn/supabase':
-        specifier: workspace:*
-        version: link:../supabase
+      '@supabase/supabase-js':
+        specifier: ^2.106.1
+        version: 2.106.1
     devDependencies:
       '@bn/tsconfig':
         specifier: workspace:*

@@ -15,7 +15,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@bn/supabase": "workspace:*"
+    "@supabase/supabase-js": "^2.106.1"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
