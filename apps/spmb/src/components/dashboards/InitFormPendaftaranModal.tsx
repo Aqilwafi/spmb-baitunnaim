@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Modal } from '@bn/ui';
-import { X, Save, Loader2 } from 'lucide-react';
+import { X, Save, Loader2, Plus } from 'lucide-react';
 import { initFormPendaftaranAction } from '@/actions/core/init-form.actions';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
 import { InitFormPendaftaranModalProps } from '@/features/pendaftaran/types';
@@ -31,9 +31,10 @@ export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaran
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Pendaftaran Baru</Button>
-
+      <Button onClick={() => setIsOpen(true)}> <Plus size={22} className="text-white" /> Pendaftaran Baru </Button>
+      
       <Modal open={isOpen} onClose={handleClose}>
+        
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Pendaftaran Baru</h2>

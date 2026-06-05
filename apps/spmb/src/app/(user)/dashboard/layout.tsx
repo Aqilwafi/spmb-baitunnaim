@@ -3,20 +3,21 @@ import { getCurrentClaims, validateAccess } from '@bn/auth'; // 💡 Import mesi
 import { CURRENT_DOMAIN, isPendaftar } from '@/utils/policies'; // 💡 Import aturan lokal kita
 import { redirect } from 'next/navigation';
 import DashboardHeader from '@/components/headers/dashboardHeader';
+import { Forbidden, Unauthorized } from '@bn/ui';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // 1. Ambil session user dari server
   const claims = await getCurrentClaims();
   
   // 2. Jika expire, langsung tendang ke halaman unauthorized
-  if (!claims) redirect('/unauthorized');
+  if (!claims) return <Unauthorized/> ;
   
   const claimsData = claims;
 
   const isAllowed = validateAccess(claimsData, CURRENT_DOMAIN, isPendaftar);
 
   if (!isAllowed) {
-    redirect('/forbidden'); 
+    return <Forbidden/>
   }
 
   // 5. Jika lolos (TRUE), render halaman dashboard dengan normal

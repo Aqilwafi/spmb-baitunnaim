@@ -12,3 +12,6 @@ export * from "./core/tabel";
 export * from "./input-field/credential-input";
 export * from "./input-field/general";
 export * from "./images/company-logo";
+export * from './components/Forbidden';
+export * from './components/Maintanance';
+export * from './components/Unauthorized';
