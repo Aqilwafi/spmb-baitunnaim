@@ -6,14 +6,7 @@ import { Label } from '@bn/ui';
 import { Select } from '@bn/ui';
 import { User, School, GraduationCap, Lock } from 'lucide-react';
 import { checkIsMI, isClassFieldLocked } from '@/helpers/registrationHelper';
-import { SelectOption } from '@bn/types';
-
-interface InitFormPendaftaranProps {
-  lembaga: SelectOption[];
-  kelas: SelectOption[];
-  selectedLembagaCode: string;
-  onLembagaChange: (code: string) => void;
-}
+import { InitFormPendaftaranProps } from '@/features/pendaftaran/types';
 
 export function InitFormPendaftaran({
   lembaga,
@@ -30,15 +23,6 @@ export function InitFormPendaftaran({
     () => isClassFieldLocked(selectedLembagaCode, isMI),
     [selectedLembagaCode, isMI]
   );
-
-  const lembagaOptions = masterLembaga.map((item) => ({
-    value: item.code,
-    label: item.label ?? item.code,
-  }));
-
-  const kelasOptions = masterKelas
-    .filter((k) => k.code)
-    .map((item) => ({ value: String(item.code), label: item.label ?? item.code }));
     
   return (
     <div className="space-y-5">
@@ -69,7 +53,7 @@ export function InitFormPendaftaran({
           name="lembaga_tujuan_id"
           required
           placeholder="Pilih Lembaga"
-          options={lembagaOptions}
+          options={lembaga}
           value={selectedLembagaCode}
           onChange={(e) => onLembagaChange(e.target.value)}
           className="px-5 py-4 rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:border-blue-500"
@@ -110,7 +94,7 @@ export function InitFormPendaftaran({
             disabled={isLocked}
             placeholder={isLocked ? undefined : 'Pilih Kelas'}
             value={isLocked ? '1' : undefined}
-            options={isLocked ? [{ value: '1', label: 'Non-MI' }] : kelasOptions}
+            options={isLocked ? [{ value: '1', label: 'Non-MI' }] : kelas}
             className={`px-5 py-4 rounded-2xl transition-all ${
               isLocked
                 ? 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed italic'

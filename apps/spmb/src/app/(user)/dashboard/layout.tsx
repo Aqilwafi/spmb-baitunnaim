@@ -1,5 +1,5 @@
 // 📄 File: apps/dashboard/src/app/dashboard/layout.tsx
-import { getCurrentClaims, getCurrentSession, getCurrentUser, validateAccess } from '@bn/auth'; // 💡 Import mesin global dari shared
+import { getCurrentClaims, validateAccess } from '@bn/auth'; // 💡 Import mesin global dari shared
 import { CURRENT_DOMAIN, isPendaftar } from '@/utils/policies'; // 💡 Import aturan lokal kita
 import { redirect } from 'next/navigation';
 import DashboardHeader from '@/components/headers/dashboardHeader';
@@ -7,17 +7,11 @@ import DashboardHeader from '@/components/headers/dashboardHeader';
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // 1. Ambil session user dari server
   const claims = await getCurrentClaims();
-  const sessions = await getCurrentSession();
-  const user = await getCurrentUser();
-
-  console.log("getClaims():", claims?.data.claims);
-  console.log("getSession():", sessions);
-  console.log("getUser():", user);
   
   // 2. Jika expire, langsung tendang ke halaman unauthorized
-  if (!claims || !claims.data) redirect('/unauthorized');
+  if (!claims) redirect('/unauthorized');
   
-  const claimsData = claims.data.claims;
+  const claimsData = claims;
 
   const isAllowed = validateAccess(claimsData, CURRENT_DOMAIN, isPendaftar);
 
@@ -29,7 +23,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <section className="min-h-screen bg-[#f8f9fa] text-gray-800 flex flex-col">
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 w-full">
-        <DashboardHeader name={claimsData.user_metadata.username || claimsData.email || "User"} />
+        <DashboardHeader name={claimsData.user_metadata?.username || claimsData.email || "User"} />
       </div>
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 py-6">
         {children}

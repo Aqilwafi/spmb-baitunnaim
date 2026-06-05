@@ -6,12 +6,8 @@ import { Button, Modal } from '@bn/ui';
 import { X, Save, Loader2 } from 'lucide-react';
 import { initFormPendaftaranAction } from '@/actions/core/init-form.actions';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
-import { SelectOption } from '@bn/types';
+import { InitFormPendaftaranModalProps } from '@/features/pendaftaran/types';
 
-interface InitFormPendaftaranModalProps {
-  lembaga: SelectOption[];
-  kelas: SelectOption[];
-}
 
 export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaranModalProps) {
   const router = useRouter();

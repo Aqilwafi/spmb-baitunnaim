@@ -6,6 +6,6 @@ export type BaseResponse<T = undefined, E = never> =
   | { success: false; message: string; data?: E};
 
 export type SelectOption = {
-  code: string;
+  value: string;
   label: string;
 };

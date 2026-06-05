@@ -1,17 +1,16 @@
 // ./tes/run-login.ts
 import { createSupabaseTesting } from "@bn/supabase";
 import { loginSchema } from "@bn/validators";
+import { getCurrentSession, getCurrentUser, getCurrentClaims } from "@bn/auth";
 
 async function jalankanTesLogin() {
   console.log("🚀 Memulai tes koneksi Supabase Auth...");
 
-  // 1. Data tiruan (ganti dengan akun asli di Supabase Anda)
   const dataInput = {
     email: "seblakpedas998@gmail.com",
     password: "Caramelwill3"
   };
 
-  // 2. Validasi dengan Zod
   const validated = loginSchema.safeParse(dataInput);
   if (!validated.success) {
     console.error("❌ Validasi Zod Gagal:", validated.error.flatten().fieldErrors);
@@ -19,10 +18,8 @@ async function jalankanTesLogin() {
   }
 
   try {
-    // 3. Hubungkan ke Supabase
     const supabase = await createSupabaseTesting();
 
-    // 4. Hit API Supabase Auth
     const { data, error } = await supabase.auth.signInWithPassword({
       email: validated.data.email,
       password: validated.data.password,
@@ -32,54 +29,41 @@ async function jalankanTesLogin() {
       console.error("❌ Supabase Auth Menolak Login:", error.message);
       return;
     }
+    console.log("✅ Login berhasil:", data.user?.email);
 
-
-    // console.log("\n👤 [USER DATA]");
-    // console.log(JSON.stringify(data.user, null, 2));
-
-    // // Log data Session (Token, Refresh Token, dll) secara detail
-    // console.log("\n🎫 [SESSION & TOKENS]");
-    // console.log(JSON.stringify(data.session, null, 2));
-
-    // 2. Tes Memanggil getClaims() untuk Verifikasi Token Lokal/Edge
     try {
-      // Jika tidak memasukkan argumen jwt, dia otomatis mengambil access_token dari session aktif
-      const { data: sessionData , error: errorSesson } = await supabase.auth.getSession();
-
-      if (error) {
-        console.error("❌ Gagal mengambil claims:", errorSesson?.message);
+      // getCurrentSession() return Session | null, bukan { data, error }
+      const session = await getCurrentSession();
+      if (!session) {
+        console.error("❌ Gagal mengambil session");
         return;
       }
       console.log("\n🎫 [SESSION]");
-      console.log( sessionData )
+      console.log(session);
 
-      const { data: userData , error: errorUser } = await supabase.auth.getUser();
-
-      if (error) {
-        console.error("❌ Gagal mengambil claims:", errorUser?.message);
+      const user = await getCurrentUser();
+      if (!user) {
+        console.error("❌ Gagal mengambil user");
         return;
       }
-      console.log("\n🎫 [USER]");
-      console.log( userData )
+      console.log("\n👤 [USER]");
+      console.log(user);
 
-      const { data: claimsData , error: errorClaims } = await supabase.auth.getClaims();
-
-      if (error) {
-        console.error("❌ Gagal mengambil claims:", errorClaims?.message);
+      const claims = await getCurrentClaims();
+      if (!claims) {
+        console.error("❌ Gagal mengambil claims");
         return;
       }
-      console.log("\n🎫 [CLAIMS]");
-      console.log( claimsData?.claims )
-
+      console.log("\n🔐 [CLAIMS]");
+      console.log(claims);
+      console.log("\n🔑 access_rights:", claims.app_metadata?.access_rights);
 
     } catch (err) {
-        console.error("❌ Terjadi error saat mengeksekusi getClaims:", err);
+      console.error("❌ Terjadi error:", err);
     }
-    
-    
 
   } catch (err) {
-    console.error("💥 Terjadi error fatal saat eksekusi:", err);
+    console.error("💥 Terjadi error fatal:", err);
   }
 }
 

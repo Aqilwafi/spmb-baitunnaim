@@ -19,7 +19,8 @@
     "next": "16.2.6",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "lucide-react": "^0.553.0"
+    "lucide-react": "^0.553.0",
+    "@bn/types": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19",

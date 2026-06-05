@@ -1,15 +1,19 @@
-import { SelectOption } from "@bn/types";
+import { SelectOption, MasterKelas, MasterLembaga } from "@bn/types";
 
-export const mapLembagaOptions = (data: SelectOption[]) =>
-  data.map(item => ({
-    code: item.code,
+export function mapLembagaOptions(data: MasterLembaga[]): SelectOption[] {
+
+  return data.map(item => ({
+    value: item.code,
     label: item.label ?? item.code,
   }));
+}
 
-export const mapKelasOptions = (data: SelectOption[]) =>
-  data
-    .filter(k => k.code)
-    .map(item => ({
-      code: String(item.code),
+export function mapKelasOptions(data: MasterKelas[]): SelectOption[] {
+
+  return data
+    .filter((k) => k.code)
+    .map((item) => ({
+      value: String(item.code),
       label: item.label ?? item.code,
     }));
+}

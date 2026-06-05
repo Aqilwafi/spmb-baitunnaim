@@ -1,6 +1,5 @@
 // packages/auth/src/errors.ts
-import { isAuthError } from "@bn/supabase";
-import { BaseResponse } from "@bn/types";
+import { BaseResponse, isAuthError } from "@bn/types";
 
 export function handleAuthError<E = never>(error: unknown, dataFails?: E): BaseResponse<undefined, E> {
   // 1. Pastikan ini adalah error dari SDK Supabase

@@ -9,6 +9,7 @@
   "dependencies": {
     "@bn/supabase": "workspace:*",
     "@bn/validators": "workspace:*",
+    "@bn/auth": "workspace:*",
     "dotenv": "^17.4.2"
   },
   "devDependencies": {

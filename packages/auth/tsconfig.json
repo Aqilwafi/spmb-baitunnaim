@@ -1,5 +1,5 @@
 {
-  "extends": "@bn/tsconfig/base.json",
+  "extends": "@bn/tsconfig/next.json",
   "compilerOptions": {
     "noEmit": false,
     "declaration": true,

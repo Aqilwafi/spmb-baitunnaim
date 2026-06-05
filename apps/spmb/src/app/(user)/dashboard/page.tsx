@@ -1,5 +1,5 @@
 // app/dashboard/page.tsx
-import { getKelasOptions, getLembagaOptions } from '@/services/pendaftaran/pendaftaran-options.services';
+import { getKelasOptions, getLembagaOptions } from '@/features/pendaftaran/options';
 import { createSupabaseServer } from '@bn/supabase';
 import { getCurrentClaims } from '@bn/auth';
 import { Button, Card, CardContent, CardHeader, CardTitle,  } from '@bn/ui';
@@ -18,11 +18,12 @@ export default async function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-[#f8f9fa] ">
-      <h1 className="text-black">DASHBOARD</h1>
+      <div className="flex justify-end items-center">
       <InitFormPendaftaranModal
         lembaga={lembagaOptions}
         kelas={kelasOptions}
       />
+      </div>
       {/* 💡 Card Pembungkus Data Lembaga */}
 
       {/* <Card className="mt-6 max-w-lg bg-white border-gray-100 shadow-sm">
@@ -57,6 +58,7 @@ export default async function DashboardPage() {
           )}
         </CardContent>
       </Card> */}
+      
     </main>
   );
 }

@@ -3,9 +3,9 @@ import { SelectOption } from "@bn/types";
 export const checkIsMI = (selectedCode: string, masterLembaga: SelectOption[]) => {
   if (!selectedCode) return false;
 
-  const selected = masterLembaga.find(l => l.code === selectedCode);
+  const selected = masterLembaga.find(l => l.value === selectedCode);
 
-  return selected?.code?.toUpperCase() === "MI";
+  return selected?.value?.toUpperCase() === "MI";
 };
 
 export const isClassFieldLocked = (

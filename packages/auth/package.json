@@ -7,23 +7,21 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/types": "workspace:*"
   },
-  "peerDependencies": {
-    "next": "16.2.6" 
-  },
   "devDependencies": {
-    "@bn/tsconfig": "workspace:*",
-    "next": "16.2.6"
+    "@bn/tsconfig": "workspace:*"
   }
 }
