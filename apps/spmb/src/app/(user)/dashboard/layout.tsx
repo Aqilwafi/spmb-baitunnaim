@@ -1,7 +1,6 @@
 // 📄 File: apps/dashboard/src/app/dashboard/layout.tsx
 import { getCurrentClaims, validateAccess } from '@bn/auth'; // 💡 Import mesin global dari shared
 import { CURRENT_DOMAIN, isPendaftar } from '@/utils/policies'; // 💡 Import aturan lokal kita
-import { redirect } from 'next/navigation';
 import DashboardHeader from '@/components/headers/dashboardHeader';
 import { Forbidden, Unauthorized } from '@bn/ui';
 

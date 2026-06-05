@@ -7,10 +7,13 @@ import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaf
 export default async function DashboardPage() {
 
   const supabase = await createSupabaseServer();
-
   
   const kelasOptions = await getKelasOptions(supabase);
   const lembagaOptions = await getLembagaOptions(supabase);
+
+  {/* To do:
+      get form   
+  */}
 
   return (
     <main className="min-h-full bg-[#f8f9fa] ">
@@ -22,8 +25,7 @@ export default async function DashboardPage() {
       </div>
       <EmptyPendaftaran/>
       {/* To do:
-          
-      
+          render <FormPendaftaranCard/> ??  <EmptyPendaftaran/>
       */}
       
     </main>
