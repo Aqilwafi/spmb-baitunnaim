@@ -2,7 +2,22 @@
 
 import "server-only";
 import type { AppSupabaseClient } from "@bn/supabase";
-import { MasterKelas, MasterLembaga, MasterStatusRumah, MasterTipeDokumen, MasterTahunAjaran, MasterTinggalBersama, MasterRole, MasterDomains } from "@bn/types";
+import { MasterStep, MasterKelas, MasterLembaga, MasterStatusRumah, MasterTipeDokumen, MasterTahunAjaran, MasterTinggalBersama, MasterRole, MasterDomains } from "@bn/types";
+
+export async function getMasterStep(supabase: AppSupabaseClient): Promise<MasterStep[]> {
+
+  const { data: masterStep, error } = await supabase
+    .from("master_step")
+    .select("*");
+
+  if (error) {
+    throw new Error(
+      `Gagal mengambil data master step: ${error.message}`
+    );
+  }
+
+  return masterStep;
+}
 
 export async function getMasterKelas(supabase: AppSupabaseClient): Promise<MasterKelas[]> {
 
