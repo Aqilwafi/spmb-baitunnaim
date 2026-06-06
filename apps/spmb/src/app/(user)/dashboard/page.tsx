@@ -3,11 +3,12 @@ import { createSupabaseServer } from '@bn/supabase';
 import { EmptyPendaftaran } from '@/components/dashboards/EmptyPendaftaran';
 import { getKelasOptions, getLembagaOptions } from '@/features/pendaftaran/options';
 import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaftaranModal';
+import { getTahunAjaranAktif } from '@/features/pendaftaran/tahun-ajaran';
 
 export default async function DashboardPage() {
 
   const supabase = await createSupabaseServer();
-  
+  const tahunAjaranAktif = await getTahunAjaranAktif(supabase);
   const kelasOptions = await getKelasOptions(supabase);
   const lembagaOptions = await getLembagaOptions(supabase);
 
@@ -23,7 +24,7 @@ export default async function DashboardPage() {
           kelas={kelasOptions}
         />
       </div>
-      <EmptyPendaftaran/>
+      <EmptyPendaftaran tahunAjaran={tahunAjaranAktif}/>
       {/* To do:
           render <FormPendaftaranCard/> ??  <EmptyPendaftaran/>
       */}

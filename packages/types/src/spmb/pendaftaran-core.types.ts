@@ -7,6 +7,8 @@ import type {
 export type TahunAjaranActive = {
   code: string;
   semester: string;
+  tahun_mulai: number;
+  tahun_selesai: number;
 };
 
 export type FormPendaftaran = Tables<'form_pendaftaran'>;
