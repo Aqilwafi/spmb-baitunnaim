@@ -15,3 +15,4 @@ export * from "./images/company-logo";
 export * from './components/Forbidden';
 export * from './components/Maintanance';
 export * from './components/Unauthorized';
+export * from './components/BackButton';

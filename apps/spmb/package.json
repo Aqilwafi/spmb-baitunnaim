@@ -15,6 +15,7 @@
     "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/services": "workspace:*",
+    "@bn/utils": "workspace:*",
     "@bn/auth": "workspace:*",
     "@bn/ui": "workspace:*",
     "framer-motion": "^12.38.0",

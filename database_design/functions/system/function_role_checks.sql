@@ -1,14 +1,37 @@
 -- 1. Mengecek apakah user memegang sebuah role tertentu (tanpa peduli domainnya)
+CREATE OR REPLACE FUNCTION public.get_access_rights()
+RETURNS TEXT[]
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT COALESCE(
+    (auth.jwt() -> 'app_metadata' -> 'access_right')::jsonb::text[],
+    ARRAY[]::text[]
+  );
+$$;
+
+CREATE OR REPLACE FUNCTION public.has_access(p_domain TEXT, p_role TEXT)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM unnest(public.get_access_rights()) ar
+    WHERE split_part(ar, ':', 1) = p_domain
+      AND split_part(ar, ':', 2) = p_role
+  );
+$$;
+
 CREATE OR REPLACE FUNCTION public.has_role(p_role TEXT)
 RETURNS BOOLEAN
 LANGUAGE sql
 STABLE
-SET search_path = public, pg_catalog, auth
 AS $$
   SELECT EXISTS (
     SELECT 1
-    FROM jsonb_array_elements(coalesce(auth.jwt() -> 'app_metadata' -> 'roles', '[]'::jsonb)) r
-    WHERE (r ->> 'role') = p_role
+    FROM unnest(public.get_access_rights()) ar
+    WHERE split_part(ar, ':', 2) = p_role
   );
 $$;
 
@@ -17,12 +40,11 @@ CREATE OR REPLACE FUNCTION public.has_any_role(p_roles TEXT[])
 RETURNS BOOLEAN
 LANGUAGE sql
 STABLE
-SET search_path = public, pg_catalog, auth
 AS $$
   SELECT EXISTS (
     SELECT 1
-    FROM jsonb_array_elements(coalesce(auth.jwt() -> 'app_metadata' -> 'roles', '[]'::jsonb)) r
-    WHERE (r ->> 'role') = ANY(p_roles)
+    FROM unnest(public.get_access_rights()) ar
+    WHERE split_part(ar, ':', 2) = ANY(p_roles)
   );
 $$;
 
@@ -31,12 +53,11 @@ CREATE OR REPLACE FUNCTION public.is_superadmin()
 RETURNS BOOLEAN
 LANGUAGE sql
 STABLE
-SET search_path = public, pg_catalog, auth
 AS $$
   SELECT EXISTS (
     SELECT 1
-    FROM jsonb_array_elements(coalesce(auth.jwt() -> 'app_metadata' -> 'roles', '[]'::jsonb)) r
-    WHERE (r ->> 'role') = 'SUPERADMIN'
+    FROM unnest(public.get_access_rights()) ar
+    WHERE split_part(ar, ':', 2) = 'SUPERADMIN'
   );
 $$;
 
@@ -45,29 +66,27 @@ CREATE OR REPLACE FUNCTION public.is_admin_level()
 RETURNS BOOLEAN
 LANGUAGE sql
 STABLE
-SET search_path = public, pg_catalog, auth
 AS $$
   SELECT EXISTS (
     SELECT 1
-    FROM jsonb_array_elements(coalesce(auth.jwt() -> 'app_metadata' -> 'roles', '[]'::jsonb)) r
-    WHERE (r ->> 'role') IN ('ADMINISTRATOR', 'SUPERADMIN')
+    FROM unnest(public.get_access_rights()) ar
+    WHERE split_part(ar, ':', 2) IN ('ADMINISTRATOR', 'SUPERADMIN')
   );
 $$;
 
 -- 5. Mengecek kombinasi berpasangan antara role DAN domain (Kunci utama aplikasi kamu)
 CREATE OR REPLACE FUNCTION public.has_role_in_domain(
-  p_role TEXT,
-  p_domain TEXT
+  p_domain TEXT,
+  p_role TEXT
 )
 RETURNS BOOLEAN
 LANGUAGE sql
 STABLE
-SET search_path = public, pg_catalog, auth
 AS $$
   SELECT EXISTS (
     SELECT 1
-    FROM jsonb_array_elements(coalesce(auth.jwt() -> 'app_metadata' -> 'roles', '[]'::jsonb)) r
-    WHERE (r ->> 'role') = p_role
-      AND (r ->> 'domain') = p_domain
+    FROM unnest(public.get_access_rights()) ar
+    WHERE split_part(ar, ':', 1) = p_domain
+      AND split_part(ar, ':', 2) = p_role
   );
 $$;

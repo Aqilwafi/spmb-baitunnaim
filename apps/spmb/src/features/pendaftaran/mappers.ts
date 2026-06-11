@@ -1,6 +1,6 @@
-import { SelectOption, MasterKelas, MasterLembaga } from "@bn/types";
+import { SelectOption, MasterKelasListItem, MasterLembagaListItem } from "@bn/types";
 
-export function mapLembagaOptions(data: MasterLembaga[]): SelectOption[] {
+export function mapLembagaOptions(data: MasterLembagaListItem[]): SelectOption[] {
 
   return data.map(item => ({
     value: item.code,
@@ -8,12 +8,11 @@ export function mapLembagaOptions(data: MasterLembaga[]): SelectOption[] {
   }));
 }
 
-export function mapKelasOptions(data: MasterKelas[]): SelectOption[] {
+export function mapKelasOptions(data: MasterKelasListItem[]): SelectOption[] {
 
-  return data
-    .filter((k) => k.code)
-    .map((item) => ({
-      value: String(item.code),
-      label: item.label ?? item.code,
-    }));
+  return data.map(item => ({
+    value: item.code,
+    label: item.label ?? item.code,
+  }));
 }
+

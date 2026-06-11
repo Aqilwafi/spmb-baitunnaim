@@ -2,7 +2,7 @@
 
 import "server-only";
 
-export async function getSiswaById(id: string) {
+export async function getSiswaId(id: string) {
 
 }
 

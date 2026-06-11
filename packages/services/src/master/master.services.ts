@@ -2,93 +2,63 @@
 
 import "server-only";
 import type { AppSupabaseClient } from "@bn/supabase";
-import { MasterStep, MasterKelas, MasterLembaga, MasterStatusRumah, MasterTipeDokumen, MasterTahunAjaran, MasterTinggalBersama, MasterRole, MasterDomains } from "@bn/types";
+import { MasterDomainsRow, MasterRolesRow, MasterKelasListItem, MasterLembagaListItem, MasterStatusRumahListItem, MasterStepListItem, MasterTahunAjaranListItem, MasterTinggalBersamaListItem, MasterTipeDokumenListItem } from "@bn/types";
+import { getCachedMasterData } from "../utils/hof";
 
-export async function getMasterStep(supabase: AppSupabaseClient): Promise<MasterStep[]> {
+export const getMasterStep = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterStepListItem[], 'master_step' >(
+    supabase,
+    "master_step",
+    "code, label, sort_order, is_revisable",
+    "master_step",
+    (q) => q.eq("is_active", true)
+  );
 
-  const { data: masterStep, error } = await supabase
-    .from("master_step")
-    .select("*");
+export const getMasterKelas = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterKelasListItem[], 'master_kelas'>(
+    supabase,
+    "master_kelas",
+    "code, label",
+    "master_kelas"
+  );
 
-  if (error) {
-    throw new Error(
-      `Gagal mengambil data master step: ${error.message}`
-    );
-  }
+export const getMasterLembaga = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterLembagaListItem[], 'master_lembaga'>(
+    supabase,
+    "master_lembaga",
+    "code, label",
+    "master_lembaga"
+  );
 
-  return masterStep;
-}
+export const getMasterTahunAjaran = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterTahunAjaranListItem | null, 'master_tahun_ajaran'>(
+    supabase,
+    "master_tahun_ajaran",
+    "code, semester, tahun_mulai, tahun_selesai",
+    "master_tahun_ajaran",
+    (q) => q.eq("is_active", true).maybeSingle() // extraLogic
+  );
 
-export async function getMasterKelas(supabase: AppSupabaseClient): Promise<MasterKelas[]> {
+export const getMasterStatusRumah = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterStatusRumahListItem[], 'master_status_rumah'>(
+    supabase,
+    "master_status_rumah",
+    "code, label",
+    "master_status_rumah"
+  );
 
-  const { data: masterKelas, error } = await supabase
-    .from("master_kelas")
-    .select("*");
+export const getMasterTinggalBersama = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterTinggalBersamaListItem[], 'master_tinggal_bersama'>(
+    supabase,
+    "master_tinggal_bersama",
+    "code, label",
+    "master_tinggal_bersama"
+  );
 
-  if (error) {
-    throw new Error(
-      `Gagal mengambil data master kelas: ${error.message}`
-    );
-  }
-
-  return masterKelas;
-}
-
-export async function getMasterLembaga (supabase: AppSupabaseClient): Promise<MasterLembaga[]> {
-    const { data: masterLembaga, error } = await supabase
-        .from('master_lembaga')
-        .select('*');
-        
-    if (error) throw new Error("Gagal mengambil data master lembaga");
-    return masterLembaga;
-}
-
-export async function getMasterTahunAjaran (supabase: AppSupabaseClient): Promise<MasterTahunAjaran | null> {
-    const { data: masterTahunAjaran, error } = await supabase
-        .from('master_tahun_ajaran')
-        .select('*')
-        .eq('is_active', true)
-        .maybeSingle();
-    if (error) throw new Error("Gagal mengambil data master tahun ajaran");
-    return masterTahunAjaran;
-}
-
-export async function getMasterStatusRumah (supabase: AppSupabaseClient): Promise<MasterStatusRumah[]> {
-    const { data: masterStatusRumah, error } = await supabase
-        .from('master_status_rumah')
-        .select('*');
-    if (error) throw new Error("Gagal mengambil data master status rumah");
-    return masterStatusRumah || [];
-}
-
-export async function getMasterTinggalBersama (supabase: AppSupabaseClient): Promise<MasterTinggalBersama[]> {
-    const { data: masterTinggalBersama, error } = await supabase
-        .from('master_tinggal_bersama')
-        .select('*');
-    if (error) throw new Error("Gagal mengambil data master tinggal bersama");
-    return masterTinggalBersama || [];
-}
-
-export async function getMasterTipeDokumen (supabase: AppSupabaseClient): Promise<MasterTipeDokumen[]> {
-    const { data: masterTipeDokumen, error } = await supabase
-        .from('master_tipe_dokumen')
-        .select('*');
-    if (error) throw new Error("Gagal mengambil data master tipe dokumen");
-    return masterTipeDokumen;
-}
-
-export async function getMasterRoles (supabase: AppSupabaseClient): Promise<MasterRole[]> {
-    const { data: masterRoles, error } = await supabase
-        .from('master_roles')
-        .select('*');
-    if (error) throw new Error("Gagal mengambil data master roles");
-    return masterRoles;
-}
-
-export async function getMasterDomains (supabase: AppSupabaseClient): Promise<MasterDomains[]> {
-    const { data: masterDomains, error } = await supabase
-        .from('master_domains')
-        .select('*');
-    if (error) throw new Error("Gagal mengambil data master domains");
-    return masterDomains;
-}
+export const getMasterTipeDokumen = (supabase: AppSupabaseClient) =>
+  getCachedMasterData<MasterTinggalBersamaListItem[], 'master_tipe_dokumen'>(
+    supabase,
+    "master_tipe_dokumen",
+    "code, label",
+    "master_tipe_dokumen"
+  );

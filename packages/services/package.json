@@ -20,6 +20,9 @@
     "@bn/auth": "workspace:*",
     "server-only": "^0.0.1"
   },
+  "peerDependencies": {
+    "next": "^16.2.6"
+  },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"
   }

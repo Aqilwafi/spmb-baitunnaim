@@ -1,11 +1,11 @@
 // services/pendaftaran/tahun-ajaran.services.ts
 
 import "server-only";
-import { TahunAjaranActive } from "@bn/types";
+import { MasterTahunAjaranListItem } from "@bn/types";
 import { getMasterTahunAjaran } from "@bn/services";
 import { AppSupabaseClient } from "@bn/supabase";
 
-export async function getTahunAjaranAktif (supabase: AppSupabaseClient): Promise<TahunAjaranActive | null> {
+export async function getTahunAjaranAktif (supabase: AppSupabaseClient): Promise<MasterTahunAjaranListItem | null> {
 
     const tahunAjaran = await getMasterTahunAjaran(supabase);
 

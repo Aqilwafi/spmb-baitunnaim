@@ -14,6 +14,9 @@
   "scripts": {
     "build": "tsc"
   },
+  "dependencies":{
+    "@bn/types": "workspace:*"
+  },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"
   }

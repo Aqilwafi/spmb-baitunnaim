@@ -33,7 +33,7 @@ async function jalankanTesLogin() {
 
     try {
       // getCurrentSession() return Session | null, bukan { data, error }
-      const session = await getCurrentSession();
+      const session = await supabase.auth.getSession();
       if (!session) {
         console.error("❌ Gagal mengambil session");
         return;
@@ -41,7 +41,7 @@ async function jalankanTesLogin() {
       console.log("\n🎫 [SESSION]");
       console.log(session);
 
-      const user = await getCurrentUser();
+      const user = await supabase.auth.getUser();
       if (!user) {
         console.error("❌ Gagal mengambil user");
         return;
@@ -49,14 +49,13 @@ async function jalankanTesLogin() {
       console.log("\n👤 [USER]");
       console.log(user);
 
-      const claims = await getCurrentClaims();
+      const claims = await supabase.auth.getClaims();
       if (!claims) {
         console.error("❌ Gagal mengambil claims");
         return;
       }
       console.log("\n🔐 [CLAIMS]");
       console.log(claims);
-      console.log("\n🔑 access_rights:", claims.app_metadata?.access_rights);
 
     } catch (err) {
       console.error("❌ Terjadi error:", err);

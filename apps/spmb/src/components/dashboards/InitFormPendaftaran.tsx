@@ -5,7 +5,7 @@ import { Input } from '@bn/ui';
 import { Label } from '@bn/ui';
 import { Select } from '@bn/ui';
 import { User, School, GraduationCap, Lock } from 'lucide-react';
-import { checkIsMI, isClassFieldLocked } from '@/helpers/registrationHelper';
+import { checkIsMI, isClassFieldLocked } from '@/features/pendaftaran/rules';
 import { InitFormPendaftaranProps } from '@/features/pendaftaran/types';
 
 export function InitFormPendaftaran({
