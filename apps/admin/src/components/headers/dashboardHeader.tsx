@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { logoutAction } from "@/actions/authAction";
+import { logoutAction } from "@/actions/auth/auth.actions";
 import { Loader2, LogOut, UserCircle } from "lucide-react";
 
 export default function DashboardHeader({ name }: { name?: string }) {

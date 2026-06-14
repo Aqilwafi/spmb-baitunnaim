@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { registerAction } from "@/actions/authAction";
+import { registerAction } from "@/actions/auth/auth.actions";
 import Link from "next/link";
 import { CheckCircle2, Mail } from "lucide-react"; // Opsional: jika ingin icon di modal
 

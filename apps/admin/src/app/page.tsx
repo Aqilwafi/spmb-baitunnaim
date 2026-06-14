@@ -1,41 +1,40 @@
-// src/app/page.tsx
-"use client";
-
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
+import LoginForm from "@/components/auth/loginForm";
 
+export default function LoginPage() {
+  return (
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <div className="flex flex-col items-center gap-6 max-w-md w-full mx-auto">
+        
+        {/* Header Area (Logo & Nama Aplikasi) */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <Image
+            src="/logo_lpi.jpg"
+            alt="Logo LPI"
+            width={100}
+            height={100}
+            priority
+            className="rounded-full shadow-sm"
+          />
+          <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
+            {"BAITUN NA'IM"}
+          </h1>
+        </div>
 
-export default function HomePage() {
-    return (
-        <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
-            {/* Logo */}
-            <div className="flex flex-col items-center gap-4 max-w-md w-full">
-                <Image
-                    src="/logo_lpi.jpg"   // ← langsung path, tanpa import
-                    alt="Logo LPI"
-                    width={120}
-                    height={120}
-                    priority
-                    className="rounded-full -mt-10"
-                  />
-                <div className="flex flex-col gap-8 w-full max-w-xs">
-                    <h1 className="text-2xl font-bold text-gray-900 text-center">
-                    BAITUN NA&apos;IM
-                    </h1>
-                </div>
-                <div className="flex flex-col gap-4 w-full max-w-md">
-                    <Link href="/login">
-                        <button className="w-full px-6 py-3 rounded-2xl bg-blue-500 text-white text-lg shadow hover:bg-blue-700 transition cursor-pointer">
-                        LOGIN
-                      </button>
-                    </Link>
-                    <Link href="/register">
-                      <button className="w-full px-6 py-3 rounded-2xl bg-gray-200 text-gray-800 text-lg shadow hover:bg-gray-300 transition cursor-pointer">
-                        DAFTAR AKUN BARU
-                      </button>
-                    </Link>
-                </div>
-            </div>
-      </main>
-    );
+        {/* Kotak Form Utama menggunakan Shared Component Card */}
+        <Card className="w-full p-6 shadow-md bg-white rounded-2xl flex flex-col gap-5">
+          <div className="text-center border-b border-gray-100 pb-3">
+            <h2 className="text-lg font-bold text-gray-800 tracking-wider">LOGIN ADMIN PANEL</h2>
+            <p className="text-xs text-gray-400 mt-1">Silakan masuk ke akun Anda</p>
+          </div>
+
+          {/* Form Login */}
+          <LoginForm />
+        </Card>
+
+      </div>
+    </main>
+  );
 }

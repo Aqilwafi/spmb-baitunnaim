@@ -39,8 +39,9 @@ export default async function DashboardPage() {
 
   //const siswaReference = await getSiswaIdByUserId(supabase, claims?.);
 
-  // TODO:
   // const formPendaftaranRaw = await getFormPendaftaran(supabase);
+
+  // todo: props data awal ke card, lalu pastikan card props juga pendaftara/id, gitu?
 
   const SHOW_FORM = true;
 
