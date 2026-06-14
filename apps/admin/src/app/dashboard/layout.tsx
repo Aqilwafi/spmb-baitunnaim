@@ -1,0 +1,35 @@
+// apps/admin/src/app/dashboard/layout.tsx
+import { getCurrentClaims, validateAccess } from "@bn/auth";
+import { Unauthorized, Forbidden } from "@bn/ui";
+import { ALL_DOMAINS, hasSpmbAccess, hasPublikasiAccess, hasManageAccess } from "@/utils/policies";
+import Sidebar from "@/components/others/Sidebar";
+
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const claims = await getCurrentClaims();
+  if (!claims) return <Unauthorized />;
+
+  // Cukup punya akses salah satu domain untuk masuk admin panel
+  const hasAnyAccess = validateAccess(claims, ALL_DOMAINS, (roles) =>
+    hasSpmbAccess(roles) || hasPublikasiAccess(roles) || hasManageAccess(roles)
+  );
+
+  if (!hasAnyAccess) return <Forbidden />;
+
+  // Hitung akses per domain untuk dikirim ke sidebar
+  const canSpmb = validateAccess(claims, "SPMB", hasSpmbAccess);
+  const canPublikasi = validateAccess(claims, "PUBLIKASI", hasPublikasiAccess);
+  const canManage = validateAccess(claims, ALL_DOMAINS, hasManageAccess);
+
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar
+        canSpmb={canSpmb}
+        canPublikasi={canPublikasi}
+        canManage={canManage}
+      />
+      <main className="flex-1 overflow-y-auto p-6">
+        {children}
+      </main>
+    </div>
+  );
+}

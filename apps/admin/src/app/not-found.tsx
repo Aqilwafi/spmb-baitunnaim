@@ -34,7 +34,7 @@ export default function NotFound() {
         {/* Action Buttons */}
         <div className="w-full pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Link
-            href="/dashboard"
+            href="/"
             className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all active:scale-95 shadow-lg shadow-blue-100"
           >
             <Home size={18} />

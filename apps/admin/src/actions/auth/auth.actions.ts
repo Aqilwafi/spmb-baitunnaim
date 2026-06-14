@@ -54,7 +54,7 @@ export async function logoutAction(): Promise<LogoutResponse> {
   }
 
   revalidatePath("/", "layout");
-  redirect("/login");
+  redirect("/");
 }
 
 export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {

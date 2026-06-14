@@ -1,24 +1,21 @@
-// 📄 File: apps/dashboard/src/utils/policies.ts
+// apps/admin/src/utils/policies.ts
 
-// 1. Tentukan nama DOMAIN utama untuk aplikasi ini.
-//    Next.js akan tahu kalau aplikasi ini khusus mengurus urusan "SPMB"
-export const CURRENT_DOMAIN = "SPMB";
+export const SPMB_DOMAIN = "SPMB";
+export const PUBLIKASI_DOMAIN = "PUBLIKASI";
+export const ALL_DOMAINS = [SPMB_DOMAIN, PUBLIKASI_DOMAIN];
 
-/**
- * 2. KUMPULAN ATURAN (POLICIES)
- * Fungsi-fungsi di bawah ini bertugas menerima array role hasil saringan,
- * lalu mengembalikan nilai true jika memenuhi syarat.
- */
+export const isVerifikator = (roles: string[]) => roles.includes("VERIFIKATOR");
+export const isPublikator = (roles: string[]) => roles.includes("PUBLIKATOR");
+export const isAdministrator = (roles: string[]) => roles.includes("ADMINISTRATOR");
+export const isSuperAdmin = (roles: string[]) => roles.includes("SUPERADMIN");
 
-// Aturan A: Khusus Administrator saja
+export const isAdminLevel = (roles: string[]) =>
+  isAdministrator(roles) || isSuperAdmin(roles);
 
-export const isPendaftar = (roles: string[]) => roles.includes("PENDAFTAR");
+export const hasSpmbAccess = (roles: string[]) =>
+  isVerifikator(roles) || isAdminLevel(roles);
 
-export const isAdmin = (roles: string[]) => roles.includes("ADMINISTRATOR");
+export const hasPublikasiAccess = (roles: string[]) =>
+  isPublikator(roles) || isAdminLevel(roles);
 
-// Aturan B: Boleh Administrator, boleh juga Verifikator (Multi-role friendly!)
-export const isStaffAtauAdmin = (roles: string[]) => 
-  roles.includes("ADMINISTRATOR") || roles.includes("VERIFIKATOR");
-
-// Aturan C: Khusus Verifikator saja
-export const isVerifikatorOnly = (roles: string[]) => roles.includes("VERIFIKATOR");
+export const hasManageAccess = (roles: string[]) => isAdminLevel(roles);
