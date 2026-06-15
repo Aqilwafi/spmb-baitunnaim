@@ -1,102 +1,39 @@
-"use client";
-
-import { useState } from 'react'
-import { resetPasswordAction } from "@/actions/auth/auth.actions";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
+import SetPasswordForm from "@/components/auth/passwordForm";
 
-export default function ResetPasswordPage() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-
-    if (password !== confirmPassword) {
-      setError("Konfirmasi password tidak cocok.");
-      return;
-    }
-
-    setLoading(true);
-    const result = await resetPasswordAction(password, password);
-
-    if (result?.success) {
-      setError(result.message);
-      setLoading(false);
-    } else {
-      alert("Password berhasil diperbarui!");
-      router.push("/login");
-    }
-  };
-
+export default function SetPasswordPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen gap-8 bg-gray-50 p-4">
-      <div className="max-w-md w-full mx-auto text-center space-y-6">
-        <Image
-          src="/logo_lpi.jpg"
-          alt="Logo"
-          width={80}
-          height={80}
-          className="rounded-full mx-auto"
-        />
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <div className="flex flex-col items-center gap-6 max-w-md w-full mx-auto">
+        
+        {/* Header Area (Logo & Nama Aplikasi) */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <Image
+            src="/logo_lpi.jpg"
+            alt="Logo LPI"
+            width={100}
+            height={100}
+            priority
+            className="rounded-full shadow-sm"
+          />
+          <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
+            {"BAITUN NA'IM"}
+          </h1>
+        </div>
 
-        <h1 className="text-2xl font-black text-gray-900">ATUR PASSWORD BARU</h1>
-
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 space-y-5 text-left"
-        >
-          <div className="relative">
-            <label className="block text-sm font-bold text-gray-700 mb-1">Password Baru</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              required
-              minLength={6}
-              className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-gray-600"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+        {/* Kotak Form Utama menggunakan Shared Component Card */}
+        <Card className="w-full p-6 shadow-md bg-white rounded-2xl flex flex-col gap-5">
+          <div className="text-center border-b border-gray-100 pb-3">
+            <h2 className="text-lg font-bold text-gray-800 tracking-wider">AKTIVASI AKUN ADMIN</h2>
+            <p className="text-xs text-gray-400 mt-1">Silakan aktivasi akun Anda</p>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">Konfirmasi Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              required
-              minLength={6}
-              className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-gray-600"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-[10px] font-bold text-gray-400 mt-2 uppercase tracking-widest hover:text-green-600"
-            >
-              {showPassword ? "Sembunyikan" : "Tampilkan Password"}
-            </button>
-          </div>
+          {/* Form Login */}
+          <SetPasswordForm />
+        </Card>
 
-          {error && (
-            <p className="text-red-500 text-xs font-medium bg-red-50 p-2 rounded-lg border border-red-100 text-center">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-green-600 text-white py-3 rounded-2xl font-black text-sm hover:bg-green-700 transition-all shadow-lg shadow-green-100 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
-          >
-            {loading && (
-              <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4" />
-            )}
-            {loading ? "Menyimpan Perubahan..." : "Update Password Sekarang"}
-          </button>
-        </form>
       </div>
     </main>
   );

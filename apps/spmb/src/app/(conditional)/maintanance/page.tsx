@@ -1,5 +1,5 @@
-import { MaintenancePage } from "@bn/ui";
+import { Maintenance } from "@bn/ui";
 
 export default function ConditionalPage() {
-  return <MaintenancePage/>;
+  return <Maintenance/>;
 }

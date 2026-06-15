@@ -2,7 +2,7 @@
 node_modules
 **/node_modules
 
-# Abaikan hasil build lokal laptop agar tidak bentrok dengan build Docker
+# Abaikan hasil build lokal
 .next
 **/.next
 out
@@ -11,11 +11,11 @@ dist
 **/dist
 .turbo
 
-# Abaikan git dan dokumentasi
+# Abaikan git dan dokumentasi (JANGAN ABAIKAN FOLDER DOCKER)
 .git
 .gitignore
 .dockerignore
-docker
+# docker  <-- HAPUS ATAU KOMENTARI BARIS INI
 README.md
 *.docx
 /todo/

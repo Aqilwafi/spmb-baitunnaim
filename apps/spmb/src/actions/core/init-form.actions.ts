@@ -23,7 +23,7 @@ export async function initFormPendaftaranAction(prevState: any, formData: FormDa
   const supabase = await createSupabaseServer();
 
   const payload = {
-    userId: user.data.id,
+    userId: user?.id,
     namaLengkap: formData.get("nama_lengkap") as string,
     jenisKelamin: formData.get("jenis_kelamin") as string,
     lembagaId: Number(formData.get("lembaga_tujuan_id")),
