@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { updatePasswordAction } from "@/actions/auth/auth.actions";
+import { useState } from 'react'
+import { resetPasswordAction } from "@/actions/auth/auth.actions";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -23,10 +23,10 @@ export default function ResetPasswordPage() {
     }
 
     setLoading(true);
-    const result = await updatePasswordAction(password);
+    const result = await resetPasswordAction(password, password);
 
-    if (result?.error) {
-      setError(result.error);
+    if (result?.success) {
+      setError(result.message);
       setLoading(false);
     } else {
       alert("Password berhasil diperbarui!");

@@ -4,4 +4,4 @@ export * from './kerjasama';
 export type * from './testimonial';
 export * from './sosmed';
 export * from './links';
-export * from './publikasi';
+// export * from './publikasi';
