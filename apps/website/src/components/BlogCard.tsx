@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, MessageCircle, ArrowRight } from "lucide-react";
-import { BlogCardProps } from "@/types/props";
+import { BlogCardProps } from "@bn/constants";
 
 export default function BlogCard({
   judul,

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import BlogCard from "../components/BlogCard"
-import { publikasi } from "@bn/constants/publikasi"
+import { publikasi } from "@bn/constants"
 
 export default function PublikasiComponent() {
   const [q, setQ] = useState("")

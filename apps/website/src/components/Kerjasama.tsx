@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { partners } from "@bn/constants/kerjasama"
+import { partners } from "@bn/constants"
 
 export default function Kerjasama() {
   return (

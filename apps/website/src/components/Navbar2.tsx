@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { sublinks } from "@bn/constants/links";
+import { sublinks } from "@bn/constants";
 
 export default function Navbar2() {
   const [active, setActive] = useState("Berita");

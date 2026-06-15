@@ -1,4 +1,4 @@
-import { publikasi } from "@bn/constants/publikasi";
+import { publikasi } from "@bn/constants";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import remarkGfm from "remark-gfm";
