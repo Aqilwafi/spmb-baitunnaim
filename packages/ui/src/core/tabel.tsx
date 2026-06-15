@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes} from "react";
 
 export function Table({
   className = "",
@@ -31,13 +31,13 @@ export function TableRow(
 }
 
 export function TableHeader(
-  props: HTMLAttributes<HTMLTableCellElement>,
+  props: ThHTMLAttributes<HTMLTableCellElement>,
 ) {
   return <th {...props} />;
 }
 
 export function TableCell(
-  props: HTMLAttributes<HTMLTableCellElement>,
+  props: TdHTMLAttributes<HTMLTableCellElement>,
 ) {
   return <td {...props} />;
 }

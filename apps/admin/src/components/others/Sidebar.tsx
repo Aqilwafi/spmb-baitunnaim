@@ -12,19 +12,27 @@ import {
   Files,
   ClipboardList,
   Newspaper,
-  ShieldCheck,
+  CircleUser,
   Menu,
   X,
   LogOut,
+  ShieldUser,
 } from "lucide-react";
 import { executeSharedLogout } from "@bn/auth";
 import { useRouter } from "next/navigation";
 import { logoutAction } from "@/actions/auth/auth.actions";
 
+type User = {
+  username?: string;
+  email: string;
+  access_rights?: string[];
+}
+
 type SidebarProps = {
   canSpmb: boolean;
   canPublikasi: boolean;
   canManage: boolean;
+  user?: User;
 };
 
 type MenuItem = {
@@ -38,7 +46,10 @@ type MenuGroup = {
   items: MenuItem[];
 };
 
-export default function Sidebar({ canSpmb, canPublikasi, canManage }: SidebarProps) {
+// todo: tambahkan halo nama! setelah Admin Panel
+// props tambahkan data username dari layout.tsx 
+
+export default function Sidebar({ canSpmb, canPublikasi, canManage, user, }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
@@ -53,7 +64,7 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage }: SidebarPro
     ...(canSpmb ? [{
       label: "SPMB",
       items: [
-        { name: "Users Progress", path: "/dashboard/progress", icon: <Activity size={18} /> },
+        { name: "Form Progress", path: "/dashboard/progress", icon: <Activity size={18} /> },
         { name: "Biodata Lengkap", path: "/dashboard/biodata", icon: <UserCheck size={18} /> },
         { name: "Pembayaran", path: "/dashboard/pembayaran", icon: <Wallet size={18} /> },
         { name: "Dokumen", path: "/dashboard/dokumen", icon: <Files size={18} /> },
@@ -69,7 +80,8 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage }: SidebarPro
     ...(canManage ? [{
       label: "Manage",
       items: [
-        { name: "Manage Admin", path: "/dashboard/manage", icon: <ShieldCheck size={18} /> },
+        { name: "Manage Users", path: "/dashboard/manage/users", icon: <CircleUser size={18} /> },
+        { name: "Manage Admin", path: "/dashboard/manage/admin", icon: <ShieldUser size={18} /> },
       ],
     }] : []),
   ];
@@ -89,6 +101,8 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage }: SidebarPro
       {/* Toggle */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100">
         {isOpen && <span className="font-semibold text-sm text-gray-700">Admin Panel</span>}
+        
+        
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-1.5 rounded hover:bg-gray-100 transition text-gray-500"
@@ -96,6 +110,8 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage }: SidebarPro
           {isOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
       </div>
+
+      
 
       {/* Menu Groups */}
       <nav className="flex-1 overflow-y-auto py-4 px-2 flex flex-col gap-4">
@@ -129,16 +145,49 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage }: SidebarPro
         ))}
       </nav>
 
-      {/* Logout */}
-      <div className="p-2 border-t border-gray-100">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-2 py-2 rounded-md text-sm text-gray-600 hover:bg-red-50 hover:text-red-500 transition-all"
-        >
-          <LogOut size={18} className="shrink-0" />
-          {isOpen && <span>Logout</span>}
-        </button>
-      </div>
+      
+
+      {/* Footer */}
+<div className="p-2 border-t border-gray-100 flex flex-col gap-2">
+
+  {isOpen && user && (
+    <div className="px-2">
+      <p className="text-[11px] text-gray-400">
+        Login sebagai
+      </p>
+
+      <p className="text-sm font-medium text-gray-700 truncate">
+        {user.username}
+      </p>
+      <p className="text-sm font-medium text-gray-700 truncate">
+        {user.email}
+      </p>
+    </div>
+  )}
+
+  {/* Logout */}
+  <button
+    onClick={handleLogout}
+    className="
+      flex
+      items-center
+      gap-3
+      w-full
+      px-2
+      py-2
+      rounded-md
+      text-sm
+      text-gray-600
+      hover:bg-red-50
+      hover:text-red-500
+      transition-all
+    "
+  >
+    <LogOut size={18} className="shrink-0" />
+
+    {isOpen && <span>Logout</span>}
+  </button>
+</div>
     </aside>
   );
 }

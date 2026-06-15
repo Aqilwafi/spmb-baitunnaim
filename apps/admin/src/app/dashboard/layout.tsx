@@ -7,6 +7,16 @@ import Sidebar from "@/components/others/Sidebar";
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const claims = await getCurrentClaims();
   if (!claims) return <Unauthorized />;
+  const user = {
+    email: claims.email || "",
+    username:
+      claims.user_metadata?.username ||
+      claims.email ||
+      "admin",
+
+    access_rights:
+      claims.app_metadata?.access_rights || [],
+  };
 
   // Cukup punya akses salah satu domain untuk masuk admin panel
   const hasAnyAccess = validateAccess(claims, ALL_DOMAINS, (roles) =>
@@ -26,6 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         canSpmb={canSpmb}
         canPublikasi={canPublikasi}
         canManage={canManage}
+        user={user}
       />
       <main className="flex-1 overflow-y-auto p-6">
         {children}

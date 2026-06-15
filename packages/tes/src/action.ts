@@ -7,8 +7,8 @@ async function jalankanTesLogin() {
   console.log("🚀 Memulai tes koneksi Supabase Auth...");
 
   const dataInput = {
-    email: "seblakpedas998@gmail.com",
-    password: "Caramelwill3"
+    email: "akaishuichisan123@gmail.com",
+    password: "AKAIsan123"
   };
 
   const validated = loginSchema.safeParse(dataInput);
@@ -47,7 +47,7 @@ async function jalankanTesLogin() {
         return;
       }
       console.log("\n👤 [USER]");
-      console.log(user);
+      console.log(user.data.user);
 
       const claims = await supabase.auth.getClaims();
       if (!claims) {

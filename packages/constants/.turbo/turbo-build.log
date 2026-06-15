@@ -1,4 +1,0 @@
-$ tsc
-src/publikasi.ts(1,31): error TS2307: Cannot find module '@/types/props' or its corresponding type declarations.
-src/pubs.ts(1,32): error TS2307: Cannot find module '@/types/props' or its corresponding type declarations.
-[ELIFECYCLE] Command failed with exit code 2.

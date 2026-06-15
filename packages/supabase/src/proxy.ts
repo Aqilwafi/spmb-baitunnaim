@@ -4,6 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
+  console.log("middleware redirect → /login dari:", request.nextUrl.pathname); 
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -42,6 +43,7 @@ export async function updateSession(request: NextRequest) {
   // with the Supabase client, your users may be randomly logged out.
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
+  console.log("user:", !!user, "path:", request.nextUrl.pathname, "startsWith /auth:", request.nextUrl.pathname.startsWith("/auth"));
 
   if (
     request.nextUrl.pathname !== "/" &&

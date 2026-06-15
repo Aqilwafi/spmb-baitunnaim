@@ -3,11 +3,24 @@
 -- ====================================================================
 CREATE OR REPLACE FUNCTION public.handle_new_user_metadata_before()
 RETURNS TRIGGER AS $$
+DECLARE
+    v_username TEXT;
 BEGIN
-    NEW.raw_app_meta_data = COALESCE(NEW.raw_app_meta_data, '{}'::jsonb) || jsonb_build_object(
-        'roles', jsonb_build_array('PENDAFTAR'),
-        'domains', jsonb_build_array('SPMB')
+    -- 1. Ambil username dari inputan user, atau fallback ke bagian depan email
+    v_username := COALESCE(NEW.raw_user_meta_data->>'username', split_part(NEW.email, '@', 1));
+
+    -- 2. Inject ke raw_user_meta_data (untuk tampilan/profil)
+    NEW.raw_user_meta_data = COALESCE(NEW.raw_user_meta_data, '{}'::jsonb) || jsonb_build_object(
+        'username', v_username
     );
+
+    -- 3. Inject ke raw_app_meta_data (untuk access_rights)
+    -- Catatan: Kita langsung pasang access_rights awal di sini 
+    -- agar saat user pertama kali login, token JWT sudah langsung memiliki role tersebut.
+    NEW.raw_app_meta_data = COALESCE(NEW.raw_app_meta_data, '{}'::jsonb) || jsonb_build_object(
+        'access_rights', jsonb_build_array('SPMB:PENDAFTAR')
+    );
+    
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
@@ -19,8 +32,8 @@ CREATE OR REPLACE FUNCTION public.handle_new_user_relations_after()
 RETURNS TRIGGER AS $$
 BEGIN
     -- Membuat profile baru secara aman
-    INSERT INTO public.profiles (id)
-    VALUES (NEW.id)
+    INSERT INTO public.profiles (id, email)
+    VALUES (NEW.id, NEW.email)
     ON CONFLICT (id) DO NOTHING;
 
     -- Menghubungkan user ke domain_id: 1 dan role_id: 1 (Gunakan nama kolom user_id)
@@ -112,3 +125,39 @@ EXECUTE FUNCTION public.sync_user_app_metadata();
 -- ====================================================================
 REVOKE EXECUTE ON FUNCTION public.sync_user_app_metadata() FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.sync_user_app_metadata() TO postgres;
+
+
+-- email sync
+CREATE OR REPLACE FUNCTION public.sync_email_update()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.email <> NEW.email THEN
+    UPDATE public.profiles
+    SET email = NEW.email
+    WHERE id = NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_email_updated
+  AFTER UPDATE OF email ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.sync_email_update();
+
+CREATE OR REPLACE FUNCTION public.sync_username_to_auth()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Langsung update ke auth.users tanpa join yang berat
+    UPDATE auth.users
+    SET raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || jsonb_build_object('username', NEW.username)
+    WHERE id = NEW.id;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Pasang hanya di tabel profiles
+CREATE TRIGGER tr_sync_username_profiles
+AFTER UPDATE OF username ON public.profiles
+FOR EACH ROW
+EXECUTE FUNCTION public.sync_username_to_auth();

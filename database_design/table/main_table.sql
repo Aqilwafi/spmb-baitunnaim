@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     legacy_user_id UUID, -- abaikan ini. Hanya untuk migrasi data lama, nanti akan dihapus
     username VARCHAR(255),
+    email TEXT,
     avatar_url TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()

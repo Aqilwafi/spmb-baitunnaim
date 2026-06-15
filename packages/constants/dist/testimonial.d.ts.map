@@ -1,1 +1,0 @@
-{"version":3,"file":"testimonial.d.ts","sourceRoot":"","sources":["../src/testimonial.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,WAAW,GAAG;IACxB,IAAI,EAAE,MAAM,CAAA;IACZ,KAAK,EAAE,MAAM,CAAA;IACb,WAAW,EAAE,MAAM,CAAA;IACnB,QAAQ,EAAE,MAAM,CAAA;CACjB,CAAA;AAED,eAAO,MAAM,YAAY,EAAE,WAAW,EAkDrC,CAAA"}

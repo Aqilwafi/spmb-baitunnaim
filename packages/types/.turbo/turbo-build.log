@@ -1,3 +1,1 @@
 $ tsc
-src/auth/auth.types.ts(4,36): error TS2307: Cannot find module '@bn/supabase' or its corresponding type declarations.
-[ELIFECYCLE] Command failed with exit code 2.

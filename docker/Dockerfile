@@ -4,8 +4,14 @@
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && pnpm add -g turbo@^2
 
+# Tambahkan baris ini untuk memastikan direktori bin ada dan dikenali
+RUN mkdir -p $PNPM_HOME && \
+    corepack enable && \
+    corepack prepare pnpm@latest --activate && \
+    pnpm config set store-dir /pnpm/store
+
+RUN pnpm add -g turbo@^2
 # -----------------------------
 # Stage 1: Prune (Memilah kode berdasarkan nama aplikasi)
 # -----------------------------

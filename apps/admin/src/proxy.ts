@@ -2,10 +2,13 @@ import { updateSession } from "@bn/supabase";
 import { type NextRequest, type NextResponse } from "next/server";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
+  console.log("middleware path:", request.nextUrl.pathname);
+
   return await updateSession(request);
 }
 
 export const config = {
+  
   matcher: [
     /*
      * Match all request paths except:
