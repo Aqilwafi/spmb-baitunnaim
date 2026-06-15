@@ -1,5 +1,5 @@
-import { Modal } from "./core/modal";
-import { Button } from "./core/button";
+import { Modal } from "../core/modal";
+import { Button } from "../core/button";
 
 interface SuccessModalProps {
   open: boolean;
