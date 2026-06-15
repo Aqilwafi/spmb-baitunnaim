@@ -1,3 +1,4 @@
+import 'server-only';
 import type { Database } from "@bn/types";
 export declare const supabaseAdmin: import("@supabase/supabase-js").SupabaseClient<Database, "public", "public", {
     Tables: {

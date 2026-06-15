@@ -1,7 +1,7 @@
 // apps/admin/src/actions/auth/users.actions.ts
 
 "use server";
-import {supabaseAdmin} from '@bn/supabase'
+import {supabaseAdmin} from '@bn/supabase/admin'
 import { createSupabaseServer } from "@bn/supabase";
 import { redirect } from "next/navigation";
 

@@ -10,6 +10,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js" 
+    },
+    "./admin": {
+      "types": "./dist/admin/index.d.ts",
+      "import": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js" 
     }
   },
   "files": ["dist"],
@@ -20,7 +25,8 @@
     "@bn/types": "workspace:*",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
-    "next": "^16.2.6"
+    "next": "^16.2.6",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
