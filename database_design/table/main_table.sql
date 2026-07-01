@@ -1,268 +1,164 @@
-CREATE TABLE IF NOT EXISTS profiles (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    legacy_user_id UUID, -- abaikan ini. Hanya untuk migrasi data lama, nanti akan dihapus
-    username VARCHAR(255),
-    email TEXT,
-    avatar_url TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+-- ============================================================
+-- File   : table/main_table.sql
+-- Purpose: Core registration tables (NOTE #3, #4, #5, #6, #7, #8)
+-- Depends: table/lookup_table.sql, table/role_domain_table.sql,
+--          other/enums_type.sql
+-- ============================================================
 
--- biodata siswa
-CREATE TABLE IF NOT EXISTS biodata_siswa (
-    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    akun_pendaftar_id   UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    akun_siswa_id       UUID UNIQUE REFERENCES auth.users(id) ON DELETE SET NULL,
-    is_verified_siswa   BOOLEAN DEFAULT FALSE,
-    nama_lengkap        VARCHAR(255) NOT NULL,
-    nik                 nik_type,
-    nisn                nisn_type,
-    no_kk               kk_type,
-    gender              gender_enum NOT NULL,
-    tempat_lahir        VARCHAR(100),
-    tanggal_lahir       DATE,
-    agama               VARCHAR(20) DEFAULT 'Islam',
-    hobi                VARCHAR(100),
-    cita_cita           VARCHAR(100),
-    jumlah_saudara      INT DEFAULT 0,
-    anak_ke             INT DEFAULT 1,
-    golongan_darah      VARCHAR(5),
-    penyakit            VARCHAR(255),
-    status_rumah_id     VARCHAR(100) REFERENCES master_status_rumah(code),
-    tinggal_bersama_id  VARCHAR(100) REFERENCES master_tinggal_bersama(code),
-    alamat              VARCHAR(255),
-    created_at          TIMESTAMPTZ DEFAULT NOW(),
-    updated_at          TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT check_jumlah_saudara_positive CHECK (jumlah_saudara >= 0),
-    CONSTRAINT check_anak_ke_positive CHECK (anak_ke > 0),
-    CONSTRAINT check_golongan_darah CHECK (golongan_darah IN ('A', 'B', 'AB', 'O', 'Tidak Tahu', 'Lainnya') OR golongan_darah IS NULL),
-    CONSTRAINT check_verified_siswa_requirements CHECK (
-        (is_verified_siswa = TRUE 
-            AND nik IS NOT NULL 
-            AND no_kk IS NOT NULL 
-            AND tempat_lahir IS NOT NULL
-            AND tanggal_lahir IS NOT NULL
+-- ---------------------------------------------------------
+-- biodata_siswa
+-- ---------------------------------------------------------
+create table biodata_siswa (
+    id                  uuid primary key default gen_random_uuid(),
+    owner_user_id       uuid references profiles(id) not null on delete restrict,
+    nik                 varchar(16) unique not null,
+    nisn                varchar(10),
+    nama_lengkap        varchar(255) not null,
+    tempat_lahir        varchar(255) not null,
+    tanggal_lahir       date not null,
+    jenis_kelamin       gender_enum  not null,
+    lembaga_id          smallint not null references master_lembaga(id) on delete restrict,
+    kelas_id            smallint references master_kelas(id) on delete restrict,
+    catatan             text,
+    created_at          timestamptz not null default now(),
+    updated_at          timestamptz not null default now(),
+    constraint chk_nisn_or_reason check (nisn is not null or nullif(trim(catatan), '') is not null)
+);
+comment on table biodata_siswa is 'Data siswa, dipisah dari form_pendaftaran (1:1) agar struktur lebih fleksibel.';
+
+-- ---------------------------------------------------------
+-- biodata_siswa_detail
+-- ---------------------------------------------------------
+create table biodata_siswa_detail (
+    id                  uuid primary key default gen_random_uuid(),
+    biodata_siswa_id    uuid references biodata_siswa(id) unique not null on delete cascade,
+    no_kk               varchar(16) not null,
+    anak_ke             int check (anak_ke >= 1),
+    jumlah_saudara      int check (jumlah_saudara >= 0),
+    alamat              text,                                  -- alamat siswa, boleh beda dgn alamat keluarga
+    tinggal_bersama_id  smallint references master_tinggal_bersama(id),
+    status_rumah_id     smallint references master_status_rumah(id),
+    created_at          timestamptz not null default now(),
+    updated_at          timestamptz not null default now()
+);
+comment on table biodata_siswa_detail is 'Data siswa detail, dipisah dari biodata_siswa (1:1) agar struktur lebih fleksibel.';
+
+-- ---------------------------------------------------------
+-- biodata_keluarga
+-- ---------------------------------------------------------
+create table biodata_keluarga (
+    id                    uuid primary key default gen_random_uuid(),
+    biodata_siswa_id      uuid references biodata_siswa(id) not null on delete cascade,
+    relation_type         family_relation_enum not null,   -- AYAH, IBU, WALI
+    detail_relation_type  varchar(50),                      -- detail WALI, mis. Kakek/Paman
+    nama_lengkap          varchar(150) not null,
+    nik                   varchar(16) unique not null,
+    status_hidup          life_status_enum not null default 'HIDUP',
+    tempat_lahir          varchar(100),
+    tanggal_lahir         date,
+    pekerjaan             varchar(100),
+    pendidikan_terakhir   varchar(50),
+    no_hp                 varchar(20) not null,
+    alamat                text,
+    created_at            timestamptz not null default now(),
+    updated_at            timestamptz not null default now(),
+    constraint uq_siswa_relation unique (biodata_siswa_id, relation_type),
+    constraint chk_wali_data check ( relation_type <> 'WALI' or (relation_type='WALI' and status_hidup='HIDUP' and detail_relation_type is not null))
+);
+comment on table biodata_keluarga is
+    'Satu tabel untuk AYAH/IBU/WALI dibedakan relation_type (hindari duplikasi struktur). '
+    'Validasi "AYAH & IBU wajib ada" dan "WALI wajib jika AYAH/IBU MENINGGAL" ditegakkan via function (functions/bisnis), bukan constraint statis.';
+
+-- ---------------------------------------------------------
+-- pendidikan_siswa_sebelumnya
+-- ---------------------------------------------------------
+create table pendidikan_siswa_sebelumnya (
+    id                   uuid primary key default gen_random_uuid(),
+    biodata_siswa_id     uuid references biodata_siswa(id) unique not null on delete cascade,
+    nama_sekolah         varchar(150),
+    npsn                 varchar(20),
+    alamat_sekolah       text,
+    tahun_lulus          int,
+    nilai_rata_rata      numeric(5,2),
+    catatan              text, -- belum pernah sekolah
+    created_at           timestamptz not null default now(),
+    updated_at           timestamptz not null default now(),
+    constraint chk_school_or_note
+    check (
+        (
+            nama_sekolah is not null
+            and npsn is not null
+            and alamat_sekolah is not null
+            and tahun_lulus is not null
+            and nilai_rata_rata is not null
         )
-        OR 
-        (is_verified_siswa = FALSE)
-    )
-);
-
--- Data Pendidikan Sebelumnya
-CREATE TABLE IF NOT EXISTS pendidikan_siswa_sebelumnya (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    siswa_id     UUID NOT NULL REFERENCES biodata_siswa(id) ON DELETE CASCADE,
-    nama_sekolah_sebelumnya VARCHAR(255),
-    npsn_sekolah_sebelumnya npsn_type,
-    tahun_lulus INT,
-    alamat_sekolah_sebelumnya VARCHAR(255),
-    has_previous_school BOOLEAN,
-    created_at   TIMESTAMPTZ DEFAULT NOW(),
-    updated_at   TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT uniq_pendidikan_siswa UNIQUE (siswa_id),
-    CONSTRAINT check_previous_school_info CHECK (
-        (has_previous_school = FALSE 
-            AND nama_sekolah_sebelumnya IS NULL 
-            AND npsn_sekolah_sebelumnya IS NULL 
-            AND alamat_sekolah_sebelumnya IS NULL
-        )
-        OR
-        (has_previous_school = TRUE 
-            AND nama_sekolah_sebelumnya IS NOT NULL 
-            AND alamat_sekolah_sebelumnya IS NOT NULL
+        or
+        (
+            nullif(trim(catatan), '') is not null
         )
     )
 );
+comment on table pendidikan_siswa_sebelumnya is 'Riwayat pendidikan siswa sebelumnya (1:1 dengan form_pendaftaran).';
 
--- Biodata Keluarga
-CREATE TABLE IF NOT EXISTS biodata_keluarga (
-    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    siswa_id     UUID NOT NULL REFERENCES biodata_siswa(id) ON DELETE CASCADE,
-    hubungan     hubungan_enum NOT NULL,
-    detail_hubungan VARCHAR(50) DEFAULT NULL,
-    nama         VARCHAR(255) NOT NULL,
-    status_hidup BOOLEAN NOT NULL,
-    nik          nik_type,
-    no_handphone phone_number,
-    pendidikan_keluarga   pendidikan_keluarga_enum,
-    pekerjaan    TEXT,
-    penghasilan  TEXT,
-    tempat_lahir VARCHAR(100),
-    tanggal_lahir   DATE,
-    created_at   TIMESTAMPTZ DEFAULT NOW(),
-    updated_at   TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT uniq_siswa_hubungan UNIQUE (siswa_id, hubungan),
-    CONSTRAINT check_data_hidup CHECK (
-        status_hidup = FALSE OR (nik IS NOT NULL AND no_handphone IS NOT NULL)
-    ),
-    CONSTRAINT check_syarat_wali CHECK (
-        hubungan != 'WALI' OR (status_hidup = TRUE AND detail_hubungan IS NOT NULL)
-    )
+-- ---------------------------------------------------------
+-- form_pendaftaran
+-- ---------------------------------------------------------
+create table form_pendaftaran (
+    id                   uuid primary key default gen_random_uuid(),
+    biodata_siswa_id     uuid references biodata_siswa(id) unique not null on delete cascade,
+    tahun_ajaran_id      smallint not null references master_tahun_ajaran(id) on delete restrict,
+    step_id              smallint references master_step(id) on delete set null,
+    registration_status  registration_form_status_enum not null default 'DRAFT',
+    admission_status     admission_status_enum    not null default 'PROCESS',
+    finalized_at         timestamptz,
+    decided_at           timestamptz,        -- tambahan: jejak kapan keputusan dibuat
+    decided_by           uuid references profiles(id),  -- tambahan: ADMINISTRATOR yang memutuskan
+    created_at           timestamptz not null default now(),
+    updated_at           timestamptz not null default now(),
+    constraint uq_nik_tahun_ajaran unique (nik, tahun_ajaran_id)
 );
+comment on table form_pendaftaran is
+    'Formulir pendaftaran. owner_user_id TIDAK unique (1 akun bisa banyak pendaftaran). '
+    'payment_status TIDAK disimpan di sini, melainkan di tabel pembayaran (status independen).';
 
--- Form Pendaftaran Utama
-CREATE TABLE IF NOT EXISTS form_pendaftaran (
-    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    siswa_id            UUID NOT NULL REFERENCES biodata_siswa(id) ON DELETE RESTRICT,
-    tahun_ajaran_code     VARCHAR(10) NOT NULL REFERENCES master_tahun_ajaran(code),
-    master_lembaga_code   VARCHAR(20) NOT NULL REFERENCES master_lembaga(code),
-    master_kelas_code     VARCHAR(20) REFERENCES master_kelas(code),
-    master_step_id     SMALLINT NOT NULL REFERENCES master_step(id) DEFAULT 1, 
-    status_keputusan_final_pendaftaran VARCHAR(30) DEFAULT 'PENDING',
-    finalized_by        UUID REFERENCES auth.users(id),
-    finalized_at        TIMESTAMPTZ,
-    created_by          UUID NOT NULL REFERENCES auth.users(id),
-    created_at          TIMESTAMPTZ DEFAULT NOW(),
-    updated_at          TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT uniq_siswa_tahun UNIQUE (siswa_id, tahun_ajaran_code),
-    CONSTRAINT check_status_keputusan CHECK (status_keputusan_final_pendaftaran IN ('PENDING', 'ACCEPTED', 'REJECTED', 'AWAITING_LIST')),
-    CONSTRAINT check_lembaga_kelas CHECK (master_lembaga_code != 'MI' OR master_kelas_code IS NOT NULL)
-);
+-- ---------------------------------------------------------
+-- pembayaran  (NOTE #7)
+-- ---------------------------------------------------------
+create table pembayaran (
+    id                   uuid primary key default gen_random_uuid(),
+    form_pendaftaran_id  uuid not null unique references form_pendaftaran(id) on delete cascade,
 
--- record step
-CREATE TABLE form_step_state (
-    form_id UUID NOT NULL REFERENCES form_pendaftaran(id) ON DELETE CASCADE,
-    step_id SMALLINT NOT NULL REFERENCES master_step(id),
-    step_status TEXT NOT NULL DEFAULT 'LOCKED', 
-    step_mode TEXT NOT NULL DEFAULT 'READ',     
-    is_current BOOLEAN DEFAULT FALSE,
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    PRIMARY KEY (form_id, step_id)
+    payment_type          varchar(30) not null default 'FORMULIR',  -- disiapkan utk jenis pembayaran lain di masa depan
+    nominal               numeric(14,2),
+    tanggal_transfer      timestamptz,         -- default waktu upload, bisa diubah admin
+    bank_tujuan           varchar(100),
+    nama_pengirim         varchar(150),        -- diisi admin berdasar bukti transfer
+    bukti_pembayaran_url  text,
+    payment_status         payment_status_enum not null default 'SUBMITTED',
+    catatan_verifikasi     text,
+    verified_by            uuid references profiles(id),
+    verified_at            timestamptz,
+    created_at             timestamptz not null default now(),
+    updated_at             timestamptz not null default now()
 );
+comment on table pembayaran is 'Satu pembayaran aktif per pendaftaran. Upload ulang mengganti file, riwayat tidak disimpan.';
 
--- Pembayaran
-CREATE TABLE IF NOT EXISTS pembayaran (
-    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    form_pendaftaran_id UUID UNIQUE NOT NULL REFERENCES form_pendaftaran(id) ON DELETE CASCADE,
-    amount              NUMERIC(12, 2) NOT NULL,
-    paid_at             TIMESTAMPTZ DEFAULT NOW(),
-    file_path           TEXT NOT NULL,
-    validated_by        UUID REFERENCES auth.users(id),
-    status_validasi     status_validasi_enum NOT NULL DEFAULT 'PENDING',
-    created_at          TIMESTAMPTZ DEFAULT NOW(),
-    updated_at          TIMESTAMPTZ DEFAULT NOW()
-);
+-- ---------------------------------------------------------
+-- dokumen  (NOTE #6)
+-- ---------------------------------------------------------
+create table dokumen (
+    id                   uuid primary key default gen_random_uuid(),
+    form_pendaftaran_id  uuid not null references form_pendaftaran(id) on delete cascade,
+    tipe_dokumen_id      uuid not null references master_tipe_dokumen(id) on delete restrict,
+    file_url             text not null,
+    document_status      document_status_enum not null default 'SUBMITTED',
+    catatan_verifikasi    text,
+    verified_by           uuid references profiles(id),
+    verified_at           timestamptz,
+    uploaded_at           timestamptz not null default now(),
+    created_at            timestamptz not null default now(),
+    updated_at             timestamptz not null default now(),
 
--- Dokumen Upload
-CREATE TABLE IF NOT EXISTS dokumen (
-    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    form_pendaftaran_id UUID NOT NULL REFERENCES form_pendaftaran(id) ON DELETE CASCADE,
-    file_path           TEXT NOT NULL,
-    tipe_dokumen_id     INT NOT NULL REFERENCES master_tipe_dokumen(id),
-    validated_by        UUID REFERENCES auth.users(id),
-    status_validasi     status_validasi_enum NOT NULL DEFAULT 'PENDING',
-    created_at          TIMESTAMPTZ DEFAULT NOW(),
-    updated_at          TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT uniq_pendaftaran_dokumen_tipe UNIQUE (form_pendaftaran_id, tipe_dokumen_id)
+    constraint uq_form_tipe_dokumen unique (form_pendaftaran_id, tipe_dokumen_id)
 );
-
--- =========================================================
--- AUDIT TRAIL
--- =========================================================
-CREATE TABLE IF NOT EXISTS audit_trail (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id     UUID, -- no FK, log tetap ada meski user dihapus
-    table_name  TEXT NOT NULL,
-    record_id   UUID,
-    action      TEXT NOT NULL,
-    old_data    JSONB,
-    new_data    JSONB,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT chk_action
-        CHECK (action IN ('INSERT', 'UPDATE', 'DELETE')),
-    CONSTRAINT chk_data_presence
-        CHECK (old_data IS NOT NULL OR new_data IS NOT NULL)
-);
-
--- =========================================================
--- ACTIVITY LOGS
--- =========================================================
-CREATE TABLE IF NOT EXISTS activity_logs (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id     UUID, -- no FK, same reason
-    event       TEXT NOT NULL,
-    status      TEXT,
-    metadata    JSONB,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE IF NOT EXISTS siswa_reclaim_request (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    siswa_id UUID NOT NULL REFERENCES biodata_siswa(id) ON DELETE CASCADE,
-    requested_by UUID NOT NULL REFERENCES auth.users(id),
-    current_owner_id UUID NOT NULL REFERENCES auth.users(id),
-    status TEXT NOT NULL DEFAULT 'PENDING',
-    reason TEXT,
-    dokumen_pendukung JSONB DEFAULT '[]'::jsonb,
-    verified_by UUID REFERENCES auth.users(id),
-    verified_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT chk_reclaim_status
-        CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
-    CONSTRAINT chk_requested_not_current
-        CHECK (requested_by IS DISTINCT FROM current_owner_id)
-);
-
-CREATE TABLE IF NOT EXISTS biodata_siswa_owner_history (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    siswa_id UUID NOT NULL REFERENCES biodata_siswa(id) ON DELETE CASCADE,
-    old_owner_id UUID REFERENCES auth.users(id),
-    new_owner_id UUID NOT NULL REFERENCES auth.users(id),
-    reclaim_request_id UUID REFERENCES siswa_reclaim_request(id) ON DELETE SET NULL,
-    is_manual BOOLEAN NOT NULL DEFAULT FALSE,
-    reason TEXT,
-    changed_by UUID REFERENCES auth.users(id),
-    changed_at TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT chk_owner_change CHECK (old_owner_id IS DISTINCT FROM new_owner_id),
-    CONSTRAINT chk_reclaim_or_manual CHECK (
-        is_manual = TRUE OR reclaim_request_id IS NOT NULL
-    )
-);
-
-=============
-= publikasi =
-=============
--- Tabel Kategori Posts
-CREATE TABLE categories (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  slug TEXT UNIQUE NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT check_name_not_empty CHECK (trim(name) <> ''),
-  CONSTRAINT check_slug_not_empty CHECK (trim(slug) <> '')
-);
-
--- Tabel Artikel/Berita
-CREATE TABLE posts (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  author VARCHAR(255) NOT NULL DEFAULT 'Admin Publikasi',
-  title TEXT NOT NULL,
-  slug TEXT UNIQUE NOT NULL, -- 1. TAMBAHKAN UNIQUE DI SINI
-  content TEXT,
-  featured_image TEXT,
-  category VARCHAR(255) NOT NULL DEFAULT 'Umum',
-  post_status TEXT NOT NULL DEFAULT 'draft',
-  excerpt TEXT,
-  is_featured BOOLEAN DEFAULT FALSE, -- 2. TAMBAHKAN INI untuk properti "unggulan"
-  published_by UUID REFERENCES auth.users(id) ON DELETE SET NULL, -- Membutuhkan tabel profiles
-  published_at TIMESTAMPTZ,
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  
-  CONSTRAINT check_status CHECK (post_status IN ('draft', 'published', 'archived')),
-  CONSTRAINT check_slug_not_empty CHECK (trim(slug) <> ''),
-  CONSTRAINT check_title_not_empty CHECK (trim(title) <> ''),
-  CONSTRAINT check_publish_time CHECK (
-    (post_status = 'published' AND published_at IS NOT NULL) OR
-    (post_status <> 'published')
-  )
-);
-
--- Pengaturan Website
-CREATE TABLE site_settings (
-  key TEXT PRIMARY KEY,
-  value JSONB NOT NULL,
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT check_key_not_empty CHECK (trim(key) <> '')
-);
+comment on table dokumen is 'Satu tipe dokumen = satu file aktif per pendaftaran. Upload ulang mengganti file, riwayat tidak disimpan.';

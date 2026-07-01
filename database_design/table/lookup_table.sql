@@ -1,61 +1,160 @@
--- Step Bisnis (Alur Form)
-CREATE TABLE IF NOT EXISTS master_step (
-    id             SMALLINT PRIMARY KEY,
-    code           TEXT UNIQUE NOT NULL,
-    label          TEXT NOT NULL,
-    sort_order     SMALLINT NOT NULL UNIQUE,
-    is_revisable   BOOLEAN NOT NULL DEFAULT FALSE,
-    is_active      BOOLEAN NOT NULL DEFAULT TRUE
+-- ============================================================
+-- File   : table/lookup_table.sql
+-- Purpose: Master / reference data (managed by administrator).
+--          Lookup tables are used instead of ENUM to allow
+--          future additions without schema changes.
+-- Depends: other/extension.sql
+-- ============================================================
+
+-- ---------------------------------------------------------
+-- master_domains
+-- ---------------------------------------------------------
+create table master_domains (
+    id          smallint     primary key generated always as identity,
+    code        varchar(30)  not null unique check (code = upper(code)),
+    label       varchar(100) not null,
+    description text,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now()
 );
 
--- Lembaga 
-CREATE TABLE IF NOT EXISTS master_lembaga (
-    id      SMALLINT PRIMARY KEY,
-    code    VARCHAR(20) UNIQUE NOT NULL,
-    label   VARCHAR(20) UNIQUE NOT NULL
+comment on table master_domains is
+'Application domains (SPMB, PUBLIKASI, LMS, etc.). A user may have different roles in different domains.';
+
+-- ---------------------------------------------------------
+-- master_roles
+-- ---------------------------------------------------------
+create table master_roles (
+    id          smallint     primary key generated always as identity,
+    code        varchar(30)  not null unique check (code = upper(code)),
+    label       varchar(100) not null,
+    description text,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now()
 );
 
--- Kelas
-CREATE TABLE IF NOT EXISTS master_kelas (
-    id   SMALLINT PRIMARY KEY,
-    code VARCHAR(20) UNIQUE NOT NULL,
-    label VARCHAR(20) UNIQUE NOT NULL
+comment on table master_roles is
+'System roles used for RBAC.';
+
+-- ---------------------------------------------------------
+-- master_lembaga
+-- ---------------------------------------------------------
+create table master_lembaga (
+    id          smallint     primary key generated always as identity,
+    code        varchar(30)  not null unique check (code = upper(code)),
+    label       varchar(150) not null,
+    description text,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now()
 );
 
--- Tahun Ajaran
-CREATE TABLE IF NOT EXISTS master_tahun_ajaran (
-    id            SMALLINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    code          VARCHAR(10) UNIQUE NOT NULL,
-    tahun_mulai   INT NOT NULL,
-    tahun_selesai INT NOT NULL,
-    semester      semester_enum NOT NULL,
-    is_active     BOOLEAN DEFAULT FALSE,
-    created_by    UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-    created_at    TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT    uniq_tahun_ajaran UNIQUE (tahun_mulai, tahun_selesai, semester),
-    CONSTRAINT    check_tahun_valid CHECK (tahun_selesai = tahun_mulai + 1)
+comment on table master_lembaga is
+'Institution / educational unit available within a domain.';
+
+-- ---------------------------------------------------------
+-- master_kelas
+-- ---------------------------------------------------------
+create table master_kelas (
+    id          smallint     primary key generated always as identity,
+    lembaga_id  smallint     not null references master_lembaga(id) on delete cascade,
+    code        varchar(30)  not null check (code = upper(code)),
+    label       varchar(100) not null,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now(),
+    constraint uq_kelas_lembaga_code unique (lembaga_id, code)
 );
 
--- Dokumen Master
-CREATE TABLE IF NOT EXISTS master_tipe_dokumen (
-    id   SMALLINT PRIMARY KEY,
-    code VARCHAR(100) UNIQUE NOT NULL,
-    label VARCHAR(100) NOT NULL
+comment on table master_kelas is
+'Classes belonging to a specific institution.';
+
+-- ---------------------------------------------------------
+-- master_tahun_ajaran
+-- ---------------------------------------------------------
+create table master_tahun_ajaran (
+    id          smallint      primary key generated always as identity,
+    semester    semester_enum not null,
+    start_year  int           not null,
+    end_year    int           not null,
+    code        varchar       generated always as (
+        start_year::text || '-' || end_year::text || '_' || semester::text
+    ) stored,
+    label       varchar(50)   not null,
+    is_active   boolean       not null default true,
+    created_at  timestamptz   not null default now(),
+    updated_at  timestamptz   not null default now(),
+    constraint uq_tahun_ajaran_code unique (start_year, end_year, semester),
+    constraint chk_tahun_ajaran_year check (start_year < end_year)
 );
 
--- Status Rumah Master
-CREATE TABLE IF NOT EXISTS master_status_rumah (
-    id   SMALLINT PRIMARY KEY,
-    code VARCHAR(100) UNIQUE NOT NULL,
-    label VARCHAR(100) NOT NULL
+comment on table master_tahun_ajaran is
+'Academic year. The same NIK may register again in a different academic year.';
+
+-- ---------------------------------------------------------
+-- master_step
+-- ---------------------------------------------------------
+create table master_step (
+    id          smallint     primary key generated always as identity,
+    step_order  smallint     not null,
+    code        varchar(30)  not null check (code = upper(code)),
+    label       varchar(100) not null,
+    description text,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now(),
+    constraint uq_step_code_active  unique (code, is_active),
+    constraint uq_step_order_active unique (step_order, is_active)
 );
 
--- Tinggal Bersama  Master
-CREATE TABLE IF NOT EXISTS master_tinggal_bersama (
-    id   SMALLINT PRIMARY KEY,
-    code VARCHAR(100) UNIQUE NOT NULL,
-    label VARCHAR(100) NOT NULL
+comment on table master_step is
+'Configurable registration steps.';
+
+-- ---------------------------------------------------------
+-- master_tipe_dokumen
+-- ---------------------------------------------------------
+create table master_tipe_dokumen (
+    id          smallint     primary key generated always as identity,
+    code        varchar(30)  not null unique check (code = upper(code)),
+    label       varchar(100) not null,
+    description text,
+    is_required boolean      not null default true,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now()
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_tahun_ajaran_active_unique 
-ON master_tahun_ajaran (is_active) WHERE (is_active = TRUE);
+comment on table master_tipe_dokumen is
+'Required document types. Additional document types may be added without altering schema.';
+
+-- ---------------------------------------------------------
+-- master_status_rumah
+-- ---------------------------------------------------------
+create table master_status_rumah (
+    id          smallint     primary key generated always as identity,
+    code        varchar(30)  not null unique check (code = upper(code)),
+    label       varchar(100) not null,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now()
+);
+
+comment on table master_status_rumah is
+'Residence ownership status.';
+
+-- ---------------------------------------------------------
+-- master_tinggal_bersama
+-- ---------------------------------------------------------
+create table master_tinggal_bersama (
+    id          smallint     primary key generated always as identity,
+    code        varchar(30)  not null unique check (code = upper(code)),
+    label       varchar(100) not null,
+    is_active   boolean      not null default true,
+    created_at  timestamptz  not null default now(),
+    updated_at  timestamptz  not null default now()
+);
+
+comment on table master_tinggal_bersama is
+'Living arrangement of the student.';
