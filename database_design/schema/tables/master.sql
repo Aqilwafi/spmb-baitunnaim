@@ -1,15 +1,7 @@
--- ============================================================
--- File   : table/lookup_table.sql
--- Purpose: Master / reference data (managed by administrator).
---          Lookup tables are used instead of ENUM to allow
---          future additions without schema changes.
--- Depends: other/extension.sql
--- ============================================================
-
 -- ---------------------------------------------------------
 -- master_domains
 -- ---------------------------------------------------------
-create table master_domains (
+create table if not exists master_domains (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
@@ -25,7 +17,7 @@ comment on table master_domains is
 -- ---------------------------------------------------------
 -- master_roles
 -- ---------------------------------------------------------
-create table master_roles (
+create table if not exists master_roles (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
@@ -41,7 +33,7 @@ comment on table master_roles is
 -- ---------------------------------------------------------
 -- master_lembaga
 -- ---------------------------------------------------------
-create table master_lembaga (
+create table if not exists master_lembaga (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(150) not null,
@@ -57,7 +49,7 @@ comment on table master_lembaga is
 -- ---------------------------------------------------------
 -- master_kelas
 -- ---------------------------------------------------------
-create table master_kelas (
+create table if not exists master_kelas (
     id          smallint     primary key generated always as identity,
     lembaga_id  smallint     not null references master_lembaga(id) on delete cascade,
     code        varchar(30)  not null check (code = upper(code)),
@@ -74,7 +66,7 @@ comment on table master_kelas is
 -- ---------------------------------------------------------
 -- master_tahun_ajaran
 -- ---------------------------------------------------------
-create table master_tahun_ajaran (
+create table if not exists master_tahun_ajaran (
     id          smallint      primary key generated always as identity,
     semester    semester_enum not null,
     start_year  int           not null,
@@ -96,7 +88,7 @@ comment on table master_tahun_ajaran is
 -- ---------------------------------------------------------
 -- master_step
 -- ---------------------------------------------------------
-create table master_step (
+create table if not exists master_step (
     id          smallint     primary key generated always as identity,
     step_order  smallint     not null,
     code        varchar(30)  not null check (code = upper(code)),
@@ -104,9 +96,7 @@ create table master_step (
     description text,
     is_active   boolean      not null default true,
     created_at  timestamptz  not null default now(),
-    updated_at  timestamptz  not null default now(),
-    constraint uq_step_code_active  unique (code, is_active),
-    constraint uq_step_order_active unique (step_order, is_active)
+    updated_at  timestamptz  not null default now()
 );
 
 comment on table master_step is
@@ -115,7 +105,7 @@ comment on table master_step is
 -- ---------------------------------------------------------
 -- master_tipe_dokumen
 -- ---------------------------------------------------------
-create table master_tipe_dokumen (
+create table if not exists master_tipe_dokumen (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
@@ -132,7 +122,7 @@ comment on table master_tipe_dokumen is
 -- ---------------------------------------------------------
 -- master_status_rumah
 -- ---------------------------------------------------------
-create table master_status_rumah (
+create table if not exists master_status_rumah (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
@@ -147,7 +137,7 @@ comment on table master_status_rumah is
 -- ---------------------------------------------------------
 -- master_tinggal_bersama
 -- ---------------------------------------------------------
-create table master_tinggal_bersama (
+create table if not exists master_tinggal_bersama (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
@@ -158,3 +148,12 @@ create table master_tinggal_bersama (
 
 comment on table master_tinggal_bersama is
 'Living arrangement of the student.';
+
+create table if not exists master_categories (
+    id smallint generated always as identity primary key,
+    label varchar(100) not null,
+    is_active boolean not null default true,
+    created_at timestamptz default now(),
+    updated_at timestamptz default now()
+
+);

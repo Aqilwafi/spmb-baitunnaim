@@ -1,18 +1,13 @@
--- ============================================================
--- File   : table/main_table.sql
--- Purpose: Core registration tables (NOTE #3, #4, #5, #6, #7, #8)
--- Depends: table/lookup_table.sql, table/role_domain_table.sql,
---          other/enums_type.sql
--- ============================================================
 
 -- ---------------------------------------------------------
 -- biodata_siswa
 -- ---------------------------------------------------------
-create table biodata_siswa (
+create table if not exists biodata_siswa (
     id                  uuid primary key default gen_random_uuid(),
     owner_user_id       uuid references profiles(id) not null on delete restrict,
-    nik                 varchar(16) unique not null,
-    nisn                varchar(10),
+    nik                 varchar(16) unique not null check (nik ~ '^[0-9]{16}$'),
+    nisn                varchar(10) unique check (nisn is null or nisn ~ '^[0-9]{10}$'),
+    no_kk               varchar(16) not null check (no_kk ~ '^[0-9]{16}$'),
     nama_lengkap        varchar(255) not null,
     tempat_lahir        varchar(255) not null,
     tanggal_lahir       date not null,
@@ -29,10 +24,9 @@ comment on table biodata_siswa is 'Data siswa, dipisah dari form_pendaftaran (1:
 -- ---------------------------------------------------------
 -- biodata_siswa_detail
 -- ---------------------------------------------------------
-create table biodata_siswa_detail (
+create table if not exists biodata_siswa_detail (
     id                  uuid primary key default gen_random_uuid(),
     biodata_siswa_id    uuid references biodata_siswa(id) unique not null on delete cascade,
-    no_kk               varchar(16) not null,
     anak_ke             int check (anak_ke >= 1),
     jumlah_saudara      int check (jumlah_saudara >= 0),
     alamat              text,                                  -- alamat siswa, boleh beda dgn alamat keluarga
@@ -46,13 +40,13 @@ comment on table biodata_siswa_detail is 'Data siswa detail, dipisah dari biodat
 -- ---------------------------------------------------------
 -- biodata_keluarga
 -- ---------------------------------------------------------
-create table biodata_keluarga (
+create table if not exists biodata_keluarga (
     id                    uuid primary key default gen_random_uuid(),
     biodata_siswa_id      uuid references biodata_siswa(id) not null on delete cascade,
     relation_type         family_relation_enum not null,   -- AYAH, IBU, WALI
     detail_relation_type  varchar(50),                      -- detail WALI, mis. Kakek/Paman
     nama_lengkap          varchar(150) not null,
-    nik                   varchar(16) unique not null,
+    nik                   varchar(16) unique not null check (nik ~ '^[0-9]{16}$'),
     status_hidup          life_status_enum not null default 'HIDUP',
     tempat_lahir          varchar(100),
     tanggal_lahir         date,
@@ -72,14 +66,14 @@ comment on table biodata_keluarga is
 -- ---------------------------------------------------------
 -- pendidikan_siswa_sebelumnya
 -- ---------------------------------------------------------
-create table pendidikan_siswa_sebelumnya (
+create table if not exists pendidikan_siswa_sebelumnya (
     id                   uuid primary key default gen_random_uuid(),
     biodata_siswa_id     uuid references biodata_siswa(id) unique not null on delete cascade,
     nama_sekolah         varchar(150),
     npsn                 varchar(20),
     alamat_sekolah       text,
-    tahun_lulus          int,
-    nilai_rata_rata      numeric(5,2),
+    tahun_lulus          smallint check (tahun_lulus between 1900 and 2100),
+    nilai_rata_rata      numeric(5,2) check (nilai_rata_rata between 0 and 100),
     catatan              text, -- belum pernah sekolah
     created_at           timestamptz not null default now(),
     updated_at           timestamptz not null default now(),
@@ -98,14 +92,15 @@ create table pendidikan_siswa_sebelumnya (
         )
     )
 );
-comment on table pendidikan_siswa_sebelumnya is 'Riwayat pendidikan siswa sebelumnya (1:1 dengan form_pendaftaran).';
+comment on table pendidikan_siswa_sebelumnya is
+'Riwayat pendidikan siswa sebelumnya (1:1 dengan biodata_siswa).';
 
 -- ---------------------------------------------------------
 -- form_pendaftaran
 -- ---------------------------------------------------------
-create table form_pendaftaran (
+create table if not exists form_pendaftaran (
     id                   uuid primary key default gen_random_uuid(),
-    biodata_siswa_id     uuid references biodata_siswa(id) unique not null on delete cascade,
+    biodata_siswa_id     uuid references biodata_siswa(id) not null on delete cascade,
     tahun_ajaran_id      smallint not null references master_tahun_ajaran(id) on delete restrict,
     step_id              smallint references master_step(id) on delete set null,
     registration_status  registration_form_status_enum not null default 'DRAFT',
@@ -113,9 +108,10 @@ create table form_pendaftaran (
     finalized_at         timestamptz,
     decided_at           timestamptz,        -- tambahan: jejak kapan keputusan dibuat
     decided_by           uuid references profiles(id),  -- tambahan: ADMINISTRATOR yang memutuskan
+    created_by uuid references profiles(id),
     created_at           timestamptz not null default now(),
     updated_at           timestamptz not null default now(),
-    constraint uq_nik_tahun_ajaran unique (nik, tahun_ajaran_id)
+    constraint uq_siswa_tahun_ajaran unique (biodata_siswa_id, tahun_ajaran_id)
 );
 comment on table form_pendaftaran is
     'Formulir pendaftaran. owner_user_id TIDAK unique (1 akun bisa banyak pendaftaran). '
@@ -124,12 +120,11 @@ comment on table form_pendaftaran is
 -- ---------------------------------------------------------
 -- pembayaran  (NOTE #7)
 -- ---------------------------------------------------------
-create table pembayaran (
+create table if not exists pembayaran (
     id                   uuid primary key default gen_random_uuid(),
-    form_pendaftaran_id  uuid not null unique references form_pendaftaran(id) on delete cascade,
-
+    form_pendaftaran_id  uuid unique not null references form_pendaftaran(id) on delete cascade,
     payment_type          varchar(30) not null default 'FORMULIR',  -- disiapkan utk jenis pembayaran lain di masa depan
-    nominal               numeric(14,2),
+    nominal               numeric(14,2) check (nominal >= 0),
     tanggal_transfer      timestamptz,         -- default waktu upload, bisa diubah admin
     bank_tujuan           varchar(100),
     nama_pengirim         varchar(150),        -- diisi admin berdasar bukti transfer
@@ -146,10 +141,10 @@ comment on table pembayaran is 'Satu pembayaran aktif per pendaftaran. Upload ul
 -- ---------------------------------------------------------
 -- dokumen  (NOTE #6)
 -- ---------------------------------------------------------
-create table dokumen (
+create table if not exists dokumen (
     id                   uuid primary key default gen_random_uuid(),
     form_pendaftaran_id  uuid not null references form_pendaftaran(id) on delete cascade,
-    tipe_dokumen_id      uuid not null references master_tipe_dokumen(id) on delete restrict,
+    tipe_dokumen_id      smallint not null references master_tipe_dokumen(id) on delete restrict,
     file_url             text not null,
     document_status      document_status_enum not null default 'SUBMITTED',
     catatan_verifikasi    text,
@@ -158,7 +153,6 @@ create table dokumen (
     uploaded_at           timestamptz not null default now(),
     created_at            timestamptz not null default now(),
     updated_at             timestamptz not null default now(),
-
     constraint uq_form_tipe_dokumen unique (form_pendaftaran_id, tipe_dokumen_id)
 );
 comment on table dokumen is 'Satu tipe dokumen = satu file aktif per pendaftaran. Upload ulang mengganti file, riwayat tidak disimpan.';

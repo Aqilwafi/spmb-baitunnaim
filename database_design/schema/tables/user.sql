@@ -1,13 +1,7 @@
--- ============================================================
--- File   : table/role_domain_table.sql
--- Purpose: Identity & access control (NOTE #1, #2)
--- Depends: table/lookup_table.sql, auth.users (Supabase)
--- ============================================================
-
 -- ---------------------------------------------------------
 -- profiles
 -- ---------------------------------------------------------
-create table profiles (
+create table if not exists profiles (
     id          uuid primary key references auth.users(id) on delete cascade,
     account_name   varchar(150),
     phone       varchar(20),
@@ -20,7 +14,7 @@ comment on table profiles is 'Profil pengguna, 1:1 dengan auth.users. Disinkronk
 -- ---------------------------------------------------------
 -- user_roles
 -- ---------------------------------------------------------
-create table user_roles (
+create table if not exists user_roles (
     id          uuid primary key default gen_random_uuid(),
     user_id     uuid not null references profiles(id) on delete cascade,
     role_id     smallint not null references master_roles(id) on delete restrict,

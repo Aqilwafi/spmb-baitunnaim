@@ -545,3 +545,16 @@ Activity Log digunakan sebagai riwayat aktivitas pengguna dan operasional sistem
 * Audit Trail diisi melalui trigger database
 * Activity Log diisi melalui fungsi atau logika aplikasi
 * Audit Trail dan Activity Log hanya dapat diakses oleh administrator
+
+
+## CMS
+-  About Us
+-  Visi & Misi
+-  Sejarah
+-  Terms & Conditions
+-  Privacy Policy
+-  FAQ
+-  Kata Mereka / Testimoni
+-  Banner
+-  Berita
+-  Pengumuman
