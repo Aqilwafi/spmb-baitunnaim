@@ -15,6 +15,7 @@ create table if not exists biodata_siswa (
     lembaga_id          smallint not null references master_lembaga(id) on delete restrict,
     kelas_id            smallint references master_kelas(id) on delete restrict,
     catatan             text,
+    deleted_at          timestamptz,
     created_at          timestamptz not null default now(),
     updated_at          timestamptz not null default now(),
     constraint chk_nisn_or_reason check (nisn is not null or nullif(trim(catatan), '') is not null)
@@ -32,6 +33,7 @@ create table if not exists biodata_siswa_detail (
     alamat              text,                                  -- alamat siswa, boleh beda dgn alamat keluarga
     tinggal_bersama_id  smallint references master_tinggal_bersama(id),
     status_rumah_id     smallint references master_status_rumah(id),
+    deleted_at          timestamptz,
     created_at          timestamptz not null default now(),
     updated_at          timestamptz not null default now()
 );
@@ -56,6 +58,7 @@ create table if not exists biodata_keluarga (
     alamat                text,
     created_at            timestamptz not null default now(),
     updated_at            timestamptz not null default now(),
+    deleted_at           timestamptz,
     constraint uq_siswa_relation unique (biodata_siswa_id, relation_type),
     constraint chk_wali_data check ( relation_type <> 'WALI' or (relation_type='WALI' and status_hidup='HIDUP' and detail_relation_type is not null))
 );
@@ -77,6 +80,7 @@ create table if not exists pendidikan_siswa_sebelumnya (
     catatan              text, -- belum pernah sekolah
     created_at           timestamptz not null default now(),
     updated_at           timestamptz not null default now(),
+    deleted_at           timestamptz,
     constraint chk_school_or_note
     check (
         (
@@ -111,6 +115,7 @@ create table if not exists form_pendaftaran (
     created_by uuid references profiles(id),
     created_at           timestamptz not null default now(),
     updated_at           timestamptz not null default now(),
+    deleted_at           timestamptz,
     constraint uq_siswa_tahun_ajaran unique (biodata_siswa_id, tahun_ajaran_id)
 );
 comment on table form_pendaftaran is
@@ -134,7 +139,8 @@ create table if not exists pembayaran (
     verified_by            uuid references profiles(id),
     verified_at            timestamptz,
     created_at             timestamptz not null default now(),
-    updated_at             timestamptz not null default now()
+    updated_at             timestamptz not null default now(),
+    deleted_at           timestamptz
 );
 comment on table pembayaran is 'Satu pembayaran aktif per pendaftaran. Upload ulang mengganti file, riwayat tidak disimpan.';
 
@@ -153,6 +159,7 @@ create table if not exists dokumen (
     uploaded_at           timestamptz not null default now(),
     created_at            timestamptz not null default now(),
     updated_at             timestamptz not null default now(),
+    deleted_at           timestamptz,
     constraint uq_form_tipe_dokumen unique (form_pendaftaran_id, tipe_dokumen_id)
 );
 comment on table dokumen is 'Satu tipe dokumen = satu file aktif per pendaftaran. Upload ulang mengganti file, riwayat tidak disimpan.';
