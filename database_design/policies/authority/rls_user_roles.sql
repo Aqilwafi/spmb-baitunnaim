@@ -19,7 +19,7 @@ create policy "RLS: user_roles: insert"
 on public.user_roles
 for insert
 with check (   
-    public.can_manage_user_role(domain_id, role_id)
+    public.can_manage_user_role(role_id)
 );
 
 drop policy if exists "RLS: user_roles: update"
@@ -29,10 +29,10 @@ create policy "RLS: user_roles: update"
 on public.user_roles
 for update  
 using (
-    public.can_manage_user_role(domain_id, role_id)
+    public.can_manage_user_role(role_id)
 )
 with check (
-    public.can_manage_user_role(domain_id, role_id)
+    public.can_manage_user_role(    role_id)
 );
 
 drop policy if exists "RLS: user_roles: delete"

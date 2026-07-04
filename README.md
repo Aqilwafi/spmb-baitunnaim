@@ -1,4 +1,4 @@
-# 🏫 Web Pendaftaran LPI
+# 🏫 Website LPI Baitunnaim
 
 Aplikasi web pendaftaran siswa berbasis **Next.js 16** dengan autentikasi dan manajemen pendaftaran multi-step. Dibangun menggunakan Supabase sebagai backend dan dapat di-deploy menggunakan Docker.
 
@@ -19,36 +19,6 @@ Aplikasi web pendaftaran siswa berbasis **Next.js 16** dengan autentikasi dan ma
 
 ---
 
-## 📁 Struktur Proyek
-
-```
-.
-├── database/               # SQL schema, fungsi, dan data lama
-│   ├── functions/          # PL/pgSQL functions (auth, bisnis, system, validasi)
-│   ├── table/              # DDL tabel utama dan lookup
-│   └── old/                # Data migrasi dari sistem lama
-├── docker/                 # Konfigurasi Docker & Compose
-│   └── development/
-├── public/                 # Aset statis (logo, gambar)
-└── src/
-    ├── actions/            # Server Actions (auth, pendaftaran)
-    ├── app/                # Next.js App Router
-    │   ├── (admin)/        # Halaman admin
-    │   ├── (auth)/         # Login, register, reset password
-    │   ├── (conditional)/  # Halaman forbidden, maintenance, unauthorized
-    │   └── (user)/         # Dashboard & alur pendaftaran
-    ├── components/         # Komponen UI
-    │   ├── auth/           # Form login & register
-    │   ├── dashboards/     # Dashboard & step pendaftaran
-    │   ├── headers/        # Header per halaman
-    │   └── others/         # Komponen umum (popup, maintenance)
-    ├── config/             # Konfigurasi step pendaftaran
-    ├── helpers/            # Helper logika pendaftaran
-    ├── lib/supabase/       # Klien Supabase (admin, client, server, proxy)
-    ├── services/           # Layer service (dashboard, pendaftaran)
-    ├── types/              # TypeScript type definitions
-    └── utils/              # Utilitas (format tanggal, status mapper)
-```
 
 ---
 

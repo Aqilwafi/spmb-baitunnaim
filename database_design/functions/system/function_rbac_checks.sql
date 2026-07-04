@@ -27,7 +27,6 @@ as $$
 $$;
 
 create or replace function public.can_manage_user_role(
-    p_target_domain_id smallint,
     p_target_role_id smallint
 )
 returns boolean
@@ -38,8 +37,8 @@ as $$
     p_target_role_id not in (1, 2)
     and 
     (
-      (auth.jwt() -> 'app_metadata' -> 'access_rights') @> jsonb_build_array(jsonb_build_object('domain_id', p_target_domain_id, 'role_id', 1))
+      (auth.jwt() -> 'app_metadata' -> 'access_rights') @> jsonb_build_array(jsonb_build_object( 'role_id', 1))
       or
-      (auth.jwt() -> 'app_metadata' -> 'access_rights') @> jsonb_build_array(jsonb_build_object('domain_id', p_target_domain_id, 'role_id', 2))
+      (auth.jwt() -> 'app_metadata' -> 'access_rights') @> jsonb_build_array(jsonb_build_object('role_id', 2))
     );
 $$;
