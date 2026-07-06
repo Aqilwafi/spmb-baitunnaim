@@ -1,17 +1,12 @@
--- =========================================================
--- 1. tabel audit trail (perubahan data level database)
--- =========================================================
-create table if not exists audit_trail (
+create table if not exists public.audit_trail (
     id          uuid primary key default gen_random_uuid(),
     user_id     uuid, -- tanpa foreign key, log tetap aman meski user dihapus
     table_name  text not null,
     record_id   text, -- menggunakan text agar fleksibel menampung bigint, smallint, atau uuid
-    action      text not null,
+    action      public.audit_operation_enum not null,
     old_data    jsonb,
     new_data    jsonb,
     created_at  timestamptz not null default now(),
-    constraint chk_action
-        check (action in ('insert', 'update', 'delete')), -- disesuaikan ke lowercase
     constraint chk_data_presence
         check (old_data is not null or new_data is not null)
 );
@@ -19,7 +14,7 @@ create table if not exists audit_trail (
 -- =========================================================
 -- 2. tabel activity logs (aksi user level aplikasi)
 -- =========================================================
-create table if not exists activity_logs (
+create table if not exists public.activity_logs (
     id          uuid primary key default gen_random_uuid(),
     user_id     uuid, -- tanpa foreign key
     event       text not null, -- contoh: 'user_login', 'export_report'

@@ -5,7 +5,7 @@
 create table if not exists public.profiles (
     id          uuid primary key references auth.users(id) on delete cascade,
     account_name varchar(150),
-    phone       varchar(20),
+    phone       public.dom_nomor_hp unique,
     avatar_url  text,
     created_at  timestamptz not null default now(),
     updated_at  timestamptz not null default now()

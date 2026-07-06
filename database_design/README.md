@@ -194,16 +194,17 @@ Database objects should generally be deployed in the following order:
 
 Additional documentation is organized separately to keep this README concise.
 
-| Document               | Description                                     |
-| ---------------------- | ----------------------------------------------- |
-| `docs/architecture.md` | Overall database architecture and relationships |
-| `docs/modules.md`      | Detailed explanation of each business module    |
-| `docs/security.md`     | RLS, RBAC, helper functions, and security model |
-| `docs/deployment.md`   | Deployment order and initialization process     |
-| `docs/conventions.md`  | Naming conventions and development guidelines   |
-| `docs/soft-delete.md`  | Soft delete strategy and implementation         |
-| `docs/roles.md`        | Role definitions                                |
-| `docs/matrix.md`       | Permission matrix                               |
+| Document                    | Description                                     |
+| --------------------------- | ----------------------------------------------- |
+| `docs/architecture.md`      | Overall database architecture and relationships |
+| `docs/modules.md`           | Detailed explanation of each business module    |
+| `docs/design-philosophy.md` | filosofi design                                 |
+| `docs/security.md`          | RLS, RBAC, helper functions, and security model |
+| `docs/deployment.md`        | Deployment order and initialization process     |
+| `docs/conventions.md`       | Naming conventions and development guidelines   |
+| `docs/soft-delete.md`       | Soft delete strategy and implementation         |
+| `docs/roles.md`             | Role definitions                                |
+| `docs/matrix.md`            | Permission matrix                               |
 
 ---
 
@@ -218,9 +219,3 @@ Planned improvements include:
 * Data Archival Strategy
 * Reporting & Analytics
 * Payment Gateway Integration
-
----
-
-# Notes
-
-The `simpan/` directory is used for archived SQL scripts, experiments, backups, and previous design references. Files in this directory are **not** part of the main deployment process.
