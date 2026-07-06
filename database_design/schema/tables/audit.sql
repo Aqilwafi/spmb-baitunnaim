@@ -26,13 +26,13 @@ create table if not exists public.activity_logs (
 -- =========================================================
 -- 3. fungsi pembersihan log otomatis (cleanup)
 -- =========================================================
-create or replace function cleanup_old_logs(retention_days int default 90)
-returns void as $$
-begin
-    delete from audit_trail
-    where created_at < now() - (retention_days || ' days')::interval;
+-- create or replace function cleanup_old_logs(retention_days int default 90)
+-- returns void as $$
+-- begin
+--     delete from audit_trail
+--     where created_at < now() - (retention_days || ' days')::interval;
 
-    delete from activity_logs
-    where created_at < now() - (retention_days || ' days')::interval;
-end;
-$$ language plpgsql;
+--     delete from activity_logs
+--     where created_at < now() - (retention_days || ' days')::interval;
+-- end;
+-- $$ language plpgsql;
