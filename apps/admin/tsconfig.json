@@ -1,6 +1,7 @@
 {
   "extends": "@bn/tsconfig/next.json",
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "noEmit": false,
     "declaration": true,
     "declarationMap": true,

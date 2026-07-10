@@ -4,8 +4,10 @@ const nextConfig = {
   transpilePackages: [
     "@bn/ui",
     "@bn/supabase",
-    "@bn/utils",
+    "@bn/auth",
     "@bn/validators",
+    "@bn/services",
+    "@bn/utils"
   ],
 };
 
