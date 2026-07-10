@@ -7,7 +7,7 @@ create policy "RLS: master_tipe_dokumen: select"
 on public.master_tipe_dokumen
 for select
 using (
-    public.can_read_master_data(is_active)
+    public.fn_can_read_master_data(is_active)
 );
 
 drop policy if exists "RLS: master_tipe_dokumen: insert"
@@ -17,7 +17,7 @@ create policy "RLS: master_tipe_dokumen: insert"
 on public.master_tipe_dokumen
 for insert
 with check (
-    public.is_high_level_admin()
+    public.fn_is_high_level_admin()
 );
 
 drop policy if exists "RLS: master_tipe_dokumen: update"
@@ -26,8 +26,11 @@ on public.master_tipe_dokumen;
 create policy "RLS: master_tipe_dokumen: update"
 on public.master_tipe_dokumen
 for update
+using (
+    public.fn_is_high_level_admin()
+)
 with check (
-   public.is_high_level_admin()
+   public.fn_is_high_level_admin()
 );
 
 drop policy if exists "RLS: master_tipe_dokumen: delete"
@@ -36,7 +39,7 @@ on public.master_tipe_dokumen;
 create policy "RLS: master_tipe_dokumen: delete"
 on public.master_tipe_dokumen
 for delete
-with check (
-   public.is_high_level_admin()
+using (
+    public.fn_is_high_level_admin()
 );
 

@@ -223,7 +223,3 @@ insert into master_tinggal_bersama (id, code, label) values
     (4, 'PANTI', 'Panti'),
     (5, 'PESANTREN', 'Pesantren')
 on conflict (code) do nothing;
-
-insert into user_roles (user_id, role_id, domain_id) values
-    ('00000000-0000-0000-0000-000000000002', 3, 1),
-    ('00000000-0000-0000-0000-000000000002', 3, 2);
