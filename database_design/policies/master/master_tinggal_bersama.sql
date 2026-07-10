@@ -1,5 +1,7 @@
 -- policies/master/rls_master_tinggal_bersama.sql
 
+alter table public.master_tinggal_bersama enable row level security;
+
 drop policy if exists "RLS: master_tinggal_bersama: select"
 on public.master_tinggal_bersama;
 

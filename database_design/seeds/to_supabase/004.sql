@@ -121,7 +121,6 @@ create table if not exists master_categories (
     is_active boolean not null default true,
     created_at timestamptz default now(),
     updated_at timestamptz default now()
-
 );
 
 insert into master_step (
@@ -197,6 +196,11 @@ insert into master_tinggal_bersama (code, label) values
     ('PESANTREN', 'Pesantren')
 on conflict (code) do nothing;
 
+insert into master_categories (label)
+values
+    ('Artikel'),
+    ('Berita')
+on conflict do nothing;
 
 create or replace function public.fn_generate_tahun_ajaran_metadata()
 returns trigger

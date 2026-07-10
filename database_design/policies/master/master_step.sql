@@ -1,5 +1,7 @@
 -- policies/master/rls_master_step.sql
 
+alter table public.master_step enable row level security;
+
 drop policy if exists "RLS: master_step: select"
 on public.master_step;
 

@@ -8,7 +8,7 @@ create policy "RLS: master_categories: select"
 on public.master_categories
 for select
 using (
-    public.fn_can_read_master_data(is_active)
+    is_active = true
 );
 
 drop policy if exists "RLS: master_categories: insert"

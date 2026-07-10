@@ -1,5 +1,7 @@
 -- policies/master/rls_master_tipe_dokumen.sql
 
+alter table public.master_tipe_dokumen enable row level security;
+
 drop policy if exists "RLS: master_tipe_dokumen: select"
 on public.master_tipe_dokumen;
 

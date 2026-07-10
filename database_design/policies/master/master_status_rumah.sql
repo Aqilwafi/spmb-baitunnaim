@@ -1,5 +1,7 @@
 -- policies/master/rls_master_status_rumah.sql
 
+alter table public.master_status_rumah enable row level security;
+
 drop policy if exists "RLS: master_status_rumah: select"
 on public.master_status_rumah;
 

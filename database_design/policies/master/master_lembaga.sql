@@ -1,5 +1,7 @@
 -- policies/master/rls_master_lembaga.sql
 
+alter table public.master_lembaga enable row level security;
+
 drop policy if exists "RLS: master_lembaga: select"
 on public.master_lembaga;
 

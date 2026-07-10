@@ -1,5 +1,7 @@
 -- policies/master/rls_master_kelas.sql
 
+alter table public.master_kelas enable row level security;
+
 drop policy if exists "RLS: master_kelas: select"
 on public.master_kelas;
 

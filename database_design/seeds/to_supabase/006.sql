@@ -207,3 +207,19 @@ create trigger trg_set_updated_at
 before update on public.master_status_rumah
 for each row
 execute function public.fn_set_updated_at();
+
+alter table public.master_categories enable row level security;
+
+alter table public.master_kelas enable row level security;
+
+alter table public.master_lembaga enable row level security;
+
+alter table public.master_step enable row level security;
+
+alter table public.master_tahun_ajaran enable row level security;
+
+alter table public.master_status_rumah enable row level security;
+
+alter table public.master_tipe_dokumen enable row level security;
+
+alter table public.master_tinggal_bersama enable row level security;

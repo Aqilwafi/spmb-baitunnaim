@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "login": "tsx --env-file=.env.staging ./src/login-tes.ts",
-    "regis": "tsx --env-file=.env.staging ./src/register-tes.ts"
+    "regis": "tsx --env-file=.env.staging ./src/register-tes.ts",
+    "master": "tsx --env-file=.env.staging ./src/master-tes.ts",
+    "authority": "tsx --env-file=.env.staging ./src/authority-tes.ts",
+    "anon": "tsx --env-file=.env.staging ./src/anon-tes.ts"
   },
   "dependencies": {
     "@bn/supabase": "workspace:*",
