@@ -1,3 +1,139 @@
+
+-- policies/master/rls_master_categories.sql
+
+drop policy if exists "RLS: master_categories: select"
+on public.master_categories;
+
+create policy "RLS: master_categories: select"
+on public.master_categories
+for select
+using (
+    public.fn_can_read_master_data(is_active)
+);
+
+drop policy if exists "RLS: master_categories: insert"
+on public.master_categories;
+
+create policy "RLS: master_categories: insert"
+on public.master_categories
+for insert
+with check (
+    public.fn_is_high_level_admin()
+);
+
+drop policy if exists "RLS: master_categories: update"
+on public.master_categories;
+
+create policy "RLS: master_categories: update"
+on public.master_categories
+for update
+using (
+    public.fn_is_high_level_admin()
+)
+with check (
+   public.fn_is_high_level_admin()
+);
+
+drop policy if exists "RLS: master_categories: delete"
+on public.master_categories;
+
+create policy "RLS: master_categories: delete"
+on public.master_categories
+for delete
+using (
+    public.fn_is_high_level_admin()
+);
+
+-- policies/master/rls_master_kelas.sql
+
+drop policy if exists "RLS: master_kelas: select"
+on public.master_kelas;
+
+create policy "RLS: master_kelas: select"
+on public.master_kelas
+for select
+using (
+    public.fn_can_read_master_data(is_active)
+);
+
+drop policy if exists "RLS: master_kelas: insert"
+on public.master_kelas;
+
+create policy "RLS: master_kelas: insert"
+on public.master_kelas
+for insert
+with check (
+    public.fn_is_high_level_admin()
+);
+
+drop policy if exists "RLS: master_kelas: update"
+on public.master_kelas;
+
+create policy "RLS: master_kelas: update"
+on public.master_kelas
+for update
+using (
+    public.fn_is_high_level_admin()
+)
+with check (
+   public.fn_is_high_level_admin()
+);
+
+drop policy if exists "RLS: master_kelas: delete"
+on public.master_kelas;
+
+create policy "RLS: master_kelas: delete"
+on public.master_kelas
+for delete
+using (
+    public.fn_is_high_level_admin()
+);
+
+-- policies/master/rls_master_lembaga.sql
+
+drop policy if exists "RLS: master_lembaga: select"
+on public.master_lembaga;
+
+create policy "RLS: master_lembaga: select"
+on public.master_lembaga
+for select
+using (
+    public.fn_can_read_master_data(is_active)
+);
+
+drop policy if exists "RLS: master_lembaga: insert"
+on public.master_lembaga;
+
+create policy "RLS: master_lembaga: insert"
+on public.master_lembaga
+for insert
+with check (
+    public.fn_is_high_level_admin()
+);
+
+drop policy if exists "RLS: master_lembaga: update"
+on public.master_lembaga;
+
+create policy "RLS: master_lembaga: update"
+on public.master_lembaga
+for update
+using (
+    public.fn_is_high_level_admin()
+)
+with check (
+   public.fn_is_high_level_admin()
+);
+
+drop policy if exists "RLS: master_lembaga: delete"
+on public.master_lembaga;
+
+create policy "RLS: master_lembaga: delete"
+on public.master_lembaga
+for delete
+using (
+    public.fn_is_high_level_admin()
+);
+
 -- policies/master/rls_master_tahun_ajaran.sql
 
 drop policy if exists "RLS: master_tahun_ajaran: select"
@@ -83,96 +219,6 @@ on public.master_tinggal_bersama;
 
 create policy "RLS: master_tinggal_bersama: delete"
 on public.master_tinggal_bersama
-for delete
-using (
-    public.fn_is_high_level_admin()
-);
-
--- policies/master/rls_master_tipe_dokumen.sql
-
-drop policy if exists "RLS: master_tipe_dokumen: select"
-on public.master_tipe_dokumen;
-
-create policy "RLS: master_tipe_dokumen: select"
-on public.master_tipe_dokumen
-for select
-using (
-    public.fn_can_read_master_data(is_active)
-);
-
-drop policy if exists "RLS: master_tipe_dokumen: insert"
-on public.master_tipe_dokumen;
-
-create policy "RLS: master_tipe_dokumen: insert"
-on public.master_tipe_dokumen
-for insert
-with check (
-    public.fn_is_high_level_admin()
-);
-
-drop policy if exists "RLS: master_tipe_dokumen: update"
-on public.master_tipe_dokumen;
-
-create policy "RLS: master_tipe_dokumen: update"
-on public.master_tipe_dokumen
-for update
-using (
-    public.fn_is_high_level_admin()
-)
-with check (
-   public.fn_is_high_level_admin()
-);
-
-drop policy if exists "RLS: master_tipe_dokumen: delete"
-on public.master_tipe_dokumen;
-
-create policy "RLS: master_tipe_dokumen: delete"
-on public.master_tipe_dokumen
-for delete
-using (
-    public.fn_is_high_level_admin()
-);
-
--- policies/master/rls_master_step.sql
-
-drop policy if exists "RLS: master_step: select"
-on public.master_step;
-
-create policy "RLS: master_step: select"
-on public.master_step
-for select
-using (
-    public.fn_can_read_master_data(is_active)
-);
-
-drop policy if exists "RLS: master_step: insert"
-on public.master_step;
-
-create policy "RLS: master_step: insert"
-on public.master_step
-for insert
-with check (
-    public.fn_is_high_level_admin()
-);
-
-drop policy if exists "RLS: master_step: update"
-on public.master_step;
-
-create policy "RLS: master_step: update"
-on public.master_step
-for update
-using (
-    public.fn_is_high_level_admin()
-)
-with check (
-   public.fn_is_high_level_admin()
-);
-
-drop policy if exists "RLS: master_step: delete"
-on public.master_step;
-
-create policy "RLS: master_step: delete"
-on public.master_step
 for delete
 using (
     public.fn_is_high_level_admin()

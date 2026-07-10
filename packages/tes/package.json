@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "uji": "tsx --env-file=.env ./src/action.ts"
+    "login": "tsx --env-file=.env.staging ./src/login-tes.ts",
+    "regis": "tsx --env-file=.env.staging ./src/register-tes.ts"
   },
   "dependencies": {
     "@bn/supabase": "workspace:*",

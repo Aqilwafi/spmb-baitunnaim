@@ -35,13 +35,11 @@ comment on table master_lembaga is
 -- ---------------------------------------------------------
 create table if not exists master_kelas (
     id          smallint     primary key generated always as identity,
-    lembaga_id  smallint     not null references master_lembaga(id) on delete cascade,
-    code        varchar(30)  not null check (code = upper(code)),
+    code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
     is_active   boolean      not null default true,
     created_at  timestamptz  not null default now(),
-    updated_at  timestamptz  not null default now(),
-    constraint uq_kelas_lembaga_code unique (lembaga_id, code)
+    updated_at  timestamptz  not null default now()
 );
 
 comment on table master_kelas is
@@ -55,10 +53,8 @@ create table if not exists master_tahun_ajaran (
     semester    semester_enum not null,
     start_year  int           not null,
     end_year    int           not null,
-    code        varchar       generated always as (
-        start_year::text || '-' || end_year::text || '_' || semester::text
-    ) stored,
-    label       varchar(50)   not null,
+    code  varchar(30) not null unique,
+    label varchar(50) not null,
     is_active   boolean       not null default true,
     created_at  timestamptz   not null default now(),
     updated_at  timestamptz   not null default now(),
@@ -75,12 +71,13 @@ comment on table master_tahun_ajaran is
 create table if not exists master_step (
     id          smallint     primary key generated always as identity,
     step_order  smallint     not null,
-    code        varchar(30)  not null check (code = upper(code)),
+    code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,
     description text,
     is_active   boolean      not null default true,
     created_at  timestamptz  not null default now(),
-    updated_at  timestamptz  not null default now()
+    updated_at  timestamptz  not null default now(),
+    constraint uq_step_order_active unique (step_order, is_active)
 );
 
 comment on table master_step is

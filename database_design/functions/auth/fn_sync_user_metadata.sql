@@ -1,4 +1,4 @@
-create or replace function public.fn_sync_username_to_auth()
+create or replace function public.fn_sync_user_metadata()
 returns trigger
 language plpgsql
 security definer
@@ -10,7 +10,7 @@ begin
         set raw_user_meta_data =
             coalesce(raw_user_meta_data, '{}'::jsonb)
             || jsonb_build_object(
-                'account_name',
+                'username',
                 new.username
             )
         where id = new.id;
@@ -19,3 +19,5 @@ begin
     return new;
 end;
 $$;
+
+revoke execute on function public.fn_sync_user_metadata() from public, anon, authenticated;
