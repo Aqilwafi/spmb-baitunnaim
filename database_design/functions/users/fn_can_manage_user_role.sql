@@ -11,7 +11,7 @@ as $$
     and 
     (
       coalesce(
-        (auth.jwt() -> 'app_metadata' -> 'role_id')::jsonb @> '[1, 2]'::jsonb, false
+        (auth.jwt() -> 'app_metadata' -> 'access_rights')::jsonb @> '[1, 2]'::jsonb, false
       )
     );
 $$;

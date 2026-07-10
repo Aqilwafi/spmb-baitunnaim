@@ -1,23 +1,36 @@
--- /rls/system/rls_audit_trail.sql
+-- policies/audit/audit_trail.sql
 
-CREATE POLICY "select_own_audit_trail"
-ON audit_trail
-FOR SELECT
-USING (
-  is_admin_level()
+drop policy if exists "RLS: audit_trail: select"
+on public.audit_trail;
+
+create policy "RLS: audit_trail: select"
+on public.audit_trail
+for select
+using (
+    public.is_high_level_admin()
 );
 
-CREATE POLICY "no_insert_audit_trail"
-ON audit_trail
-FOR INSERT
-WITH CHECK (false);
+drop policy if exists "RLS: audit_trail: insert"
+on public.audit_trail;
 
-CREATE POLICY "no_update_audit_trail"
-ON audit_trail
-FOR UPDATE
-USING (false);
+create policy "RLS: audit_trail: insert"
+on public.audit_trail
+for insert
+with check (false);
 
-CREATE POLICY "no_delete_audit_trail"
-ON audit_trail
-FOR DELETE
-USING (false);
+drop policy if exists "RLS: audit_trail: update"
+on public.audit_trail;
+
+create policy "RLS: audit_trail: update"
+on public.audit_trail
+for update  
+using (false);
+
+drop policy if exists "RLS: audit_trail: delete"
+on public.audit_trail;
+
+create policy "RLS: audit_trail: delete"
+on public.audit_trail
+for delete
+using (false); -- tidak boleh delete audit_trail, harus delete user di auth.users sekalian 2 fungsi.
+

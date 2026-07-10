@@ -19,12 +19,10 @@ begin
 
     -- buat profile
     insert into public.profiles (
-        id,
-        email
+        id
     )
     values (
-        new.id,
-        new.email
+        new.id
     )
     on conflict (id) do nothing;
 
@@ -42,3 +40,6 @@ begin
     return new;
 end;
 $$;
+
+-- Cabut akses publik untuk fungsi fn_create_user_relations
+revoke execute on function public.fn_create_user_relations() from public, anon, authenticated;

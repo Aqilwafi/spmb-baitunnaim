@@ -1,4 +1,4 @@
-create or replace function public.fn_can_manage_publikasi()
+create or replace function public.fn_can_manage_publication()
 returns boolean
 language sql
 stable
@@ -8,7 +8,7 @@ as $$
         public.fn_is_high_level_admin() 
         or
         coalesce(
-            (auth.jwt() -> 'app_metadata' -> 'role_id')::jsonb @> '[4]'::jsonb, false
+            (auth.jwt() -> 'app_metadata' -> 'access_rights')::jsonb @> '[4]'::jsonb, false
         )
     ); 
 $$;

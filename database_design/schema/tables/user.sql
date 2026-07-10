@@ -22,3 +22,4 @@ create table if not exists public.user_roles (
     constraint uq_user_role_domain unique (user_id, role_id)
 );
 comment on table public.user_roles is 'Pemetaan role per user per domain. Contoh: Ahmad = VERIFIKATOR@SPMB, PUBLIKATOR@PUBLIKASI.';
+

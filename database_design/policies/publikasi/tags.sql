@@ -14,7 +14,9 @@ on public.tags;
 create policy "RLS: tags: insert"
 on public.tags
 for insert
-with check (false);
+with check (
+    public.can_manage_publication()
+);
 
 drop policy if exists "RLS: tags: update"
 on public.tags;
@@ -23,14 +25,10 @@ create policy "RLS: tags: update"
 on public.tags
 for update  
 using (
-    public.is_high_level_admin()
-    or
-    id = auth.uid()
+    public.can_manage_publication()
 )
 with check (
-    public.is_high_level_admin()
-    or
-    id = auth.uid()
+    public.can_manage_publication()
 );
 
 drop policy if exists "RLS: tags: delete"

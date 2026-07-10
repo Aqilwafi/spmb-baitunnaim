@@ -1,23 +1,36 @@
--- /rls/system/rls_activity_logs.sql
+-- policies/audit/activity_logs.sql
 
-CREATE POLICY "select_own_activity_logs"
-ON activity_logs
-FOR SELECT
-USING (
-  is_admin_level()
+drop policy if exists "RLS: activity_logs: select"
+on public.activity_logs;
+
+create policy "RLS: activity_logs: select"
+on public.activity_logs
+for select
+using (
+    public.is_high_level_admin()
 );
 
-CREATE POLICY "no_insert_activity_logs"
-ON activity_logs
-FOR INSERT
-WITH CHECK (false);
+drop policy if exists "RLS: activity_logs: insert"
+on public.activity_logs;
 
-CREATE POLICY "no_update_activity_logs"
-ON activity_logs
-FOR UPDATE
-USING (false);
+create policy "RLS: activity_logs: insert"
+on public.activity_logs
+for insert
+with check (false);
 
-CREATE POLICY "no_delete_activity_logs"
-ON activity_logs
-FOR DELETE
-USING (false);
+drop policy if exists "RLS: activity_logs: update"
+on public.activity_logs;
+
+create policy "RLS: activity_logs: update"
+on public.activity_logs
+for update  
+using (false);
+
+drop policy if exists "RLS: activity_logs: delete"
+on public.activity_logs;
+
+create policy "RLS: activity_logs: delete"
+on public.activity_logs
+for delete
+using (false); -- tidak boleh delete activity_logs, harus delete user di auth.users sekalian 2 fungsi.
+

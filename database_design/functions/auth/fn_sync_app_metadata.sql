@@ -23,7 +23,7 @@ begin
     into v_access_rights
     from public.user_roles
     where user_id = v_user_id
-      and suspended_at is null;
+      and is_active = true;
 
     -- sinkronkan ke auth.users
     update auth.users
@@ -38,3 +38,6 @@ begin
     return null;
 end;
 $$;
+
+-- Cabut akses publik untuk fungsi fn_sync_app_metadata
+revoke execute on function public.fn_sync_app_metadata() from public, anon, authenticated;

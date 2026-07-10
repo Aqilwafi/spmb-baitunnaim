@@ -66,12 +66,12 @@ insert into master_tinggal_bersama (id, code, label) values
     (5, 'PESANTREN', 'Pesantren')
 on conflict (code) do nothing;
 
-insert into master_roles (id, code, role_name, role_description) values
-    (1, 'PENDAFTAR', 'Pendaftar', 'Akun untuk melakukan pendaftaran siswa baru di SPMB Baitunnaim'),
-    (2, 'SUPERADMIN', 'Super Administrator', 'Full system access'),
-    (3, 'ADMINISTRATOR', 'Administrator', 'Admin lintas domain SPMB & Publikasi'),
-    (4, 'VERIFIKATOR', 'Verifikator', 'Verifikasi data dan dokumen pendaftaran'),
-    (5, 'PUBLIKATOR', 'Publikator', 'Kelola konten publikasi')
+insert into master_roles (code, label, description) values
+('SUPERADMIN', 'Super Administrator', 'Full system access'),
+('ADMINISTRATOR', 'Administrator', 'Admin lintas domain SPMB & Publikasi'),
+    ('PENDAFTAR', 'Pendaftar', 'Akun untuk melakukan pendaftaran siswa baru di SPMB Baitunnaim'),
+    ('VERIFIKATOR', 'Verifikator', 'Verifikasi data dan dokumen pendaftaran'),
+    ('PUBLIKATOR', 'Publikator', 'Kelola konten publikasi')
 on conflict (id) do nothing;
 
 insert into master_domains (id, code, domain_name, domain_description) values

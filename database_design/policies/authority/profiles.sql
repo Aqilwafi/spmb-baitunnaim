@@ -1,5 +1,7 @@
 -- policies/authority/rls_profiles.sql
 
+alter table public.profiles enable row level security;
+
 drop policy if exists "RLS: profiles: select"
 on public.profiles;
 
@@ -7,7 +9,7 @@ create policy "RLS: profiles: select"
 on public.profiles
 for select
 using (
-    public.is_high_level_admin()
+    public.fn_is_high_level_admin()
     or
     id = auth.uid()
 );
@@ -27,12 +29,12 @@ create policy "RLS: profiles: update"
 on public.profiles
 for update  
 using (
-    public.is_high_level_admin()
+    public.fn_is_high_level_admin()
     or
     id = auth.uid()
 )
 with check (
-    public.is_high_level_admin()
+    public.fn_is_high_level_admin()
     or
     id = auth.uid()
 );

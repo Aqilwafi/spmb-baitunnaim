@@ -14,7 +14,9 @@ on public.posts;
 create policy "RLS: posts: insert"
 on public.posts
 for insert
-with check (false);
+with check (
+    public.can_manage_publication()
+);
 
 drop policy if exists "RLS: posts: update"
 on public.posts;
@@ -23,14 +25,10 @@ create policy "RLS: posts: update"
 on public.posts
 for update  
 using (
-    public.is_high_level_admin()
-    or
-    id = auth.uid()
+    public.can_manage_publication()
 )
 with check (
-    public.is_high_level_admin()
-    or
-    id = auth.uid()
+    public.can_manage_publication()
 );
 
 drop policy if exists "RLS: posts: delete"
