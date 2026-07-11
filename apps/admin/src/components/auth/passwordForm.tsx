@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 
-import { setPasswordAction } from "@/actions/auth/users.actions";
+import { setPasswordAction } from "@/actions/users.actions";
 
 import {
   TextInput,

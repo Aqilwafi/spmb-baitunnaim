@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { executeSharedLogout } from "@bn/auth";
 import { useRouter } from "next/navigation";
-import { logoutAction } from "@/actions/auth/auth.actions";
+import { logoutAction } from "@/actions/auth.actions";
 
 type User = {
   username?: string;

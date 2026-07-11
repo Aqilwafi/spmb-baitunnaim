@@ -6,7 +6,7 @@ import { useActionState } from "react";
 
 import { Mail, UserPlus } from "lucide-react";
 
-import { inviteAdminAction } from "@/actions/auth/users.actions";
+import { inviteAdminAction } from "@/actions/users.actions";
 
 export default function InviteAdminForm() {
   const [state, formAction, isPending] =
