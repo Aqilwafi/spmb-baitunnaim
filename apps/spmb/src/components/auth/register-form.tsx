@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { registerAction } from "@/actions/auth/auth.actions"; 
+import { registerAction } from "@/actions/auth.actions"; 
 import { TextInput, EmailInput, PasswordInput, Button } from "@bn/ui";
 
 export default function RegisterForm() {

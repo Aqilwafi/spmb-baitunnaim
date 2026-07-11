@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { 
   RegisterResponse, 
   LoginResponse, 
@@ -9,11 +11,13 @@ import {
   ForgotPasswordPayload,
   ResetPasswordPayload,
   RegisterPayload,
-  LoginPayload
-} from "@bn/types";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { executeSharedLogin, executeSharedRegister, executeSharedLogout, executeSharedForgotPassword, executeSharedResetPassword } from "@bn/auth";
+  LoginPayload } from "@bn/types";
+import { 
+  executeSharedLogin, 
+  executeSharedRegister, 
+  executeSharedLogout, 
+  executeSharedForgotPassword, 
+  executeSharedResetPassword } from "@bn/auth";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
   
@@ -68,6 +72,11 @@ export async function forgotPasswordAction(prevState: any, formData: FormData): 
 export async function resetPasswordAction(prevState: any, formData: FormData): Promise<ResetPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
 
-  // Langsung oper ke Shared Service
-  return await executeSharedResetPassword(rawPayload as ResetPasswordPayload);
+  const result = await executeSharedResetPassword(rawPayload as ResetPasswordPayload);
+
+  if (!result.success) {
+    return result; // tampilkan error di form, jangan redirect
+  }
+
+  redirect("/login?reset=success");
 }

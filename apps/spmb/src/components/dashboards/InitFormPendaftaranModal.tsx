@@ -4,7 +4,7 @@ import { useActionState, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Modal } from '@bn/ui';
 import { X, Save, Loader2, Plus } from 'lucide-react';
-import { initFormPendaftaranAction } from '@/actions/core/init-form.actions';
+import { initFormPendaftaranAction } from '@/actions/init-form.actions';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
 import { InitFormPendaftaranModalProps } from '@/features/pendaftaran/types';
 
