@@ -59,9 +59,10 @@ export async function logoutAction(): Promise<LogoutResponse> {
 
 export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
+  const siteUrl = process.env.NEXT_PUBLIC_SPMB_URL!;
   
   // Langsung oper ke Shared Service
-  return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload);
+  return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload, siteUrl);
 }
 
 export async function resetPasswordAction(prevState: any, formData: FormData): Promise<ResetPasswordResponse> {

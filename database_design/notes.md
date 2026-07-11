@@ -29,11 +29,11 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `functions/audit/function_audit_trigger.sql`
 
 ### 🔑 Auth (`/functions/auth`)
-- [v] `functions/auth/fn_create_user_relations.sql` — *Pastikan pakai AFTER INSERT*
-- [v] `functions/auth/fn_prepare_new_user.sql` — *Pastikan pakai BEFORE INSERT*
-- [v] `functions/auth/fn_sync_app_metadata.sql` — *Pastikan logic `is_active = true` & include `auth` schema di search_path*
+- [v] `functions/auth/fn_create_user_relations.sql` 
+- [v] `functions/auth/fn_prepare_new_user.sql` 
+- [v] `functions/auth/fn_sync_app_metadata.sql`
 - [ ] `functions/auth/fn_sync_email_to_profile.sql`
-- [ ] `functions/auth/fn_sync_username_to_auth.sql` — *(Catatan: Periksa jika fungsi ini sudah di-drop/diganti)*
+- [ ] `functions/auth/fn_sync_username_to_auth.sql` 
 
 ### 📰 Publication (`/functions/publication`)
 - [ ] `functions/publication/fn_can_manage_publication.sql`
@@ -44,22 +44,23 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `functions/shared/function_rls_helper.sql`
 
 ### 🎓 SPMB (`/functions/spmb`)
-- [ ] `functions/spmb/fn_can_manage_spmb.sql`
-- [ ] `functions/spmb/fn_is_owner_form_data.sql`
-- [ ] `functions/spmb/fn_is_owner_siswa_data.sql`
-- [ ] `functions/spmb/fn_rpc_is_guardian_required.sql`
-- [ ] `functions/spmb/fn_rpc_validate_guardian_requirement.sql`
+- [v] `functions/spmb/fn_can_manage_spmb.sql`
+- [v] `functions/spmb/fn_is_owner_form_data.sql`
+- [v] `functions/spmb/fn_is_owner_siswa_data.sql`
+- [v] `functions/spmb/fn_rpc_is_guardian_required.sql`
+- [v] `functions/spmb/fn_validate_guardian_requirement.sql`
+- [v] `functions/spmb/fn_validate_step_progression.sql`
 
 ### 🖥️ System (`/functions/system`)
 - [ ] `functions/system/fn_is_owner_data.sql`
 - [v] `functions/system/fn_set_updated_at.sql`
-- [ ] `functions/system/funtion_role_mutation.sql` — *(Catatan: Typo pada nama file 'funtion')*
+- [ ] `functions/system/funtion_role_mutation.sql`
 
 ### 👥 Users (`/functions/users`)
 - [v] `functions/users/fn_can_manage_user_role.sql`
-- [v] `functions/users/fn_is_administrator.sql` — *Pastikan `SET search_path = public`*
-- [v] `functions/users/fn_is_high_level_admin.sql` — *Pastikan sinkron dengan nama panggilan di RLS policy*
-- [v] `functions/users/fn_is_superadmin.sql` — *Pastikan `SET search_path = public`*
+- [v] `functions/users/fn_is_administrator.sql` 
+- [v] `functions/users/fn_is_high_level_admin.sql`
+- [v] `functions/users/fn_is_superadmin.sql` 
 
 ---
 
@@ -70,8 +71,8 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `policies/audit/audit_trail.sql`
 
 ### 🔑 Authority (`/policies/authority`)
-- [ ] `policies/authority/profiles.sql` — *Pastikan query `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` sudah ada*
-- [ ] `policies/authority/user_roles.sql`
+- [v] `policies/authority/profiles.sql` 
+- [v] `policies/authority/user_roles.sql`
 
 ### 🎨 CMS (`/policies/cms`)
 - [ ] `policies/cms/faq.sql`
@@ -83,15 +84,15 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `policies/cms/sosial_media.sql`
 
 ### 📦 Master Data (`/policies/master`)
-- [ ] `policies/master/master_categories.sql`
-- [ ] `policies/master/master_kelas.sql`
-- [ ] `policies/master/master_lembaga.sql`
+- [v] `policies/master/master_categories.sql`
+- [v] `policies/master/master_kelas.sql`
+- [v] `policies/master/master_lembaga.sql`
 - [v] `policies/master/master_roles.sql`
-- [ ] `policies/master/master_status_rumah.sql`
-- [ ] `policies/master/master_step.sql`
-- [ ] `policies/master/master_tahun_ajaran.sql`
-- [ ] `policies/master/master_tinggal_bersama.sql`
-- [ ] `policies/master/master_tipe_dokumen.sql`
+- [v] `policies/master/master_status_rumah.sql`
+- [v] `policies/master/master_step.sql`
+- [v] `policies/master/master_tahun_ajaran.sql`
+- [v] `policies/master/master_tinggal_bersama.sql`
+- [v] `policies/master/master_tipe_dokumen.sql`
 
 ### 📰 Publikasi (`/policies/publikasi`)
 - [ ] `policies/publikasi/posts.sql`
@@ -99,13 +100,13 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `policies/publikasi/tags.sql`
 
 ### 🎓 SPMB (`/policies/spmb`)
-- [ ] `policies/spmb/biodata_keluarga.sql`
-- [ ] `policies/spmb/biodata_siswa.sql`
-- [ ] `policies/spmb/biodata_siswa_detail.sql`
-- [ ] `policies/spmb/dokumen.sql`
-- [ ] `policies/spmb/form_pendaftaran.sql`
-- [ ] `policies/spmb/pembayaran.sql`
-- [ ] `policies/spmb/pendidikan_siswa_sebelumnya.sql`
+- [v] `policies/spmb/biodata_keluarga.sql`
+- [v] `policies/spmb/biodata_siswa.sql`
+- [v] `policies/spmb/biodata_siswa_detail.sql`
+- [v] `policies/spmb/dokumen.sql`
+- [v] `policies/spmb/form_pendaftaran.sql`
+- [v] `policies/spmb/pembayaran.sql`
+- [v] `policies/spmb/pendidikan_siswa_sebelumnya.sql`
 
 ---
 
@@ -115,16 +116,16 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `schema/supabase.sql`
 
 ### ⚙️ Other Configurations (`/schema/other`)
-- [ ] `schema/other/enums_type.sql`
-- [ ] `schema/other/extensions_and_domain.sql`
+- [v] `schema/other/enums_type.sql`
+- [v] `schema/other/extensions_and_domain.sql`
 - [ ] `schema/other/indexing.sql`
 
 ### 📊 Tables Definition (`/schema/tables`)
 - [ ] `schema/tables/audit.sql`
 - [ ] `schema/tables/cms.sql`
-- [ ] `schema/tables/master.sql`
+- [v] `schema/tables/master.sql`
 - [ ] `schema/tables/publikasi.sql`
-- [ ] `schema/tables/spmb.sql`
+- [v] `schema/tables/spmb.sql`
 - [v] `schema/tables/user.sql`
 
 ---
@@ -151,14 +152,14 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 ## ⚡ Triggers (`/triggers`)
 
 ### 🔑 Auth Triggers (`/triggers/auth`)
-- [ ] `triggers/auth/tr_after_auth_user_created.sql`
-- [ ] `triggers/auth/tr_before_auth_user_created.sql`
-- [ ] `triggers/auth/tr_sync_app_metadata.sql` — *Pastikan pakai AFTER INSERT OR UPDATE OR DELETE*
+- [v] `triggers/auth/tr_after_auth_user_created.sql`
+- [v] `triggers/auth/tr_before_auth_user_created.sql`
+- [v] `triggers/auth/tr_sync_app_metadata.sql` 
 - [ ] `triggers/auth/tr_sync_email_to_profile.sql`
 - [ ] `triggers/auth/tr_sync_username_to_auth.sql`
 
 ### 🖥️ System Triggers (`/triggers/system`)
-- [ ] `triggers/system/trg_set_updated_at.sql`
+- [v] `triggers/system/trg_set_updated_at.sql`
 
 ---
 

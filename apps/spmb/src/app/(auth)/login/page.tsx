@@ -40,7 +40,7 @@ export default function LoginPage() {
         {/* Navigasi Tambahan: Lupa Password & Register */}
         <div className="flex flex-col gap-2 text-center mt-2 mb-4">
           <Link
-            href="/auth/lupa-password"
+            href="/lupa-password"
             className="text-sm text-blue-600 hover:text-blue-800 transition-colors font-medium hover:underline"
           >
             Lupa password?

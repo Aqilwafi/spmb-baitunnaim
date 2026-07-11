@@ -1,6 +1,6 @@
 // packages/types/src/auth/auth.types.ts
 
-import type { Tables } from '../base.types';
+import type { Tables } from '../shared/supabase';
 import type { Session, User, JwtPayload } from '../shared/core.types'; // Pastikan package ini mengekspor tipe asli Supabase
 import { BaseResponse } from '../shared/core.types';
 
@@ -18,43 +18,24 @@ export type LoginPayload = Credetials;
 
 export type ForgotPasswordPayload = Pick<Credetials, 'email'>;
 
-export type ResetPasswordPayload = Pick<Credetials, 'email'> & {
-  new_password: string;
-  confirm_new_password: string;
+export type ResetPasswordPayload = {
+  newPassword: string;
+  confirmNewPassword: string;
 };
+
 
 export type RegisterResponse = BaseResponse<undefined, Pick<RegisterPayload, 'email' | 'username'>>;
 export type LoginResponse = BaseResponse<{ user: User, session: Session }, Pick<LoginPayload, 'email'>>;
 export type LogoutResponse = BaseResponse;
 export type ForgotPasswordResponse = BaseResponse<undefined, Pick<ForgotPasswordPayload, 'email'>>;
-export type ResetPasswordResponse = BaseResponse<undefined, Pick<ResetPasswordPayload, 'email'>>;
+export type ResetPasswordResponse = BaseResponse;
 
 // belum pernah dipakai
 
 export type Profile = Tables<'profiles'>;
 export type MasterRole = Tables<'master_roles'>;
-export type MasterDomain = Tables<'master_domains'>;
 export type UserRole = Tables<'user_roles'>;
 type RoleCode = MasterRole['code'];
-type DomainCode = MasterDomain['code'];
-
-export type UserAccess = {
-  AccessRights: AuthClaims['app_metadata']['access_rights'];
-  domain: MasterDomain;
-  assigned_at: string | null;
-  assigned_by: string | null;
-  suspended_at: string | null;
-  suspended_by: string | null;
-};
-
-export type AuthUser = User & {
-  profile: Profile | null;
-  accesses: UserAccess[];
-};
-
-export type AuthSession = Omit<Session, 'user'> & {
-  user: AuthUser;
-};
 
 export type AuthClaims = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {
   app_metadata: {

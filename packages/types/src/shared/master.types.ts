@@ -2,7 +2,7 @@ import type {
   Tables,
   TablesInsert,
   TablesUpdate,
-} from './base.types';
+} from './supabase';
 
 export type MasterStepRow = Tables<'master_step'>;
 export type MasterStepInsert = TablesInsert<'master_step'>;

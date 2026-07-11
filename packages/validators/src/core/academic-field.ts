@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { masterIdField } from "./master-id-field";
 
 export const nisnField = z
   .string()
@@ -8,23 +9,19 @@ export const nisnField = z
 export const npsnField = z
   .string()
   .trim()
-  .regex(/^\d{10}$/, "NPSN harus berupa 10 digit angka");
+  .regex(/^[a-zA-Z0-9]{8}$/, "NPSN harus 8 karakter alfanumerik");
 
-export const lembagaField = z.enum(["MI", "TK", "PAUD", "TPA"], {
-  error: "Lembaga Tujuan harus dipilih (MI, TK, PAUD, atau TPA)",
-});
-
-export const kelasField = z.enum(["1", "2", "3", "4", "5", "6"], {
-  error: "Kelas harus dipilih (1, 2, 3, 4, 5, atau 6)",
-});
+export const lembagaIdField = masterIdField("Lembaga tujuan");
+export const kelasIdField = masterIdField("Kelas");
 
 export const pendidikanSebelumnyaField = z
   .string()
   .trim()
   .min(3, "Nama pendidikan sebelumnya minimal harus 3 karakter")
   .max(150, "Nama pendidikan sebelumnya terlalu panjang (maksimal 150 karakter)")
-  // 💡 Mengizinkan huruf, angka, spasi, dan tanda baca standar sekolah seperti strip atau petik tunggal
   .regex(
-    /^[a-zA-Z0-9\s.,'()-]+$/, 
+    /^[a-zA-Z0-9\s.,'()-]+$/,
     "Nama sekolah hanya boleh berisi huruf, angka, dan tanda baca standar"
-  );
+  )
+  .optional()
+  .nullable();

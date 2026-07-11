@@ -30,6 +30,9 @@ create table if not exists public.biodata_siswa_detail (
     agama               public.agama_enum not null default 'ISLAM',
     anak_ke             int not null check (anak_ke >= 1),
     jumlah_saudara      int not null check (jumlah_saudara >= 0),
+    hobi                varchar(100) not null,
+    cita-cita           varchar(100) not null,
+    penyakit            text,
     alamat              text not null,                                  -- alamat siswa, boleh beda dgn alamat keluarga
     tinggal_bersama_id  smallint not null references public.master_tinggal_bersama(id),
     status_rumah_id     smallint not null references public.master_status_rumah(id),
@@ -54,6 +57,7 @@ create table if not exists public.biodata_keluarga (
     tanggal_lahir         date,
     pekerjaan             varchar(100),
     pendidikan_terakhir   varchar(50),
+    penghasilan           varchar(50),
     no_hp                 public.dom_nomor_hp,
     alamat                text,
     created_at            timestamptz not null default now(),
@@ -64,7 +68,8 @@ create table if not exists public.biodata_keluarga (
         or 
         (
             nik is not null and tempat_lahir is not null and tanggal_lahir is not null and
-            pekerjaan is not null and pendidikan_terakhir is not null and no_hp is not null
+            pekerjaan is not null and pendidikan_terakhir is not null and no_hp is not null and
+            penghasilan is not null
         )
     ),
     constraint chk_wali_data check (relation_type <> 'WALI'

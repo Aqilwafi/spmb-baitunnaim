@@ -61,7 +61,7 @@ begin
     ) then
         create domain public.dom_npsn as text
         check (
-            value ~ '^[a-zA-r0-9]{8}$'
+            value ~ '^[a-zA-Z0-9]{8}$'
         );
     end if;
 

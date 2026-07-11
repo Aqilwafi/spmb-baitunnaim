@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
 import SetPasswordForm from "@/components/auth/password-form";
 
-export default function SetPasswordPage() {
+export default function ResetPasswordPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="flex flex-col items-center gap-6 max-w-md w-full mx-auto">
@@ -26,8 +26,8 @@ export default function SetPasswordPage() {
         {/* Kotak Form Utama menggunakan Shared Component Card */}
         <Card className="w-full p-6 shadow-md bg-white rounded-2xl flex flex-col gap-5">
           <div className="text-center border-b border-gray-100 pb-3">
-            <h2 className="text-lg font-bold text-gray-800 tracking-wider">AKTIVASI AKUN ADMIN</h2>
-            <p className="text-xs text-gray-400 mt-1">Silakan aktivasi akun Anda</p>
+            <h2 className="text-lg font-bold text-gray-800 tracking-wider">RESET PASSWORD AKUN</h2>
+            <p className="text-xs text-gray-400 mt-1">Silakan reset password akun Anda</p>
           </div>
 
           {/* Form Login */}
