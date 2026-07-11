@@ -1,12 +1,18 @@
 -- policies/spmb/rls_dokumen.sql
 
+alter table public.dokumen enable row level security;
+
 drop policy if exists "RLS: dokumen: select"
 on public.dokumen;
 
 create policy "RLS: dokumen: select"
 on public.dokumen
 for select
-using (true);
+using (
+    public.fn_can_manage_spmb()
+    or
+    public.fn_is_owner_form_data(form_pendaftaran_id)
+);
 
 drop policy if exists "RLS: dokumen: insert"
 on public.dokumen;
@@ -14,7 +20,11 @@ on public.dokumen;
 create policy "RLS: dokumen: insert"
 on public.dokumen
 for insert
-with check (false);
+with check (
+    public.fn_can_manage_spmb()
+    or
+    public.fn_is_owner_form_data(form_pendaftaran_id)
+);
 
 drop policy if exists "RLS: dokumen: update"
 on public.dokumen;
@@ -23,14 +33,14 @@ create policy "RLS: dokumen: update"
 on public.dokumen
 for update  
 using (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
-    id = auth.uid()
+    public.fn_is_owner_form_data(form_pendaftaran_id)
 )
 with check (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
-    id = auth.uid()
+    public.fn_is_owner_form_data(form_pendaftaran_id)
 );
 
 drop policy if exists "RLS: dokumen: delete"

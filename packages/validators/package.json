@@ -16,7 +16,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "@bn/types": "workspace:*"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"

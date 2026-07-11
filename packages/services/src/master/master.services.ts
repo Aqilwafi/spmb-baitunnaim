@@ -2,14 +2,14 @@
 
 import "server-only";
 import type { AppSupabaseClient } from "@bn/supabase";
-import { MasterDomainsRow, MasterRolesRow, MasterKelasListItem, MasterLembagaListItem, MasterStatusRumahListItem, MasterStepListItem, MasterTahunAjaranListItem, MasterTinggalBersamaListItem, MasterTipeDokumenListItem } from "@bn/types";
+import { MasterRolesRow, MasterKelasListItem, MasterLembagaListItem, MasterStatusRumahListItem, MasterStepListItem, MasterTahunAjaranListItem, MasterTinggalBersamaListItem, MasterTipeDokumenListItem } from "@bn/types";
 import { getCachedMasterData } from "../utils/hof";
 
 export const getMasterStep = (supabase: AppSupabaseClient) =>
   getCachedMasterData<MasterStepListItem[], 'master_step' >(
     supabase,
     "master_step",
-    "code, label, sort_order, is_revisable",
+    "code, label, step_order",
     "master_step",
     (q) => q.eq("is_active", true)
   );
@@ -34,7 +34,7 @@ export const getMasterTahunAjaran = (supabase: AppSupabaseClient) =>
   getCachedMasterData<MasterTahunAjaranListItem | null, 'master_tahun_ajaran'>(
     supabase,
     "master_tahun_ajaran",
-    "code, semester, tahun_mulai, tahun_selesai",
+    "code, semester, start_year, end_year",
     "master_tahun_ajaran",
     (q) => q.eq("is_active", true).maybeSingle() // extraLogic
   );

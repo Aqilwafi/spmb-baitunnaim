@@ -1,5 +1,7 @@
 -- policies/spmb/rls_pendidikan_siswa_sebelumnya.sql
 
+alter table public.pendidikan_siswa_sebelumnya enable row level security;
+
 drop policy if exists "RLS: pendidikan_siswa_sebelumnya: select"
 on public.pendidikan_siswa_sebelumnya;
 
@@ -29,12 +31,12 @@ create policy "RLS: pendidikan_siswa_sebelumnya: update"
 on public.pendidikan_siswa_sebelumnya
 for update  
 using (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
     public.fn_is_owner_siswa_data(biodata_siswa_id)
 )
 with check (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
     public.fn_is_owner_siswa_data(biodata_siswa_id)
 );

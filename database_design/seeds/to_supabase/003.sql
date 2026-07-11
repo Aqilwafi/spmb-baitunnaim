@@ -188,4 +188,15 @@ begin
         create type public.audit_operation_enum as enum ('INSERT', 'UPDATE', 'SOFT_DELETE', 'DELETE');
     end if;
 
+    -- 11. agama
+    if not exists (
+        select 1 
+        from pg_type n
+        join pg_namespace nsp on nsp.oid = n.typnamespace
+        where n.typname = 'agama_enum' 
+          and nsp.nspname = 'public'
+    ) then
+        create type public.agama_enum as enum ('ISLAM', 'KRISTEN', 'KATOLIK', 'BUDHA', 'HINDU', 'KONGHUCHU');
+    end if;
+
 end $$;

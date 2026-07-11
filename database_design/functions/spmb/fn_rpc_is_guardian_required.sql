@@ -1,4 +1,4 @@
-create or replace function public.fn_is_guardian_required(
+create or replace function public.fn_rpc_is_guardian_required(
     p_biodata_siswa_id uuid
 )
 returns boolean

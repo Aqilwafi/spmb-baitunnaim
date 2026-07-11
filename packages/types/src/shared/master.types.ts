@@ -7,7 +7,7 @@ import type {
 export type MasterStepRow = Tables<'master_step'>;
 export type MasterStepInsert = TablesInsert<'master_step'>;
 export type MasterStepUpdate = TablesUpdate<'master_step'>;
-export type MasterStepListItem = Pick<MasterStepRow, 'id'| 'code' | 'label' | 'sort_order' | 'is_revisable'>;
+export type MasterStepListItem = Pick<MasterStepRow, 'id'| 'code' | 'label' | 'step_order' >;
 
 export type MasterKelasRow = Tables<'master_kelas'>;
 export type MasterKelasInsert = TablesInsert<'master_kelas'>;
@@ -22,7 +22,7 @@ export type MasterLembagaListItem = Pick<MasterLembagaRow, 'code' | 'label'>;
 export type MasterTahunAjaranRow = Tables<'master_tahun_ajaran'>;
 export type MasterTahunAjaranInsert = TablesInsert<'master_tahun_ajaran'>;
 export type MasterTahunAjaranUpdate = TablesUpdate<'master_tahun_ajaran'>;
-export type MasterTahunAjaranListItem = Pick<MasterTahunAjaranRow, 'semester' | 'code' | 'tahun_mulai' | 'tahun_selesai' >;
+export type MasterTahunAjaranListItem = Pick<MasterTahunAjaranRow, 'semester' | 'code' | 'start_year' | 'end_year' >;
 
 export type MasterStatusRumahRow = Tables<'master_status_rumah'>;
 export type MasterStatusRumahInsert = TablesInsert<'master_status_rumah'>;
@@ -42,7 +42,4 @@ export type MasterTipeDokumenListItem = Pick<MasterTipeDokumenRow, 'code' | 'lab
 export type MasterRolesRow = Tables<'master_roles'>;
 export type MasterRolesInsert = TablesInsert<'master_roles'>;
 export type MasterRolesUpdate = TablesUpdate<'master_roles'>;
-
-export type MasterDomainsRow = Tables<'master_domains'>;
-export type MasterDomainsInsert = TablesInsert<'master_domains'>;
-export type MasterDomainsUpdate = TablesUpdate<'master_domains'>;
+export type MasterRolesListItem = Pick<MasterRolesRow, 'id' | 'code' | 'label'>;

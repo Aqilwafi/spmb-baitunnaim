@@ -19,7 +19,12 @@ export async function createSupabaseServer() {
       setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
+            cookieStore.set(name, value, { 
+                ...options, 
+                httpOnly: true, // ← Paksa True di sini jika belum otomatis
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'lax'
+              })
           );
         } catch {
           // The `set` method was called from a Server Component.

@@ -1,15 +1,6 @@
 // 📄 File: apps/dashboard/src/utils/policies.ts
 
-// 1. Tentukan nama DOMAIN utama untuk aplikasi ini.
-//    Next.js akan tahu kalau aplikasi ini khusus mengurus urusan "SPMB"
-export const CURRENT_DOMAIN = "SPMB";
-
-/**
- * 2. KUMPULAN ATURAN (POLICIES)
- * Fungsi-fungsi di bawah ini bertugas menerima array role hasil saringan,
- * lalu mengembalikan nilai true jika memenuhi syarat.
- */
-
-// Aturan A: Khusus Administrator saja
-
-export const isPendaftar = (roles: string[]) => roles.includes("PENDAFTAR");
+export const isPendaftar = (roles: (string | number)[]) => {
+  // Masukkan angka ID Role yang mewakili pendaftar, misal angka 4 dan 5
+  return roles.includes(3); 
+};

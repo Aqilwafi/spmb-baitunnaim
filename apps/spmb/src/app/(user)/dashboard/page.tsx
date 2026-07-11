@@ -5,12 +5,11 @@ import { EmptyPendaftaran } from '@/components/dashboards/EmptyPendaftaran';
 import { getKelasOptions, getLembagaOptions } from '@/features/pendaftaran/options';
 import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaftaranModal';
 import { getTahunAjaranAktif } from '@/features/pendaftaran/tahun-ajaran';
-import { getSiswaIdByUserId } from '@/services/pendaftaran/servicePendaftaran';
 import { getCurrentClaims } from '@bn/auth';
-import { getMasterStep } from '@bn/services';
-import { getFormPendaftaranMapList } from '@/features/pendaftaran/form';
+// import { getMasterStep } from '@bn/services'; // Tidak dipakai di render
+// import { getFormPendaftaranMapList } from '@/features/pendaftaran/form'; // Tidak dipakai di render
 
-// TODO: pisahkan ke /features/pendaftaran/mappers.ts
+// TODO: Pindahkan mapper ke /features/pendaftaran/mappers.ts
 function mapFormPendaftaran(
   raw: FormPendaftaranRaw[],
   kelasOptions: { value: string; label: string }[],
@@ -24,59 +23,20 @@ function mapFormPendaftaran(
 }
 
 export default async function DashboardPage() {
-
   const supabase = await createSupabaseServer();
 
   const claims = await getCurrentClaims();
   if (!claims) return null;
-  const userid = claims?.data
 
-  const tahunAjaranAktif = await getTahunAjaranAktif(supabase);
-  const kelasOptions = await getKelasOptions(supabase);
-  const lembagaOptions = await getLembagaOptions(supabase);
-  const stepList = await getMasterStep(supabase);
-  //const forms = await getFormPendaftaranMapList(supabase)
+  // Optimasi: Fetch semua data pendukung secara paralel
+  const [tahunAjaranAktif, kelasOptions, lembagaOptions] = await Promise.all([
+    getTahunAjaranAktif(supabase),
+    getKelasOptions(supabase),
+    getLembagaOptions(supabase),
+  ]);
 
-  //const siswaReference = await getSiswaIdByUserId(supabase, claims?.);
-
-  // const formPendaftaranRaw = await getFormPendaftaran(supabase);
-
-  // todo: props data awal ke card, lalu pastikan card props juga pendaftara/id, gitu?
-
-  const SHOW_FORM = true;
-
-  const formPendaftaranRaw: FormPendaftaranRaw[] = SHOW_FORM
-    ? [
-        {
-          id: "1",
-          namaSiswa: "Ahmad Fauzan",
-          lembagaCode: "MI",
-          kelasCode: "MI01",
-          lastStep: "Data Orang Tua",
-          status: "DRAFT",
-          lastModified: "06 Juni 2026 09:15",
-        },
-        {
-          id: "2",
-          namaSiswa: "Siti Nurhaliza",
-          lembagaCode: "TK",
-          kelasCode: "",
-          lastStep: "Upload Dokumen",
-          status: "SUBMITTED",
-          lastModified: "05 Juni 2026 14:20",
-        },
-        {
-          id: "3",
-          namaSiswa: "Freiren",
-          lembagaCode: "MI",
-          kelasCode: "MI06",
-          lastStep: "Upload Dokumen",
-          status: "SUBMITTED",
-          lastModified: "05 Juni 2026 14:20",
-        },
-      ]
-    : [];
-
+  // Data saat ini kosong (menghapus dummy yang tidak terpakai)
+  const formPendaftaranRaw: FormPendaftaranRaw[] = [];
   const formPendaftaran = mapFormPendaftaran(formPendaftaranRaw, kelasOptions, lembagaOptions);
   const hasPendaftaran = formPendaftaran.length > 0;
 

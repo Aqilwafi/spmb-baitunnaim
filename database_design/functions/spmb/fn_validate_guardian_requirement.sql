@@ -9,7 +9,7 @@ declare
     v_guardian_exists boolean;
 begin
     -- jika wali tidak diwajibkan, langsung lolos
-    if not public.fn_is_guardian_required(p_biodata_siswa_id) then
+    if not public.fn_rpc_is_guardian_required(p_biodata_siswa_id) then
         return;
     end if;
 

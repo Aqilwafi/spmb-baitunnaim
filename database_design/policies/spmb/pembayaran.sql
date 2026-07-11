@@ -1,12 +1,18 @@
 -- policies/spmb/rls_pembayaran.sql
 
+alter table public.pembayaran enable row level security;
+
 drop policy if exists "RLS: pembayaran: select"
 on public.pembayaran;
 
 create policy "RLS: pembayaran: select"
 on public.pembayaran
 for select
-using (true);
+using (
+    public.fn_can_manage_spmb()
+    or
+    public.fn_is_owner_form_data(id)
+);
 
 drop policy if exists "RLS: pembayaran: insert"
 on public.pembayaran;
@@ -14,7 +20,11 @@ on public.pembayaran;
 create policy "RLS: pembayaran: insert"
 on public.pembayaran
 for insert
-with check (false);
+with check (
+    public.fn_can_manage_spmb()
+    or
+    public.fn_is_owner_form_data(id)
+);
 
 drop policy if exists "RLS: pembayaran: update"
 on public.pembayaran;
@@ -23,14 +33,14 @@ create policy "RLS: pembayaran: update"
 on public.pembayaran
 for update  
 using (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
-    id = auth.uid()
+    public.fn_is_owner_form_data(id)
 )
 with check (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
-    id = auth.uid()
+    public.fn_is_owner_form_data(id)
 );
 
 drop policy if exists "RLS: pembayaran: delete"

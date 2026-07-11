@@ -30,7 +30,7 @@ create table if not exists public.biodata_siswa_detail (
     agama               public.agama_enum not null default 'ISLAM',
     anak_ke             int not null check (anak_ke >= 1),
     jumlah_saudara      int not null check (jumlah_saudara >= 0),
-    alamat              text not null,                                  -- alamat siswa, boleh beda dgn alamat keluarga
+    alamat              text not null,                                 -- alamat siswa, boleh beda dgn alamat keluarga
     tinggal_bersama_id  smallint not null references public.master_tinggal_bersama(id),
     status_rumah_id     smallint not null references public.master_status_rumah(id),
     deleted_at          timestamptz,
@@ -176,3 +176,31 @@ create table if not exists public.dokumen (
     constraint uq_form_tipe_dokumen unique (form_pendaftaran_id, tipe_dokumen_id)
 );
 comment on table public.dokumen is 'Satu tipe dokumen = satu file aktif per pendaftaran. Upload ulang mengganti file, riwayat tidak disimpan.';
+
+create or replace function public.fn_is_owner_siswa_data(p_biodata_siswa_id uuid)
+returns boolean
+language sql
+stable
+set search_path = public
+as $$
+  select exists (
+    select 1 
+    from public.biodata_siswa bs
+    where bs.id = p_biodata_siswa_id 
+      and bs.owner_user_id = auth.uid()
+  );
+$$;
+
+create or replace function public.fn_is_owner_form_data(p_form_pendaftaran_id uuid)
+returns boolean
+language sql
+stable
+set search_path = public
+as $$
+  select exists (
+    select 1 
+    from public.form_pendaftaran fp
+    where fp.id = p_form_pendaftaran_id 
+      and fp.pendaftar_id = auth.uid()
+  );
+$$;

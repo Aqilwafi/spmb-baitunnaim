@@ -135,9 +135,16 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `seeds/insert.sql`
 
 ### 🚀 To Supabase Production/Staging (`/seeds/to_supabase`)
-- [ ] `seeds/to_supabase/001.sql`
-- [ ] `seeds/to_supabase/002.sql`
-- [ ] `seeds/to_supabase/003.sql`
+- [v] `seeds/to_supabase/001.sql`
+- [v] `seeds/to_supabase/002.sql`
+- [v] `seeds/to_supabase/003.sql`
+- [v] `seeds/to_supabase/004.sql`
+- [v] `seeds/to_supabase/005.sql`
+- [v] `seeds/to_supabase/006.sql`
+- [v] `seeds/to_supabase/007.sql`
+- [v] `seeds/to_supabase/008.sql`
+- [v] `seeds/to_supabase/009.sql`
+- [ ] `seeds/to_supabase/010.sql`
 
 ---
 

@@ -1,5 +1,7 @@
 -- policies/spmb/rls_biodata_siswa.sql
 
+alter table public.biodata_siswa enable row level security;
+
 drop policy if exists "RLS: biodata_siswa: select"
 on public.biodata_siswa;
 
@@ -29,12 +31,12 @@ create policy "RLS: biodata_siswa: update"
 on public.biodata_siswa
 for update  
 using (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
     owner_user_id = auth.uid()
 )
 with check (
-    public.is_high_level_admin()
+    public.fn_can_manage_spmb()
     or
     owner_user_id = auth.uid()
 );

@@ -12,754 +12,365 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
-      activity_logs: {
-        Row: {
-          created_at: string
-          event: string
-          id: string
-          metadata: Json | null
-          status: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          event: string
-          id?: string
-          metadata?: Json | null
-          status?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          event?: string
-          id?: string
-          metadata?: Json | null
-          status?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      audit_trail: {
-        Row: {
-          action: string
-          created_at: string
-          id: string
-          new_data: Json | null
-          old_data: Json | null
-          record_id: string | null
-          table_name: string
-          user_id: string | null
-        }
-        Insert: {
-          action: string
-          created_at?: string
-          id?: string
-          new_data?: Json | null
-          old_data?: Json | null
-          record_id?: string | null
-          table_name: string
-          user_id?: string | null
-        }
-        Update: {
-          action?: string
-          created_at?: string
-          id?: string
-          new_data?: Json | null
-          old_data?: Json | null
-          record_id?: string | null
-          table_name?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      biodata_keluarga: {
+      master_categories: {
         Row: {
           created_at: string | null
-          detail_hubungan: string | null
-          hubungan: Database["public"]["Enums"]["hubungan_enum"]
-          id: string
-          nama: string
-          nik: string | null
-          no_handphone: string | null
-          pekerjaan: string | null
-          pendidikan_keluarga:
-            | Database["public"]["Enums"]["pendidikan_keluarga_enum"]
-            | null
-          penghasilan: string | null
-          siswa_id: string
-          status_hidup: boolean
-          tanggal_lahir: string | null
-          tempat_lahir: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          detail_hubungan?: string | null
-          hubungan: Database["public"]["Enums"]["hubungan_enum"]
-          id?: string
-          nama: string
-          nik?: string | null
-          no_handphone?: string | null
-          pekerjaan?: string | null
-          pendidikan_keluarga?:
-            | Database["public"]["Enums"]["pendidikan_keluarga_enum"]
-            | null
-          penghasilan?: string | null
-          siswa_id: string
-          status_hidup: boolean
-          tanggal_lahir?: string | null
-          tempat_lahir?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          detail_hubungan?: string | null
-          hubungan?: Database["public"]["Enums"]["hubungan_enum"]
-          id?: string
-          nama?: string
-          nik?: string | null
-          no_handphone?: string | null
-          pekerjaan?: string | null
-          pendidikan_keluarga?:
-            | Database["public"]["Enums"]["pendidikan_keluarga_enum"]
-            | null
-          penghasilan?: string | null
-          siswa_id?: string
-          status_hidup?: boolean
-          tanggal_lahir?: string | null
-          tempat_lahir?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "biodata_keluarga_siswa_id_fkey"
-            columns: ["siswa_id"]
-            isOneToOne: false
-            referencedRelation: "biodata_siswa"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      biodata_siswa: {
-        Row: {
-          agama: string | null
-          akun_pendaftar_id: string
-          akun_siswa_id: string | null
-          alamat: string | null
-          anak_ke: number | null
-          cita_cita: string | null
-          created_at: string | null
-          gender: Database["public"]["Enums"]["gender_enum"]
-          golongan_darah: string | null
-          hobi: string | null
-          id: string
-          is_verified_siswa: boolean | null
-          jumlah_saudara: number | null
-          nama_lengkap: string
-          nik: string | null
-          nisn: string | null
-          no_kk: string | null
-          penyakit: string | null
-          status_rumah_id: string | null
-          tanggal_lahir: string | null
-          tempat_lahir: string | null
-          tinggal_bersama_id: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          agama?: string | null
-          akun_pendaftar_id: string
-          akun_siswa_id?: string | null
-          alamat?: string | null
-          anak_ke?: number | null
-          cita_cita?: string | null
-          created_at?: string | null
-          gender: Database["public"]["Enums"]["gender_enum"]
-          golongan_darah?: string | null
-          hobi?: string | null
-          id?: string
-          is_verified_siswa?: boolean | null
-          jumlah_saudara?: number | null
-          nama_lengkap: string
-          nik?: string | null
-          nisn?: string | null
-          no_kk?: string | null
-          penyakit?: string | null
-          status_rumah_id?: string | null
-          tanggal_lahir?: string | null
-          tempat_lahir?: string | null
-          tinggal_bersama_id?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          agama?: string | null
-          akun_pendaftar_id?: string
-          akun_siswa_id?: string | null
-          alamat?: string | null
-          anak_ke?: number | null
-          cita_cita?: string | null
-          created_at?: string | null
-          gender?: Database["public"]["Enums"]["gender_enum"]
-          golongan_darah?: string | null
-          hobi?: string | null
-          id?: string
-          is_verified_siswa?: boolean | null
-          jumlah_saudara?: number | null
-          nama_lengkap?: string
-          nik?: string | null
-          nisn?: string | null
-          no_kk?: string | null
-          penyakit?: string | null
-          status_rumah_id?: string | null
-          tanggal_lahir?: string | null
-          tempat_lahir?: string | null
-          tinggal_bersama_id?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "biodata_siswa_status_rumah_id_fkey"
-            columns: ["status_rumah_id"]
-            isOneToOne: false
-            referencedRelation: "master_status_rumah"
-            referencedColumns: ["code"]
-          },
-          {
-            foreignKeyName: "biodata_siswa_tinggal_bersama_id_fkey"
-            columns: ["tinggal_bersama_id"]
-            isOneToOne: false
-            referencedRelation: "master_tinggal_bersama"
-            referencedColumns: ["code"]
-          },
-        ]
-      }
-      dokumen: {
-        Row: {
-          created_at: string | null
-          file_path: string
-          form_pendaftaran_id: string
-          id: string
-          status_validasi: Database["public"]["Enums"]["status_validasi_enum"]
-          tipe_dokumen_id: number
-          updated_at: string | null
-          validated_by: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          file_path: string
-          form_pendaftaran_id: string
-          id?: string
-          status_validasi?: Database["public"]["Enums"]["status_validasi_enum"]
-          tipe_dokumen_id: number
-          updated_at?: string | null
-          validated_by?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          file_path?: string
-          form_pendaftaran_id?: string
-          id?: string
-          status_validasi?: Database["public"]["Enums"]["status_validasi_enum"]
-          tipe_dokumen_id?: number
-          updated_at?: string | null
-          validated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "dokumen_form_pendaftaran_id_fkey"
-            columns: ["form_pendaftaran_id"]
-            isOneToOne: false
-            referencedRelation: "form_pendaftaran"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "dokumen_tipe_dokumen_id_fkey"
-            columns: ["tipe_dokumen_id"]
-            isOneToOne: false
-            referencedRelation: "master_tipe_dokumen"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      form_pendaftaran: {
-        Row: {
-          created_at: string | null
-          created_by: string
-          finalized_at: string | null
-          finalized_by: string | null
-          id: string
-          master_kelas_code: string | null
-          master_lembaga_code: string
-          master_step_id: number
-          siswa_id: string
-          status_keputusan_final_pendaftaran: string | null
-          tahun_ajaran_code: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          created_by: string
-          finalized_at?: string | null
-          finalized_by?: string | null
-          id?: string
-          master_kelas_code?: string | null
-          master_lembaga_code: string
-          master_step_id?: number
-          siswa_id: string
-          status_keputusan_final_pendaftaran?: string | null
-          tahun_ajaran_code: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          created_by?: string
-          finalized_at?: string | null
-          finalized_by?: string | null
-          id?: string
-          master_kelas_code?: string | null
-          master_lembaga_code?: string
-          master_step_id?: number
-          siswa_id?: string
-          status_keputusan_final_pendaftaran?: string | null
-          tahun_ajaran_code?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "form_pendaftaran_master_kelas_code_fkey"
-            columns: ["master_kelas_code"]
-            isOneToOne: false
-            referencedRelation: "master_kelas"
-            referencedColumns: ["code"]
-          },
-          {
-            foreignKeyName: "form_pendaftaran_master_lembaga_code_fkey"
-            columns: ["master_lembaga_code"]
-            isOneToOne: false
-            referencedRelation: "master_lembaga"
-            referencedColumns: ["code"]
-          },
-          {
-            foreignKeyName: "form_pendaftaran_master_step_id_fkey"
-            columns: ["master_step_id"]
-            isOneToOne: false
-            referencedRelation: "master_step"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "form_pendaftaran_siswa_id_fkey"
-            columns: ["siswa_id"]
-            isOneToOne: false
-            referencedRelation: "biodata_siswa"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "form_pendaftaran_tahun_ajaran_code_fkey"
-            columns: ["tahun_ajaran_code"]
-            isOneToOne: false
-            referencedRelation: "master_tahun_ajaran"
-            referencedColumns: ["code"]
-          },
-        ]
-      }
-      master_domains: {
-        Row: {
-          code: string
-          domain_description: string | null
-          domain_name: string
           id: number
+          is_active: boolean
+          label: string
+          updated_at: string | null
         }
         Insert: {
-          code: string
-          domain_description?: string | null
-          domain_name: string
-          id: number
+          created_at?: string | null
+          id?: never
+          is_active?: boolean
+          label: string
+          updated_at?: string | null
         }
         Update: {
-          code?: string
-          domain_description?: string | null
-          domain_name?: string
-          id?: number
+          created_at?: string | null
+          id?: never
+          is_active?: boolean
+          label?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       master_kelas: {
         Row: {
           code: string
+          created_at: string
           id: number
+          is_active: boolean
           label: string
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
+          created_at?: string
+          id?: never
+          is_active?: boolean
           label: string
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
+          created_at?: string
+          id?: never
+          is_active?: boolean
           label?: string
+          updated_at?: string
         }
         Relationships: []
       }
       master_lembaga: {
         Row: {
           code: string
+          created_at: string
+          description: string | null
           id: number
+          is_active: boolean
           label: string
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
+          created_at?: string
+          description?: string | null
+          id?: never
+          is_active?: boolean
           label: string
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
+          created_at?: string
+          description?: string | null
+          id?: never
+          is_active?: boolean
           label?: string
+          updated_at?: string
         }
         Relationships: []
       }
       master_roles: {
         Row: {
           code: string
+          created_at: string
+          description: string | null
           id: number
-          role_description: string | null
-          role_name: string
+          is_active: boolean
+          label: string
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
-          role_description?: string | null
-          role_name: string
+          created_at?: string
+          description?: string | null
+          id?: never
+          is_active?: boolean
+          label: string
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
-          role_description?: string | null
-          role_name?: string
+          created_at?: string
+          description?: string | null
+          id?: never
+          is_active?: boolean
+          label?: string
+          updated_at?: string
         }
         Relationships: []
       }
       master_status_rumah: {
         Row: {
           code: string
+          created_at: string
           id: number
+          is_active: boolean
           label: string
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
+          created_at?: string
+          id?: never
+          is_active?: boolean
           label: string
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
+          created_at?: string
+          id?: never
+          is_active?: boolean
           label?: string
+          updated_at?: string
         }
         Relationships: []
       }
       master_step: {
         Row: {
           code: string
+          created_at: string
+          description: string | null
           id: number
           is_active: boolean
-          is_revisable: boolean
           label: string
-          sort_order: number
+          step_order: number
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
+          created_at?: string
+          description?: string | null
+          id?: never
           is_active?: boolean
-          is_revisable?: boolean
           label: string
-          sort_order: number
+          step_order: number
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
+          created_at?: string
+          description?: string | null
+          id?: never
           is_active?: boolean
-          is_revisable?: boolean
           label?: string
-          sort_order?: number
+          step_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
       master_tahun_ajaran: {
         Row: {
           code: string
-          created_at: string | null
-          created_by: string | null
+          created_at: string
+          end_year: number
           id: number
-          is_active: boolean | null
+          is_active: boolean
+          label: string
           semester: Database["public"]["Enums"]["semester_enum"]
-          tahun_mulai: number
-          tahun_selesai: number
+          start_year: number
+          updated_at: string
         }
         Insert: {
           code: string
-          created_at?: string | null
-          created_by?: string | null
+          created_at?: string
+          end_year: number
           id?: never
-          is_active?: boolean | null
+          is_active?: boolean
+          label: string
           semester: Database["public"]["Enums"]["semester_enum"]
-          tahun_mulai: number
-          tahun_selesai: number
+          start_year: number
+          updated_at?: string
         }
         Update: {
           code?: string
-          created_at?: string | null
-          created_by?: string | null
+          created_at?: string
+          end_year?: number
           id?: never
-          is_active?: boolean | null
+          is_active?: boolean
+          label?: string
           semester?: Database["public"]["Enums"]["semester_enum"]
-          tahun_mulai?: number
-          tahun_selesai?: number
+          start_year?: number
+          updated_at?: string
         }
         Relationships: []
       }
       master_tinggal_bersama: {
         Row: {
           code: string
+          created_at: string
           id: number
+          is_active: boolean
           label: string
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
+          created_at?: string
+          id?: never
+          is_active?: boolean
           label: string
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
+          created_at?: string
+          id?: never
+          is_active?: boolean
           label?: string
+          updated_at?: string
         }
         Relationships: []
       }
       master_tipe_dokumen: {
         Row: {
           code: string
+          created_at: string
+          description: string | null
           id: number
+          is_active: boolean
+          is_required: boolean
           label: string
+          updated_at: string
         }
         Insert: {
           code: string
-          id: number
+          created_at?: string
+          description?: string | null
+          id?: never
+          is_active?: boolean
+          is_required?: boolean
           label: string
+          updated_at?: string
         }
         Update: {
           code?: string
-          id?: number
+          created_at?: string
+          description?: string | null
+          id?: never
+          is_active?: boolean
+          is_required?: boolean
           label?: string
-        }
-        Relationships: []
-      }
-      pembayaran: {
-        Row: {
-          amount: number
-          created_at: string | null
-          file_path: string
-          form_pendaftaran_id: string
-          id: string
-          paid_at: string | null
-          status_validasi: Database["public"]["Enums"]["status_validasi_enum"]
-          updated_at: string | null
-          validated_by: string | null
-        }
-        Insert: {
-          amount: number
-          created_at?: string | null
-          file_path: string
-          form_pendaftaran_id: string
-          id?: string
-          paid_at?: string | null
-          status_validasi?: Database["public"]["Enums"]["status_validasi_enum"]
-          updated_at?: string | null
-          validated_by?: string | null
-        }
-        Update: {
-          amount?: number
-          created_at?: string | null
-          file_path?: string
-          form_pendaftaran_id?: string
-          id?: string
-          paid_at?: string | null
-          status_validasi?: Database["public"]["Enums"]["status_validasi_enum"]
-          updated_at?: string | null
-          validated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "pembayaran_form_pendaftaran_id_fkey"
-            columns: ["form_pendaftaran_id"]
-            isOneToOne: true
-            referencedRelation: "form_pendaftaran"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      pendidikan_siswa_sebelumnya: {
-        Row: {
-          alamat_sekolah_sebelumnya: string | null
-          created_at: string | null
-          has_previous_school: boolean | null
-          id: string
-          nama_sekolah_sebelumnya: string | null
-          npsn_sekolah_sebelumnya: string | null
-          siswa_id: string
-          updated_at: string | null
-        }
-        Insert: {
-          alamat_sekolah_sebelumnya?: string | null
-          created_at?: string | null
-          has_previous_school?: boolean | null
-          id?: string
-          nama_sekolah_sebelumnya?: string | null
-          npsn_sekolah_sebelumnya?: string | null
-          siswa_id: string
-          updated_at?: string | null
-        }
-        Update: {
-          alamat_sekolah_sebelumnya?: string | null
-          created_at?: string | null
-          has_previous_school?: boolean | null
-          id?: string
-          nama_sekolah_sebelumnya?: string | null
-          npsn_sekolah_sebelumnya?: string | null
-          siswa_id?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "pendidikan_siswa_sebelumnya_siswa_id_fkey"
-            columns: ["siswa_id"]
-            isOneToOne: true
-            referencedRelation: "biodata_siswa"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      posts: {
-        Row: {
-          author: string
-          category: string
-          content: string | null
-          created_at: string | null
-          excerpt: string | null
-          featured_image: string | null
-          id: string
-          is_featured: boolean | null
-          post_status: string
-          published_at: string | null
-          published_by: string | null
-          slug: string
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          author?: string
-          category?: string
-          content?: string | null
-          created_at?: string | null
-          excerpt?: string | null
-          featured_image?: string | null
-          id?: string
-          is_featured?: boolean | null
-          post_status?: string
-          published_at?: string | null
-          published_by?: string | null
-          slug: string
-          title: string
-          updated_at?: string | null
-        }
-        Update: {
-          author?: string
-          category?: string
-          content?: string | null
-          created_at?: string | null
-          excerpt?: string | null
-          featured_image?: string | null
-          id?: string
-          is_featured?: boolean | null
-          post_status?: string
-          published_at?: string | null
-          published_by?: string | null
-          slug?: string
-          title?: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
       profiles: {
         Row: {
           avatar_url: string | null
-          created_at: string | null
+          created_at: string
           id: string
-          legacy_user_id: string | null
-          updated_at: string | null
+          phone: string | null
+          updated_at: string
           username: string | null
         }
         Insert: {
           avatar_url?: string | null
-          created_at?: string | null
+          created_at?: string
           id: string
-          legacy_user_id?: string | null
-          updated_at?: string | null
+          phone?: string | null
+          updated_at?: string
           username?: string | null
         }
         Update: {
           avatar_url?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
-          legacy_user_id?: string | null
-          updated_at?: string | null
+          phone?: string | null
+          updated_at?: string
           username?: string | null
         }
         Relationships: []
       }
       user_roles: {
         Row: {
-          assigned_at: string | null
-          assigned_by: string | null
-          domain_id: number
+          created_at: string
+          id: string
+          is_active: boolean
           role_id: number
-          suspended_at: string | null
-          suspended_by: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
-          assigned_at?: string | null
-          assigned_by?: string | null
-          domain_id: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
           role_id: number
-          suspended_at?: string | null
-          suspended_by?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
-          assigned_at?: string | null
-          assigned_by?: string | null
-          domain_id?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
           role_id?: number
-          suspended_at?: string | null
-          suspended_by?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "user_roles_domain_id_fkey"
-            columns: ["domain_id"]
-            isOneToOne: false
-            referencedRelation: "master_domains"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "user_roles_role_id_fkey"
             columns: ["role_id"]
             isOneToOne: false
             referencedRelation: "master_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -769,40 +380,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      activity_logger: {
-        Args: {
-          p_event: string
-          p_metadata?: Json
-          p_status?: string
-          p_user_id?: string
-        }
-        Returns: undefined
-      }
-      has_any_role: { Args: { p_roles: string[] }; Returns: boolean }
-      has_role: { Args: { p_role: string }; Returns: boolean }
-      has_role_in_domain: {
-        Args: { p_domain: string; p_role: string }
+      fn_can_manage_spmb: { Args: never; Returns: boolean }
+      fn_can_manage_user_role: {
+        Args: { p_target_role_id: number }
         Returns: boolean
       }
-      is_admin_level: { Args: never; Returns: boolean }
-      is_owner_form: { Args: { p_form_id: string }; Returns: boolean }
-      is_owner_siswa: { Args: { p_siswa_id: string }; Returns: boolean }
-      is_superadmin: { Args: never; Returns: boolean }
+      fn_can_read_master_data: {
+        Args: { p_is_active: boolean }
+        Returns: boolean
+      }
+      fn_is_administrator: { Args: never; Returns: boolean }
+      fn_is_high_level_admin: { Args: never; Returns: boolean }
+      fn_is_superadmin: { Args: never; Returns: boolean }
     }
     Enums: {
-      gender_enum: "L" | "P"
-      hubungan_enum: "AYAH" | "IBU" | "WALI"
-      pendidikan_keluarga_enum:
-        | "SD"
-        | "SMP"
-        | "SMA"
-        | "D3"
-        | "S1"
-        | "S2"
-        | "S3"
-        | "LAINNYA"
+      admission_status_enum: "PROCESS" | "AWAITING" | "ACCEPTED" | "REJECTED"
+      audit_operation_enum: "INSERT" | "UPDATE" | "SOFT_DELETE" | "DELETE"
+      document_status_enum: "PENDING" | "SUBMITTED" | "VERIFIED" | "REJECTED"
+      family_relation_enum: "AYAH" | "IBU" | "WALI"
+      gender_enum: "MALE" | "FEMALE" | "OTHER"
+      life_status_enum: "HIDUP" | "MENINGGAL" | "LAINNYA"
+      payment_status_enum: "PENDING" | "SUBMITTED" | "VERIFIED" | "REJECTED"
+      post_status: "DRAFT" | "PUBLISHED"
+      registration_form_status_enum: "DRAFT" | "FINALIZED"
       semester_enum: "GANJIL" | "GENAP"
-      status_validasi_enum: "PENDING" | "APPROVED" | "REVISION_REQUIRED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -928,22 +529,21 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
-      gender_enum: ["L", "P"],
-      hubungan_enum: ["AYAH", "IBU", "WALI"],
-      pendidikan_keluarga_enum: [
-        "SD",
-        "SMP",
-        "SMA",
-        "D3",
-        "S1",
-        "S2",
-        "S3",
-        "LAINNYA",
-      ],
+      admission_status_enum: ["PROCESS", "AWAITING", "ACCEPTED", "REJECTED"],
+      audit_operation_enum: ["INSERT", "UPDATE", "SOFT_DELETE", "DELETE"],
+      document_status_enum: ["PENDING", "SUBMITTED", "VERIFIED", "REJECTED"],
+      family_relation_enum: ["AYAH", "IBU", "WALI"],
+      gender_enum: ["MALE", "FEMALE", "OTHER"],
+      life_status_enum: ["HIDUP", "MENINGGAL", "LAINNYA"],
+      payment_status_enum: ["PENDING", "SUBMITTED", "VERIFIED", "REJECTED"],
+      post_status: ["DRAFT", "PUBLISHED"],
+      registration_form_status_enum: ["DRAFT", "FINALIZED"],
       semester_enum: ["GANJIL", "GENAP"],
-      status_validasi_enum: ["PENDING", "APPROVED", "REVISION_REQUIRED"],
     },
   },
 } as const

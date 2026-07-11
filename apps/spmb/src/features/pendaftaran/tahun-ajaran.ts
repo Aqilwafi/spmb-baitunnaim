@@ -14,7 +14,7 @@ export async function getTahunAjaranAktif (supabase: AppSupabaseClient): Promise
     return {
         code: tahunAjaran.code,
         semester: tahunAjaran.semester,
-        tahun_mulai: tahunAjaran.tahun_mulai,
-        tahun_selesai: tahunAjaran.tahun_selesai,
+        start_year: tahunAjaran.start_year,
+        end_year: tahunAjaran.end_year,
     }
 }
