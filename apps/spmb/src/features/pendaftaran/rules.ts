@@ -1,16 +1,11 @@
 import { MasterData } from "@bn/types";
-
-export const checkIsMI = (selectedId: number, masterLembaga: MasterData[]) => {
-  if (!selectedId) return false;
-
-  const selected = masterLembaga.find(l => l.value === selectedId);
-
-  return selected?.value === 1;
+export const checkIsMI = (selectedId: number | undefined): boolean => {
+  return selectedId === 1;
 };
 
 export const isClassFieldLocked = (
-  selectedLembagaId: string,
+  selectedLembagaId: number | undefined,
   isMI: boolean
-) => {
+): boolean => {
   return !selectedLembagaId || !isMI;
 };

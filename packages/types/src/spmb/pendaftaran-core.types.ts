@@ -20,4 +20,6 @@ export type DokumenInsert = TablesInsert<'dokumen'>;
 export type DokumenUpdate = TablesUpdate<'dokumen'>;
 export type DokumenListItem = Pick<Dokumen, 'id' >;
 
+export type InitFormPendaftaran = Pick<FormPendaftaranListItem, 'biodata_siswa_id'> 
+
 export type FormPendaftaranDisplayItem = FormPendaftaranListItem & Omit<BiodataSiswaListItem, 'id'>;

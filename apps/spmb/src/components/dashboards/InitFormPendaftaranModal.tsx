@@ -12,15 +12,16 @@ import { InitFormPendaftaranModalProps } from '@/features/pendaftaran/types';
 export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaranModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLembagaCode, setSelectedLembagaCode] = useState('');
+  const [selectedLembagaId, setSelectedLembagaId] = useState<number | undefined>(undefined);
   
   // Menggunakan useActionState (menggantikan useState untuk loading & logic form)
   const [state, action, isPending] = useActionState(initFormPendaftaranAction, null);
 
   function handleClose() {
-    setIsOpen(false);
-    setSelectedLembagaCode('');
-  }
+  setIsOpen(false);
+  setSelectedLembagaId(undefined); // reset juga saat modal ditutup
+}
+
 
   // Navigasi otomatis jika sukses
   useEffect(() => {
@@ -56,8 +57,8 @@ export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaran
           <InitFormPendaftaran
             lembaga={lembaga}
             kelas={kelas}
-            selectedLembagaCode={selectedLembagaCode}
-            onLembagaChange={setSelectedLembagaCode}
+            selectedLembagaId={selectedLembagaId}
+            onLembagaChange={setSelectedLembagaId}
           />
 
           <Button

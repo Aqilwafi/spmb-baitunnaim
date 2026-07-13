@@ -1,52 +1,25 @@
 "use server";
 
-import { createSupabaseServer } from "@bn/supabase";
-import { BaseResponse } from "@bn/types";
-import { getCurrentUser } from '@bn/auth';
-import { checkUserAccess } from "@/utils/guards";
 import { revalidatePath } from "next/cache";
+import { createSupabaseServer } from "@bn/supabase";
+import {
+  executeInitFormPendaftaran,
+  type InitFormPendaftaranResult,
+} from "@/features/pendaftaran/form";
 
-export type ActionState = {
-  success: boolean;
-  message: string;
-  data?: { id: string };
-};
-
-export async function initFormPendaftaranAction(prevState: any, formData: FormData): Promise<BaseResponse<{ id: string }, never>> {
-  
-  if (!checkUserAccess()) {
-    return { success: false, message: "Akses tidak diizinkan." };
-  }
-
-  const user = await getCurrentUser();
-
+export async function initFormPendaftaranAction(
+  prevState: any,
+  formData: FormData
+): Promise<InitFormPendaftaranResult> {
   const supabase = await createSupabaseServer();
+  const payload = Object.fromEntries(formData);
 
-  const payload = {
-    userId: user?.id,
-    namaLengkap: formData.get("nama_lengkap") as string,
-    jenisKelamin: formData.get("jenis_kelamin") as string,
-    lembagaId: Number(formData.get("lembaga_tujuan_id")),
-    kelasId: Number(formData.get("kelas_mi_id")),
-  };
+  const result = await executeInitFormPendaftaran(supabase, payload);
 
-  if (!payload.namaLengkap || !payload.lembagaId || !payload.kelasId) {
-    return { success: false, message: "Data formulir tidak valid." };
+  if (!result.success) {
+    return result;
   }
 
-  try {
-    // Simulasi pemanggilan service Anda
-    // const result = await createNewRegistrationService(payload);
-    const newRegId = "12345"; // Contoh ID dari DB
-
-    revalidatePath("/dashboard");
-    
-    return { 
-      success: true, 
-      message: "Berhasil!",
-      data: { id: newRegId }
-    };
-  } catch (error) {
-    return { success: false, message: "Terjadi kesalahan pada server." };
-  }
+  revalidatePath("/dashboard");
+  return result;
 }

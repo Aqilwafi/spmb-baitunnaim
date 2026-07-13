@@ -6,6 +6,6 @@ export interface InitFormPendaftaranModalProps {
 }
 
 export interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps { 
-  selectedLembagaCode: string;
-  onLembagaChange: (code: string) => void;
+  selectedLembagaId: number | undefined;
+  onLembagaChange: (id: number) => void;
 }
