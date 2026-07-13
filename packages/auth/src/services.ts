@@ -32,6 +32,7 @@ export async function executeSharedForgotPassword(
       redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
     },
   );
+  console.log('DEBUG redirectTo:', `${siteUrl}/auth/callback?next=/reset-password`);
 
   if (error) {
     console.error("Shared Forgot Password Error:", error.message);
