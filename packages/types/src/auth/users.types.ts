@@ -2,7 +2,7 @@ import type {
   Tables,
   TablesInsert,
   TablesUpdate,
-} from '../base.types';
+} from '../shared/supabase';
 
 export type ProfileRaw = Tables<'profiles'>;
 export type ProfileInsert = TablesInsert<'profiles'>;
