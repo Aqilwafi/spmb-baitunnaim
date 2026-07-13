@@ -3,4 +3,4 @@ packages:
   - 'packages/*'
 onlyBuiltDependencies:
   - sharp
-  - unrs-resolver
+  - unrs-resolvers

@@ -6,12 +6,6 @@
   "engines": {
     "node": ">=22"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp",
-      "unrs-resolver"
-    ]
-  },
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
