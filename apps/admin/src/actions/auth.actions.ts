@@ -57,12 +57,12 @@ export async function logoutAction(): Promise<LogoutResponse> {
   redirect("/");
 }
 
-export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
-  const rawPayload = Object.fromEntries(formData);
+// export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
+//   const rawPayload = Object.fromEntries(formData);
   
-  // Langsung oper ke Shared Service
-  return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload);
-}
+//   // Langsung oper ke Shared Service
+//   return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload);
+// }
 
 export async function resetPasswordAction(prevState: any, formData: FormData): Promise<ResetPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);

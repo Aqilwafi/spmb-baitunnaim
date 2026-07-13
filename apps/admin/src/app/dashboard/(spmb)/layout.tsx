@@ -4,7 +4,7 @@ import { hasSpmbAccess } from "@/utils/policies";
 
 export default async function SpmbLayout({ children }: { children: React.ReactNode }) {
   const claims = await getCurrentClaims();
-  const allowed = validateAccess(claims, "SPMB", hasSpmbAccess);
+  const allowed = validateAccess(claims, hasSpmbAccess);
   if (!allowed) return <Forbidden />;
   return <>{children}</>;
 }
