@@ -1,38 +1,54 @@
-// // @bn/services/src/pendafat/masterService.ts
+// @bn/services/src/pendafat/masterService.ts
 
-// import "server-only";
-// import type { AppSupabaseClient } from "@bn/supabase";
-// import { FormPendaftaranListItem, MasterTahunAjaranListItem } from "@bn/types";
+import "server-only";
+import { getBiodataSiswaByOwner } from "../siswa/siswa.services";
+import type { AppSupabaseClient } from "@bn/supabase";
+import { FormPendaftaranDisplayItem, FormPendaftaranListItem, MasterTahunAjaranListItem } from "@bn/types";
 
-// export async function getFormPendaftaran(supabase: AppSupabaseClient, tahunAjaranAktif: MasterTahunAjaranListItem): Promise<FormPendaftaranListItem[]> {
+async function getFormPendaftaranBySiswaIds(
+  supabase: AppSupabaseClient,
+  biodataSiswaIds: string[],
+  tahunAjaranId: number
+): Promise<FormPendaftaranListItem[]> {
+  const { data, error } = await supabase
+    .from('form_pendaftaran')
+    .select('id, biodata_siswa_id, updated_at, step_id, registration_status, admission_status')
+    .in('biodata_siswa_id', biodataSiswaIds)
+    .eq('tahun_ajaran_id', tahunAjaranId);
 
-//   const { data: formPendaftaran, error } = await supabase
-//     .from("form_pendaftaran")
-//     .select("id, master_lembaga_code, master_kelas_code, master_step_id, status_keputusan_final_pendaftaran, updated_at")
-//     .eq('tahun_ajaran_code', tahunAjaranAktif.code);
+  if (error) {
+    throw new Error(`Gagal mengambil data form pendaftaran: ${error.message}`);
+  }
+  return data;
+}
 
-//   if (error) {
-//     throw new Error(
-//       `Gagal mengambil data master kelas: ${error.message}`
-//     );
-//   }
+export async function getFormPendaftaranDisplayCards(
+  supabase: AppSupabaseClient,
+  userId: string,
+  tahunAjaranAktif: MasterTahunAjaranListItem
+): Promise<FormPendaftaranDisplayItem[]> {
+  const siswaList = await getBiodataSiswaByOwner(supabase, userId);
 
-//   return formPendaftaran;
-// }
+  if (siswaList.length === 0) {
+    return [];
+  }
 
-// export async function getFormPendaftaranBySiswaId(supabase: AppSupabaseClient, siswaId: string, tahunAjaranAktif: MasterTahunAjaranListItem): Promise<FormPendaftaranListItem[]> {
+  const siswaIds = siswaList.map((s) => s.id);
+  const formList = await getFormPendaftaranBySiswaIds(supabase, siswaIds, tahunAjaranAktif.id);
 
-//   const { data: formPendaftaran, error } = await supabase
-//     .from("form_pendaftaran")
-//     .select("id, master_lembaga_code, master_kelas_code, master_step_id, status_keputusan_final_pendaftaran, updated_at")
-//     .eq('siswa_id', siswaId)
-//     .eq('tahun_ajaran_code', tahunAjaranAktif.code);
+  // Buat lookup map biar gampang cari biodata siswa per form
+  const siswaMap = new Map(siswaList.map((s) => [s.id, s]));
 
-//   if (error) {
-//     throw new Error(
-//       `Gagal mengambil data master kelas: ${error.message}`
-//     );
-//   }
+  return formList.map((form) => {
+    const siswa = siswaMap.get(form.biodata_siswa_id)!; // pasti ada, karena kita query pakai id yang sama
 
-//   return formPendaftaran;
-// }
+    return {
+      ...form,
+      nik: siswa.nik,
+      nama_lengkap: siswa.nama_lengkap,
+      jenis_kelamin: siswa.jenis_kelamin,
+      lembaga_id: siswa.lembaga_id,
+      kelas_id: siswa.kelas_id,
+    };
+  });
+}

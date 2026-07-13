@@ -84,6 +84,9 @@ importers:
       '@bn/supabase':
         specifier: workspace:*
         version: link:../../packages/supabase
+      '@bn/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@bn/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -115,9 +118,6 @@ importers:
       '@bn/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
-      '@bn/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       eslint-config-next:
         specifier: ^16.2.3
         version: 16.2.10(@typescript-eslint/parser@8.63.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)

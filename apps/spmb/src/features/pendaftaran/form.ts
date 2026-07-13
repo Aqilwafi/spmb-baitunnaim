@@ -1,22 +1,36 @@
-// import { getFormPendaftaranBySiswaId, getSiswaIdByUserId } from "@/services/pendaftaran/servicePendaftaran";
-// import { AppSupabaseClient } from "@bn/supabase";
-// import { MasterStepListItem, MasterTahunAjaranListItem, SelectOption } from "@bn/types";
-// import { mapFormPendaftaran } from "@bn/utils";
+// features/pendaftaran/form-pendaftaran.ts
+import { getFormPendaftaranDisplayCards, getMasterStep } from '@bn/services';
+import type { FormPendaftaranDisplayItem, MasterData } from '@bn/types';
+import type { AppSupabaseClient } from '@bn/supabase';
+import type { MasterTahunAjaranListItem, MasterStepListItem} from '@bn/types';
+import { mapStepOptions } from "@bn/utils";
 
-// export async function getFormPendaftaranMapList(
-//   supabase: AppSupabaseClient,
-//   userid: string,
-//   tahunAjaranAktif: MasterTahunAjaranListItem,
-//   kelasOptions: SelectOption[],
-//   lembagaOptions: SelectOption[],
-//   stepList: MasterStepListItem[],
-// ) {
-//   const siswaReference = await getSiswaIdByUserId(supabase, userid);
-//   const formList = (await Promise.all(
-//     siswaReference.map((siswa) =>
-//       getFormPendaftaranBySiswaId(supabase, siswa.id, tahunAjaranAktif)
-//     )
-//   )).flat();
 
-//   return mapFormPendaftaran(formList, kelasOptions, lembagaOptions, stepList);
-// }
+async function getSteps (supabase: AppSupabaseClient): Promise<MasterData[]> {
+    const data = await getMasterStep(supabase);
+    return mapStepOptions(data);
+}
+
+export type FormPendaftaranDisplayCard = FormPendaftaranDisplayItem & {
+  lembagaLabel: string;
+  kelasLabel: string;
+  stepLabel: string
+};
+
+export async function getFormPendaftaranForDashboard(
+  supabase: AppSupabaseClient,
+  userId: string,
+  tahunAjaranAktif: MasterTahunAjaranListItem,
+  kelasOptions: MasterData[],
+  lembagaOptions: MasterData[],
+  steps: MasterData[],
+): Promise<FormPendaftaranDisplayCard[]> {
+    const raw = await getFormPendaftaranDisplayCards(supabase, userId, tahunAjaranAktif);
+    const step = await getSteps(supabase)
+  return raw.map((form) => ({
+    ...form,
+    lembagaLabel: lembagaOptions.find((o) => o.value === form.lembaga_id)?.label ?? '-',
+    kelasLabel: kelasOptions.find((o) => o.value === form.kelas_id)?.label ?? '-',
+    stepLabel:steps.find((o) => o.value === form.step_id)?.label ?? '-',
+  }));
+}

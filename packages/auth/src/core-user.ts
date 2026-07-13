@@ -29,7 +29,7 @@ export async function getCurrentClaims(): Promise<GetClaimsResponse | null> {
   const supabase = await createSupabaseServer();
   
   const { data, error } = await supabase.auth.getClaims(); 
-  console.log("log", error);
+  //console.log("log", error);
 
   if (error || !data?.claims) {
     return null;

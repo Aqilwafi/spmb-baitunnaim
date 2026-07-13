@@ -1,26 +1,10 @@
 // components/dashboards/FormPendaftaranCard.tsx
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@bn/ui";
-
-// Type raw dari DB — berisi code
-export type FormPendaftaranRaw = {
-  id: string;
-  namaSiswa: string;
-  lembagaCode: string;
-  kelasCode: string;
-  lastStep: string;
-  status: "DRAFT" | "SUBMITTED" | "VERIFIED" | "REJECTED";
-  lastModified: string;
-};
-
-// Type setelah mapping — berisi label siap display
-export type FormPendaftaranDisplay = Omit<FormPendaftaranRaw, 'lembagaCode' | 'kelasCode'> & {
-  lembaga: string;
-  kelas: string;
-};
+import type { FormPendaftaranDisplayCard } from "@/features/pendaftaran/form";
 
 type FormPendaftaranCardProps = {
-  data: FormPendaftaranDisplay[];
+  data: FormPendaftaranDisplayCard[];
 };
 
 export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
@@ -42,29 +26,29 @@ export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-semibold text-gray-900">
-                        {form.namaSiswa}
+                        {form.nama_lengkap}
                       </h3>
 
-                      <p className="text-sm text-gray-600">{form.lembaga}</p>
+                      <p className="text-sm text-gray-600">{form.lembagaLabel}</p>
 
                       <p className="text-xs text-gray-500 mt-1">
-                        Kelas: {form.kelas}
+                        Kelas: {form.kelasLabel}
                       </p>
                     </div>
 
                     <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                      {form.status}
+                      {form.registration_status}
                     </span>
                   </div>
 
                   <div className="mt-4 border-t border-gray-200 pt-3 space-y-1">
                     <p className="text-sm text-gray-700">
                       <span className="font-medium">Langkah Terakhir:</span>{" "}
-                      {form.lastStep}
+                      {form.step_id}
                     </p>
 
                     <p className="text-xs text-gray-500">
-                      Terakhir diubah: {form.lastModified}
+                      Terakhir diubah: {form.updated_at}
                     </p>
                   </div>
                 </Link>

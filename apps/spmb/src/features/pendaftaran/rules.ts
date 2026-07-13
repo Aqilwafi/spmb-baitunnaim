@@ -1,16 +1,16 @@
-import { SelectOption } from "@bn/types";
+import { MasterData } from "@bn/types";
 
-export const checkIsMI = (selectedCode: string, masterLembaga: SelectOption[]) => {
-  if (!selectedCode) return false;
+export const checkIsMI = (selectedId: number, masterLembaga: MasterData[]) => {
+  if (!selectedId) return false;
 
-  const selected = masterLembaga.find(l => l.value === selectedCode);
+  const selected = masterLembaga.find(l => l.value === selectedId);
 
-  return selected?.value?.toUpperCase() === "MI";
+  return selected?.value === 1;
 };
 
 export const isClassFieldLocked = (
-  selectedLembagaCode: string,
+  selectedLembagaId: string,
   isMI: boolean
 ) => {
-  return !selectedLembagaCode || !isMI;
+  return !selectedLembagaId || !isMI;
 };

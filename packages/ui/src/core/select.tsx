@@ -1,9 +1,9 @@
 import type { SelectHTMLAttributes } from "react";
-import type { SelectOption } from "@bn/types";
+import type { MasterData } from "@bn/types";
 
 export interface SelectProps
   extends SelectHTMLAttributes<HTMLSelectElement> {
-  options: SelectOption[];
+  options: MasterData[];
   placeholder?: string;
 }
 

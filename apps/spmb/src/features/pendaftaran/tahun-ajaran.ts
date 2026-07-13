@@ -12,6 +12,7 @@ export async function getTahunAjaranAktif (supabase: AppSupabaseClient): Promise
     if (!tahunAjaran) return null;
 
     return {
+        id: tahunAjaran.id,
         code: tahunAjaran.code,
         semester: tahunAjaran.semester,
         start_year: tahunAjaran.start_year,

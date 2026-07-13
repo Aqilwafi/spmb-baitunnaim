@@ -1,8 +1,8 @@
-import { SelectOption } from "@bn/types";
+import { MasterData } from "@bn/types";
 
 export interface InitFormPendaftaranModalProps {
-  lembaga: SelectOption[];
-  kelas: SelectOption[];
+  lembaga: MasterData[];
+  kelas: MasterData[];
 }
 
 export interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps { 

@@ -1,6 +1,5 @@
 // 📄 File: komponen tempat EmptyPendaftaran berada
 import { FileQuestion } from "lucide-react";
-// 💡 Import tipe baru yang dikembalikan oleh fungsi fetcher database kamu
 import { MasterTahunAjaranListItem } from "@bn/types"; // atau dari mana pun tipe ini diexport
 
 interface EmptyPendaftaranProps {
