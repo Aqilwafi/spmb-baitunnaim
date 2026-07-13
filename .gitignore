@@ -45,5 +45,5 @@ next-env.d.ts
 .vercel
 .turbo
 
-/tes/
-*.ps1
+packages/tes/
+packages/*.ps1
