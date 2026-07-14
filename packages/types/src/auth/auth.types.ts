@@ -2,7 +2,7 @@
 
 import type { Tables } from '../shared/supabase';
 import type { Session, User, JwtPayload } from '../shared/core.types'; // Pastikan package ini mengekspor tipe asli Supabase
-import { BaseResponse } from '../shared/core.types';
+import { ActionResponse } from '../response/action-response.types';
 
 export type Credetials = {
   email: string;
@@ -24,11 +24,7 @@ export type ResetPasswordPayload = {
 };
 
 
-export type RegisterResponse = BaseResponse<undefined, Pick<RegisterPayload, 'email' | 'username'>>;
-export type LoginResponse = BaseResponse<{ user: User, session: Session }, Pick<LoginPayload, 'email'>>;
-export type LogoutResponse = BaseResponse;
-export type ForgotPasswordResponse = BaseResponse<undefined, Pick<ForgotPasswordPayload, 'email'>>;
-export type ResetPasswordResponse = BaseResponse;
+
 
 // belum pernah dipakai
 

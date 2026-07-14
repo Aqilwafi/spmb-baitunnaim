@@ -36,7 +36,9 @@ export default function RegisterForm() {
       />
 
       {(frontendError || state?.message) && (
-        <p className="text-red-500 text-sm">{frontendError || state?.message}</p>
+        <p className={`text-sm ${frontendError || state?.success === false ? "text-red-500" : "text-green-600"}`}>
+          {frontendError || state?.message}
+        </p>
       )}
       
       <Button type="submit" variant="primary" disabled={isPending}>

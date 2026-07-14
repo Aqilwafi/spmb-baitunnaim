@@ -5,3 +5,5 @@ export * from './shared/core.types';
 export * from './shared/master.types';
 export * from './spmb/pendaftaran-core.types'
 export * from './spmb/siswa-core.types'
+export * from './response/action-response.types';
+export * from './response/auth-response.types';

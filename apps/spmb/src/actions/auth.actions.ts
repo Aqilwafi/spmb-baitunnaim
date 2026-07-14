@@ -20,18 +20,22 @@ import {
   executeSharedResetPassword } from "@bn/auth";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
-  
   const payload = Object.fromEntries(formData) as RegisterPayload;
+  const { password, confirmPassword, ...safePayload } = payload as any;
 
   const result = await executeSharedRegister(payload);
 
   if (!result.success) {
-    return result; // Mengembalikan error (success: false)
+    return {
+      ...result,
+      data: { email: safePayload.email },
+    };
   }
 
-  return { 
+  return {
     success: true,
-    message: "Registrasi berhasil. Silakan cek email Anda untuk verifikasi."
+    message: "Registrasi berhasil. Silakan cek email Anda untuk verifikasi.",
+    data: { email: safePayload.email },
   };
 }
 
