@@ -3,7 +3,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function updateSession(request: NextRequest) {
+export type ProtectCheckFn = (pathname: string) => boolean;
+
+export async function updateSession(request: NextRequest,   options: {
+    shouldProtect: ProtectCheckFn;
+    loginUrl: string;
+  }
+) {
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -40,22 +46,17 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
-  
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/register") &&
-    !request.nextUrl.pathname.startsWith("/lupa-password") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/reset-password")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+  const { data: user } = await supabase.auth.getClaims();
+  if (options.shouldProtect(request.nextUrl.pathname)) {
+    // Jika perlu dilindungi DAN user tidak ada (belum login)
+    if (!user) {
+      // Redirect ke loginUrl yang ditentukan apps
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = options.loginUrl;
+      // Tambahkan parameter 'next' agar bisa kembali setelah login (opsional tapi disarankan)
+      redirectUrl.searchParams.set('next', request.nextUrl.pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.

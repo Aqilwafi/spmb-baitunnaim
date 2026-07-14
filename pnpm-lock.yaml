@@ -35,6 +35,9 @@ importers:
       '@bn/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@bn/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
       '@bn/supabase':
         specifier: workspace:*
         version: link:../../packages/supabase
@@ -78,6 +81,9 @@ importers:
       '@bn/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@bn/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
       '@bn/services':
         specifier: workspace:*
         version: link:../../packages/services

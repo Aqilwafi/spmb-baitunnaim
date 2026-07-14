@@ -1,7 +1,7 @@
 import { ShieldAlert, ArrowLeft, Lock } from "lucide-react";
-import Link from "next/link";
+import { Button } from "../core/button";
 
-export function Forbidden() {
+export function Forbidden({link, link2}: any) {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 p-6 min-h-screen">
       <div className="flex flex-col items-center gap-6 p-10 bg-white shadow-2xl rounded-[2.5rem] w-full max-w-lg text-center border border-red-50">
@@ -26,20 +26,14 @@ export function Forbidden() {
         </p>
 
         <div className="w-full pt-4 space-y-3">
-          <Link
-            href="/"
-            className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 hover:bg-black text-white rounded-2xl font-bold transition-all active:scale-95 shadow-lg shadow-gray-200"
-          >
+          <Button onClick={link} className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 hover:bg-black text-white rounded-2xl font-bold transition-all active:scale-95 shadow-lg shadow-gray-200"> 
             <ArrowLeft size={18} />
             Kembali
-          </Link>
-          
-          <Link
-            href="/"
-            className="w-full block px-6 py-4 text-gray-400 hover:text-gray-600 text-xs font-semibold transition-colors"
-          >
+          </Button> 
+          <Button onClick={link2} className="w-full block px-6 py-4 text-gray-400 hover:text-gray-600 text-xs font-semibold transition-colors"> 
+            <ArrowLeft size={18} />
             Hubungi Admin IT
-          </Link>
+          </Button> 
         </div>
 
         {/* Audit Info (Opsional, untuk kacamata Security) */}

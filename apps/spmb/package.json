@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@bn/validators": "workspace:*",
+    "@bn/constants": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/services": "workspace:*",
     "@bn/utils": "workspace:*",

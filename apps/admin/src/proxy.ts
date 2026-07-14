@@ -1,24 +1,31 @@
+// apps/spmb/src/middleware.ts
 import { updateSession } from "@bn/supabase";
 import { type NextRequest, type NextResponse } from "next/server";
+import { ROUTES } from "@bn/constants";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
-  console.log("middleware path:", request.nextUrl.pathname);
+  // Tentukan aturan proteksi khusus SPMB
+  const shouldProtectSPMB = (pathname: string): boolean => {
+    // Lindungi dashboard user
+    if (pathname.startsWith(ROUTES.SPMB.DASHBOARD)) return true;
+    // Lindungi halaman pendaftaran berbayar
+    if (pathname.startsWith(ROUTES.SPMB.PENDAFTARAN)) return true;
+    
+    return false; // Halaman lain publik (misal: home page SPMB)
+  };
 
-  return await updateSession(request);
+  // Panggil shared updateSession dengan aturan SPMB
+  return await updateSession(request, {
+    shouldProtect: shouldProtectSPMB,
+    loginUrl: ROUTES.AUTH.LOGIN, // Misal: /login (beda dengan admin path?)
+  });
 }
 
 export const config = {
-  
+  // Konfigurasi matcher SPMB
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * Feel free to modify this pattern to include more paths.
-     */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
     "/dashboard/:path*",
+    "/pendaftaran/:path*", // Tambahan matcher untuk SPMB
   ],
 };

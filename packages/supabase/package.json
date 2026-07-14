@@ -15,6 +15,11 @@
       "types": "./src/admin/index.ts",
       "import": "./src/admin/index.ts",
       "default": "./src/admin/index.ts" 
+    },
+    "./testing": {
+      "types": "./src/testing/index.ts",
+      "import": "./src/testing/index.ts",
+      "default": "./src/testing/index.ts" 
     }
   },
   "files": ["dist"],
