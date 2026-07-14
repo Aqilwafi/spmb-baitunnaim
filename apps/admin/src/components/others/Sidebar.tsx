@@ -20,7 +20,7 @@ import {
   ShieldUser,
 } from "lucide-react";
 
-import LogoutButton from "@/components/buttons/LogoutButtons";
+import LogoutButton from "@/components/buttons/LogoutButton";
 import { useRouter } from "next/navigation";
 
 

@@ -3,9 +3,9 @@
 
 import { Button } from "@bn/ui";
 import { LogOut } from "lucide-react";
-import { executeSharedLogout } from "@bn/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { logoutAction } from "@/actions/auth.actions";
 
 type LogoutButtonProps = {
   showLabel?: boolean;
@@ -17,7 +17,7 @@ export default function LogoutButton({ showLabel = true }: LogoutButtonProps) {
 
   const handleLogout = async () => {
     setIsLoading(true);
-    const response = await executeSharedLogout();
+    const response = await logoutAction();
 
     if (response?.success) {
       router.refresh();
