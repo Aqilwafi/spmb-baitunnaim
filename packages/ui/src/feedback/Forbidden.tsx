@@ -1,12 +1,18 @@
+// packages/ui/src/Forbidden.tsx
 import { ShieldAlert, ArrowLeft, Lock } from "lucide-react";
 import { Button } from "../core/button";
+import type { ReactNode } from "react";
 
-export function Forbidden({link, link2}: any) {
+export interface ForbiddenProps {
+  primaryAction: ReactNode;
+  secondaryAction?: ReactNode;
+}
+
+export function Forbidden({ primaryAction, secondaryAction }: ForbiddenProps) {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 p-6 min-h-screen">
       <div className="flex flex-col items-center gap-6 p-10 bg-white shadow-2xl rounded-[2.5rem] w-full max-w-lg text-center border border-red-50">
         
-        {/* Ikon Keamanan */}
         <div className="relative">
           <div className="bg-red-50 p-6 rounded-full">
             <ShieldAlert className="w-16 h-16 text-red-500" />
@@ -26,17 +32,10 @@ export function Forbidden({link, link2}: any) {
         </p>
 
         <div className="w-full pt-4 space-y-3">
-          <Button onClick={link} className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 hover:bg-black text-white rounded-2xl font-bold transition-all active:scale-95 shadow-lg shadow-gray-200"> 
-            <ArrowLeft size={18} />
-            Kembali
-          </Button> 
-          <Button onClick={link2} className="w-full block px-6 py-4 text-gray-400 hover:text-gray-600 text-xs font-semibold transition-colors"> 
-            <ArrowLeft size={18} />
-            Hubungi Admin IT
-          </Button> 
+          {primaryAction}
+          {secondaryAction}
         </div>
 
-        {/* Audit Info (Opsional, untuk kacamata Security) */}
         <div className="mt-4 pt-6 border-t border-dashed border-gray-100 w-full">
           <p className="text-[10px] text-gray-300 font-mono italic">
             Event ID: Security Policy

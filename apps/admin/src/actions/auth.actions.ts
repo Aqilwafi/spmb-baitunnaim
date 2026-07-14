@@ -60,7 +60,7 @@ export async function logoutAction(): Promise<LogoutResponse> {
 export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
   const siteUrl = `${process.env.NEXT_PUBLIC_ADMIN_URL!}/auth/callback?next=/reset-password`;
-  console.log('DEBUG siteUrl:', siteUrl);
+  
   // Langsung oper ke Shared Service
   return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload, siteUrl);
 }
