@@ -26,4 +26,5 @@ export const usernameField = z
   .toLowerCase()
   .min(3, "Username minimal harus 3 karakter")
   .max(25, "Username terlalu panjang")
+  .optional()
   .or(z.literal(""));
