@@ -19,6 +19,7 @@ export const ROUTES = {
 
   // -- Admin Routes --
   ADMIN: {
+    HOME: "/",
     DASHBOARD: "/dashboard",
     USER_MANAGEMENT: "/dashboard/manage/admin",
     DATA_SISWA: "/dashboard/manage/users",

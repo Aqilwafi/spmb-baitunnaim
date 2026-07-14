@@ -14,13 +14,15 @@ import {
   Newspaper,
   CircleUser,
   Menu,
+  Users,
+  PenLine,
   X,
-  LogOut,
   ShieldUser,
 } from "lucide-react";
-import { executeSharedLogout } from "@bn/auth";
+
+import LogoutButton from "@/components/buttons/LogoutButtons";
 import { useRouter } from "next/navigation";
-import { logoutAction } from "@/actions/auth.actions";
+
 
 type User = {
   username?: string;
@@ -65,7 +67,8 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage, user, }: Sid
       label: "SPMB",
       items: [
         { name: "Form Progress", path: "/dashboard/progress", icon: <Activity size={18} /> },
-        { name: "Biodata Lengkap", path: "/dashboard/biodata", icon: <UserCheck size={18} /> },
+        { name: "Biodata Siswa", path: "/dashboard/biodata/siswa", icon: <UserCheck size={18} /> },
+        { name: "Biodata Keluarga", path: "/dashboard/biodata/keluarga", icon: <Users size={18} /> },
         { name: "Pembayaran", path: "/dashboard/pembayaran", icon: <Wallet size={18} /> },
         { name: "Dokumen", path: "/dashboard/dokumen", icon: <Files size={18} /> },
         { name: "Keputusan", path: "/dashboard/keputusan", icon: <ClipboardList size={18} /> },
@@ -74,23 +77,18 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage, user, }: Sid
     ...(canPublikasi ? [{
       label: "Publikasi",
       items: [
-        { name: "Publikasi", path: "/dashboard/publikasi", icon: <Newspaper size={18} /> },
+        { name: "Semua Artikel", path: "/dashboard/publikasi", icon: <Newspaper size={18} /> },
+        { name: "Tulis Artikel", path: "/dashboard/publikasi/baru", icon: <PenLine size={18} /> },
       ],
     }] : []),
     ...(canManage ? [{
-      label: "Manage",
+      label: "Manage Akun",
       items: [
-        { name: "Manage Users", path: "/dashboard/manage/users", icon: <CircleUser size={18} /> },
-        { name: "Manage Admin", path: "/dashboard/manage/admin", icon: <ShieldUser size={18} /> },
+        { name: "Pendaftar", path: "/dashboard/manage/users", icon: <CircleUser size={18} /> },
+        { name: "Admin", path: "/dashboard/manage/admin", icon: <ShieldUser size={18} /> },
       ],
     }] : []),
   ];
-
-  async function handleLogout() {
-    await logoutAction();
-    router.push("/");
-    router.refresh();
-  }
 
   return (
     <aside
@@ -166,27 +164,7 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage, user, }: Sid
   )}
 
   {/* Logout */}
-  <button
-    onClick={handleLogout}
-    className="
-      flex
-      items-center
-      gap-3
-      w-full
-      px-2
-      py-2
-      rounded-md
-      text-sm
-      text-gray-600
-      hover:bg-red-50
-      hover:text-red-500
-      transition-all
-    "
-  >
-    <LogOut size={18} className="shrink-0" />
-
-    {isOpen && <span>Logout</span>}
-  </button>
+  <LogoutButton showLabel={isOpen} />
 </div>
     </aside>
   );
