@@ -1,6 +1,7 @@
 // src/app/register/page.tsx
 import Link from "next/link";
-import { Card, CompanyLogo, BackButton } from "@bn/ui";
+import { Card, CompanyLogo } from "@bn/ui";
+import BackButton from "@/components/buttons/BackButton";
 import RegisterForm from "@/components/auth/register-form"; // 💡 Catatan: Nanti kalau sempat, ganti nama filenya jadi register-form.tsx ya biar konsisten kebab-case!
 
 export default function RegisterPage() {

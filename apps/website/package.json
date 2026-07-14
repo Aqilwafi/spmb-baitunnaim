@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -26,10 +26,10 @@
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
     "@bn/types": "workspace:*",
-    "@tailwindcss/postcss": "^4.3.1",
+    "@tailwindcss/postcss": "^4.3.2",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^25.9.3",
     "eslint-config-next": "^16.2.3",
-    "tailwindcss": "^4.3.1"
+    "tailwindcss": "^4.3.2"
   }
 }

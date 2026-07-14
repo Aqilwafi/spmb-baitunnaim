@@ -6,23 +6,25 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "next dev -p 3002 -H 0.0.0.0",
+    "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@bn/validators": "workspace:*",
+    "@bn/auth": "workspace:*",
     "@bn/constants": "workspace:*",
     "@bn/supabase": "workspace:*",
-    "@bn/auth": "workspace:*",
     "@bn/ui": "workspace:*",
+    "@bn/validators": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.2",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.544.0",
     "next": "16.2.6",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "tailwindcss": "^4.3.2"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",

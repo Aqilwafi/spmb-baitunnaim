@@ -1,4 +1,5 @@
-import { Card, CompanyLogo, BackButton } from "@bn/ui";
+import { Card, CompanyLogo } from "@bn/ui";
+import BackButton from "@/components/buttons/BackButton";
 import SetPasswordForm from "@/components/auth/reset-password-form";
 
 export default function ResetPasswordPage() {

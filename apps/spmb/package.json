@@ -12,20 +12,22 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@bn/validators": "workspace:*",
-    "@bn/constants": "workspace:*",
-    "@bn/supabase": "workspace:*",
-    "@bn/services": "workspace:*",
-    "@bn/utils": "workspace:*",
-    "@bn/types": "workspace:*",
     "@bn/auth": "workspace:*",
+    "@bn/constants": "workspace:*",
+    "@bn/services": "workspace:*",
+    "@bn/supabase": "workspace:*",
+    "@bn/types": "workspace:*",
     "@bn/ui": "workspace:*",
+    "@bn/utils": "workspace:*",
+    "@bn/validators": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.2",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.544.0",
     "next": "16.2.6",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "tailwindcss": "^4.3.2"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",

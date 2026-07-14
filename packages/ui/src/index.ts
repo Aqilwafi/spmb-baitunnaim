@@ -15,5 +15,4 @@ export * from "./images/company-logo";
 export * from './feedback/Forbidden';
 export * from './feedback/Maintanance';
 export * from './feedback/Unauthorized';
-export * from './navigation/BackButton';
 export * from './feedback/success-modal';

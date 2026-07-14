@@ -1,6 +1,5 @@
 import PendaftaranDraft from "@/components/dashboards/pendaftaran/PendaftaranDraft";
-import { BackButton } from "@bn/ui";
-
+import BackButton from "@/components/buttons/BackButton";
 const dummyPendaftaran = {
   lembaga: "MI",
   kelas: "1A",

@@ -1,6 +1,7 @@
 // apps/admin/src/app/dashboard/page.tsx
 
-import { Maintenance, BackButton } from "@bn/ui";
+import { Maintenance } from "@bn/ui";
+import BackButton from "@/components/buttons/BackButton";
 import { ShieldUser } from "lucide-react";
 
 import InviteAdminForm from "@/components/auth/InviteForm";
