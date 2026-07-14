@@ -9,26 +9,29 @@ export async function getCachedMasterData<T, Table extends TableName>(
   supabase: AppSupabaseClient,
   tableName: Table,
   query: string,
-  cacheKey: string,
   // Kita buat extraLogic lebih spesifik daripada 'any'
-  extraLogic?: (queryBuilder: any) => any 
+  extraLogic?: (queryBuilder: any) => any
 ): Promise<T> {
-  
+
   const fetcher = async (): Promise<T> => {
     let builder = supabase.from(tableName).select(query);
-    
+
     if (extraLogic) {
       builder = extraLogic(builder);
     }
 
     const { data, error } = await builder;
     if (error) throw new Error(`Gagal mengambil ${tableName}: ${error.message}`);
-    
+
     return data as T;
   };
 
-  const cachedFetcher  = unstable_cache( fetcher, [cacheKey],{ tags: [cacheKey], revalidate: false } );
+  // tableName dipakai langsung sebagai cache key & tag — sebelumnya ada
+  // parameter cacheKey terpisah yang di semua pemanggilan selalu diisi
+  // sama persis dengan tableName, jadi dihapus supaya gak ada celah
+  // orang passing key yang beda dari tabelnya (bikin cache miss/collision
+  // yang membingungkan).
+  const cachedFetcher = unstable_cache(fetcher, [tableName], { tags: [tableName], revalidate: false });
 
   return await cachedFetcher();
-
 }

@@ -57,16 +57,22 @@ export async function logoutAction(): Promise<LogoutResponse> {
   redirect("/");
 }
 
-// export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
-//   const rawPayload = Object.fromEntries(formData);
-  
-//   // Langsung oper ke Shared Service
-//   return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload);
-// }
+export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
+  const rawPayload = Object.fromEntries(formData);
+  const siteUrl = `${process.env.NEXT_PUBLIC_ADMIN_URL!}/auth/callback?next=/reset-password`;
+  console.log('DEBUG siteUrl:', siteUrl);
+  // Langsung oper ke Shared Service
+  return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload, siteUrl);
+}
 
 export async function resetPasswordAction(prevState: any, formData: FormData): Promise<ResetPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
 
-  // Langsung oper ke Shared Service
-  return await executeSharedResetPassword(rawPayload as ResetPasswordPayload);
+  const result = await executeSharedResetPassword(rawPayload as ResetPasswordPayload);
+
+  if (!result.success) {
+    return result; // tampilkan error di form, jangan redirect
+  }
+
+  redirect("/login?reset=success");
 }

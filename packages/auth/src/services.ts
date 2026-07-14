@@ -29,7 +29,7 @@ export async function executeSharedForgotPassword(
   const { error } = await supabase.auth.resetPasswordForEmail(
     validation.data.email,
     {
-      redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
+      redirectTo: `${siteUrl}`,
     },
   );
   console.log('DEBUG redirectTo:', `${siteUrl}/auth/callback?next=/reset-password`);

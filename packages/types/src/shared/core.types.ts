@@ -5,11 +5,6 @@ export type BaseResponse<T = undefined, E = never> =
   | { success: true; message: string; data?: T } 
   | { success: false; message: string; data?: E};
 
-export type MasterDataz = {
-  value: number;
-  label: string;
-};
-
 export type MasterData = {
   value: number;
   label: string;
