@@ -6,9 +6,9 @@ export const registerSchema = z
     username: usernameField,
     email:emailField,     
     password: registerPasswordField,
-    confirm_password: z.string(),
+    confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirm_password, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Password dan Konfirmasi Password tidak cocok",
     path: ["confirm_password"],
   });

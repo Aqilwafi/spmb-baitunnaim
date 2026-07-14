@@ -71,10 +71,13 @@ export async function executeSharedRegister(payload: RegisterPayload): Promise<R
       } 
     }
   })
-  console.log(error);
   
     if (error) {
-      return handleAuthError(error, { email: validation.data.email, username: validation.data.username });
+       handleAuthError(error, { email: validation.data.email, username: validation.data.username });
+       return {
+        success: false,
+        message: "gagal"
+       }
     }
 
   return {
