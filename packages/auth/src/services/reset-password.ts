@@ -8,9 +8,9 @@ export async function getCurrentUser() {
   return supabase.auth.getUser();
 }
 
-export async function updateUserPassword(newPassword: string) {
+export async function updateUserPassword(newPassword: string, username?:string) {
   const supabase = await createSupabaseServer();
-  return supabase.auth.updateUser({ password: newPassword });
+  return supabase.auth.updateUser({ password: newPassword, data: {username} });
 }
 
 export async function signOutCurrentSession() {

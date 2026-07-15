@@ -1,8 +1,9 @@
 // apps/admin/src/actions/auth/users.actions.ts
 
 "use server";
-import { supabaseAdmin } from '@bn/supabase/admin'
+
 import { createSupabaseServer } from "@bn/supabase";
+import { executeSharedAdminInvite } from '@bn/auth/admin';
 import { redirect } from "next/navigation";
 
 export async function inviteAdminAction(
@@ -18,21 +19,18 @@ export async function inviteAdminAction(
     };
   }
 
-  const { error } =
-    await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_ADMIN_URL}/auth/callback`,
-    });
+  const { data } = await executeSharedAdminInvite(email);
 
-  if (error) {
+  if (!data) {
     return {
       success: false,
-      message: error.message,
+      message: Error,
     };
   }
 
   return {
     success: true,
-    message: "Invite admin berhasil dikirim",
+    message: "Invitasi admin berhasil dikirim",
   };
 }
 
