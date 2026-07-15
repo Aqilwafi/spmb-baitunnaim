@@ -13,7 +13,7 @@ import {
 } from "@bn/types";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { executeSharedLogin, executeSharedRegister, executeSharedLogout, executeSharedForgotPassword, executeSharedResetPassword } from "@bn/auth";
+import { executeSharedLogin, executeSharedRegister, executeSharedLogout, executeSharedForgotPassword, executeSharedResetPassword } from "@bn/auth/services";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
   

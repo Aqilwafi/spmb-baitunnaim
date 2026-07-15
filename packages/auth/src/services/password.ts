@@ -22,7 +22,12 @@ export async function executeSharedForgotPassword(
     return {
       success: false,
       message: "Format email tidak valid.",
-      data: { email: payload.email },
+      data: {
+        email: payload.email
+      },
+      error: {
+        code:"INTERNAL_SERVER_ERROR",
+      },
     };
   }
 
@@ -54,6 +59,9 @@ export async function executeSharedResetPassword(
     return {
       success: false,
       message: "Data yang dimasukkan tidak memenuhi syarat keamanan.",
+      error: {
+        code:"ERROR_VALIDATION"
+      },
     };
   }
 
@@ -67,6 +75,9 @@ export async function executeSharedResetPassword(
       success: false,
       message:
         "Sesi tidak ditemukan atau kedaluwarsa. Silakan klik ulang link dari email Anda.",
+      error: {
+        code:"INTERNAL_SERVER_ERROR"
+      },
     };
   }
 
@@ -79,6 +90,9 @@ export async function executeSharedResetPassword(
     return {
       success: false,
       message: "Gagal memperbarui password. Silakan coba lagi.",
+      error: {
+        code:"INTERNAL_SERVER_ERROR"
+      },
     };
   }
 
