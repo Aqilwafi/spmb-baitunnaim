@@ -1,5 +1,7 @@
 // apps/admin/src/app/dashboard/(manage)/manage/layout.tsx
-import { getCurrentClaims, validateAccess } from "@bn/auth";
+
+import { getCurrentClaims } from "@bn/auth";
+import { validateAccess } from "@bn/auth/utils";
 import { Forbidden, Button } from "@bn/ui";
 import { hasManageAccess } from "@/utils/policies";
 import Link from "next/link";

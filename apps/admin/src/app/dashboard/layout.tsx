@@ -1,5 +1,7 @@
 // apps/admin/src/app/dashboard/layout.tsx
-import { getCurrentClaims, validateAccess } from "@bn/auth";
+
+import { getCurrentClaims } from "@bn/auth";
+import { validateAccess } from "@bn/auth/utils";
 import { Unauthorized, Forbidden, Button } from "@bn/ui";
 import { hasSpmbAccess, hasPublikasiAccess, hasManageAccess } from "@/utils/policies";
 import Sidebar from "@/components/others/Sidebar";

@@ -1,4 +1,7 @@
-import { getCurrentClaims, validateAccess } from "@bn/auth";
+// apps/admin/src/app/dashboard/(spmb)/layout.tsx
+
+import { getCurrentClaims } from "@bn/auth";
+import { validateAccess } from "@bn/auth/utils";
 import { Forbidden, Button } from "@bn/ui";
 import { hasSpmbAccess } from "@/utils/policies";
 import Link from "next/link";
