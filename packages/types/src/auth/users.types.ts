@@ -11,5 +11,5 @@ export type ProfileListItem = Pick<ProfileRaw, 'id'| 'username' | 'updated_at' |
 
 export type UserRoleRaw = Tables<'user_roles'>;
 export type UserRoleInsert = TablesInsert<'profiles'>;
-export type UserRolUpdate = TablesUpdate<'profiles'>;
-export type UserRolListItem = Pick<UserRoleRaw, 'id'|'user_id' | 'role_id' | 'is_active' >;
+export type UserRoleUpdate = TablesUpdate<'profiles'>;
+export type UserRoleListItem = Pick<UserRoleRaw, 'id'|'user_id' | 'role_id' | 'is_active' >;

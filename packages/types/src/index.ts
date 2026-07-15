@@ -1,4 +1,5 @@
 export * from './auth/auth.types';
+export * from './auth/users.types';
 // export * from './publikasi/post.type'
 export * from './shared/supabase';
 export * from './shared/core.types';
