@@ -1,18 +1,18 @@
 import "server-only";
 import { unstable_cache } from 'next/cache';
-import { AppSupabaseClient } from '@bn/supabase';
+import { createSupabaseServer } from '@bn/supabase';
 import { Database } from '@bn/types';
 
 type TableName = keyof Database['public']['Tables'];
 
 export async function getCachedMasterData<T, Table extends TableName>(
-  supabase: AppSupabaseClient,
   tableName: Table,
   query: string,
   // Kita buat extraLogic lebih spesifik daripada 'any'
   extraLogic?: (queryBuilder: any) => any
 ): Promise<T> {
 
+  const supabase = await createSupabaseServer();
   const fetcher = async (): Promise<T> => {
     let builder = supabase.from(tableName).select(query);
 

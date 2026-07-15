@@ -1,37 +1,33 @@
 // app/dashboard/page.tsx
 import { getCurrentClaims } from '@bn/auth';
-import { createSupabaseServer } from '@bn/supabase';
+import { getSteps } from '@/features/pendaftaran/steps';
 import { getTahunAjaranAktif } from '@/features/pendaftaran/tahun-ajaran';
+import { getFormPendaftaranForDashboard } from '@/features/form/display-form';
 import { getKelasOptions, getLembagaOptions } from '@/features/pendaftaran/options';
 import { EmptyPendaftaran } from '@/components/dashboards/EmptyPendaftaran';
-import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaftaranModal';
-import { getFormPendaftaranForDashboard } from '@/features/pendaftaran/form';
 import { FormPendaftaranCard } from '@/components/dashboards/FormPendaftaranCard';
-import { getSteps } from '@/features/pendaftaran/steps';
+import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaftaranModal';
 
 export default async function DashboardPage() {
-  const supabase = await createSupabaseServer();
 
   const claims = await getCurrentClaims();
   if (!claims) return null;
   
   // Optimasi: Fetch semua data pendukung secara paralel
   const [tahunAjaranAktif, kelasOptions, lembagaOptions, steps] = await Promise.all([
-    getTahunAjaranAktif(supabase),
-    getKelasOptions(supabase),
-    getLembagaOptions(supabase),
-    getSteps(supabase)
+    getTahunAjaranAktif(),
+    getKelasOptions(),
+    getLembagaOptions(),
+    getSteps()
   ]);
 
   if (!tahunAjaranAktif) return null;
 
   const formPendaftaran = await getFormPendaftaranForDashboard(
-    supabase,
     claims.sub,
     tahunAjaranAktif,
     kelasOptions,
-    lembagaOptions,
-    steps
+    lembagaOptions
   );
   const hasPendaftaran = formPendaftaran.length > 0;
 

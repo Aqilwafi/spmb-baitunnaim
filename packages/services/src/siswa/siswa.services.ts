@@ -1,22 +1,47 @@
-// services/siswa/siswa.services.ts
+// packages/services/src/siswa/siswa.services.ts
 
 import "server-only";
-import type { AppSupabaseClient } from "@bn/supabase";
-import { BiodataSiswaListItem } from "@bn/types";
+import { createSupabaseServer } from "@bn/supabase";
 
+export async function getBiodataSiswa() {
 
-export async function getBiodataSiswaByOwner(
-  supabase: AppSupabaseClient,
-  userId: string
-): Promise<BiodataSiswaListItem[]> {
+  const supabase = await createSupabaseServer();
   const { data, error } = await supabase
     .from('biodata_siswa')
     .select('id, nik, nama_lengkap, jenis_kelamin, lembaga_id, kelas_id')
-    .eq('owner_user_id', userId)
     .is('deleted_at', null);
+  
+  if (error) return [];
+    
+  return data || [];
+}
 
-  if (error) {
-    throw new Error(`Gagal mengambil data biodata siswa: ${error.message}`);
-  }
-  return data;
+export async function getBiodataSiswaById(SiswaId: string){
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('biodata_siswa')
+    .select('id, nik, nama_lengkap, jenis_kelamin, lembaga_id, kelas_id')
+    .eq('id', SiswaId)
+    .is('deleted_at', null)
+    .single();
+  
+  if (error) return null;
+    
+  return data ||  null;
+}
+
+export async function getBiodataSiswaDetailById(SiswaId: string){
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('biodata_siswa_detail')
+    .select('id, no_kk, status_rumah_id, tinggal_bersama_id, anak_ke, jumlah_saudara, agama, alamat')
+    .eq('id', SiswaId)
+    .is('deleted_at', null)
+    .single();
+  
+  if (error) return null;
+    
+  return data ||  null;
 }

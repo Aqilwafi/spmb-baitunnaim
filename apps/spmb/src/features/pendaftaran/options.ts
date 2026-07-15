@@ -1,21 +1,20 @@
 // features/pendaftaran/options.ts
 
 import "server-only";
-import { AppSupabaseClient } from "@bn/supabase";
 import { mapToMasterData } from "@bn/utils";
 import { getMasterKelas, getMasterLembaga } from "@bn/services";
 import { MasterData } from "@bn/types";
 
-export async function getLembagaOptions (supabase: AppSupabaseClient): Promise<MasterData[]> {
+export async function getLembagaOptions (): Promise<MasterData[]> {
 
-    const data = await getMasterLembaga(supabase);
+    const data = await getMasterLembaga();
 
     return mapToMasterData(data);
 }
 
-export async function getKelasOptions (supabase: AppSupabaseClient): Promise<MasterData[]> {
+export async function getKelasOptions (): Promise<MasterData[]> {
 
-    const data = await getMasterKelas(supabase);
+    const data = await getMasterKelas();
 
     return mapToMasterData(data);
 }

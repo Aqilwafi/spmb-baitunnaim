@@ -1,7 +1,7 @@
 // components/dashboards/FormPendaftaranCard.tsx
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@bn/ui";
-import type { FormPendaftaranDisplayCard } from "@/features/pendaftaran/form";
+import type { FormPendaftaranDisplayCard } from "@/features/form/display-form";
 
 type FormPendaftaranCardProps = {
   data: FormPendaftaranDisplayCard[];
@@ -32,19 +32,19 @@ export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
                       <p className="text-sm text-gray-600">{form.lembagaLabel}</p>
 
                       <p className="text-xs text-gray-500 mt-1">
-                        Kelas: {form.kelasLabel}
+                        {form.kelasLabel}
                       </p>
                     </div>
 
                     <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                      {form.registration_status}
+                      {form.registration_status} | {form.admission_status}
                     </span>
                   </div>
 
                   <div className="mt-4 border-t border-gray-200 pt-3 space-y-1">
                     <p className="text-sm text-gray-700">
                       <span className="font-medium">Langkah Terakhir:</span>{" "}
-                      {form.step_id}
+                      {form.stepLabel}
                     </p>
 
                     <p className="text-xs text-gray-500">

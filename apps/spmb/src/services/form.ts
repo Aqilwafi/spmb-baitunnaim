@@ -1,13 +1,10 @@
-// @bn/services/src/pendafat/masterService.ts
+// @/services/form.ts
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
 import { FormPendaftaranListItem } from "@bn/types";
 
-export async function getFormPendaftaranBySiswaIds(
-  biodataSiswaIds: string[],
-  tahunAjaranId: number
-): Promise<FormPendaftaranListItem[]> {
+export async function getFormPendaftaranBySiswaIds(biodataSiswaIds: string[], tahunAjaranId: number) {
 
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase

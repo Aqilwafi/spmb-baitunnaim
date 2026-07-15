@@ -2,12 +2,6 @@
 
 import type { MasterData } from '@bn/types';
 import type {
-  MasterKelasListItem,
-  MasterLembagaListItem,
-  MasterStatusRumahListItem,
-  MasterTinggalBersamaListItem,
-  MasterTipeDokumenListItem,
-  MasterRolesListItem,
   MasterStepListItem,
   MasterTahunAjaranListItem,
 } from '@bn/types';
