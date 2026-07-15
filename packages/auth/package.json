@@ -30,7 +30,8 @@
   "dependencies": {
     "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
-    "@bn/types": "workspace:*"
+    "@bn/types": "workspace:*",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"

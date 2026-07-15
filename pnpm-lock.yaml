@@ -215,6 +215,9 @@ importers:
       '@bn/validators':
         specifier: workspace:*
         version: link:../validators
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@bn/tsconfig':
         specifier: workspace:*
@@ -295,10 +298,6 @@ importers:
   packages/tsconfig: {}
 
   packages/types:
-    dependencies:
-      '@supabase/supabase-js':
-        specifier: ^2.106.1
-        version: 2.110.2
     devDependencies:
       '@bn/tsconfig':
         specifier: workspace:*

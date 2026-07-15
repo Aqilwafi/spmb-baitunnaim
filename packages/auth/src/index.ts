@@ -1,1 +1,0 @@
-export { validateAccess } from './utils/rbac';
