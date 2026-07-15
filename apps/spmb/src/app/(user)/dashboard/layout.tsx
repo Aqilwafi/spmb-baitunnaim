@@ -1,9 +1,9 @@
 // 📄 File: apps/dashboard/src/app/dashboard/layout.tsx
-import { getCurrentClaims, validateAccess } from '@bn/auth';
+import { getCurrentClaims } from '@bn/auth';
+import { validateAccess } from '@bn/auth/utils';
 import { isPendaftar } from '@/utils/policies';
 import DashboardHeader from '@/components/headers/dashboardHeader';
 import { Forbidden, Unauthorized, Button } from '@bn/ui';
-import { executeSharedLogout } from '@bn/auth';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 

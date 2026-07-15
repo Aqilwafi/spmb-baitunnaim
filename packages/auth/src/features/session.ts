@@ -1,11 +1,12 @@
-// packages/auth/src/core-user.ts
+// packages/auth/src/features/session.ts
 
-import { createSupabaseServer } from "@bn/supabase";
+import { getUser, getClaims, getSession } from "../services/session";
+
 import { GetUserResponse, GetClaimsResponse, GetSessionResponse } from "@bn/types";
 
 export async function getCurrentSession(): Promise<GetSessionResponse | null> {
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase.auth.getSession();
+
+  const { data, error } = await getSession();
 
   if (error ||!data.session) {
     return null;
@@ -15,8 +16,8 @@ export async function getCurrentSession(): Promise<GetSessionResponse | null> {
 }
 
 export async function getCurrentUser(): Promise<GetUserResponse | null> {
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase.auth.getUser();
+
+  const { data, error } = await getUser();
 
   if (error ||!data.user) {
     return null;
@@ -26,10 +27,8 @@ export async function getCurrentUser(): Promise<GetUserResponse | null> {
 }
 
 export async function getCurrentClaims(): Promise<GetClaimsResponse | null> {
-  const supabase = await createSupabaseServer();
   
-  const { data, error } = await supabase.auth.getClaims(); 
-  //console.log("log", error);
+  const { data, error } = await getClaims();
 
   if (error || !data?.claims) {
     return null;

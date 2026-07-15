@@ -17,7 +17,7 @@ import {
   executeSharedRegister, 
   executeSharedLogout, 
   executeSharedForgotPassword, 
-  executeSharedResetPassword } from "@bn/auth/services";
+  executeSharedResetPassword } from "@bn/auth";
 
 export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
   const payload = Object.fromEntries(formData) as RegisterPayload;

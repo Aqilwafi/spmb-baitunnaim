@@ -1,5 +1,6 @@
 import {  isPendaftar } from "./policies";
-import { getCurrentUser, validateAccess } from '@bn/auth';
+import { getCurrentUser } from '@bn/auth'
+import { validateAccess } from '@bn/auth/utils';
 
 export const checkUserAccess = async (): Promise<boolean> => {
   const user = await getCurrentUser(); 

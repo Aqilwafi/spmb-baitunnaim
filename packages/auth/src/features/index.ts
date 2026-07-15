@@ -3,3 +3,4 @@ export * from './register';
 export * from './logout';
 export * from './forgot-password';
 export * from './reset-password';
+export * from './session';
