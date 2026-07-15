@@ -1,39 +1,22 @@
 // packages/auth/src/core-user.ts
 
+import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
-import { GetUserResponse, GetClaimsResponse, GetSessionResponse } from "@bn/types";
 
-export async function getCurrentSession(): Promise<GetSessionResponse | null> {
+export async function getSession() {
+
   const supabase = await createSupabaseServer();
-  const { data, error } = await supabase.auth.getSession();
-
-  if (error ||!data.session) {
-    return null;
-  }
-
-  return data.session as unknown as GetSessionResponse;
+  return await supabase.auth.getSession();
 }
 
-export async function getCurrentUser(): Promise<GetUserResponse | null> {
+export async function getUser() {
+
   const supabase = await createSupabaseServer();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (error ||!data.user) {
-    return null;
-  }
-
-  return data.user as unknown as GetUserResponse;
+  return await supabase.auth.getUser();
 }
 
-export async function getCurrentClaims(): Promise<GetClaimsResponse | null> {
+export async function getClaims() {
+
   const supabase = await createSupabaseServer();
-  
-  const { data, error } = await supabase.auth.getClaims(); 
-  //console.log("log", error);
-
-  if (error || !data?.claims) {
-    return null;
-  }
-
-  return data.claims as unknown as GetClaimsResponse;
+  return await supabase.auth.getClaims(); 
 }

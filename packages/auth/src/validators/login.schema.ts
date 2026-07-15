@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emailField, loginPasswordField } from "../core/auth-field";
+import { emailField, loginPasswordField } from "@bn/validators";
 
 export const loginSchema = z
   .object({

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { registerPasswordField } from "../core/auth-field";
+import { registerPasswordField } from "@bn/validators";
 
 export const resetPasswordSchema = z
   .object({

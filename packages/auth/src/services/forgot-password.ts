@@ -1,0 +1,9 @@
+// packages/auth/src/services/forgot-password.ts
+
+import "server-only";
+import { createSupabaseServer } from "@bn/supabase";
+
+export async function resetPasswordForEmail(email: string, redirectTo: string) {
+  const supabase = await createSupabaseServer();
+  return supabase.auth.resetPasswordForEmail(email, { redirectTo });
+}

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emailField } from "../core/auth-field";
+import { emailField } from "@bn/validators";
 
 export const forgotPasswordSchema = z.object({
   email: emailField,

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emailField, registerPasswordField, usernameField } from "../core/auth-field";
+import { emailField, registerPasswordField, usernameField } from "@bn/validators";
 
 export const registerSchema = z
   .object({
