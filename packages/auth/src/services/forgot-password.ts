@@ -3,7 +3,7 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
 
-export async function resetPasswordForEmail(email: string, redirectTo: string) {
+export async function resetPasswordForEmail(email: string, redirectUrl: string) {
   const supabase = await createSupabaseServer();
-  return supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  return supabase.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
 }
