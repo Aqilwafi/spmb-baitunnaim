@@ -1,35 +1,22 @@
+// apps/admin/srcp/actions/auth.actions.ts
+
 "use server";
 
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { 
-  RegisterResponse, 
   LoginResponse, 
   LogoutResponse,  
   ForgotPasswordResponse,
   ResetPasswordResponse,
   ForgotPasswordPayload,
   ResetPasswordPayload,
-  RegisterPayload,
   LoginPayload
-} from "@bn/types";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { executeSharedLogin, executeSharedRegister, executeSharedLogout, executeSharedForgotPassword, executeSharedResetPassword } from "@bn/auth";
-
-export async function registerAction(prevState: any, formData: FormData): Promise<RegisterResponse> {
-  
-  const payload = Object.fromEntries(formData) as RegisterPayload;
-
-  const result = await executeSharedRegister(payload);
-
-  if (!result.success) {
-    return result; // Mengembalikan error (success: false)
-  }
-
-  return { 
-    success: true,
-    message: "Registrasi berhasil. Silakan cek email Anda untuk verifikasi."
-  };
-}
+} from "@bn/types";import { 
+  executeSharedLogin, 
+  executeSharedLogout, 
+  executeSharedForgotPassword, 
+  executeSharedResetPassword } from "@bn/auth";
 
 export async function loginAction(prevState: any, formData: FormData): Promise<LoginResponse> {
 

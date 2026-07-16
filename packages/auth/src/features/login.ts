@@ -6,25 +6,25 @@ import { LoginResponse, LoginPayload } from "@bn/types";
 
 export async function executeSharedLogin(payload: LoginPayload): Promise<LoginResponse> {
   const parsed = loginSchema.safeParse(payload);
-  if (!parsed.success) throw new Error(parsed.error.issues[0].message);
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: parsed.error.issues[0].message,
+      error: { code: "VALIDATION_ERROR" },
+      data: { email: payload.email as string },
+    };
+  }
 
   const { error } = await signInWithPassword(parsed.data.email, parsed.data.password);
 
   if (error) {
     return {
       success: false,
-      message: "",
-      error:{
-        code: ""
-      },
-      data: {
-        email: payload.email 
-      }
-    }
+      message: "Email atau password salah.", // sebaiknya diisi, bukan string kosong
+      error: { code: error.code ?? "AUTH_ERROR" },
+      data: { email: payload.email as string },
+    };
   }
 
-  return {
-      success: true,
-      message: "",
-    }
+  return { success: true, message: "" };
 }
