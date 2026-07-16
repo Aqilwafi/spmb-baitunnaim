@@ -7,7 +7,7 @@ export const emailField = z
   .min(1, "Email wajib diisi")
   .trim()
   .toLowerCase()
-  .email("Format email tidak valid");
+  .pipe(z.email({ message: "Format email tidak valid" }));
 
 export const loginPasswordField = z
   .string()
