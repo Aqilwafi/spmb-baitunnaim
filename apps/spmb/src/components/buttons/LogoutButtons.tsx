@@ -15,11 +15,11 @@ export default function LogoutButton() {
     setIsLoading(true);
     const response = await executeSharedLogout();
     
-    if (response?.success) {
+    if (!response?.error) {
       router.refresh();
       router.push("/login");
     } else {
-      alert(response?.message || "Gagal logout");
+      alert(response?.error || "Gagal logout");
       setIsLoading(false);
     }
   };

@@ -21,4 +21,5 @@ export type DokumenUpdate = TablesUpdate<'dokumen'>;
 export type DokumenListItem = Pick<Dokumen, 'id' >;
 
 export type InitFormPendaftaran = Pick<FormPendaftaranListItem, 'biodata_siswa_id'> 
-export type FormPendaftaranDisplayItem = FormPendaftaranListItem & Omit<BiodataSiswaListItem, 'id'>;
+export type FormPendaftaranDisplayItem = FormPendaftaranListItem & 
+  Pick<BiodataSiswaListItem, 'nik' | 'nama_lengkap' | 'jenis_kelamin' | 'lembaga_id' | 'kelas_id'>;

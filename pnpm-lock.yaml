@@ -235,22 +235,6 @@ importers:
         specifier: ^25.9.1
         version: 25.9.5
 
-  packages/errors:
-    dependencies:
-      '@bn/supabase':
-        specifier: workspace:*
-        version: link:../supabase
-      '@bn/types':
-        specifier: workspace:*
-        version: link:../types
-      '@bn/validators':
-        specifier: workspace:*
-        version: link:../validators
-    devDependencies:
-      '@bn/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
-
   packages/services:
     dependencies:
       '@bn/auth':
@@ -301,6 +285,10 @@ importers:
   packages/tsconfig: {}
 
   packages/types:
+    dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.106.1
+        version: 2.110.2
     devDependencies:
       '@bn/tsconfig':
         specifier: workspace:*

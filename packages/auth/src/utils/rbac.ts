@@ -1,5 +1,7 @@
 // 📄 File: packages/auth/src/utils/rbac.ts
 
+import { GetUserResponse } from "@bn/types";
+
 // 1. Definisikan tipe data struktur User dari Supabase dengan role berbasis angka/string
 interface UserData {
   app_metadata?: {
@@ -12,7 +14,7 @@ interface UserData {
  * Memeriksa apakah user memiliki salah satu dari role yang diizinkan oleh kebijakan (policyCheck).
  */
 export function validateAccess(
-  userData: UserData | undefined | null,
+  userData: GetUserResponse | UserData | undefined | null,
   policyCheck: (roles: (number | string)[]) => boolean
 ): boolean {
   // Jika user tidak punya hak akses atau array kosong, langsung tolak

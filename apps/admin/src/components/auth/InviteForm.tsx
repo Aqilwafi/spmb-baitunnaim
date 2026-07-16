@@ -65,7 +65,7 @@ export default function InviteAdminForm() {
                 : "text-red-500"
             }`}
           >
-            {state.message}
+            {state.message as string}
           </p>
         )}
 

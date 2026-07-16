@@ -2,7 +2,6 @@
 
 import type { Tables } from '../shared/supabase';
 import type { Session, User, JwtPayload } from '../shared/core.types'; // Pastikan package ini mengekspor tipe asli Supabase
-import { ActionResponse } from '../response/action-response.types';
 
 export type Credetials = {
   email: string;
