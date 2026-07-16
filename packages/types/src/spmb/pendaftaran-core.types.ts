@@ -3,7 +3,7 @@ import type {
   TablesInsert,
   TablesUpdate,
 } from '../shared/supabase';
-import type { BiodataSiswaListItem } from './siswa-core.types';
+import type { BiodataSiswaListItem } from './biodata-core.types';
 
 export type FormPendaftaran = Tables<'form_pendaftaran'>;
 export type FormPendaftaranInsert = TablesInsert<'form_pendaftaran'>;

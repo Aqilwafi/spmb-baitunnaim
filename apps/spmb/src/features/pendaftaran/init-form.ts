@@ -1,16 +1,17 @@
 // features/pendaftaran/form-pendaftaran.ts
 
-import type { AppSupabaseClient } from '@bn/supabase';
 import { getCurrentUser } from "@bn/auth";
 import { checkUserAccess } from "@/utils/guards";
 import { initFormSchema } from "@bn/validators";
+import { getMasterTahunAjaran } from "@bn/services"; // sesuaikan path
+import { mapInitFormPayload } from './mappers';
+import { upsertBiodataSiswa, insertFormPendaftaran } from "@/services/init-form";
 
 export type InitFormPendaftaranResult =
   | { success: true; message: string; data: { id: string } }
   | { success: false; message: string };
 
 export async function executeInitFormPendaftaran(
-  supabase: AppSupabaseClient,
   payload: Record<string, FormDataEntryValue>
 ): Promise<InitFormPendaftaranResult> {
   if (!(await checkUserAccess())) {
@@ -22,17 +23,31 @@ export async function executeInitFormPendaftaran(
     return { success: false, message: "Sesi pengguna tidak ditemukan, silakan login ulang." };
   }
 
-  const parsed = initFormSchema.safeParse(payload);
+  const mapped = mapInitFormPayload(payload);
+  const parsed = initFormSchema.safeParse(mapped);
+
   if (!parsed.success) {
     const firstError = parsed.error.issues[0]?.message ?? "Data formulir tidak valid.";
     return { success: false, message: firstError };
   }
 
   try {
-    // const result = await createNewRegistrationService(supabase, { userId: user.id, ...parsed.data });
-    const newRegId = "12345"; // Contoh ID dari DB
+      const tahunAjaran = await getMasterTahunAjaran();
+      if (!tahunAjaran) {
+        return { success: false, message: "Tahun ajaran aktif tidak ditemukan." };
+      }
 
-    return { success: true, message: "Berhasil!", data: { id: newRegId } };
+      const siswa = await upsertBiodataSiswa(user.id, parsed.data);
+
+      const pendaftaran = await insertFormPendaftaran({
+        pendaftarId: user.id,
+        biodataSiswaId: siswa.id,
+        tahunAjaranId: tahunAjaran.id,
+        stepId: 2,
+      });
+    
+
+    return { success: true, message: "Berhasil!", data: { id: pendaftaran.id } };
   } catch (error) {
     console.error("executeInitFormPendaftaran error:", error);
     return { success: false, message: "Terjadi kesalahan pada server." };

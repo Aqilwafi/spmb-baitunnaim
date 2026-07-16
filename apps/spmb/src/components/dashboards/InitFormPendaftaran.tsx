@@ -72,8 +72,8 @@ export function InitFormPendaftaran({
             required
             placeholder="Pilih"
             options={[
-              { value: 1, label: 'Laki-laki' },
-              { value: 2, label: 'Perempuan' },
+              { value: 1, label: 'Laki-laki', code: 'MALE' },
+              { value: 2, label: 'Perempuan', code: 'FEMALE'},
             ]}
             className={inputBaseClass}
           />

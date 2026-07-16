@@ -5,16 +5,15 @@ import { createSupabaseServer } from "@bn/supabase";
 import {
   executeInitFormPendaftaran,
   type InitFormPendaftaranResult,
-} from "@/features/pendaftaran/form";
+} from "@/features/pendaftaran/init-form";
 
 export async function initFormPendaftaranAction(
   prevState: any,
   formData: FormData
 ): Promise<InitFormPendaftaranResult> {
-  const supabase = await createSupabaseServer();
   const payload = Object.fromEntries(formData);
 
-  const result = await executeInitFormPendaftaran(supabase, payload);
+  const result = await executeInitFormPendaftaran(payload);
 
   if (!result.success) {
     return result;

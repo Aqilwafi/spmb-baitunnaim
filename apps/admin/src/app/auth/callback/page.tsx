@@ -13,7 +13,7 @@ export default function AuthCallbackPage() {
     const supabaseSSR = createSupabaseClient();      // @supabase/ssr, untuk set cookie
 
     const { data: { subscription } } = supabaseBrowser.auth.onAuthStateChange(async (event, session) => {
-      console.log("auth event:", event, !!session);
+     
       if (session) {
         subscription.unsubscribe();
         // Set session ke SSR client supaya cookie tersimpan

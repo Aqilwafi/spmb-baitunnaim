@@ -2,7 +2,7 @@
 
 import "server-only";
 import { MasterKelasListItem, MasterLembagaListItem, MasterStatusRumahListItem, MasterStepListItem, MasterTahunAjaranListItem, MasterTinggalBersamaListItem, MasterTipeDokumenListItem } from "@bn/types";
-import { getCachedMasterData } from "../utils/hof";
+import { getCachedMasterData } from "./hof";
 
 export const getMasterStep = () =>
   getCachedMasterData<MasterStepListItem[], 'master_step'>(

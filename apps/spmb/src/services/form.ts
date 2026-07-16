@@ -2,7 +2,6 @@
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
-import { FormPendaftaranListItem } from "@bn/types";
 
 export async function getFormPendaftaranBySiswaIds(biodataSiswaIds: string[], tahunAjaranId: number) {
 
