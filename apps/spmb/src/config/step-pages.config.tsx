@@ -2,6 +2,7 @@
 
 import DaftarAkunStep from "@/components/dashboards/pendaftaran/step/InitFormStep";
 import PembayaranStep from "@/components/dashboards/pendaftaran/step/pembayaranStep";
+import BiodataSiswaLengkapForm from "@/components/dashboards/pendaftaran/step/BiodataSiswaStep";
 import type { StepConfigItem } from "@/types/step.types";
 
 // Placeholder sementara untuk step yang belum dibangun
@@ -12,7 +13,7 @@ function ComingSoonStep() {
 export const STEP_CONFIG: StepConfigItem[] = [
   { id: 1, step_order: 1, code: 'FORM', label: 'Buat Form', component: DaftarAkunStep },
   { id: 2, step_order: 2, code: 'PAYMENT', label: 'Pembayaran', component: PembayaranStep },
-  { id: 3, step_order: 3, code: 'BIODATA_STUDENT', label: 'Biodata Siswa', component: ComingSoonStep },
+  { id: 3, step_order: 3, code: 'BIODATA_STUDENT', label: 'Biodata Siswa', component: BiodataSiswaLengkapForm },
   { id: 4, step_order: 4, code: 'BIODATA_FATHER', label: 'Biodata Ayah', component: ComingSoonStep },
   { id: 5, step_order: 5, code: 'BIODATA_MOTHER', label: 'Biodata Ibu', component: ComingSoonStep },
   { id: 6, step_order: 6, code: 'BIODATA_WALI', label: 'Biodata Wali', component: ComingSoonStep },

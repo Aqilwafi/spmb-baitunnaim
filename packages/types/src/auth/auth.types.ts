@@ -46,7 +46,7 @@ export type AuthClaims = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {
 
 export type GetUserResponse = User;
 export type GetSessionResponse = Session;
-export type GetClaimsResponse = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {
+export type GetClaimsResponse = JwtPayload & {
   app_metadata: {
     access_rights: string[];
     provider?: string;

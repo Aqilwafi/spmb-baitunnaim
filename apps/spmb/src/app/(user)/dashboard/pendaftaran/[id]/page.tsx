@@ -1,6 +1,10 @@
 // app/dashboard/pendaftaran/[id]/page.tsx
 
+import Link from "next/link";
+import { isAccessAllowed } from "@/utils/guards";
 import ClientDetailPendaftaran from "@/components/dashboards/pendaftaran/ClientPendaftaran";
+import { Forbidden, Button } from "@bn/ui";
+import { ArrowLeft } from 'lucide-react';
 
 // Kita lengkapi dummy datanya sedikit agar tampilan Header di Accordion terisi bagus
 const dummyPendaftaran = {
@@ -26,6 +30,31 @@ export default async function DetailPendaftaranPage({
 }) {
   // Mengambil ID dari URL parameter (Next.js 15+ Pattern)
   const { id } = await params;
+  const { allowed } = await isAccessAllowed(id);
+  if (!allowed) {
+    return  (
+      <div className=" fixed inset-0 z-50 flex">
+        <Forbidden
+          className="fixed inset-0 z-[9999] w-screen h-screen"
+            primaryAction={
+              <Link href="/dashboard" className="block w-full">
+                <Button className="w-full flex items-center justify-center gap-2">
+                  <ArrowLeft size={18} />
+                    Kembali
+                </Button>
+              </Link>
+            }
+          secondaryAction={
+            <Link href="/" className="block w-full">
+              <Button variant="ghost" className="w-full flex items-center justify-center gap-2 text-xs">
+                Hubungi Admin IT
+              </Button>
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
 
   /**
    * NOTE MASA DEPAN:

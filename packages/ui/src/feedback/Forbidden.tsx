@@ -6,11 +6,12 @@ import type { ReactNode } from "react";
 export interface ForbiddenProps {
   primaryAction: ReactNode;
   secondaryAction?: ReactNode;
+  className?: string;
 }
 
-export function Forbidden({ primaryAction, secondaryAction }: ForbiddenProps) {
+export function Forbidden({ primaryAction, secondaryAction, className }: ForbiddenProps) {
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 p-6 min-h-screen">
+    <div className={`flex flex-col items-center justify-center bg-gray-50 text-gray-800 p-6 ${className || "min-h-screen"}`}>
       <div className="flex flex-col items-center gap-6 p-10 bg-white shadow-2xl rounded-[2.5rem] w-full max-w-lg text-center border border-red-50">
         
         <div className="relative">

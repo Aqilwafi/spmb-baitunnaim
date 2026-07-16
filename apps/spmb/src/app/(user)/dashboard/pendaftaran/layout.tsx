@@ -1,4 +1,5 @@
-// 📄 File: apps/dashboard/src/app/dashboard/layout.tsx
+// 📄 File: apps/dashboard/src/app/dashboard/pendaftaran/layout.tsx
+
 import { getCurrentClaims } from '@bn/auth';
 import { validateAccess } from '@bn/auth/utils';
 import { isPendaftar } from '@/utils/policies';
@@ -7,7 +8,7 @@ import { Forbidden, Unauthorized, Button } from '@bn/ui';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardPendaftaranLayout({ children }: { children: React.ReactNode }) {
   const claims = await getCurrentClaims();
 
   if (!claims) return <Unauthorized />;
@@ -39,13 +40,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <section className="min-h-screen bg-[#f8f9fa] text-gray-800 flex flex-col">
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 w-full">
-        <DashboardHeader name={claimsData.user_metadata?.username || claimsData.email || "User"} />
-      </div>
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 py-4">
-        {children}
-      </main>
-    </section>
+    <>
+      {children}
+    </>
   );
 }
