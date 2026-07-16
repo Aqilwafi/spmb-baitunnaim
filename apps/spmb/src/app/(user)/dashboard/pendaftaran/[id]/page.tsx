@@ -9,7 +9,7 @@ const dummyPendaftaran = {
   nisn: "1234567890",
 };
 
-// todo : pastikan dashboard props data kebutuhan awal, nama, gender, siswa id, dll, agar tidak hit ulang?
+// todo :  dashboard props data kebutuhan awal, nama, gender, siswa id, dll, agar tidak hit ulang?
 // todo : hit data masif di awal, props ke component, dan buat features/helpers/utils untuk urus logika toogle.
 
 export default async function DetailPendaftaranPage({ 
