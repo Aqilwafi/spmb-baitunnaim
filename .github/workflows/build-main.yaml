@@ -4,10 +4,14 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   guard-source-branch:
     name: Ensure PR source is master
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Fail if base branch is not from master
@@ -19,6 +23,7 @@ jobs:
   build:
     name: Build
     needs: guard-source-branch
+    if: always() && (github.event_name == 'push' || needs.guard-source-branch.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
