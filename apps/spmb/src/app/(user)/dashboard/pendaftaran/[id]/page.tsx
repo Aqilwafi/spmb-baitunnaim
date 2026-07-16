@@ -1,30 +1,45 @@
-import PendaftaranDraft from "@/components/dashboards/pendaftaran/PendaftaranDraft";
-import BackButton from "@/components/buttons/BackButton";
+// app/dashboard/pendaftaran/[id]/page.tsx
+
+import ClientDetailPendaftaran from "@/components/dashboards/pendaftaran/ClientPendaftaran";
+
+// Kita lengkapi dummy datanya sedikit agar tampilan Header di Accordion terisi bagus
 const dummyPendaftaran = {
-  lembaga: "MI",
-  kelas: "1A",
-  nama_lengkap: "Ahmad Budi Santoso",
-  gender: "Laki-laki",
-  nik: "3201234567890001",
-  nisn: "1234567890",
+  id: "dummy-id-123",
+  current_step_id: 2, // Menandakan user sudah menyelesaikan step 2, sekarang aktif di step 3
+  biodata_siswa: {
+    nama_lengkap: "Ahmad Rifai", // Muncul di header
+  },
+  final_status_id: {
+    name: "Draft Pendaftaran", // Muncul di status badge header
+  },
 };
 
-// todo :  dashboard props data kebutuhan awal, nama, gender, siswa id, dll, agar tidak hit ulang?
-// todo : hit data masif di awal, props ke component, dan buat features/helpers/utils untuk urus logika toogle.
+const dummyUser = {
+  id: "dummy-user-id-999",
+  email: "ahmad.rifai@example.com",
+};
 
-export default async function DetailPendaftaranPage({ 
-  params 
-}: { 
-  params: Promise<{ id: string }> 
+export default async function DetailPendaftaranPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
 }) {
+  // Mengambil ID dari URL parameter (Next.js 15+ Pattern)
   const { id } = await params;
 
+  /**
+   * NOTE MASA DEPAN:
+   * Jika nanti sudah pakai database/Supabase asli, kamu tinggal ganti dummy di atas dengan:
+   * 
+   * const supabase = await createSupabaseServer();
+   * const { data: { user } } = await supabase.auth.getUser();
+   * const pendaftaran = await getDetailPendaftaranService(id, user.id);
+   */
+
   return (
-    <div>
-      <div className="p-2">
-        <BackButton />
-      </div>
-      <PendaftaranDraft pendaftaran={dummyPendaftaran} />
-    </div>
+    <ClientDetailPendaftaran 
+      pendaftaran={dummyPendaftaran} 
+      user={dummyUser} 
+    />
   );
 }
