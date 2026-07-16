@@ -1,10 +1,18 @@
 // // packages/types/src/post.types.ts
 
+<<<<<<< HEAD
 // import type {
 //   Tables,
 //   TablesInsert,
 //   TablesUpdate,
 // } from '../shared/supabase'
+=======
+import type {
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from '../shared/supabase'
+>>>>>>> master
 
 // /**
 //  * =========================
