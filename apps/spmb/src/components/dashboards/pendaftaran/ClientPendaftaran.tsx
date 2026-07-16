@@ -7,7 +7,6 @@ import { ChevronUp, ChevronLeft, ChevronDown, Lock } from "lucide-react";
 import PendaftaranStep from "@/components/dashboards/pendaftaran/PendaftaranStep";
 import { STEP_CONFIG } from "@/config/step-pages.config";
 
-// Definisikan interface props lokal jika belum diimport dari types
 interface ClientDetailPendaftaranProps {
   pendaftaran: {
     id: string;
@@ -26,10 +25,7 @@ interface ClientDetailPendaftaranProps {
 }
 
 export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDetailPendaftaranProps) {
-  // Ambil progres terakhir dari DB. Default ke 2 sesuai logic awal Anda
   const currentStep = pendaftaran.current_step_id || 2;
-
-  // Otomatis membuka langkah yang sedang aktif saat halaman dimuat
   const [openStep, setOpenStep] = useState<number | null>(currentStep);
 
   const toggleStep = (id: number) => {
@@ -38,7 +34,6 @@ export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDet
 
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
-      {/* Header Info */}
       <div className="bg-white p-6 border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
           <Link 
@@ -59,10 +54,8 @@ export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDet
         </div>
       </div>
 
-      {/* Accordion Container */}
       <section className="p-6 space-y-4 max-w-3xl mx-auto">
         {STEP_CONFIG.map((step) => {
-          // Logika Status Berdasarkan STEP_CONFIG Baru
           const isComplete = step.id < currentStep;
           const isActive = step.id === currentStep;
           const isLocked = step.id > currentStep;
@@ -75,14 +68,12 @@ export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDet
                 ${isLocked ? "border-gray-100 opacity-60" : "hover:border-blue-300"} 
                 ${isActive ? "ring-2 ring-blue-500 border-blue-500 shadow-md" : ""}`}
             >
-              {/* Trigger Header Accordion */}
               <button
                 onClick={() => toggleStep(step.id)}
                 disabled={isLocked}
                 className="w-full flex justify-between items-center p-5 outline-none text-left"
               >
                 <div className="flex items-center gap-4">
-                  {/* Indikator Angka / Centang */}
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-colors
                     ${isComplete ? "bg-green-500 text-white" : ""} 
                     ${isActive ? "bg-blue-600 text-white" : ""}
@@ -91,13 +82,11 @@ export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDet
                     {isComplete ? "✓" : step.step_order}
                   </div>
                   
-                  {/* Label dari step.config */}
                   <span className={`font-bold ${isLocked ? "text-gray-400" : "text-gray-700"}`}>
                     {step.label}
                   </span>
                 </div>
 
-                {/* Ikon Kanan (Gembok / Arrow) */}
                 {isLocked ? (
                   <Lock size={16} className="text-gray-300" />
                 ) : (
@@ -105,7 +94,6 @@ export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDet
                 )}
               </button>
 
-              {/* Konten dengan Animasi Framer Motion */}
               <AnimatePresence initial={false}>
                 {isOpen && !isLocked && (
                   <motion.div
@@ -121,6 +109,7 @@ export default function ClientDetailPendaftaran({ pendaftaran, user }: ClientDet
                         pendaftaranId={pendaftaran.id}
                         stepNumber={step.id}
                         userid={user.id}
+                        currentStep={currentStep}
                       />
                     </div>
                   </motion.div>

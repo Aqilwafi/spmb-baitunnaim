@@ -5,7 +5,7 @@ import ClientDetailPendaftaran from "@/components/dashboards/pendaftaran/ClientP
 // Kita lengkapi dummy datanya sedikit agar tampilan Header di Accordion terisi bagus
 const dummyPendaftaran = {
   id: "dummy-id-123",
-  current_step_id: 2, // Menandakan user sudah menyelesaikan step 2, sekarang aktif di step 3
+  current_step_id: 3, // Menandakan user sudah menyelesaikan step 2, sekarang aktif di step 3
   biodata_siswa: {
     nama_lengkap: "Ahmad Rifai", // Muncul di header
   },
