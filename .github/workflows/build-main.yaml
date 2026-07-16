@@ -1,0 +1,47 @@
+name: Build (PR to main)
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  guard-source-branch:
+    name: Ensure PR source is master
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if base branch is not from master
+        if: github.head_ref != 'master'
+        run: |
+          echo "::error::Pull requests into 'main' are only allowed from 'master'. Source branch was '${{ github.head_ref }}'."
+          exit 1
+
+  build:
+    name: Build
+    needs: guard-source-branch
+    if: always() && (github.event_name == 'push' || needs.guard-source-branch.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run build
+        run: pnpm run build
