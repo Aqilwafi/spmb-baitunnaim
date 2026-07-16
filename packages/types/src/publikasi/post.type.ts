@@ -4,7 +4,7 @@ import type {
   Tables,
   TablesInsert,
   TablesUpdate,
-} from '../base.types'
+} from '../shared/supabase'
 
 /**
  * =========================
@@ -12,11 +12,11 @@ import type {
  * =========================
  */
 
-export type Post = Tables<'posts'>
+// export type Post = Tables<'posts'>
 
-export type PostInsert = TablesInsert<'posts'>
+// export type PostInsert = TablesInsert<'posts'>
 
-export type PostUpdate = TablesUpdate<'posts'>
+// export type PostUpdate = TablesUpdate<'posts'>
 
 /**
  * =========================
