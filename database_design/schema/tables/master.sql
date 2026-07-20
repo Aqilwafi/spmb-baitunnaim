@@ -1,7 +1,7 @@
 -- ---------------------------------------------------------
 -- master_roles
 -- ---------------------------------------------------------
-create table if not exists master_roles (
+create table if not exists public.master_roles (
     id          smallint     primary key generated always as identity,
     code        varchar(30)  not null unique check (code = upper(code)),
     label       varchar(100) not null,

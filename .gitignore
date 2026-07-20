@@ -39,6 +39,7 @@ next-env.d.ts
 /migration-script/
 /documents/
 /notes/
+/docs/
 *.docx
 
 # vercel & turbo
