@@ -18,7 +18,7 @@ import {
   executeSharedForgotPassword, 
   executeSharedResetPassword } from "@bn/auth";
 
-export async function loginAction(prevState: any, formData: FormData): Promise<LoginResponse> {
+export async function loginAction(_prevState: any, formData: FormData): Promise<LoginResponse> {
 
   const payload = Object.fromEntries(formData) as LoginPayload;
 
@@ -44,7 +44,7 @@ export async function logoutAction(): Promise<LogoutResponse> {
   redirect("/");
 }
 
-export async function forgotPasswordAction(prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
+export async function forgotPasswordAction(_prevState: any, formData: FormData): Promise<ForgotPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
   const siteUrl = `${process.env.NEXT_PUBLIC_ADMIN_URL!}/auth/callback?next=/reset-password`;
   
@@ -52,7 +52,7 @@ export async function forgotPasswordAction(prevState: any, formData: FormData): 
   return await executeSharedForgotPassword(rawPayload as ForgotPasswordPayload, siteUrl);
 }
 
-export async function resetPasswordAction(prevState: any, formData: FormData): Promise<ResetPasswordResponse> {
+export async function resetPasswordAction(_prevState: any, formData: FormData): Promise<ResetPasswordResponse> {
   const rawPayload = Object.fromEntries(formData);
 
   const result = await executeSharedResetPassword(rawPayload as ResetPasswordPayload);

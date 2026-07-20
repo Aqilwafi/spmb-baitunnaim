@@ -1,6 +1,5 @@
 // features/pendaftaran/options.ts
 
-import "server-only";
 import { MasterData } from "@bn/types";
 import { mapStepOptions } from "@bn/utils";
 import { getMasterStep } from "@bn/services";

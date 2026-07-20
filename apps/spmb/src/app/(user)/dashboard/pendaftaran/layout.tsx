@@ -3,7 +3,7 @@
 import { getCurrentClaims } from '@bn/auth';
 import { validateAccess } from '@bn/auth/utils';
 import { isPendaftar } from '@/utils/policies';
-import DashboardHeader from '@/components/headers/dashboardHeader';
+import DashboardHeader from '@/components/others/DashboardHeader';
 import { Forbidden, Unauthorized, Button } from '@bn/ui';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';

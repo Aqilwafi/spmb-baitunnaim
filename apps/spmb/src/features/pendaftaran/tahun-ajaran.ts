@@ -1,6 +1,5 @@
 // services/pendaftaran/tahun-ajaran.services.ts
 
-import "server-only";
 import { MasterTahunAjaranListItem } from "@bn/types";
 import { getMasterTahunAjaran } from "@bn/services";
 

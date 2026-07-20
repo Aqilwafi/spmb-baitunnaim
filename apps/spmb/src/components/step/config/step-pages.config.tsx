@@ -1,8 +1,8 @@
 // config/step-pages.config.tsx
 
-import DaftarAkunStep from "@/components/dashboards/pendaftaran/step/InitFormStep";
-import PembayaranStep from "@/components/dashboards/pendaftaran/step/pembayaranStep";
-import BiodataSiswaLengkapForm from "@/components/dashboards/pendaftaran/step/BiodataSiswaStep";
+import DaftarAkunStep from "@/components/step/InitFormStep";
+import PembayaranStep from "@/components/step/pembayaranStep";
+import BiodataSiswaLengkapForm from "@/components/step/BiodataSiswaStep";
 import type { StepConfigItem } from "@/types/step.types";
 
 // Placeholder sementara untuk step yang belum dibangun

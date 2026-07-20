@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { Input, Label, Select } from '@bn/ui';
 import { User, School, GraduationCap, Lock, IdCard, MapPin, Calendar } from 'lucide-react';
 import { checkIsMI, isClassFieldLocked } from '@/features/pendaftaran/rules';
-import { InitFormPendaftaranProps } from '@/features/pendaftaran/types';
+import { InitFormPendaftaranProps } from '@/types/form.types';
 
 export function InitFormPendaftaran({
   lembaga,

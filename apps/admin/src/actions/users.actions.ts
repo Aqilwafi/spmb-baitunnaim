@@ -7,7 +7,7 @@ import { executeSharedAdminInvite } from '@bn/auth/admin';
 import { redirect } from "next/navigation";
 
 export async function inviteAdminAction(
-  prevState: unknown,
+  _prevState: unknown,
   formData: FormData
 ) {
   const email = formData.get("email")?.toString();
@@ -35,7 +35,7 @@ export async function inviteAdminAction(
 }
 
 export async function setPasswordAction(
-  prevState: unknown,
+  _prevState: unknown,
   formData: FormData
 ) {
   const password =

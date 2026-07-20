@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronUp, ChevronLeft, ChevronDown, Lock } from "lucide-react";
-import PendaftaranStep from "@/components/dashboards/pendaftaran/PendaftaranStep";
-import { STEP_CONFIG } from "@/config/step-pages.config";
+import PendaftaranStep from "@/components/pendaftaran/PendaftaranStep";
+import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import { Card, Button } from "@bn/ui";
 
 interface ClientDetailPendaftaranProps {

@@ -6,7 +6,7 @@ import { Button, Modal } from '@bn/ui';
 import { X, Save, Loader2, Plus } from 'lucide-react';
 import { initFormPendaftaranAction } from '@/actions/init-form.actions';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
-import { InitFormPendaftaranModalProps } from '@/features/pendaftaran/types';
+import { InitFormPendaftaranModalProps } from '@/types/form.types';
 
 
 export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaranModalProps) {

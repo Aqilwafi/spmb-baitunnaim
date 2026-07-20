@@ -1,7 +1,7 @@
 "use client";
 
 import { Maintenance } from "@bn/ui";
-import { STEP_CONFIG } from "@/config/step-pages.config";
+import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 
 // Menambahkan ekstensi interface agar TypeScript tidak error membaca properti baru Anda
 interface PendaftaranStepExtendedProps {

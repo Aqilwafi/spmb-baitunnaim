@@ -4,7 +4,7 @@ import { getCurrentUser } from "@bn/auth";
 import { checkUserAccess } from "@/utils/guards";
 import { initFormSchema } from "@bn/validators";
 import { getMasterTahunAjaran } from "@bn/services"; // sesuaikan path
-import { mapInitFormPayload } from './mappers';
+import { mapInitFormPayload } from '../pendaftaran/mappers';
 import { upsertBiodataSiswa, insertFormPendaftaran } from "@/services/init-form";
 
 export type InitFormPendaftaranResult =

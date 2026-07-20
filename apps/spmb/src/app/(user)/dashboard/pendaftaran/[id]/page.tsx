@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { isAccessAllowed } from "@/utils/guards";
-import ClientDetailPendaftaran from "@/components/dashboards/pendaftaran/ClientPendaftaran";
+import ClientDetailPendaftaran from "@/components/pendaftaran/ClientPendaftaran";
 import { Forbidden, Button } from "@bn/ui";
 import { ArrowLeft } from 'lucide-react';
 
