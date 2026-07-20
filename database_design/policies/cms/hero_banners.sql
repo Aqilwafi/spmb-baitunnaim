@@ -15,7 +15,7 @@ create policy "RLS: hero_banners: insert"
 on public.hero_banners
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: hero_banners: update"
@@ -25,10 +25,10 @@ create policy "RLS: hero_banners: update"
 on public.hero_banners
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: hero_banners: delete"

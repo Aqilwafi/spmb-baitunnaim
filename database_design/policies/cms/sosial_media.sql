@@ -15,7 +15,7 @@ create policy "RLS: sosial_media: insert"
 on public.sosial_media
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: sosial_media: update"
@@ -25,10 +25,10 @@ create policy "RLS: sosial_media: update"
 on public.sosial_media
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: sosial_media: delete"

@@ -1,4 +1,6 @@
 
+
+-- 1. Tabel-tabel utama
 create table if not exists public.tags (
     id bigint generated always as identity primary key,
     label varchar(50) not null unique,
@@ -14,7 +16,7 @@ create table if not exists public.posts (
     slug varchar(255) not null unique,
     ringkasan varchar(255),
     content text not null,
-    status post_status default 'DRAFT', 
+    status post_status default 'PUBLISHED',
     is_active boolean default true,
     created_by uuid references public.profiles(id) on delete set null,
     created_at timestamptz default now(),
@@ -27,4 +29,11 @@ create table if not exists public.post_tag (
     primary key (post_id, tag_id),
     foreign key (post_id) references public.posts(id) on delete cascade,
     foreign key (tag_id) references public.tags(id) on delete cascade
+);
+
+create table if not exists public.post_images (
+    post_id bigint not null,
+    image_path text not null,
+    is_hero boolean not null default false,
+    primary key (post_id, image_path)
 );

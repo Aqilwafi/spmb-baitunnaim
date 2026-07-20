@@ -91,6 +91,13 @@ on form_pendaftaran (pendaftar_id);
 -- Pastikan nama kolom (lembaga_id, category_id, created_by, slug,
 -- is_active, status, created_at) memang sesuai sebelum menjalankan.
 
+create index if not exists idx_posts_lembaga on public.posts(lembaga_id);
+create index if not exists idx_posts_category on public.posts(category_id);
+create index if not exists idx_posts_status on public.posts(status) where is_active = true;
+create index if not exists idx_posts_slug on public.posts(slug);
+create index if not exists idx_post_images_hero on public.post_images(post_id) where is_hero = true;
+
+
 -- -- 1. index untuk foreign key (wajib agar query join kencang)
 -- create index if not exists idx_posts_lembaga_id on posts (lembaga_id);
 -- create index if not exists idx_posts_category_id on posts (category_id);

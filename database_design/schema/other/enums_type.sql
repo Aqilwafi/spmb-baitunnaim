@@ -130,5 +130,4 @@ begin
         create type public.agama_enum as enum ('ISLAM', 'KRISTEN', 'KATOLIK', 'BUDHA', 'HINDU', 'KONGHUCHU');
     end if;
     
-
 end $$;

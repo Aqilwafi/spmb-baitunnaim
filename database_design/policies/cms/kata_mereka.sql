@@ -15,7 +15,7 @@ create policy "RLS: kata_mereka: insert"
 on public.kata_mereka
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: kata_mereka: update"
@@ -25,10 +25,10 @@ create policy "RLS: kata_mereka: update"
 on public.kata_mereka
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: kata_mereka: delete"

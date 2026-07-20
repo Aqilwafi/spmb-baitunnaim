@@ -1,5 +1,7 @@
 -- policies/publikasi/rls_post_tag.sql
 
+alter table public.post_tag enable row level security;
+
 drop policy if exists "RLS: post_tag: select"
 on public.post_tag;
 
@@ -15,7 +17,7 @@ create policy "RLS: post_tag: insert"
 on public.post_tag
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: post_tag: update"
@@ -25,10 +27,10 @@ create policy "RLS: post_tag: update"
 on public.post_tag
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: post_tag: delete"

@@ -1,5 +1,7 @@
 -- policies/publikasi/rls_posts.sql
 
+alter table public.posts enable row level security;
+
 drop policy if exists "RLS: posts: select"
 on public.posts;
 
@@ -15,7 +17,7 @@ create policy "RLS: posts: insert"
 on public.posts
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: posts: update"
@@ -25,10 +27,10 @@ create policy "RLS: posts: update"
 on public.posts
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: posts: delete"

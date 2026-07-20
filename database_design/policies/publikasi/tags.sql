@@ -1,4 +1,6 @@
--- policies/publikasi/rls_tags.sql
+-- policies/publikasi/rls_tags.
+
+alter table public.tags enable row level security;
 
 drop policy if exists "RLS: tags: select"
 on public.tags;
@@ -15,7 +17,7 @@ create policy "RLS: tags: insert"
 on public.tags
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: tags: update"
@@ -25,10 +27,10 @@ create policy "RLS: tags: update"
 on public.tags
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: tags: delete"

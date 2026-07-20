@@ -1,4 +1,4 @@
-create or replace function public.fn_can_manage_publication()
+create or replace function public.fn_can_manage_publikasi()
 returns boolean
 language sql
 stable

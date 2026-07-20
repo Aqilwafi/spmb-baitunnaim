@@ -36,7 +36,7 @@ File ini digunakan untuk melakukan tracking peninjauan, perbaikan, dan pengujian
 - [ ] `functions/auth/fn_sync_username_to_auth.sql` 
 
 ### 📰 Publication (`/functions/publication`)
-- [ ] `functions/publication/fn_can_manage_publication.sql`
+- [ ] `functions/publication/fn_fn_can_manage_publikasi.sql`
 
 ### 🤝 Shared Helper (`/functions/shared`)
 - [ ] `functions/shared/function_admin_only.sql`

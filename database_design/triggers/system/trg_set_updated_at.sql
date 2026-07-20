@@ -92,3 +92,14 @@ execute function public.fn_set_updated_at();
 
 -- spmb table
 
+
+-- publikasi table
+
+
+drop trigger if exists trg_posts_updated_at 
+on public.posts;
+
+create trigger trg_posts_updated_at
+before update on public.posts
+for each row 
+execute function public.fn_set_updated_at();

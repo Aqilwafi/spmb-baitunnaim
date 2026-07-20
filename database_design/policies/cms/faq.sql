@@ -15,7 +15,7 @@ create policy "RLS: faq: insert"
 on public.faq
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: faq: update"
@@ -25,10 +25,10 @@ create policy "RLS: faq: update"
 on public.faq
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: faq: delete"

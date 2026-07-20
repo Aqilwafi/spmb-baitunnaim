@@ -15,7 +15,7 @@ create policy "RLS: pages: insert"
 on public.pages
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: pages: update"
@@ -25,10 +25,10 @@ create policy "RLS: pages: update"
 on public.pages
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: pages: delete"

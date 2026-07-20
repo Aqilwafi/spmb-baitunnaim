@@ -15,7 +15,7 @@ create policy "RLS: site_settings: insert"
 on public.site_settings
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: site_settings: update"
@@ -25,10 +25,10 @@ create policy "RLS: site_settings: update"
 on public.site_settings
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: site_settings: delete"

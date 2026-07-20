@@ -15,7 +15,7 @@ create policy "RLS: kerjasama: insert"
 on public.kerjasama
 for insert
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: kerjasama: update"
@@ -25,10 +25,10 @@ create policy "RLS: kerjasama: update"
 on public.kerjasama
 for update  
 using (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 )
 with check (
-    public.can_manage_publication()
+    public.fn_can_manage_publikasi()
 );
 
 drop policy if exists "RLS: kerjasama: delete"
