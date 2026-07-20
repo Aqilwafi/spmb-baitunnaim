@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import BlogCard from "./BlogCard"
+import BlogCard from "../components/BlogCard"
 import type { PostListItem } from "@bn/types"
 
 interface Props {
@@ -32,7 +32,6 @@ export default function PublikasiList({ posts }: Props) {
         </h2>
         <div className="w-24 h-1 bg-teal-600 mx-auto mb-10" />
 
-        {/* SEARCH */}
         <div className="max-w-md mx-auto mb-12">
           <input
             type="text"
@@ -43,22 +42,29 @@ export default function PublikasiList({ posts }: Props) {
           />
         </div>
 
-        {/* LIST */}
-        {filteredPosts.map((post) => {
-  const hero = post.post_images?.find((img) => img.is_hero);
-  return (
-    <BlogCard
-      key={post.id}
-      judul={post.judul}
-      slug={post.slug}
-      ringkasan={post.ringkasan ?? ""}
-      penulis={post.penulis}
-      kategori={post.master_categories?.label ?? ""}
-      gambar={hero?.image_path ?? ""}
-      tanggalDibuat={post.created_at ?? new Date().toISOString()}
-    />
-  );
-})}
+        {filteredPosts.length === 0 ? (
+          <p className="text-center text-gray-500">
+            Tidak ada artikel yang cocok.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {filteredPosts.map((post) => {
+              const hero = post.post_images?.find((img) => !img.is_hero);
+              return (
+                <BlogCard
+                  key={post.id}
+                  judul={post.judul}
+                  slug={post.slug}
+                  ringkasan={post.ringkasan ?? ""}
+                  penulis={post.penulis}
+                  kategori={post.master_categories?.label ?? ""}
+                  gambar={hero?.image_path ?? ""}
+                  tanggalDibuat={post.created_at ?? new Date().toISOString()}
+                />
+              );
+            })}
+          </div>
+        )}
 
       </div>
     </section>
