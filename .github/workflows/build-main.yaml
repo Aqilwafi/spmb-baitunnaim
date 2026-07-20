@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # perlu history untuk turbo diff detection
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -43,3 +45,6 @@ jobs:
 
       - name: Run build
         run: pnpm run build
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
