@@ -29,7 +29,7 @@ export function Forbidden({ primaryAction, secondaryAction, className }: Forbidd
         </div>
 
         <p className="text-gray-500 text-sm leading-relaxed max-w-[280px] mx-auto">
-          Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Hal ini bisa terjadi karena sesi berakhir atau pembatasan hak akses keamanan.
+          Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Hal ini bisa terjadi pembatasan hak akses keamanan.
         </p>
 
         <div className="w-full pt-4 space-y-3">

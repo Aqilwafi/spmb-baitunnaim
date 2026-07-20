@@ -1,28 +1,28 @@
-CREATE OR REPLACE FUNCTION public.activity_logger(
-    p_event TEXT,
-    p_status TEXT DEFAULT 'success',
-    p_metadata JSONB DEFAULT '{}'::jsonb,
-    p_user_id UUID DEFAULT NULL
+create or replace function public.activity_logger(
+    p_event text,
+    p_status text default 'success',
+    p_metadata JSONB default '{}'::jsonb,
+    p_user_id UUID default null
 )
-RETURNS VOID AS $$
-BEGIN
-    INSERT INTO public.activity_logs (
+language plpgsql
+security definer
+set search_path = public, pg_catalog, auth
+return void as $$
+begin
+    insert into public.activity_logs (
         user_id,
         event,
         status,
         metadata
     )
-    VALUES (
-        COALESCE(p_user_id, auth.uid()),
+    values (
+        coalesce(p_user_id, auth.uid()),
         p_event,
         p_status,
         p_metadata
     );
--- Catatan: Blok EXCEPTION dihapus agar performa stabil dan tidak menyembunyikan error struktural
-END;
-$$ LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, pg_catalog, auth; -- Ditambahkan pg_catalog dan auth agar auth.uid() terbaca
+end;
+$$
 
 -- LANGKAH PENGAMANAN TAMBAHAN (Wajib):
 -- 1. Cabut hak akses dari semua orang di internet (anon & authenticated)
@@ -34,44 +34,39 @@ REVOKE EXECUTE ON FUNCTION public.activity_logger(TEXT, TEXT, JSONB, UUID) FROM 
 GRANT EXECUTE ON FUNCTION public.activity_logger(TEXT, TEXT, JSONB, UUID) TO postgres;
 GRANT EXECUTE ON FUNCTION public.activity_logger(TEXT, TEXT, JSONB, UUID) TO service_role;
 
-CREATE OR REPLACE FUNCTION public.on_auth_user_action()
-RETURNS TRIGGER 
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, pg_catalog, auth
+create or replace function public.on_auth_user_action()
+returns trigger 
+language plpgsql
+set search_path = public, pg_catalog, auth
 AS $$
-BEGIN
-    -- Jika user baru saja mendaftar (Sign Up)
-    IF TG_OP = 'INSERT' THEN
-        PERFORM public.activity_logger(
+begin
+    if tg_op = 'INSERT' then
+        perform public.activity_logger(
             'USER_SIGNUP', 
             'success', 
             jsonb_build_object('email', NEW.email), 
             NEW.id
         );
-    
-    -- Jika user melakukan login (diidentifikasi dari kolom last_sign_in_at yang berubah)
-    ELSIF TG_OP = 'UPDATE' THEN
-        IF OLD.last_sign_in_at IS DISTINCT FROM NEW.last_sign_in_at THEN
-            PERFORM public.activity_logger(
+    elsif tg_op = 'UPDATE' then
+        if OLD.last_sign_in_at is distinct from NEW.last_sign_in_at then
+            perform public.activity_logger(
                 'USER_LOGIN', 
                 'success', 
                 jsonb_build_object(
                     'email', NEW.email, 
                     'ip_address', auth.auth_metadata() ->> 'ip'
-                ),
+                ), 
                 NEW.id
             );
-        END IF;
-    END IF;
-    
-    RETURN NEW;
-END;
+        end if;
+    end if;
+    return NEW;
+end;
 $$;
 
-CREATE TRIGGER on_auth_user_action_trigger
-  AFTER INSERT OR UPDATE ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.on_auth_user_action();
+create trigger on_auth_user_action_trigger
+after insert or update on auth.users
+for each row execute public.on_auth_user_action();
 
   -- 1. Cabut izin eksekusi dari publik dan role bawaan API Supabase
 REVOKE EXECUTE ON FUNCTION public.on_auth_user_action() FROM PUBLIC;
