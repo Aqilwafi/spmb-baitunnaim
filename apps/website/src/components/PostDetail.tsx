@@ -1,24 +1,24 @@
-import { publikasi } from "@bn/constants";
-import ReactMarkdown from "react-markdown";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
+import type { PostDetail as PostDetailType } from "@bn/types";
 
 interface Props {
-  slug: string;
+  post: PostDetailType | null;
 }
 
-// Server Component
-export default function PostDetail({ slug }: Props) {
-  const post = publikasi.find((p) => p.slug === slug);
-
+// Server Component — data sudah difetch di page.tsx lewat feature, tinggal dirender
+export default function PostDetail({ post }: Props) {
   if (!post)
     return (
       <p className="text-center mt-10 text-xl font-semibold">
         ❌ Post tidak ditemukan
       </p>
     );
+
+  const hero = post.post_images?.find((img) => img.is_hero);
 
   return (
     <div className="max-w-3xl mx-auto p-4">
@@ -49,9 +49,9 @@ export default function PostDetail({ slug }: Props) {
       </p>
 
       {/* Gambar */}
-      {post.gambar && (
+      {hero && (
         <img
-          src={post.gambar}
+          src={hero.image_path}
           alt={post.judul}
           className="rounded-lg shadow mb-8 w-full object-cover"
         />
@@ -63,11 +63,23 @@ export default function PostDetail({ slug }: Props) {
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw, rehypeSanitize]}
         >
-          {post.konten_md}
+          {post.content}
         </ReactMarkdown>
       </article>
-      <article></article>
+
+      {/* Tags */}
+      {post.post_tag && post.post_tag.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-6">
+          {post.post_tag.map((pt, i) => (
+            <span
+              key={i}
+              className="text-xs bg-gray-100 px-2 py-1 rounded"
+            >
+              #{pt.tags.label}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
-    
   );
 }

@@ -35,5 +35,6 @@ create table if not exists public.post_images (
     post_id bigint not null,
     image_path text not null,
     is_hero boolean not null default false,
-    primary key (post_id, image_path)
+    primary key (post_id, image_path),
+    foreign key (post_id) references public.posts(id) on delete cascade
 );

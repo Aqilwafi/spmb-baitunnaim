@@ -52,6 +52,7 @@ export type Database = {
           no_hp: string | null
           pekerjaan: string | null
           pendidikan_terakhir: string | null
+          penghasilan: string | null
           relation_type: Database["public"]["Enums"]["family_relation_enum"]
           status_hidup: Database["public"]["Enums"]["life_status_enum"]
           tanggal_lahir: string | null
@@ -70,6 +71,7 @@ export type Database = {
           no_hp?: string | null
           pekerjaan?: string | null
           pendidikan_terakhir?: string | null
+          penghasilan?: string | null
           relation_type: Database["public"]["Enums"]["family_relation_enum"]
           status_hidup?: Database["public"]["Enums"]["life_status_enum"]
           tanggal_lahir?: string | null
@@ -88,6 +90,7 @@ export type Database = {
           no_hp?: string | null
           pekerjaan?: string | null
           pendidikan_terakhir?: string | null
+          penghasilan?: string | null
           relation_type?: Database["public"]["Enums"]["family_relation_enum"]
           status_hidup?: Database["public"]["Enums"]["life_status_enum"]
           tanggal_lahir?: string | null
@@ -182,11 +185,14 @@ export type Database = {
           agama: Database["public"]["Enums"]["agama_enum"]
           alamat: string
           anak_ke: number
+          cita_cita: string
           created_at: string
           deleted_at: string | null
+          hobi: string
           id: string
           jumlah_saudara: number
           no_kk: string
+          penyakit: string | null
           status_rumah_id: number
           tinggal_bersama_id: number
           updated_at: string
@@ -195,11 +201,14 @@ export type Database = {
           agama?: Database["public"]["Enums"]["agama_enum"]
           alamat: string
           anak_ke: number
+          cita_cita: string
           created_at?: string
           deleted_at?: string | null
+          hobi: string
           id: string
           jumlah_saudara: number
           no_kk: string
+          penyakit?: string | null
           status_rumah_id: number
           tinggal_bersama_id: number
           updated_at?: string
@@ -208,11 +217,14 @@ export type Database = {
           agama?: Database["public"]["Enums"]["agama_enum"]
           alamat?: string
           anak_ke?: number
+          cita_cita?: string
           created_at?: string
           deleted_at?: string | null
+          hobi?: string
           id?: string
           jumlah_saudara?: number
           no_kk?: string
+          penyakit?: string | null
           status_rumah_id?: number
           tinggal_bersama_id?: number
           updated_at?: string
@@ -785,6 +797,124 @@ export type Database = {
           },
         ]
       }
+      post_images: {
+        Row: {
+          image_path: string
+          is_hero: boolean
+          post_id: number
+        }
+        Insert: {
+          image_path: string
+          is_hero?: boolean
+          post_id: number
+        }
+        Update: {
+          image_path?: string
+          is_hero?: boolean
+          post_id?: number
+        }
+        Relationships: []
+      }
+      post_tag: {
+        Row: {
+          post_id: number
+          tag_id: number
+        }
+        Insert: {
+          post_id: number
+          tag_id: number
+        }
+        Update: {
+          post_id?: number
+          tag_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_tag_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_tag_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          category_id: number | null
+          content: string
+          created_at: string | null
+          created_by: string | null
+          id: number
+          is_active: boolean | null
+          judul: string
+          lembaga_id: number | null
+          penulis: string
+          ringkasan: string | null
+          slug: string
+          status: Database["public"]["Enums"]["post_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_id?: number | null
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: never
+          is_active?: boolean | null
+          judul: string
+          lembaga_id?: number | null
+          penulis: string
+          ringkasan?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["post_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_id?: number | null
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: never
+          is_active?: boolean | null
+          judul?: string
+          lembaga_id?: number | null
+          penulis?: string
+          ringkasan?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["post_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "master_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_lembaga_id_fkey"
+            columns: ["lembaga_id"]
+            isOneToOne: false
+            referencedRelation: "master_lembaga"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -809,6 +939,24 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          id: number
+          is_active: boolean | null
+          label: string
+        }
+        Insert: {
+          id?: never
+          is_active?: boolean | null
+          label: string
+        }
+        Update: {
+          id?: never
+          is_active?: boolean | null
+          label?: string
         }
         Relationships: []
       }
@@ -859,6 +1007,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      fn_can_manage_publikasi: { Args: never; Returns: boolean }
       fn_can_manage_spmb: { Args: never; Returns: boolean }
       fn_can_manage_user_role: {
         Args: { p_target_role_id: number }
