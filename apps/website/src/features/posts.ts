@@ -1,23 +1,17 @@
 // apps/web/src/features/publikasi/publikasi.feature.ts
 
-import { getPublishedPosts, getPublishedPostBySlug } from '@bn/services'
-import type { PostItem, PostDetail } from '@bn/types'
+import { getPostsByStatus, getPublishedPostBySlug } from '@bn/services'
+import type { Posts, PostDetail } from '@bn/types'
 
-/**
- * Feature wrapper untuk halaman list publikasi (web utama).
- * Lapisan ini yang dipanggil komponen — bukan service langsung —
- * supaya kalau nanti ada logic tambahan (mapping, caching, dsb)
- * bisa ditaruh di sini tanpa menyentuh service atau komponen.
- */
-export async function fetchPublishedPosts(): Promise<PostItem[]> {
-  return getPublishedPosts()
+const STSTUS = 'PUBLISHED';
+
+export async function fetchPublishedPosts(): Promise<Posts[]> {
+  return getPostsByStatus(STSTUS);
 }
 
 /**
  * Feature wrapper untuk halaman detail publikasi (web utama).
  */
-export async function fetchPublishedPostBySlug(
-  slug: string
-): Promise<PostDetail | null> {
+export async function fetchPublishedPostBySlug(slug: string): Promise<Posts|null> {
   return getPublishedPostBySlug(slug)
 }

@@ -24,10 +24,25 @@ export async function getPostsByStatus(statusPosts: PostStatusEnum): Promise<Pos
   const { data, error } = await supabase
     .from('posts')
     .select('*')
-    .eq('is_active', false)
+    .eq('is_active', true)
     .eq('status', statusPosts)
 
   if (error) return [];
+
+  return data;
+}
+
+export async function getPublishedPostBySlug(slug: string): Promise<Posts | null> {
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('is_active', true)
+    .eq('slug', slug)
+    .single()
+
+  if (error) return null;
 
   return data;
 }
