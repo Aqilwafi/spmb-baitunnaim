@@ -2,18 +2,18 @@
 
 import type { MasterData } from '@bn/types';
 import type {
-  MasterStepListItem,
-  MasterTahunAjaranListItem,
+  MasterStep,
+  MasterTahunAjaran,
 } from '@bn/types';
 
-type BasicMasterListItem = {
+type BasicMasterItem = {
   id: number;
   code: string;
   label: string | null;
 };
 
 // Generic — dipakai untuk 6 master data dengan shape { id, code, label }
-export function mapToMasterData<T extends BasicMasterListItem>(data: T[]): MasterData[] {
+export function mapToMasterData<T extends BasicMasterItem>(data: T[]): MasterData[] {
   return data.map((item) => ({
     value: item.id,
     label: item.label ?? item.code,
@@ -21,7 +21,7 @@ export function mapToMasterData<T extends BasicMasterListItem>(data: T[]): Maste
 }
 
 // Override — Step punya field tambahan `order`
-export function mapStepOptions(data: MasterStepListItem[]): MasterData[] {
+export function mapStepOptions(data: MasterStep[]): MasterData[] {
   return data.map((step) => ({
     value: step.id,
     label: step.label ?? step.code,
@@ -30,7 +30,7 @@ export function mapStepOptions(data: MasterStepListItem[]): MasterData[] {
 }
 
 // Override — TahunAjaran gak punya `label`, dan punya `semester`
-export function mapTahunAjaranOptions(data: MasterTahunAjaranListItem[]): MasterData[] {
+export function mapTahunAjaranOptions(data: MasterTahunAjaran[]): MasterData[] {
   return data.map((item) => ({
     value: item.id,
     label: `${item.semester} (${item.start_year}/${item.end_year})`,

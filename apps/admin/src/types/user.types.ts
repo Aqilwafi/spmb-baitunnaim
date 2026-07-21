@@ -1,8 +1,8 @@
-import type { ProfileListItem, UserRoleListItem } from "@bn/types";
+import type { ProfileItem, UserRoleItem } from "@bn/types";
 
-export type UsersData = Pick<ProfileListItem, 'id' | 'username' | 'phone'> & {
+export type UsersData = Pick<ProfileItem, 'id' | 'username' | 'phone'> & {
     email: string;
-    roles: Pick<UserRoleListItem, 'role_id' | 'is_active'>[];
+    roles: Pick<UserRoleItem, 'role_id' | 'is_active'>[];
     role_names?: string[]; 
     last_login: Date | null; 
 };

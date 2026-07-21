@@ -1,87 +1,59 @@
-// packages/services/src/services/post.services.ts
+// packages/services/src/services/publikasi/post.services.ts
+// @bn/services
 
+import "server-only";
 import { createSupabaseServer } from '@bn/supabase'
-import type { PostListItem, PostDetail } from '@bn/types'
+import type { Posts, PostTag, PostImages, PostStatusEnum } from '@bn/types'
 
-const LIST_SELECT = `
-  id,
-  judul,
-  slug,
-  ringkasan,
-  penulis,
-  created_at,
-  master_categories ( label ),
-  post_images ( image_path, is_hero )
-`
+export async function getPosts(): Promise<Posts[]> {
 
-const DETAIL_SELECT = `
-  *,
-  master_categories ( label ),
-  post_images ( image_path, is_hero ),
-  post_tag ( tags ( label ) )
-`
-
-/**
- * Ambil semua post published & active — dipakai web utama (publik).
- */
-export async function getPublishedPosts(): Promise<PostListItem[]> {
-  const supabase = await createSupabaseServer()
-
+  const supabase = await createSupabaseServer();
   const { data, error } = await supabase
     .from('posts')
-    .select(LIST_SELECT)
-    .eq('status', 'PUBLISHED')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
+    .select('*')
+    .eq('is_active', true);
 
-  if (error) {
-    console.error('[getPublishedPosts]', error)
-    throw new Error('Gagal mengambil daftar publikasi')
-  }
+  if (error) return [];
 
-  return data as unknown as PostListItem[]
+  return data;
 }
 
-/**
- * Ambil satu post published by slug — dipakai halaman detail publik.
- */
-export async function getPublishedPostBySlug(
-  slug: string
-): Promise<PostDetail | null> {
-  const supabase = await createSupabaseServer()
+export async function getPostsByStatus(statusPosts: PostStatusEnum): Promise<Posts[]> {
 
+  const supabase = await createSupabaseServer();
   const { data, error } = await supabase
     .from('posts')
-    .select(DETAIL_SELECT)
-    .eq('slug', slug)
-    .eq('status', 'PUBLISHED')
-    .eq('is_active', true)
-    .maybeSingle()
+    .select('*')
+    .eq('is_active', false)
+    .eq('status', statusPosts)
 
-  if (error) {
-    console.error('[getPublishedPostBySlug]', error)
-    throw new Error('Gagal mengambil detail publikasi')
-  }
+  if (error) return [];
 
-  return data as unknown as PostDetail | null
+  return data;
 }
 
-/**
- * Ambil SEMUA post (termasuk draft/inactive) — dipakai admin, RLS
- * yang membatasi lewat can_manage_publication().
- */
-export async function getAllPostsForAdmin(): Promise<PostListItem[]> {
-  const supabase = await createSupabaseServer()
+export async function getPostTagByPostId(postsId: number[]): Promise<PostTag[]> {
 
+  const supabase = await createSupabaseServer();
   const { data, error } = await supabase
-    .from('posts')
-    .select(LIST_SELECT)
-    .order('created_at', { ascending: false })
+    .from('post_tag')
+    .select('*')
+    .in('post_id', postsId);
 
-  if (error) {
-    console.error('[getAllPostsForAdmin]', error)
-    throw new Error('Gagal mengambil daftar post (admin)')
-  }
+  if (error) return [];
 
-  return data as unknown as PostListItem[]
+  return data;
+}
+
+export async function getPostImagesByPostId(postsId: number[]): Promise<PostImages[]> {
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('post_images')
+    .select('*')
+    .in('post_id', postsId);
+
+  if (error) return [];
+
+  return data;
 }

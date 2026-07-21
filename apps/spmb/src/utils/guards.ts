@@ -1,4 +1,4 @@
-import {  isPendaftar } from "./policies";
+import { isPendaftar } from "./policies";
 import { getCurrentUser, getCurrentClaims } from '@bn/auth'
 import { validateAccess } from '@bn/auth/utils';
 import { getPendaftarIdByFormId } from "@/services/user";

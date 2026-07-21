@@ -1,10 +1,10 @@
 // 📄 File: komponen tempat EmptyPendaftaran berada
 import { FileQuestion } from "lucide-react";
-import { MasterTahunAjaranListItem } from "@bn/types"; // atau dari mana pun tipe ini diexport
+import { MasterTahunAjaran } from "@bn/types"; // atau dari mana pun tipe ini diexport
 
 interface EmptyPendaftaranProps {
   // 💡 Ganti tipe datanya di sini agar cocok dengan variabel tahunAjaranAktif kamu
-  tahunAjaran: MasterTahunAjaranListItem | null; 
+  tahunAjaran: MasterTahunAjaran | null; 
 }
 
 export function EmptyPendaftaran({ tahunAjaran }: EmptyPendaftaranProps) {

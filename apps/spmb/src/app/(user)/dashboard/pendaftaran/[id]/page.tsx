@@ -56,15 +56,6 @@ export default async function DetailPendaftaranPage({
     );
   }
 
-  /**
-   * NOTE MASA DEPAN:
-   * Jika nanti sudah pakai database/Supabase asli, kamu tinggal ganti dummy di atas dengan:
-   * 
-   * const supabase = await createSupabaseServer();
-   * const { data: { user } } = await supabase.auth.getUser();
-   * const pendaftaran = await getDetailPendaftaranService(id, user.id);
-   */
-
   return (
     <ClientDetailPendaftaran 
       pendaftaran={dummyPendaftaran} 

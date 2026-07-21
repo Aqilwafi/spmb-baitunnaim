@@ -1,24 +1,20 @@
 // components/dashboards/FormPendaftaranCard.tsx
+
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@bn/ui";
-import type { FormPendaftaranDisplayCard } from "@/features/form/display-form";
+import { FormCardsData } from "@/types/form.types";
 
-type FormPendaftaranCardProps = {
-  data: FormPendaftaranDisplayCard[];
-};
-
-export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
+export function FormPendaftaranCard(data: FormCardsData[]) {
   return (
     <Card className="mt-6 bg-white border-gray-100 shadow-sm">
       <CardHeader className="border-b border-gray-100 pb-3">
         <CardTitle className="text-gray-800">Form Pendaftaran</CardTitle>
       </CardHeader>
-
       <CardContent className="pt-4">
-        {data.length > 0 ? (
-          <ul className="space-y-4">
-            {data.map((form) => (
-              <li key={form.id}>
+        <ul className="space-y-4">
+          {data.map((form) => (
+            <li key={form.id}>
+
                 <Link
                   href={`/dashboard/pendaftaran/${form.id}`}
                   className="block rounded-xl border border-gray-100 bg-gray-50 p-4 transition-all hover:bg-blue-50 hover:border-blue-200 hover:shadow-sm"
@@ -29,10 +25,10 @@ export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
                         {form.nama_lengkap}
                       </h3>
 
-                      <p className="text-sm text-gray-600">{form.lembagaLabel}</p>
+                      <p className="text-sm text-gray-600">{form.lembaga_label}</p>
 
                       <p className="text-xs text-gray-500 mt-1">
-                        {form.kelasLabel}
+                        {form.kelas_label}
                       </p>
                     </div>
 
@@ -44,7 +40,7 @@ export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
                   <div className="mt-4 border-t border-gray-200 pt-3 space-y-1">
                     <p className="text-sm text-gray-700">
                       <span className="font-medium">Langkah Terakhir:</span>{" "}
-                      {form.stepLabel}
+                      {form.step_label}
                     </p>
 
                     <p className="text-xs text-gray-500">
@@ -52,14 +48,9 @@ export function FormPendaftaranCard({ data }: FormPendaftaranCardProps) {
                     </p>
                   </div>
                 </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-gray-400 text-center py-4">
-            Belum ada form pendaftaran.
-          </p>
-        )}
+             </li>
+          ))}
+        </ul>
       </CardContent>
     </Card>
   );

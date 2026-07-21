@@ -1,10 +1,10 @@
-// features/pendaftaran/form-pendaftaran.ts
+// features/form/init.ts
 
 import { getCurrentUser } from "@bn/auth";
 import { checkUserAccess } from "@/utils/guards";
 import { initFormSchema } from "@bn/validators";
 import { getMasterTahunAjaran } from "@bn/services"; // sesuaikan path
-import { mapInitFormPayload } from '../pendaftaran/mappers';
+import { mapInitFormPayload } from '../../utils/mappers';
 import { upsertBiodataSiswa, insertFormPendaftaran } from "@/services/init-form";
 
 export type InitFormPendaftaranResult =

@@ -1,21 +1,20 @@
-// @/services/form.ts
+// services/form.ts
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
+import { FormPendaftaran } from "@bn/types";
 
-export async function getFormPendaftaranBySiswaIds(biodataSiswaIds: string[], tahunAjaranId: number) {
+export async function getFormDataByOwnerIdAndTahunAjaranId(ownerId: string, tahunAjaranId: number): Promise<FormPendaftaran[]> {
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('form_pendaftaran')
-    .select('id, biodata_siswa_id, updated_at, step_id, registration_status, admission_status')
-    .in('biodata_siswa_id', biodataSiswaIds)
-    .eq('tahun_ajaran_id', tahunAjaranId);
+    const supabase = await createSupabaseServer();
+    const { data, error } = await supabase
+        .from('form_pendaftaran')
+        .select('*')
+        .is('deleted_at', null)
+        .eq('pendaftar_id', ownerId)
+        .eq('tahun_ajaran_id', tahunAjaranId);
 
-  if (error) {
-    throw new Error(`Gagal mengambil data form pendaftaran: ${error.message}`);
-  }
+    if (error) return [];
 
-  return data;
+    return data;
 }
-

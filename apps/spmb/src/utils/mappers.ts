@@ -1,4 +1,4 @@
-// features/pendaftaran/mappers.ts
+// utils/mappers.ts
 
 const GENDER_MAP: Record<string, 'MALE' | 'FEMALE'> = {
   '1': 'MALE',

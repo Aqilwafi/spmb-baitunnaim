@@ -4,12 +4,10 @@ import type {
   TablesUpdate,
 } from '../shared/supabase';
 
-export type ProfileRaw = Tables<'profiles'>;
-export type ProfileInsert = TablesInsert<'profiles'>;
-export type ProfileUpdate = TablesUpdate<'profiles'>;
-export type ProfileListItem = Pick<ProfileRaw, 'id'| 'username' | 'updated_at' | 'avatar_url' | 'phone'>;
+export type Profiles = Tables<'profiles'>;
+export type ProfilesInsert = TablesInsert<'profiles'>;
+export type ProfilesUpdate = TablesUpdate<'profiles'>;
 
-export type UserRoleRaw = Tables<'user_roles'>;
-export type UserRoleInsert = TablesInsert<'profiles'>;
-export type UserRoleUpdate = TablesUpdate<'profiles'>;
-export type UserRoleListItem = Pick<UserRoleRaw, 'id'|'user_id' | 'role_id' | 'is_active' >;
+export type UserRoles = Tables<'user_roles'>;
+export type UserRolesInsert = TablesInsert<'profiles'>;
+export type UserRolesUpdate = TablesUpdate<'profiles'>;

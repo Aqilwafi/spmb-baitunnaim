@@ -5,7 +5,7 @@ import { createSupabaseServer } from "@bn/supabase";
 import {
   executeInitFormPendaftaran,
   type InitFormPendaftaranResult,
-} from "@/features/form/init-form";
+} from "@/features/form/init";
 
 export async function initFormPendaftaranAction(
   _prevState: any,

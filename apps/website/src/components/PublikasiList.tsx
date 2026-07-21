@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react"
 import BlogCard from "../components/BlogCard"
-import type { PostListItem } from "@bn/types"
+import type { PostItem } from "@bn/types"
 
 interface Props {
-  posts: PostListItem[];
+  posts: PostItem[];
 }
 
 export default function PublikasiList({ posts }: Props) {
