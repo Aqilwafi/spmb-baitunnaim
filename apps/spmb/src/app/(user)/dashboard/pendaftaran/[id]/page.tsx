@@ -9,6 +9,7 @@ import { computeStepStatus } from "@/utils/rules";
 import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
 import type { StepElement } from "@/types/step.types";
+import NotFound from "@/app/not-found";
 export const dynamic = "force-dynamic";
 
 function ForbiddenScreen() {
@@ -38,12 +39,14 @@ function ForbiddenScreen() {
 
 export default async function DetailPendaftaranPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  
 
   const { allowed } = await isAccessAllowed(id);
   if (!allowed) return <ForbiddenScreen />;
+  
 
-  const detailPendaftaranData = await getDetailPendaftaran();
-  if (!detailPendaftaranData) return <ForbiddenScreen />;
+  const detailPendaftaranData = await getDetailPendaftaran(id);
+  if (!detailPendaftaranData) return <NotFound />;
 
   const stepElements: StepElement[] = STEP_CONFIG.map((step) => {
     const status = computeStepStatus(step.id, detailPendaftaranData.step_id);

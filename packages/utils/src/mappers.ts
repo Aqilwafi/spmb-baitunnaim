@@ -39,3 +39,41 @@ export function mapTahunAjaranOptions(data: MasterTahunAjaran[]): MasterData[] {
     semester: item.semester,
   }));
 }
+
+const GENDER_MAP: Record<string, 'MALE' | 'FEMALE'> = {
+  '1': 'MALE',
+  '2': 'FEMALE',
+};
+
+export function mapGenderCode(value: FormDataEntryValue | undefined): 'MALE' | 'FEMALE' | undefined {
+  if (typeof value !== 'string') return undefined;
+  return GENDER_MAP[value];
+}
+
+const GENDER_LABEL: Record<'MALE' | 'FEMALE' | 'OTHER', string> = {
+  MALE: 'Laki-laki',
+  FEMALE: 'Perempuan',
+  OTHER: 'Lainnya',
+};
+
+export function genderLabel(value: 'MALE' | 'FEMALE' | 'OTHER'): string {
+  return GENDER_LABEL[value];
+}
+
+// utils/lookup-label.ts (atau taruh di file mappers.ts yang sudah ada)
+
+
+/**
+ * Generic lookup: cari satu item dari array master data berdasarkan id,
+ * kembalikan label-nya saja (fallback ke code kalau label null, atau "-" kalau tidak ketemu).
+ * Cocok dipakai saat sudah punya array master data di memory (hasil getXxxOptions),
+ * tidak perlu fetch/query baru per item.
+ */
+export function lookupLabelById<T extends BasicMasterItem>(
+  data: T[],
+  id: number | null | undefined
+): string {
+  if (id == null) return "-";
+  const found = data.find((item) => item.id === id);
+  return found?.label ?? found?.code ?? "-";
+}

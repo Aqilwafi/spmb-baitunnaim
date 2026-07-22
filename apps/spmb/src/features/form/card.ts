@@ -9,6 +9,7 @@ import {
   getMasterKelas,
 } from "@bn/services";
 import type { FormCardsData } from "@/types/form.types";
+import { formatDateTimeId } from "@bn/utils";
 
 export async function getFormCardsData(tahunAjaranId: number): Promise<FormCardsData[]> {
   const user = await getCurrentClaims();
@@ -40,7 +41,7 @@ export async function getFormCardsData(tahunAjaranId: number): Promise<FormCards
       step_label: step?.label ?? "-",
       registration_status: form.registration_status,
       admission_status: form.admission_status,
-      updated_at: form.updated_at,
+      updated_at: formatDateTimeId(form.updated_at),
     };
   });
 }

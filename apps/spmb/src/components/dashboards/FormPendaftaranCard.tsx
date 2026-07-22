@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@bn/ui";
 import { FormCardsData } from "@/types/form.types";
 
-export function FormPendaftaranCard(data: FormCardsData[]) {
+export function FormPendaftaranCard({ data }: { data: FormCardsData[] }) {
   return (
     <Card className="mt-6 bg-white border-gray-100 shadow-sm">
       <CardHeader className="border-b border-gray-100 pb-3">

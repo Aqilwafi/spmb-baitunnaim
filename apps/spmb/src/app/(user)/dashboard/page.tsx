@@ -25,7 +25,7 @@ export default async function DashboardPage() {
         <InitFormPendaftaranModal lembaga={lembagaOptions} kelas={kelasOptions} />
       </div>
       {hasPendaftaran ? (
-        <FormPendaftaranCard {...cards} />
+        <FormPendaftaranCard data={cards}  />
       ) : (
         <EmptyPendaftaran tahunAjaran={tahunAjaran} />
       )}

@@ -1,14 +1,6 @@
 // utils/mappers.ts
 
-const GENDER_MAP: Record<string, 'MALE' | 'FEMALE'> = {
-  '1': 'MALE',
-  '2': 'FEMALE',
-};
-
-export function mapGenderCode(value: FormDataEntryValue | undefined): 'MALE' | 'FEMALE' | undefined {
-  if (typeof value !== 'string') return undefined;
-  return GENDER_MAP[value];
-}
+import { mapGenderCode } from "@bn/utils";
 
 export function mapInitFormPayload(raw: Record<string, FormDataEntryValue>) {
   return {
