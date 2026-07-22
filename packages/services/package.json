@@ -22,7 +22,7 @@
     "server-only": "^0.0.1"
   },
   "peerDependencies": {
-    "next": "^16.2.6"
+    "next": "^16.2.10"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"

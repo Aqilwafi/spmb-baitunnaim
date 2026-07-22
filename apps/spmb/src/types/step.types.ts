@@ -1,7 +1,7 @@
 // @/types/step.types.ts
 
 import type { ComponentType } from 'react';
-import { AdmissionStatusEnum, FormPendaftaran, BiodataSiswa } from '@bn/types';
+import { FormPendaftaran, BiodataSiswa } from '@bn/types';
 
 export type StepStatus = 'locked' | 'active' | 'complete';
 

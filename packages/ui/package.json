@@ -11,21 +11,23 @@
       "import": "./src/index.ts"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
   },
-   "dependencies": {
-    "next": "16.2.6",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+  "dependencies": {
+    "@bn/types": "workspace:*",
     "lucide-react": "^0.553.0",
-    "@bn/types": "workspace:*"
+    "next": "16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@bn/tsconfig": "workspace:*",
     "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@bn/tsconfig": "workspace:*"
+    "@types/react-dom": "^19"
   }
 }
