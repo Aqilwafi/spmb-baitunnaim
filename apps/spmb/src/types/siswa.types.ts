@@ -1,5 +1,5 @@
-import { ActionResponse, BiodataSiswaDetailItem } from "@bn/types";
+import { ActionResponse, BiodataSiswaDetail } from "@bn/types";
 
 export type SiswaResponse = 
-    | BiodataSiswaDetailItem & ActionResponse
+    | BiodataSiswaDetail & ActionResponse
     | ActionResponse;

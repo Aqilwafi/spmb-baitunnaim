@@ -2,18 +2,19 @@
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
-import { BiodataSiswa } from "@bn/types";
+import type { NamaSiswa } from "@/types/step.types";
 
-export async function getBiodataSiswaByIds(ids: string[]): Promise<BiodataSiswa[]>{
+export async function getNamaLengkapById(id: string): Promise<NamaSiswa|null>{
 
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase
     .from('biodata_siswa')
-    .select('*')
-    .in('id', ids)
-    .is('deleted_at', null);
+    .select('nama_lengkap')
+    .is('deleted_at', null)
+    .eq('id', id)
+    .single();
   
-  if (error) return [];
+  if (error) return null;
     
   return data;
 }

@@ -1,65 +1,73 @@
 // app/dashboard/pendaftaran/[id]/page.tsx
 
 import Link from "next/link";
-import { isAccessAllowed } from "@/utils/guards";
-import ClientDetailPendaftaran from "@/components/pendaftaran/ClientPendaftaran";
-import { Forbidden, Button } from "@bn/ui";
 import { ArrowLeft } from 'lucide-react';
+import { Forbidden, Button } from "@bn/ui";
+import { isAccessAllowed } from "@/utils/guards";
+import { getDetailPendaftaran } from "@/features/form/detail";
+import { computeStepStatus } from "@/utils/rules";
+import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
+import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
+import type { StepElement } from "@/types/step.types";
+export const dynamic = "force-dynamic";
 
-// Kita lengkapi dummy datanya sedikit agar tampilan Header di Accordion terisi bagus
-const dummyPendaftaran = {
-  id: "dummy-id-123",
-  current_step_id: 3, // Menandakan user sudah menyelesaikan step 2, sekarang aktif di step 3
-  biodata_siswa: {
-    nama_lengkap: "Ahmad Rifai", // Muncul di header
-  },
-  final_status_id: {
-    name: "Draft Pendaftaran", // Muncul di status badge header
-  },
-};
+function ForbiddenScreen() {
+  return (
+    <div className="fixed inset-0 z-50 flex">
+      <Forbidden
+        className="fixed inset-0 z-[9999] w-screen h-screen"
+        primaryAction={
+          <Link href="/dashboard" className="block w-full">
+            <Button className="w-full flex items-center justify-center gap-2">
+              <ArrowLeft size={18} />
+              Kembali
+            </Button>
+          </Link>
+        }
+        secondaryAction={
+          <Link href="/" className="block w-full">
+            <Button variant="ghost" className="w-full flex items-center justify-center gap-2 text-xs">
+              Hubungi Admin IT
+            </Button>
+          </Link>
+        }
+      />
+    </div>
+  );
+}
 
-const dummyUser = {
-  id: "dummy-user-id-999",
-  email: "ahmad.rifai@example.com",
-};
-
-export default async function DetailPendaftaranPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  // Mengambil ID dari URL parameter (Next.js 15+ Pattern)
+export default async function DetailPendaftaranPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
   const { allowed } = await isAccessAllowed(id);
-  if (!allowed) {
-    return  (
-      <div className=" fixed inset-0 z-50 flex">
-        <Forbidden
-          className="fixed inset-0 z-[9999] w-screen h-screen"
-            primaryAction={
-              <Link href="/dashboard" className="block w-full">
-                <Button className="w-full flex items-center justify-center gap-2">
-                  <ArrowLeft size={18} />
-                    Kembali
-                </Button>
-              </Link>
-            }
-          secondaryAction={
-            <Link href="/" className="block w-full">
-              <Button variant="ghost" className="w-full flex items-center justify-center gap-2 text-xs">
-                Hubungi Admin IT
-              </Button>
-            </Link>
-          }
-        />
-      </div>
-    );
-  }
+  if (!allowed) return <ForbiddenScreen />;
+
+  const detailPendaftaranData = await getDetailPendaftaran();
+  if (!detailPendaftaranData) return <ForbiddenScreen />;
+
+  const stepElements: StepElement[] = STEP_CONFIG.map((step) => {
+    const status = computeStepStatus(step.id, detailPendaftaranData.step_id);
+    const Container = step.container;
+
+    return {
+    id: step.id,
+    step_order: step.step_order,
+    label: step.label,
+    status,
+    node: status === "locked" ? null : (
+      <Container
+        pendaftaran_id={detailPendaftaranData.id}
+        user_id={detailPendaftaranData.pendaftar_id}
+        status={status}
+      />
+    ),
+    };
+  });
 
   return (
-    <ClientDetailPendaftaran 
-      pendaftaran={dummyPendaftaran} 
-      user={dummyUser} 
+    <AccordionOrchestrator
+      pendaftaran={detailPendaftaranData}
+      stepElements={stepElements}
     />
   );
 }
