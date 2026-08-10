@@ -1,7 +1,7 @@
 // components/step/containers/InitFormContainer.tsx
 
 import type { StepContainerProps } from "@/types/step.types";
-import { getInitFormStepData } from "@/features/accordion/finished-step"; // sesuaikan path
+import { getInitFormStepData } from "@/features/form/init"; // sesuaikan path
 import InitFormStep from "@/components/step/clients/InitFormStep";
 
 export default async function InitFormContainer({

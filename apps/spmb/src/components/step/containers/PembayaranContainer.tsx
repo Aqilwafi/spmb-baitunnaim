@@ -1,18 +1,33 @@
 // components/step/containers/PembayaranContainer.tsx
 
 import type { StepContainerProps } from "@/types/step.types";
+import PembayaranStep from "@/components/step/clients/PembayaranStep";
 
 export default async function PembayaranContainer({
   pendaftaran_id,
   user_id,
   status,
 }: StepContainerProps) {
+  if (status === "locked") {
+    return null;
+  }
+
+  // TODO: ganti dengan fetch data pembayaran asli begitu API siap
+  // const data = await getPembayaranStepData(pendaftaran_id);
+  const dummyData =
+    status === "complete"
+      ? {
+          bukti_bayar_url: "https://placehold.co/400x300?text=Bukti+Bayar",
+          uploaded_at: new Date().toISOString(),
+        }
+      : null;
+
   return (
-    <div>
-      <h1>Pembayaran</h1>
-      <p>pendaftaran_id: {pendaftaran_id}</p>
-      <p>user_id: {user_id}</p>
-      <p>status: {status}</p>
-    </div>
+    <PembayaranStep
+      pendaftaran_id={pendaftaran_id}
+      user_id={user_id}
+      status={status}
+      data={dummyData}
+    />
   );
 }

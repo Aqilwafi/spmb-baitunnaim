@@ -10,6 +10,7 @@ import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
 import type { StepElement } from "@/types/step.types";
 import NotFound from "@/app/not-found";
+import BackButton from "@/components/buttons/BackButton";
 export const dynamic = "force-dynamic";
 
 function ForbiddenScreen() {
@@ -68,9 +69,12 @@ export default async function DetailPendaftaranPage({ params }: { params: Promis
   });
 
   return (
-    <AccordionOrchestrator
-      pendaftaran={detailPendaftaranData}
-      stepElements={stepElements}
-    />
+    <>
+      <BackButton />
+      <AccordionOrchestrator
+        pendaftaran={detailPendaftaranData}
+        stepElements={stepElements}
+      />
+    </>
   );
 }
