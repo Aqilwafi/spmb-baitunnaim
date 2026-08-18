@@ -11,3 +11,10 @@ export type ProfilesUpdate = TablesUpdate<'profiles'>;
 export type UserRoles = Tables<'user_roles'>;
 export type UserRolesInsert = TablesInsert<'profiles'>;
 export type UserRolesUpdate = TablesUpdate<'profiles'>;
+
+export type UsersData = Pick<Profiles, 'id' | 'username' | 'phone'> & {
+    email: string;
+    roles: Pick<UserRoles, 'role_id' | 'is_active'>[];
+    role_names?: string[]; 
+    last_login: Date | null; 
+};

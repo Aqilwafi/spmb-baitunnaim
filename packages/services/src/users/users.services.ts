@@ -2,7 +2,7 @@
 
 import "server-only";
 import type { AppSupabaseClient } from "@bn/supabase";
-import type { UsersData } from "@/types/user.types";
+import type { UsersData } from "@bn/types";
 import { listAuthUsers } from "./users.admin.services";
 
 export async function getUsers(supabase: AppSupabaseClient): Promise<UsersData[]> {

@@ -60,3 +60,18 @@ export async function getFormPendaftaranByPendaftarIdAndTahunAjaranId(pendaftarI
 
   return data;
 }
+
+export async function getFormPendaftaranBySiswaIdsAndTahunAjaranId(siswaIds: string[], tahunAjaranId: number): Promise<FormPendaftaran[]> {
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('form_pendaftaran')
+    .select('*')
+    .is('deleted_at', null)
+    .in('biodata_siswa_id', siswaIds)
+    .eq('tahun_ajaran_id', tahunAjaranId);
+
+  if (error) return [];
+
+  return data;
+}

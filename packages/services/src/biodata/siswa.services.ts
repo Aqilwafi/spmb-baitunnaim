@@ -5,6 +5,7 @@ import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
 import { BiodataSiswa, BiodataSiswaDetail } from "@bn/types";
 
+// ambil semua siswa untuk admin
 export async function getBiodataSiswa(): Promise<BiodataSiswa[]> {
 
   const supabase = await createSupabaseServer();
@@ -18,6 +19,7 @@ export async function getBiodataSiswa(): Promise<BiodataSiswa[]> {
   return data;
 }
 
+// ambil semua siswa untuk pendaftar
 export async function getBiodataSiswaByOwnerId(ownerId: string): Promise<BiodataSiswa[]> {
 
   const supabase = await createSupabaseServer();
@@ -46,6 +48,7 @@ export async function getBiodataSiswaByIds(siswaIds: string[]): Promise<BiodataS
   return data;
 }
 
+// ambil data siswa by id, untuk admin
 export async function getBiodataSiswaById(siswaId: string): Promise<BiodataSiswa | null> {
 
   const supabase = await createSupabaseServer();
@@ -61,7 +64,7 @@ export async function getBiodataSiswaById(siswaId: string): Promise<BiodataSiswa
   return data;
 }
 
-// id bio_sis_detail = bio_sis
+// ambil satu detail siswa by id, untuk pendaftarn dan admin
 export async function getBiodataSiswaDetailById(siswaId: string): Promise<BiodataSiswaDetail | null> {
 
   const supabase = await createSupabaseServer();

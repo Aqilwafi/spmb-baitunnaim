@@ -17,12 +17,10 @@
   },
   "dependencies": {
     "@bn/supabase": "workspace:*",
+    "@bn/utils": "workspace:*",
     "@bn/types": "workspace:*",
     "@bn/auth": "workspace:*",
     "server-only": "^0.0.1"
-  },
-  "peerDependencies": {
-    "next": "^16.2.10"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"

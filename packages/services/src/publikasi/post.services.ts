@@ -2,73 +2,94 @@
 // @bn/services
 
 import "server-only";
-import { createSupabaseServer } from '@bn/supabase'
-import type { Posts, PostTag, PostImages, PostStatusEnum } from '@bn/types'
+import { createSupabaseServer } from "@bn/supabase";
+import { withCache } from "@bn/utils";
+import type { Posts, PostTag, PostImages, PostStatusEnum } from "@bn/types";
 
-export async function getPosts(): Promise<Posts[]> {
+export const getPosts = () =>
+  withCache<Posts[]>(
+    async () => {
+      const supabase = await createSupabaseServer();
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("is_active", true);
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('is_active', true);
+      if (error) return [];
 
-  if (error) return [];
+      return data;
+    },
+    ["posts"],
+    ["posts"]
+  )();
 
-  return data;
-}
+export const getPostsByStatus = (statusPosts: PostStatusEnum) =>
+  withCache<Posts[]>(
+    async () => {
+      const supabase = await createSupabaseServer();
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("is_active", true)
+        .eq("status", statusPosts);
 
-export async function getPostsByStatus(statusPosts: PostStatusEnum): Promise<Posts[]> {
+      if (error) return [];
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('is_active', true)
-    .eq('status', statusPosts)
+      return data;
+    },
+    ["posts", "status", statusPosts],
+    ["posts"]
+  )();
 
-  if (error) return [];
+export const getPublishedPostBySlug = (slug: string) =>
+  withCache<Posts | null>(
+    async () => {
+      const supabase = await createSupabaseServer();
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("is_active", true)
+        .eq("slug", slug)
+        .single();
 
-  return data;
-}
+      if (error) return null;
 
-export async function getPublishedPostBySlug(slug: string): Promise<Posts | null> {
+      return data;
+    },
+    ["posts", "slug", slug],
+    ["posts"]
+  )();
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('is_active', true)
-    .eq('slug', slug)
-    .single()
+export const getPostTagByPostId = (postsId: number[]) =>
+  withCache<PostTag[]>(
+    async () => {
+      const supabase = await createSupabaseServer();
+      const { data, error } = await supabase
+        .from("post_tag")
+        .select("*")
+        .in("post_id", postsId);
 
-  if (error) return null;
+      if (error) return [];
 
-  return data;
-}
+      return data;
+    },
+    ["post_tag", ...postsId.map(String)],
+    ["post_tag"]
+  )();
 
-export async function getPostTagByPostId(postsId: number[]): Promise<PostTag[]> {
+export const getPostImagesByPostId = (postsId: number[]) =>
+  withCache<PostImages[]>(
+    async () => {
+      const supabase = await createSupabaseServer();
+      const { data, error } = await supabase
+        .from("post_images")
+        .select("*")
+        .in("post_id", postsId);
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('post_tag')
-    .select('*')
-    .in('post_id', postsId);
+      if (error) return [];
 
-  if (error) return [];
-
-  return data;
-}
-
-export async function getPostImagesByPostId(postsId: number[]): Promise<PostImages[]> {
-
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('post_images')
-    .select('*')
-    .in('post_id', postsId);
-
-  if (error) return [];
-
-  return data;
-}
+      return data;
+    },
+    ["post_images", ...postsId.map(String)],
+    ["post_images"]
+  )();

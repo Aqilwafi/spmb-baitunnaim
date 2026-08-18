@@ -18,6 +18,9 @@
   "dependencies":{
     "@bn/types": "workspace:*"
   },
+ "peerDependencies": {
+    "next": "^16.2.10"
+  },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*"
   }

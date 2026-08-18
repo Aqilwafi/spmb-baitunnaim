@@ -20,4 +20,4 @@ export type DokumenUpdate = TablesUpdate<'dokumen'>;
 // additionnal custom types per-components
 export type InitFormPendaftaran = Pick<FormPendaftaran, 'biodata_siswa_id'> 
 export type FormPendaftaranDisplayItem = FormPendaftaran & 
-  Pick<BiodataSiswa, 'nik' | 'nama_lengkap' | 'jenis_kelamin' | 'lembaga_id' | 'kelas_id'>;
+  Pick<BiodataSiswa, 'nik' | 'nama_lengkap' | 'jenis_kelamin' | 'lembaga_id' | 'kelas_id' > ;
