@@ -13,6 +13,7 @@ export default async function DashboardPage() {
     getLembagaOptions(),
     getKelasOptions(),
   ]);
+  
 
   if (!tahunAjaran) return;
 

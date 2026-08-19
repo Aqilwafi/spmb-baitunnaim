@@ -1,20 +1,21 @@
 // packages/supabase/src/browser.ts
 
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "@bn/types";
+
+let client: ReturnType<typeof createBrowserClient<Database>> | null = null;
 
 export function createSupabaseBrowser() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    throw new Error("Missing Supabase environment variables (browser)");
+    throw new Error("Missing Supabase environment variables (client)");
   }
 
-  return createClient<Database>(url, key, {
-    auth: {
-      detectSessionInUrl: true,
-      flowType: "implicit",
-    },
-  });
+  if (!client) {
+    client = createBrowserClient<Database>(url, key);
+  }
+
+  return client;
 }

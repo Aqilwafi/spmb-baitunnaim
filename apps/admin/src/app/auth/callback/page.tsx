@@ -1,23 +1,25 @@
+// admin/src/app/auth/callback/page.tsx
+
 "use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { createSupabaseCallback } from "@bn/supabase";
 import { createSupabaseBrowser } from "@bn/supabase";
-import { createSupabaseClient } from "@bn/supabase";
 
 export default function AuthCallbackPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const supabaseBrowser = createSupabaseBrowser(); // supabase-js, untuk parse hash
-    const supabaseSSR = createSupabaseClient();      // @supabase/ssr, untuk set cookie
+    const supabaseCallback  = createSupabaseCallback(); // supabase-js, untuk parse hash
+    const supabaseBrowser = createSupabaseBrowser();      // @supabase/ssr, untuk set cookie
 
-    const { data: { subscription } } = supabaseBrowser.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabaseCallback.auth.onAuthStateChange(async (event, session) => {
      
       if (session) {
         subscription.unsubscribe();
         // Set session ke SSR client supaya cookie tersimpan
-        await supabaseSSR.auth.setSession({
+        await supabaseBrowser.auth.setSession({
           access_token: session.access_token,
           refresh_token: session.refresh_token,
         });

@@ -3,7 +3,7 @@
 
 import "server-only";
 import { withCache } from "@bn/utils";
-import { createSupabaseServer } from "@bn/supabase"; // sesuaikan path import supabase server client-mu
+import { createSupabaseStatic } from "@bn/supabase";
 import {
   MasterCategories,
   MasterKelas,
@@ -15,11 +15,12 @@ import {
   MasterTipeDokumen,
 } from "@bn/types";
 
+const supabaseStatic = createSupabaseStatic();
+
 export const getMasterStep = () =>
   withCache<MasterStep[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase
+      const { data, error } = await supabaseStatic
         .from("master_step")
         .select("*")
         .eq("is_active", true);
@@ -33,8 +34,7 @@ export const getMasterStep = () =>
 export const getMasterKelas = () =>
   withCache<MasterKelas[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase.from("master_kelas").select("*");
+      const { data, error } = await supabaseStatic.from("master_kelas").select("*");
       if (error) throw new Error(error.message);
       return data as MasterKelas[];
     },
@@ -45,8 +45,7 @@ export const getMasterKelas = () =>
 export const getMasterLembaga = () =>
   withCache<MasterLembaga[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase.from("master_lembaga").select("*");
+      const { data, error } = await supabaseStatic.from("master_lembaga").select("*");
       if (error) throw new Error(error.message);
       return data as MasterLembaga[];
     },
@@ -57,8 +56,7 @@ export const getMasterLembaga = () =>
 export const getMasterTahunAjaran = () =>
   withCache<MasterTahunAjaran | null>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase
+      const { data, error } = await supabaseStatic
         .from("master_tahun_ajaran")
         .select("*")
         .eq("is_active", true)
@@ -69,12 +67,12 @@ export const getMasterTahunAjaran = () =>
     ["master_tahun_ajaran"],
     ["master_tahun_ajaran"]
   )();
+  
 
 export const getMasterStatusRumah = () =>
   withCache<MasterStatusRumah[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase.from("master_status_rumah").select("*");
+      const { data, error } = await supabaseStatic.from("master_status_rumah").select("*");
       if (error) throw new Error(error.message);
       return data as MasterStatusRumah[];
     },
@@ -85,8 +83,7 @@ export const getMasterStatusRumah = () =>
 export const getMasterTinggalBersama = () =>
   withCache<MasterTinggalBersama[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase.from("master_tinggal_bersama").select("*");
+      const { data, error } = await supabaseStatic.from("master_tinggal_bersama").select("*");
       if (error) throw new Error(error.message);
       return data as MasterTinggalBersama[];
     },
@@ -97,8 +94,7 @@ export const getMasterTinggalBersama = () =>
 export const getMasterTipeDokumen = () =>
   withCache<MasterTipeDokumen[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase.from("master_tipe_dokumen").select("*");
+      const { data, error } = await supabaseStatic.from("master_tipe_dokumen").select("*");
       if (error) throw new Error(error.message);
       return data as MasterTipeDokumen[];
     },
@@ -109,8 +105,7 @@ export const getMasterTipeDokumen = () =>
 export const getMasterCategories = () =>
   withCache<MasterCategories[]>(
     async () => {
-      const supabase = await createSupabaseServer();
-      const { data, error } = await supabase.from("master_categories").select("*");
+      const { data, error } = await supabaseStatic.from("master_categories").select("*");
       if (error) throw new Error(error.message);
       return data as MasterCategories[];
     },

@@ -7,6 +7,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/**/*", "src/browser.ts"],
+  "include": ["src/**/*", "src/callback.ts"],
   "exclude": ["node_modules", "dist"]
 }

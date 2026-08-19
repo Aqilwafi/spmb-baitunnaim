@@ -35,6 +35,20 @@ export async function getFormPendaftaranBySiswaIdsAndTahunAjaranId(siswaIds: str
   return data;
 }
 
+export async function getFormPendaftaranByPendaftarId(pendaftarId: string): Promise<FormPendaftaran[]> {
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('form_pendaftaran')
+    .select('*')
+    .is('deleted_at', null)
+    .eq('pendaftar_id', pendaftarId);
+
+  if (error) return [];
+
+  return data;
+}
+
 export async function getFormPendaftaranByPendaftarIdAndTahunAjaranId(pendaftarId: string, tahunAjaranId: number): Promise<FormPendaftaran[]> {
 
   const supabase = await createSupabaseServer();
@@ -58,20 +72,6 @@ export async function getFormPendaftaranByTahunAjaranId(tahunAjaranId: number): 
     .select('*')
     .is('deleted_at', null)
     .eq('tahun_ajaran_id', tahunAjaranId);
-
-  if (error) return [];
-
-  return data;
-}
-
-export async function getFormPendaftaranByPendaftarId(pendaftarId: string): Promise<FormPendaftaran[]> {
-
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('form_pendaftaran')
-    .select('*')
-    .is('deleted_at', null)
-    .eq('pendaftar_id', pendaftarId);
 
   if (error) return [];
 

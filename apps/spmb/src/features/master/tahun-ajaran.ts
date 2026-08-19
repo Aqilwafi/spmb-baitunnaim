@@ -6,6 +6,7 @@ import { getMasterTahunAjaran } from "@bn/services";
 export async function getTahunAjaranAktif (): Promise<MasterTahunAjaran | null> {
 
     const tahunAjaran = await getMasterTahunAjaran();
+    
 
     if (!tahunAjaran) return null;
 

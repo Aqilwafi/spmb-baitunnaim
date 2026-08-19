@@ -18,7 +18,7 @@ export default function PostDetail({ post }: Props) {
     );
 
   const hero = post.post_images?.find((img) => !img.is_hero);
-  console.log(hero?.image_path);
+  
 
   return (
     <div className="max-w-3xl mx-auto p-4">

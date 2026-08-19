@@ -1,7 +1,8 @@
 // packages/supabase/src/index.ts
 
-export {createSupabaseClient} from "./client";
+export {createSupabaseBrowser} from "./browser";
 export {createSupabaseServer} from "./server";
-export {createSupabaseBrowser} from './browser';
+export {createSupabaseCallback} from './callback';
+export {createSupabaseStatic} from './static';
 export {updateSession} from "./proxy";
 export * from "./types"; 
