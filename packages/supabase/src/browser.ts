@@ -10,7 +10,7 @@ export function createSupabaseBrowser() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    throw new Error("Missing Supabase environment variables (client)");
+    throw new Error("Missing Supabase environment variables (browser)");
   }
 
   if (!client) {

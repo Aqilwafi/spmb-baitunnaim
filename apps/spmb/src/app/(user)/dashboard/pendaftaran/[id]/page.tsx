@@ -47,6 +47,7 @@ export default async function DetailPendaftaranPage({ params }: { params: Promis
   
 
   const detailPendaftaranData = await getDetailPendaftaran(id);
+  console.log("detailPendaftaranData", detailPendaftaranData);  
   if (!detailPendaftaranData) return <NotFound />;
 
   const stepElements: StepElement[] = STEP_CONFIG.map((step) => {
