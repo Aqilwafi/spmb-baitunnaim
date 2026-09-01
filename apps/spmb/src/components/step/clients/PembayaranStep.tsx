@@ -120,7 +120,7 @@ export default function PembayaranStep({
             type="file"
             accept="image/*,application/pdf"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            className="text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            className="cursor-pointer text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           <Button onClick={handleUpload} disabled={!file || uploading} className="rounded-xl">
             {uploading ? "Mengunggah..." : "Unggah Bukti Bayar"}

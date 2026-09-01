@@ -51,7 +51,7 @@ export default async function DetailPendaftaranPage({ params }: { params: Promis
   console.log(detailPendaftaranData)
 
   const stepElements: StepElement[] = STEP_CONFIG.map((step) => {
-    const status = computeStepStatus(step.id, 10); // hack kalau mau cek locked UI cepat
+    const status = computeStepStatus(step.id, detailPendaftaranData.step_id); // hack kalau mau cek locked UI cepat
     const Container = step.container;
 
     return {
