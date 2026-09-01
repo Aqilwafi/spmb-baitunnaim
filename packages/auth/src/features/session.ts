@@ -1,7 +1,6 @@
 // packages/auth/src/features/session.ts
 
 import { getUser, getClaims, getSession } from "../services/session";
-
 import { GetUserResponse, GetClaimsResponse, GetSessionResponse } from "@bn/types";
 
 export async function getCurrentSession(): Promise<GetSessionResponse | null> {
