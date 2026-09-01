@@ -10,5 +10,9 @@ export function createSupabaseStatic() {
     throw new Error("Missing Supabase environment variables (static)");
   }
 
-  return createClient<Database>(url, key);
+  return createClient<Database>(url, key, {
+    auth: {
+      flowType: "pkce",
+    },
+  });
 }
