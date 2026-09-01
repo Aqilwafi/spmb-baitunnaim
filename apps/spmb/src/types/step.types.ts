@@ -13,7 +13,10 @@ export type StepStatus = 'locked' | 'active' | 'complete';
 export interface StepContainerProps {
   pendaftaran_id: string;
   user_id: string;
+  siswa_id?: string;
+  tahun_ajaran_id?: number;
   status: StepStatus;
+  code: string;
 }
 
 /**

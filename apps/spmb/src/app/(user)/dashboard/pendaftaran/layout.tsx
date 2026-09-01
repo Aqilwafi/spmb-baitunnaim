@@ -2,7 +2,7 @@
 
 import { getCurrentClaims } from '@bn/auth';
 import { validateAccess } from '@bn/auth/utils';
-import { isPendaftar } from '@/utils/policies';
+import { isPendaftar } from '@/helpers/policies';
 import DashboardHeader from '@/components/others/DashboardHeader';
 import { Forbidden, Unauthorized, Button } from '@bn/ui';
 import Link from 'next/link';

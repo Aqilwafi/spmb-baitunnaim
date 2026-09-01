@@ -3,7 +3,7 @@
 import { getCurrentClaims } from "@bn/auth";
 import {
   getBiodataSiswaByOwnerId,
-  getFormPendaftaranBySiswaIdsAndTahunAjaranId,
+  getFormPendaftaranBySiswaIds,
   getMasterStep,
   getMasterLembaga,
   getMasterKelas,
@@ -25,7 +25,7 @@ export async function getFormCardsData(
 
   const [formData, masterStep, masterLembaga, masterKelas] =
     await Promise.all([
-      getFormPendaftaranBySiswaIdsAndTahunAjaranId(
+      getFormPendaftaranBySiswaIds(
         siswaIds,
         tahunAjaranId
       ),

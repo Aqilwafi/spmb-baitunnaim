@@ -49,7 +49,7 @@ create table if not exists public.biodata_keluarga (
     id                    uuid primary key default gen_random_uuid(),
     biodata_siswa_id      uuid not null references public.biodata_siswa(id) on delete cascade,
     relation_type         family_relation_enum not null,   -- AYAH, IBU, WALI
-    detail_relation_type  varchar(50),                      -- detail WALI, mis. Kakek/Paman
+    detail_relation_type  varchar(50),                     -- detail WALI, mis. Kakek/Paman
     nama_lengkap          varchar(150) not null,
     nik                   public.dom_nik unique,
     status_hidup          life_status_enum not null default 'HIDUP',

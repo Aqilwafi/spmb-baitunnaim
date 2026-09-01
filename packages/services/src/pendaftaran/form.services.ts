@@ -20,7 +20,7 @@ export async function getFormPendaftaran(): Promise<FormPendaftaran[]> {
 }
 
 // ambil semua form untuk pendaftar berdasarkan tahun ajaran
-export async function getFormPendaftaranBySiswaIdsAndTahunAjaranId(siswaIds: string[], tahunAjaranId: number): Promise<FormPendaftaran[]> {
+export async function getFormPendaftaranBySiswaIds(siswaIds: string[], tahunAjaranId: number): Promise<FormPendaftaran[]> {
 
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase

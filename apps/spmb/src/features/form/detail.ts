@@ -1,16 +1,18 @@
 // features/form/detail.ts
 
+import { getDokumenByFormId } from "@bn/services";
 import { getPartFormPendaftaranByFormIdAndTahunAjaranId } from "@/services/form";
 import { getNamaLengkapById } from "@/services/siswa";
 import type { DetailPendaftaran } from "@/types/step.types";
-import { getCurrentUser } from "@bn/auth";
-import { pickId } from "@/utils/extract-id";
+import { getCurrentClaims } from "@bn/auth";
+import { pickId } from "@bn/utils";
 import { getTahunAjaranAktif } from "../master/tahun-ajaran";
 import { formIdParamsSchema } from "@bn/validators";
 
 export async function getDetailPendaftaran(id: string): Promise<DetailPendaftaran|null> {
 
-    const user = await getCurrentUser();
+    // auth check
+    const user = await getCurrentClaims();
     if (!user) return null;
     
     const tahunAjaranId = await pickId(getTahunAjaranAktif());
@@ -21,7 +23,7 @@ export async function getDetailPendaftaran(id: string): Promise<DetailPendaftara
 
     const formId = parsed.data;
 
-    const formData = await getPartFormPendaftaranByFormIdAndTahunAjaranId(formId, user.id, tahunAjaranId);
+    const formData = await getPartFormPendaftaranByFormIdAndTahunAjaranId(formId, user.sub, tahunAjaranId);
     if (!formData) return null;
 
     const siswaData = await getNamaLengkapById(formData.biodata_siswa_id);

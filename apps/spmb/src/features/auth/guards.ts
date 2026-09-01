@@ -1,7 +1,8 @@
-import { isPendaftar } from "./policies";
+import { isPendaftar } from "@/helpers/policies";
 import { getCurrentUser, getCurrentClaims } from '@bn/auth'
 import { validateAccess } from '@bn/auth/utils';
 import { getPendaftarIdByFormId } from "@/services/user";
+import { formIdParamsSchema } from "@bn/validators";
 
 export const checkUserAccess = async (): Promise<boolean> => {
   const user = await getCurrentUser(); 
@@ -12,10 +13,16 @@ export const checkUserAccess = async (): Promise<boolean> => {
 
 export async function isAccessAllowed(pendaftaranId: string) {
   
-  const claims = await getCurrentClaims();
-  if (!claims) return { allowed: false };;
+  const safe = formIdParamsSchema.safeParse(pendaftaranId);
+  if (!safe.success) {
+    return { allowed: false, reason: "INVALID_FORMAT" };
+  }
 
-  const data = await getPendaftarIdByFormId(pendaftaranId);
+  const claims = await getCurrentClaims();
+  if (!claims) return { allowed: false };
+ 
+
+  const data = await getPendaftarIdByFormId(safe.data);
   const isOwner = claims.sub === data?.pendaftar_id;
   
   return { 

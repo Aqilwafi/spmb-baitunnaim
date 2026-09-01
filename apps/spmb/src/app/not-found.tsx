@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPinned, Home, Search, RefreshCcw } from "lucide-react";
+import { Home, Search, RefreshCcw } from "lucide-react";
 import Link from "next/link";
 
 export default function NotFound() {

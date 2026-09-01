@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { Input, Label, Select } from '@bn/ui';
 import { User, School, GraduationCap, Lock, IdCard, MapPin, Calendar } from 'lucide-react';
-import { checkIsMI, isClassFieldLocked } from '@/utils/rules';
+import { checkIsMI, isClassFieldLocked } from '@/helpers/biodata-rules';
 import { InitFormPendaftaranProps } from '@/types/form.types';
 
 export function InitFormPendaftaran({

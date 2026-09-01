@@ -1,4 +1,4 @@
-// utils/extract-id.ts
+// @bn/utils/src/extract-id.ts
 
 export async function pickId<T extends { id: number | string }>(
   promise: Promise<T | null>

@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { ArrowLeft } from 'lucide-react';
 import { Forbidden, Button } from "@bn/ui";
-import { isAccessAllowed } from "@/utils/guards";
+import { isAccessAllowed } from "@/features/auth/guards";
 import { getDetailPendaftaran } from "@/features/form/detail";
-import { computeStepStatus } from "@/utils/rules";
+import { computeStepStatus } from "@/helpers/step-rules";
 import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
 import type { StepElement } from "@/types/step.types";
@@ -46,12 +46,12 @@ export default async function DetailPendaftaranPage({ params }: { params: Promis
   if (!allowed) return <ForbiddenScreen />;
   
 
-  const detailPendaftaranData = await getDetailPendaftaran(id);
-  console.log("detailPendaftaranData", detailPendaftaranData);  
+  const detailPendaftaranData = await getDetailPendaftaran(id); 
   if (!detailPendaftaranData) return <NotFound />;
+  console.log(detailPendaftaranData)
 
   const stepElements: StepElement[] = STEP_CONFIG.map((step) => {
-    const status = computeStepStatus(step.id, detailPendaftaranData.step_id);
+    const status = computeStepStatus(step.id, 10); // hack kalau mau cek locked UI cepat
     const Container = step.container;
 
     return {
@@ -64,6 +64,7 @@ export default async function DetailPendaftaranPage({ params }: { params: Promis
         pendaftaran_id={detailPendaftaranData.id}
         user_id={detailPendaftaranData.pendaftar_id}
         status={status}
+        code={step.code}
       />
     ),
     };
