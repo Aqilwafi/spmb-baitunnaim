@@ -4,17 +4,11 @@ import { createSupabaseServer } from '@bn/supabase';
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get('code');
+  const token_hash = requestUrl.searchParams.get('token_hash');
+  const type = requestUrl.searchParams.get('type');
   const error = requestUrl.searchParams.get('error');
   const errorCode = requestUrl.searchParams.get('error_code');
   const next = requestUrl.searchParams.get('next') ?? '/dashboard';
-
-  // Tambahan: cek cookie apa aja yang kebawa di request ini
-  const cookieHeader = request.headers.get('cookie');
-  console.log('Incoming cookies:', cookieHeader);
-  console.log('Has code_verifier cookie:', cookieHeader?.includes('code-verifier') ?? false);
-
-  console.log('Supabase callback code:', code);
 
   if (error) {
     const loginUrl = new URL('/login', requestUrl.origin);
@@ -22,17 +16,15 @@ export async function GET(request: Request) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (code) {
+  if (token_hash && type) {
     const supabase = await createSupabaseServer();
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      token_hash,
+      type,
+    });
 
-    // Tambahan: log detail error-nya, bukan cuma truthy check
-    if (exchangeError) {
-      console.error('Exchange error name:', exchangeError.name);
-      console.error('Exchange error message:', exchangeError.message);
-      console.error('Exchange error status:', exchangeError.status);
-      console.error('Exchange error code:', exchangeError.code); // AuthApiError punya ini kadang
-
+    if (verifyError) {
+      console.error('Verify OTP error:', verifyError.name, verifyError.message);
       const loginUrl = new URL('/login', requestUrl.origin);
       loginUrl.searchParams.set('error', 'invalid_token');
       return NextResponse.redirect(loginUrl);
