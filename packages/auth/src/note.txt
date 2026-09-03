@@ -1,0 +1,10 @@
+Flow type SDK — cek createClient() pakai flowType: 'pkce' atau 'implicit'. PKCE itu penyebab paling umum untuk kasus beda browser.
+Redirect URL config di Supabase Dashboard — Authentication → URL Configuration, pastikan Site URL dan Redirect URLs sudah include domain staging Vercel-mu persis (termasuk trailing slash/wildcard kalau perlu).
+Link asli di email — buka raw email/header, lihat URL lengkapnya. Perhatikan: token, type=recovery, dan redirect_to param-nya, apakah domainnya sesuai staging.
+URL setelah redirect di browser — bandingkan dengan link asli di email. Kalau ada perubahan/pemotongan token (misal ke-encode ulang, ke-strip query param oleh email client "link protection" seperti Outlook Safe Links / Gmail scanning), itu bisa jadi biang keladinya.
+Log Supabase Auth — Dashboard → Logs → Auth logs, cari request di waktu yang sama, lihat error detailnya (biasanya lebih spesifik dari sekadar "invalid_token", misal otp_expired, flow_state_not_found, dll).
+Log Vercel (runtime/function logs) — cek kalau ada API route/middleware yang handle callback (/auth/callback dsb), lihat apakah request token-nya sampai atau error duluan.
+Expiry token — cek default expiry OTP/token di Supabase (default 1 jam), apakah link dites setelah lewat waktu itu.
+Cookie/localStorage code_verifier — inspect Application tab browser saat request reset, cek key sb-<project>-auth-token-code-verifier ada atau tidak sebelum klik link di browser lain.
+Custom email template — kalau pakai custom SMTP/template, cek apakah {{ .ConfirmationURL }} atau token-nya diteruskan utuh, nggak ke-modify oleh template engine.
+Single-use token — pastikan link belum pernah diklik/dipakai sebelumnya (misal link preview/prefetch dari email client ikut "membuka" link duluan → token invalid pas user klik beneran).

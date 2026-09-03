@@ -5,6 +5,9 @@ import { createSupabaseServer } from '@bn/supabase';
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  console.log('Supabase callback request URL:', requestUrl);
+  console.log('Supabase callback request:', requestUrl.href);
+  console.log('Supabase callback code:', code);
   const error = requestUrl.searchParams.get('error');
   const errorCode = requestUrl.searchParams.get('error_code');
   const next = requestUrl.searchParams.get('next') ?? '/dashboard';
