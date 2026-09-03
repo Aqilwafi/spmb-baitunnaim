@@ -1,7 +1,7 @@
 // packages/auth/src/features/forgot-password.ts
-
 import { forgotPasswordSchema } from "../validators/forgot-password.schema";
 import { resetPasswordForEmail } from "../services/forgot-password";
+import { isAdminEmail } from "../services/check-email";
 import { ForgotPasswordPayload, ForgotPasswordResponse } from "@bn/types";
 
 const GENERIC_FORGOT_PASSWORD_MESSAGE =
@@ -9,7 +9,7 @@ const GENERIC_FORGOT_PASSWORD_MESSAGE =
 
 export async function executeSharedForgotPassword(
   payload: ForgotPasswordPayload,
-  siteUrl: string, // diinject dari caller, bukan baca env var sendiri
+  siteUrl: string,
 ): Promise<ForgotPasswordResponse> {
   const parsed = forgotPasswordSchema.safeParse(payload);
   if (!parsed.success) {
@@ -21,14 +21,15 @@ export async function executeSharedForgotPassword(
     };
   }
 
-  const { error } = await resetPasswordForEmail(parsed.data.email, siteUrl);
+  const isAdmin = await isAdminEmail(parsed.data.email);
 
-  if (error) {
-    console.error("Shared Forgot Password Error:", error.message);
+  if (!isAdmin) {
+    const { error } = await resetPasswordForEmail(parsed.data.email, siteUrl);
+    if (error) {
+      console.error("Shared Forgot Password Error:", error.message);
+    }
   }
 
-  // Selalu return success (generic message) walau ada error di Supabase,
-  // untuk mencegah user enumeration.
   return {
     success: true,
     message: GENERIC_FORGOT_PASSWORD_MESSAGE,

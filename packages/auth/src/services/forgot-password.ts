@@ -4,5 +4,6 @@ import { createSupabaseServer } from "@bn/supabase"; // bukan createSupabaseStat
 
 export async function resetPasswordForEmail(email: string, redirectUrl: string) {
   const supabase = await createSupabaseServer();
+  
   return supabase.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
 }
