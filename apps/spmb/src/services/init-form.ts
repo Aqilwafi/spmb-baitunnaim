@@ -1,85 +1,67 @@
-// @/services/init-form.ts
-
+// services/init-form.ts
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
-import type { InitFormInput } from "@bn/validators";
+import type { EnumGender } from "@bn/types";
 
-const INIT_CATATAN = "Init Form. NISN akan diisi saat biodata siswa.";
-
-export async function upsertBiodataSiswa(pendaftarId: string, payload: InitFormInput) {
-  const supabase = await createSupabaseServer();
-
-  // 1. Cek dulu apakah NIK ini sudah pernah terdaftar (row manapun, siapapun ownernya)
-  const { data: existing, error: checkError } = await supabase
-    .from('biodata_siswa')
-    .select('id, owner_user_id')
-    .eq('nik', payload.nik)
-    .maybeSingle();
-
-  if (checkError) {
-    throw new Error(`Gagal memeriksa data NIK: ${checkError.message}`);
-  }
-
-  if (existing) {
-    // NIK sudah terdaftar — baik milik sendiri maupun orang lain, TOLAK.
-    // Tidak boleh ada pendaftaran baru untuk NIK yang sama.
-    throw new Error(
-      existing.owner_user_id === pendaftarId
-        ? "NIK ini sudah pernah didaftarkan sebelumnya."
-        : "NIK sudah terdaftar dalam sistem."
-    );
-  }
-
-  // 2. Belum ada — insert baru (bukan upsert)
-  const { data, error } = await supabase
-    .from('biodata_siswa')
-    .insert({
-      nik: payload.nik,
-      nama_lengkap: payload.namaLengkap,
-      jenis_kelamin: payload.gender,
-      tempat_lahir: payload.tempatLahir,
-      tanggal_lahir: payload.tanggalLahir.toISOString().split('T')[0],
-      lembaga_id: payload.lembagaId,
-      kelas_id: payload.kelasId ?? null,
-      owner_user_id: pendaftarId,
-      catatan: INIT_CATATAN,
-    })
-    .select('id')
-    .single();
-
-  if (error) {
-    // Jaga-jaga kalau ada race condition dan constraint unique NIK di DB kena
-    if (error.code === '23505') {
-      throw new Error("NIK sudah terdaftar dalam sistem.");
-    }
-    throw new Error(`Gagal menyimpan biodata siswa: ${error.message}`);
-  }
-
-  return data;
+export interface InitFormRPCResponse {
+  form_id: string;
+  siswa_id: string;
 }
 
-export async function insertFormPendaftaran(params: {
-    pendaftarId: string;
-    biodataSiswaId: string;
-    tahunAjaranId: number;
-    stepId: number;
-}) {
+export interface InitFormStepDataRPCResponse {
+  nama_lengkap: string;
+  nik: string;
+  jenis_kelamin: EnumGender;
+  tempat_lahir: string;
+  tanggal_lahir: string;
+  lembaga_tujuan: string | null;
+  kelas: string | null;
+}
+
+export async function initFormPendaftaranService(params: {
+  nik: string;
+  namaLengkap: string;
+  gender: EnumGender;
+  tempatLahir: string;
+  tanggalLahir: string;
+  lembagaId: number;
+  kelasId: number | null;
+  tahunAjaranId: number;
+  stepId: number;
+}): Promise<InitFormRPCResponse> {
+  const supabase = await createSupabaseServer();
+
+  const { data, error } = await supabase.rpc("fn_rpc_init_form", {
+    p_nik: params.nik,
+    p_nama_lengkap: params.namaLengkap,
+    p_gender: params.gender,
+    p_tempat_lahir: params.tempatLahir,
+    p_tanggal_lahir: params.tanggalLahir,
+    p_lembaga_id: params.lembagaId,
+    p_kelas_id: params.kelasId ?? undefined,
+    p_tahun_ajaran_id: params.tahunAjaranId,
+    p_step_id: params.stepId,
+  });
+
+  if (error) throw error;
+
+  return data as unknown as InitFormRPCResponse;
+}
+
+export async function initFormStepDataService(
+  formId: string,
+  tahunAjaranId: number
+): Promise<InitFormStepDataRPCResponse | null> {
   const supabase = await createSupabaseServer();
 
   const { data, error } = await supabase
-    .from('form_pendaftaran')
-    .insert({
-        pendaftar_id: params.pendaftarId,
-        biodata_siswa_id: params.biodataSiswaId,
-        tahun_ajaran_id: params.tahunAjaranId,
-        step_id: params.stepId,
+    .rpc("fn_rpc_get_init_form_step_data", {
+      p_form_id: formId,
+      p_tahun_ajaran_id: tahunAjaranId,
     })
-    .select('id')
-    .single();
+    .maybeSingle();
 
-  if (error) {
-    throw new Error(`Gagal membuat form pendaftaran: ${error.message}`);
-  }
+  if (error) throw error;
 
-  return data;
+  return data as InitFormStepDataRPCResponse | null;
 }

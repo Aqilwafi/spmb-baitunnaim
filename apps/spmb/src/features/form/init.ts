@@ -1,22 +1,25 @@
 // features/form/init.ts
-
-import { getCurrentUser } from "@bn/auth";
 import { checkUserAccess } from "@/features/auth/guards";
-import { initFormSchema } from "@bn/validators";
-import { getMasterTahunAjaran } from "@bn/services";
-import { mapInitFormPayload } from '../../helpers/mappers';
-import { upsertBiodataSiswa, insertFormPendaftaran } from "@/services/init-form";
-import { getCurrentClaims } from "@bn/auth";
+import { initFormSchema, formIdParamsSchema } from "@bn/validators";
+import {
+  initFormPendaftaranService,
+  initFormStepDataService,
+  type InitFormStepDataRPCResponse,
+} from "@/services/init-form";
 import { getTahunAjaranAktif } from "../master/tahun-ajaran";
-import { pickId } from "@bn/utils";
-import { getBiodataSiswaIdByFormId } from "@/services/form";
-import { getBiodataSiswaById } from "@/services/siswa";
-import { lookupLabelById, genderLabel } from "@bn/utils";
-import { getMasterLembaga, getMasterKelas } from "@bn/services";
+import { mapInitFormPayload } from "../../helpers/mappers";
+import { pickId, genderLabel } from "@bn/utils";
 
 export type InitFormPendaftaranResult =
   | { success: true; message: string; data: { id: string } }
   | { success: false; message: string };
+
+// Tipe data hasil kustomisasi di layer feature/UI (jenis_kelamin ter-format)
+export type InitFormStepData = Omit<InitFormStepDataRPCResponse, "jenis_kelamin"> & {
+  jenis_kelamin: string;
+};
+
+const STEP_INIT_FORM = 2;
 
 export async function executeInitFormPendaftaran(
   payload: Record<string, FormDataEntryValue>
@@ -25,67 +28,62 @@ export async function executeInitFormPendaftaran(
     return { success: false, message: "Akses tidak diizinkan." };
   }
 
-  const user = await getCurrentUser();
-  if (!user?.id) {
-    return { success: false, message: "Sesi pengguna tidak ditemukan, silakan login ulang." };
+  const parsed = initFormSchema.safeParse(mapInitFormPayload(payload));
+  if (!parsed.success) {
+    return {
+      success: false,
+      message: parsed.error.issues[0]?.message ?? "Data formulir tidak valid.",
+    };
   }
 
-  const mapped = mapInitFormPayload(payload);
-  const parsed = initFormSchema.safeParse(mapped);
-
-  if (!parsed.success) {
-    const firstError = parsed.error.issues[0]?.message ?? "Data formulir tidak valid.";
-    return { success: false, message: firstError };
+  const tahunAjaranId = await pickId(getTahunAjaranAktif());
+  if (!tahunAjaranId) {
+    return { success: false, message: "Tahun ajaran aktif tidak ditemukan." };
   }
 
   try {
-      const tahunAjaran = await getMasterTahunAjaran();
-      if (!tahunAjaran) {
-        return { success: false, message: "Tahun ajaran aktif tidak ditemukan." };
-      }
+    const pendaftaran = await initFormPendaftaranService({
+      nik: parsed.data.nik,
+      namaLengkap: parsed.data.namaLengkap,
+      gender: parsed.data.gender,
+      tempatLahir: parsed.data.tempatLahir,
+      tanggalLahir: parsed.data.tanggalLahir.toISOString().split("T")[0],
+      lembagaId: parsed.data.lembagaId,
+      kelasId: parsed.data.kelasId ?? null,
+      tahunAjaranId,
+      stepId: STEP_INIT_FORM,
+    });
 
-      const siswa = await upsertBiodataSiswa(user.id, parsed.data);
-
-      const pendaftaran = await insertFormPendaftaran({
-        pendaftarId: user.id,
-        biodataSiswaId: siswa.id,
-        tahunAjaranId: tahunAjaran.id,
-        stepId: 2,
-      });
-    
-
-    return { success: true, message: "Berhasil!", data: { id: pendaftaran.id } };
+    return {
+      success: true,
+      message: "Berhasil!",
+      data: { id: pendaftaran.form_id },
+    };
   } catch (error) {
     console.error("executeInitFormPendaftaran error:", error);
-    return { success: false, message: "Terjadi kesalahan pada server." };
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Terjadi kesalahan pada server.",
+    };
   }
 }
 
-export async function getInitFormStepData(formId: string): Promise<any|null> {
-  const user = await getCurrentClaims();
-  if (!user) return null;
+export async function getInitFormStepData(formId: string): Promise<InitFormStepData | null> {
+  // 1. Validasi parameter formId
+  const parsed = formIdParamsSchema.safeParse(formId);
+  if (!parsed.success) return null;
 
+  // 2. Ambil Tahun Ajaran Aktif
   const tahunAjaranId = await pickId(getTahunAjaranAktif());
   if (!tahunAjaranId) return null;
 
-  const siswaId = await getBiodataSiswaIdByFormId(formId, tahunAjaranId);
-  if (!siswaId) return null;
+  // 3. Panggil RPC Atomic (Ownership check via auth.uid() sudah ditangani di SQL)
+  const data = await initFormStepDataService(parsed.data, tahunAjaranId);
+  if (!data) return null;
 
-  const siswaData = await getBiodataSiswaById(siswaId);
-  if (!siswaData) return null;
-
-  const [lembagaOptions, kelasOptions] = await Promise.all([
-    getMasterLembaga(),
-    getMasterKelas(),
-  ]);
-
+  // 4. Format tampilan sederhana di UI level
   return {
-    nama_lengkap: siswaData.nama_lengkap,
-    nik: siswaData.nik,
-    jenis_kelamin: genderLabel(siswaData.jenis_kelamin),
-    tempat_lahir: siswaData.tempat_lahir,
-    tanggal_lahir: siswaData.tanggal_lahir,
-    lembaga_tujuan: lookupLabelById(lembagaOptions, siswaData.lembaga_id),
-    kelas: lookupLabelById(kelasOptions, siswaData.kelas_id),
+    ...data,
+    jenis_kelamin: genderLabel(data.jenis_kelamin),
   };
 }

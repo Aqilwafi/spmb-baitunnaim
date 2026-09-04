@@ -8,3 +8,4 @@ export * from './shared/core.types';
 export * from './shared/master.types';
 export * from './spmb/biodata-core.types';
 export * from './spmb/pendaftaran-core.types';
+export * from './shared/enum.types';

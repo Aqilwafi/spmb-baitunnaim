@@ -2,7 +2,7 @@
 
 import { getTahunAjaranAktif } from "@/features/master/tahun-ajaran";
 import { getLembagaOptions, getKelasOptions } from "@/features/master/options";
-import { getFormCardsData } from "@/features/form/card";
+import { formCardsServices } from "@/services/cards";
 import type { FormCardsData } from "@/types/form.types";
 import type { MasterData, MasterTahunAjaran } from "@bn/types";
 
@@ -16,9 +16,6 @@ export interface DashboardSummary {
 
 export async function getDashboardSummary(): Promise<DashboardSummary | null> {
 
-    // no auth pos, layout handled
-    // no input, no sanitasi.
-
     // bisnis start
     const [tahunAjaran, lembagaOptions, kelasOptions] = await Promise.all([
         getTahunAjaranAktif(),
@@ -31,7 +28,7 @@ export async function getDashboardSummary(): Promise<DashboardSummary | null> {
     if (!tahunAjaran) return null;
 
     // cards bergantung pada tahunAjaran.id, sehingga tidak bisa digabung ke Promise.all di atas
-    const cards = await getFormCardsData(tahunAjaran.id);
+    const cards = await formCardsServices(tahunAjaran.id);
 
     return {
         tahunAjaran,

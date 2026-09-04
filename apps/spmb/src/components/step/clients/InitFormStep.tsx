@@ -2,17 +2,8 @@
 "use client";
 
 import { CheckCircle2, User, IdCard, MapPin, Calendar, School, GraduationCap, ShieldCheck } from "lucide-react";
-import { formatDateId } from "@bn/utils"; // sesuaikan path
-
-export interface InitFormStepData {
-  nama_lengkap: string;
-  nik: string;
-  jenis_kelamin: string;
-  tempat_lahir: string;
-  tanggal_lahir: string;
-  lembaga_tujuan: string;
-  kelas: string;
-}
+import { formatDateId } from "@bn/utils";
+import type { InitFormStepData } from "@/features/form/init";
 
 interface InitFormStepProps {
   data: InitFormStepData;
@@ -87,7 +78,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
               <School size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Lembaga Tujuan</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.lembaga_tujuan}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.lembaga_tujuan ?? "-"}</p>
               </div>
             </div>
 
@@ -95,7 +86,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
               <GraduationCap size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Kelas</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.kelas}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.kelas ?? "-"}</p>
               </div>
             </div>
           </div>

@@ -19,6 +19,40 @@ export async function getFormPendaftaran(): Promise<FormPendaftaran[]> {
   return data;
 }
 
+// untuk cek guard id dan owner
+export async function getFormPendaftaranByPendaftarId(formId: string): Promise<FormPendaftaran|null> {
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('form_pendaftaran')
+    .select('*')
+    .is('deleted_at', null)
+    .eq('id', formId)
+    .single();
+
+  if (error) return null;
+
+  return data;
+}
+
+// Dipakai oleh detail pendaftaran
+export async function getFormFormIdAndPendaftaranByPendaftarIdAndTahunAjaranId(pendaftarId: string, formId: string, tahunAjaranId: number): Promise<FormPendaftaran|null> {
+
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from('form_pendaftaran')
+    .select('*')
+    .is('deleted_at', null)
+    .eq('id', formId) 
+    .eq('pendaftar_id', pendaftarId)
+    .eq('tahun_ajaran_id', tahunAjaranId)
+    .single();
+
+  if (error) null;
+
+  return data;
+}
+
 // ambil semua form untuk pendaftar berdasarkan tahun ajaran
 export async function getFormPendaftaranBySiswaIds(siswaIds: string[], tahunAjaranId: number): Promise<FormPendaftaran[]> {
 
@@ -35,34 +69,7 @@ export async function getFormPendaftaranBySiswaIds(siswaIds: string[], tahunAjar
   return data;
 }
 
-export async function getFormPendaftaranByPendaftarId(pendaftarId: string): Promise<FormPendaftaran[]> {
 
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('form_pendaftaran')
-    .select('*')
-    .is('deleted_at', null)
-    .eq('pendaftar_id', pendaftarId);
-
-  if (error) return [];
-
-  return data;
-}
-
-export async function getFormPendaftaranByPendaftarIdAndTahunAjaranId(pendaftarId: string, tahunAjaranId: number): Promise<FormPendaftaran[]> {
-
-  const supabase = await createSupabaseServer();
-  const { data, error } = await supabase
-    .from('form_pendaftaran')
-    .select('*')
-    .is('deleted_at', null)
-    .eq('pendaftar_id', pendaftarId)
-    .eq('tahun_ajaran_id', tahunAjaranId);
-
-  if (error) return [];
-
-  return data;
-}
 
 export async function getFormPendaftaranByTahunAjaranId(tahunAjaranId: number): Promise<FormPendaftaran[]> {
 

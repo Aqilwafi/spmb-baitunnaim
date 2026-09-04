@@ -1,8 +1,6 @@
 // features/form/detail.ts
 
-import { getDokumenByFormId } from "@bn/services";
-import { getPartFormPendaftaranByFormIdAndTahunAjaranId } from "@/services/form";
-import { getNamaLengkapById } from "@/services/siswa";
+import { formDetailService } from "@/services/detail";
 import type { DetailPendaftaran } from "@/types/step.types";
 import { getCurrentClaims } from "@bn/auth";
 import { pickId } from "@bn/utils";
@@ -21,17 +19,5 @@ export async function getDetailPendaftaran(id: string): Promise<DetailPendaftara
     const parsed = formIdParamsSchema.safeParse(id);
     if (!parsed.success) return null;
 
-    const formId = parsed.data;
-
-    const formData = await getPartFormPendaftaranByFormIdAndTahunAjaranId(formId, user.sub, tahunAjaranId);
-    if (!formData) return null;
-
-    const siswaData = await getNamaLengkapById(formData.biodata_siswa_id);
-    if (!siswaData) return null;
-
-    return  {
-        ...formData,
-        ...siswaData,
-        pendaftar_id: user.id,
-    };
+    return await formDetailService(parsed.data, tahunAjaranId);
 }

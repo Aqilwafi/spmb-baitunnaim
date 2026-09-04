@@ -1037,6 +1037,56 @@ export type Database = {
         Returns: boolean
       }
       fn_is_superadmin: { Args: never; Returns: boolean }
+      fn_rpc_get_form_cards: {
+        Args: { p_tahun_ajaran_id: number }
+        Returns: {
+          admission_status: Database["public"]["Enums"]["admission_status_enum"]
+          id: string
+          kelas_label: string
+          lembaga_label: string
+          nama_lengkap: string
+          registration_status: Database["public"]["Enums"]["registration_form_status_enum"]
+          step_label: string
+          updated_at: string
+        }[]
+      }
+      fn_rpc_get_form_detail: {
+        Args: { p_form_id: string; p_tahun_ajaran_id: number }
+        Returns: {
+          admission_status: Database["public"]["Enums"]["admission_status_enum"]
+          biodata_siswa_id: string
+          id: string
+          nama_lengkap: string
+          pendaftar_id: string
+          step_id: number
+        }[]
+      }
+      fn_rpc_get_init_form_step_data: {
+        Args: { p_form_id: string; p_tahun_ajaran_id: number }
+        Returns: {
+          jenis_kelamin: Database["public"]["Enums"]["gender_enum"]
+          kelas: string
+          lembaga_tujuan: string
+          nama_lengkap: string
+          nik: string
+          tanggal_lahir: string
+          tempat_lahir: string
+        }[]
+      }
+      fn_rpc_init_form: {
+        Args: {
+          p_gender: Database["public"]["Enums"]["gender_enum"]
+          p_kelas_id?: number
+          p_lembaga_id: number
+          p_nama_lengkap: string
+          p_nik: unknown
+          p_step_id: number
+          p_tahun_ajaran_id: number
+          p_tanggal_lahir: string
+          p_tempat_lahir: string
+        }
+        Returns: Json
+      }
       fn_rpc_is_guardian_required: {
         Args: { p_biodata_siswa_id: string }
         Returns: boolean

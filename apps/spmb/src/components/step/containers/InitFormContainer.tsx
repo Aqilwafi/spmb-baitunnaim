@@ -1,7 +1,6 @@
 // components/step/containers/InitFormContainer.tsx
-
 import type { StepContainerProps } from "@/types/step.types";
-import { getInitFormStepData } from "@/features/form/init"; // sesuaikan path
+import { getInitFormStepData } from "@/features/form/init";
 import InitFormStep from "@/components/step/clients/InitFormStep";
 
 export default async function InitFormContainer({
@@ -9,7 +8,7 @@ export default async function InitFormContainer({
   status,
 }: StepContainerProps) {
   if (status !== "complete") {
-    return null; // step 1 selalu complete atau locked, tidak ada state "active" (form kosong) untuk step ini
+    return null;
   }
 
   const data = await getInitFormStepData(pendaftaran_id);
