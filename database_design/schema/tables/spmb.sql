@@ -152,7 +152,7 @@ create table if not exists public.pembayaran (
     bank_tujuan           varchar(100),
     nama_pengirim         varchar(150),        -- diisi admin berdasar bukti transfer
     bukti_pembayaran_url  text not null,
-    payment_status         payment_status_enum not null default 'SUBMITTED',
+    payment_status         payment_status_e num not null default 'SUBMITTED',
     catatan_verifikasi     text,
     verified_by            uuid references public.profiles(id),
     verified_at            timestamptz,

@@ -6,7 +6,7 @@ create or replace function public.fn_rpc_init_form(
   p_tanggal_lahir   date,
   p_lembaga_id      smallint,
   p_tahun_ajaran_id smallint,
-  p_step_id         smallint,
+  p_step_id         smallint default 1,
   p_kelas_id        smallint default null
 )
 returns jsonb
@@ -18,17 +18,27 @@ declare
   v_owner_user_id uuid := auth.uid();
   v_siswa_id      uuid;
   v_form_id       uuid;
+  v_next_step     smallint;
 begin
   if v_owner_user_id is null then
     raise exception 'Unauthorized: user tidak terautentikasi'
       using errcode = '28000';
   end if;
 
+  -- 1. Validasi step & aturan bisnis linear DULU, sebelum insert apapun
+  v_next_step := public.fn_assert_linear_step(
+    p_form_id         => null,
+    p_current_step    => p_step_id,
+    p_tahun_ajaran_id => p_tahun_ajaran_id
+  );
+
+  -- 2. Baru cek NIK
   if exists (select 1 from public.biodata_siswa where nik = p_nik) then
     raise exception 'NIK sudah terdaftar dalam sistem'
       using errcode = '23505';
   end if;
 
+  -- 3. Insert biodata_siswa
   insert into public.biodata_siswa (
     owner_user_id, nik, nama_lengkap, jenis_kelamin,
     tempat_lahir, tanggal_lahir, lembaga_id, kelas_id, catatan
@@ -39,10 +49,11 @@ begin
   )
   returning id into v_siswa_id;
 
+  -- 4. Insert form_pendaftaran, step_id pakai hasil dari helper (bukan p_step_id mentah)
   insert into public.form_pendaftaran (
     biodata_siswa_id, pendaftar_id, tahun_ajaran_id, step_id
   ) values (
-    v_siswa_id, v_owner_user_id, p_tahun_ajaran_id, p_step_id
+    v_siswa_id, v_owner_user_id, p_tahun_ajaran_id, v_next_step
   )
   returning id into v_form_id;
 
