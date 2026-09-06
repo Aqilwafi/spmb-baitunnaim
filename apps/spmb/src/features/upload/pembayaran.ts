@@ -1,63 +1,21 @@
-import {
-  getPembayaranByFormId,
-  getSignedBuktiPembayaranUrl,
-  createBuktiPembayaranSignedUrl,
-} from "@bn/services";
-import type { PembayaranStepData } from "@/components/step/clients/PembayaranStep";
-import { requestUploadMetadataSchema } from "@bn/validators";
-import { getCurrentClaims } from "@bn/auth";
+import { submitPembayaran } from "@/services/pembayaran";
 
-export async function getPembayaranStepData(
-  formId: string
-): Promise<PembayaranStepData | null> {
-  const pembayaran = await getPembayaranByFormId(formId);
-  if (!pembayaran) return null;
-
-  const signedUrl = await getSignedBuktiPembayaranUrl(
-    pembayaran.bukti_pembayaran_url
-  );
-  if (!signedUrl) return null;
-
-  return {
-    bukti_bayar_url: signedUrl,
-    uploaded_at: pembayaran.tanggal_transfer ?? pembayaran.created_at,
-  };
+interface SubmitPembayaranFeaturesInput {
+  formId: string;
+  filePath: string;
 }
 
-export async function createPembayaranSignedUrl(body: unknown) {
-  // 1. Authenticated User Check
-  const user = await getCurrentClaims();
-  const userId = user?.sub || user?.id;
-
-  if (!user || !userId) {
-    return { error: "Unauthorized: Silakan login terlebih dahulu", status: 401 };
-  }
-
-  // 2. Validasi Payload via Zod Schema
-  const validation = requestUploadMetadataSchema.safeParse(body);
-  if (!validation.success) {
+export async function submitPembayaranFeatures(
+  input: SubmitPembayaranFeaturesInput,
+): Promise<{ success: boolean; nextStep?: number; error?: string }> {
+  try {
+    const step_id = 2;
+    const result = await submitPembayaran({ ...input, stepId: step_id });
+    return { success: true, nextStep: result.nextStep };
+  } catch (err) {
     return {
-      error: validation.error.issues[0]?.message || "Bad Request",
-      status: 400,
+      success: false,
+      error: err instanceof Error ? err.message : "Gagal mengirim bukti pembayaran.",
     };
   }
-
-  // 3. Generate Path & Panggil Service
-  const { fileName } = validation.data;
-  const filePath = `bukti-pembayaran/${userId}/${Date.now()}-${fileName}`;
-
-  const result = await createBuktiPembayaranSignedUrl(filePath);
-
-  // 4. Handling Error dari Service Layer
-  if (!result || "error" in result) {
-    return {
-      error: result?.error || "Gagal membuat URL upload",
-      status: result?.status || 500,
-    };
-  }
-
-  return {
-    data: result.data,
-    status: 200,
-  };
 }

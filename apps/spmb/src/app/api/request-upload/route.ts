@@ -15,6 +15,8 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     const validation = requestUploadMetadataSchema.safeParse(body)
+    console.log('request-upload validation:', validation)
+    console.log('request-upload body:', body)
 
     if (!validation.success) {
       return NextResponse.json(

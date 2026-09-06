@@ -17,7 +17,7 @@ interface PembayaranStepProps {
   user_id: string;
   status: "active" | "complete";
   data: PembayaranStepData | null;
-  step_id: number; // step_id AKTIF saat ini, dikirim ke RPC sebagai p_step_id (klaim, tetap divalidasi di server)
+  step_id?: number; // step_id AKTIF saat ini, dikirim ke RPC sebagai p_step_id (klaim, tetap divalidasi di server)
 }
 
 export default function PembayaranStep({

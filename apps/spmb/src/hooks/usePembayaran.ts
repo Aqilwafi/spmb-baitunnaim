@@ -3,7 +3,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { createSupabaseBrowser } from "@bn/supabase";
+import { createSupabaseBrowser } from "@bn/supabase/browser";
 import { submitPembayaranAction } from "@/actions/pembayaran-actions";
 
 type UploadStage =
@@ -16,7 +16,7 @@ type UploadStage =
 
 interface UseUploadPembayaranParams {
   formId: string;
-  stepId: number;
+  stepId?: number;
 }
 
 interface UseUploadPembayaranState {
@@ -43,9 +43,13 @@ export function useUploadPembayaran({ formId, stepId }: UseUploadPembayaranParam
       try {
         // 1. Minta signed upload token
         const tokenRes = await fetch("/api/request-upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileName: file.name }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                fileName: file.name,
+                fileType: file.type,
+                fileSize: file.size,
+            }),
         });
 
         const tokenJson = await tokenRes.json();
@@ -74,7 +78,7 @@ export function useUploadPembayaran({ formId, stepId }: UseUploadPembayaranParam
         const result = await submitPembayaranAction({
           formId,
           filePath: path,
-          stepId,
+          
         });
 
         if (!result.success) {

@@ -11,6 +11,21 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./browser": {
+      "types": "./src/browser.ts",
+      "import": "./src/browser.ts",
+      "default": "./src/browser.ts"
+    },
+    "./server": {
+      "types": "./src/server.ts",
+      "import": "./src/server.ts",
+      "default": "./src/server.ts"
+    },
+    "./callback": {
+      "types": "./src/callback.ts",
+      "import": "./src/callback.ts",
+      "default": "./src/callback.ts"
+    },
     "./admin": {
       "types": "./src/admin/index.ts",
       "import": "./src/admin/index.ts",
