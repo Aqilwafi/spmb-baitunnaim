@@ -1015,6 +1015,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      fn_assert_linear_step: {
+        Args: {
+          p_current_step: number
+          p_form_id: string
+          p_tahun_ajaran_id?: number
+        }
+        Returns: number
+      }
       fn_can_manage_publikasi: { Args: never; Returns: boolean }
       fn_can_manage_spmb: { Args: never; Returns: boolean }
       fn_can_manage_user_role: {
@@ -1080,7 +1088,7 @@ export type Database = {
           p_lembaga_id: number
           p_nama_lengkap: string
           p_nik: unknown
-          p_step_id: number
+          p_step_id?: number
           p_tahun_ajaran_id: number
           p_tanggal_lahir: string
           p_tempat_lahir: string
@@ -1090,6 +1098,10 @@ export type Database = {
       fn_rpc_is_guardian_required: {
         Args: { p_biodata_siswa_id: string }
         Returns: boolean
+      }
+      fn_rpc_submit_pembayaran: {
+        Args: { p_file_path: string; p_form_id: string; p_step_id: number }
+        Returns: Json
       }
       fn_validate_guardian_requirement: {
         Args: { p_biodata_siswa_id: string }

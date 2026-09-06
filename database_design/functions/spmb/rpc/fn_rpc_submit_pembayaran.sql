@@ -24,7 +24,7 @@ begin
 
   select exists (
     select 1 from storage.objects
-    where bucket_id = 'pembayaran-private'
+    where bucket_id = 'SPMB'
       and name = p_file_path
       and owner = v_owner_user_id
   ) into v_file_exists;

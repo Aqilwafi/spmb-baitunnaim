@@ -19,7 +19,7 @@ export type InitFormStepData = Omit<InitFormStepDataRPCResponse, "jenis_kelamin"
   jenis_kelamin: string;
 };
 
-const STEP_INIT_FORM = 2;
+const STEP_INIT_FORM = 1;
 
 export async function executeInitFormPendaftaran(
   payload: Record<string, FormDataEntryValue>

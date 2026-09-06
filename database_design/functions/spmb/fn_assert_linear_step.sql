@@ -71,7 +71,7 @@ begin
 
   select id into v_next_step
   from public.master_step
-  where step_order > v_current_order and deleted_at is null
+  where step_order > v_current_order and is_active = true
   order by step_order asc
   limit 1;
 

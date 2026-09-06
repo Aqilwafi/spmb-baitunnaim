@@ -1,23 +1,46 @@
+// apps/spmb/src/actions/pembayaran-actions.ts
+
 "use server";
 
 import { revalidatePath } from "next/cache";
-import {
-  executeInitFormPendaftaran,
-  type InitFormPendaftaranResult,
-} from "@/features/form/init";
+import { submitPembayaran } from "@/services/pembayaran";
+import type { ActionResponse } from "@bn/types";
 
-export async function PembayaranAction(
-  _prevState: any,
-  formData: FormData
-): Promise<InitFormPendaftaranResult> {
-  const payload = Object.fromEntries(formData);
+interface SubmitPembayaranActionInput {
+  formId: string;
+  filePath: string;
+  stepId: number;
+}
 
-  const result = await executeInitFormPendaftaran(payload);
+export interface SubmitPembayaranActionData {
+  nextStep: number;
+}
 
-  if (!result.success) {
-    return result;
+export async function submitPembayaranAction(
+  input: SubmitPembayaranActionInput
+): Promise<ActionResponse<SubmitPembayaranActionData>> {
+  try {
+    const result = await submitPembayaran({
+      formId: input.formId,
+      filePath: input.filePath,
+      stepId: input.stepId,
+    });
+
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      message: "Bukti pembayaran berhasil dikirim.",
+      data: { nextStep: result.nextStep },
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Gagal mengirim bukti pembayaran.",
+      error: {
+        code: "SUBMIT_PEMBAYARAN_FAILED",
+        details: err instanceof Error ? err.message : err,
+      },
+    };
   }
-
-  revalidatePath("/dashboard");
-  return result;
 }

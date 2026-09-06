@@ -2,9 +2,10 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck } from "lucide-react";
+import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck, AlertCircle } from "lucide-react";
 import { Button } from "@bn/ui";
-import { formatDateId } from "@bn/utils"; // sesuaikan path
+import { formatDateId } from "@bn/utils";
+import { useUploadPembayaran } from "@/hooks/usePembayaran";
 
 export interface PembayaranStepData {
   bukti_bayar_url: string;
@@ -16,27 +17,31 @@ interface PembayaranStepProps {
   user_id: string;
   status: "active" | "complete";
   data: PembayaranStepData | null;
+  step_id: number; // step_id AKTIF saat ini, dikirim ke RPC sebagai p_step_id (klaim, tetap divalidasi di server)
 }
 
 export default function PembayaranStep({
   pendaftaran_id,
-  user_id,
   status,
   data,
+  step_id,
 }: PembayaranStepProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const { upload, isLoading, error, stage } = useUploadPembayaran({
+    formId: pendaftaran_id,
+    stepId: step_id,
+  });
 
-  // TODO: ganti dengan upload asli ke Supabase Storage
   const handleUpload = async () => {
     if (!file) return;
-    setUploading(true);
-
-    // Dummy delay, simulasi upload
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    console.log("dummy upload:", { pendaftaran_id, user_id, file: file.name });
-    setUploading(false);
+    try {
+      await upload(file);
+      // Tidak perlu manual redirect/set state di sini:
+      // server action sudah revalidatePath("/dashboard"),
+      // Next.js akan re-render server component dengan status "complete" otomatis.
+    } catch {
+      // error sudah ditangani & disimpan di state hook (lihat `error` di bawah)
+    }
   };
 
   if (status === "complete" && data) {
@@ -120,12 +125,20 @@ export default function PembayaranStep({
             type="file"
             accept="image/*,application/pdf"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            className="cursor-pointer text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            disabled={isLoading}
+            className="cursor-pointer text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
           />
-          <Button onClick={handleUpload} disabled={!file || uploading} className="rounded-xl">
-            {uploading ? "Mengunggah..." : "Unggah Bukti Bayar"}
+          <Button onClick={handleUpload} disabled={!file || isLoading} className="rounded-xl">
+            {isLoading ? uploadingLabel(stage) : "Unggah Bukti Bayar"}
           </Button>
         </div>
+
+        {error && (
+          <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-100 rounded-[1.5rem] mt-4">
+            <AlertCircle className="text-red-600 mt-0.5 shrink-0" size={18} />
+            <p className="text-[11px] sm:text-xs text-red-800 leading-relaxed font-medium">{error}</p>
+          </div>
+        )}
 
         <div className="flex items-start gap-3 p-4 bg-amber-50/50 border border-amber-100 rounded-[1.5rem] mt-6">
           <ShieldCheck className="text-amber-600 mt-0.5 shrink-0" size={18} />
@@ -136,4 +149,17 @@ export default function PembayaranStep({
       </div>
     </div>
   );
+}
+
+function uploadingLabel(stage: string): string {
+  switch (stage) {
+    case "requesting-token":
+      return "Menyiapkan unggahan...";
+    case "uploading":
+      return "Mengunggah berkas...";
+    case "submitting":
+      return "Menyimpan data...";
+    default:
+      return "Memproses...";
+  }
 }
