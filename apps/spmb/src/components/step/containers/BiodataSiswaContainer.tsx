@@ -1,6 +1,10 @@
 import type { StepContainerProps } from "@/types/step.types";
 import BiodataSiswaDetailStep from "@/components/step/clients/BiodataSiswaStep";
+import { getMasterData } from "@/features/form/biodata-siswa-detail";
+
 //import { getBiodataSiswaDetailData } from "@/features/pendaftaran/biodata-detail";
+
+
 
 export default async function BiodataSiswaContainer({
   pendaftaran_id,
@@ -10,6 +14,7 @@ export default async function BiodataSiswaContainer({
   if (status === "locked") {
     return null;
   }
+  const masterData = await getMasterData();
 
   const data = status === "complete" 
     ? null
@@ -21,6 +26,8 @@ export default async function BiodataSiswaContainer({
       user_id={user_id}
       status={status}
       data={data}
+      statusRumahOptions={masterData.statusRumahOptions}
+      tinggalBersamaOptions={masterData.tinggalBersamaOptions}
     />
   );
 }

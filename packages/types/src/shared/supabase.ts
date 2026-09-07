@@ -1099,6 +1099,24 @@ export type Database = {
         Args: { p_biodata_siswa_id: string }
         Returns: boolean
       }
+      fn_rpc_submit_biodata_siswa_detail: {
+        Args: {
+          p_agama: Database["public"]["Enums"]["agama_enum"]
+          p_alamat: string
+          p_anak_ke: number
+          p_cita_cita: string
+          p_form_id: string
+          p_hobi: string
+          p_jumlah_saudara: number
+          p_nisn: unknown
+          p_no_kk: unknown
+          p_penyakit?: string
+          p_status_rumah_id: number
+          p_step_id?: number
+          p_tinggal_bersama_id: number
+        }
+        Returns: Json
+      }
       fn_rpc_submit_pembayaran: {
         Args: { p_file_path: string; p_form_id: string; p_step_id: number }
         Returns: Json

@@ -29,9 +29,10 @@ export const penyakitField = z
   .string()
   .trim()
   .max(255, "Penyakit terlalu panjang")
-  .regex(/^[a-zA-Z0-9\s.,-]+$/, "Penyakit hanya boleh berisi huruf")
+  .regex(/^[a-zA-Z\s]*$/, "Penyakit hanya boleh berisi huruf dan spasi")
   .optional()
-  .nullable();
+  .nullable()
+  .transform((val) => (val === "" ? null : val)); // <--- Mengubah "" menjadi null
 
 export const pendidikanField = z.enum(
   ["TIDAK_SEKOLAH", "SD", "SMP", "SMA", "D3", "D4", "S1", "S2", "S3"],

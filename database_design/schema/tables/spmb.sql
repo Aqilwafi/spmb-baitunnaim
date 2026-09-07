@@ -31,7 +31,7 @@ create table if not exists public.biodata_siswa_detail (
     anak_ke             int not null check (anak_ke >= 1),
     jumlah_saudara      int not null check (jumlah_saudara >= 0),
     hobi                varchar(100) not null,
-    cita-cita           varchar(100) not null,
+    cita_cita           varchar(100) not null,
     penyakit            text,
     alamat              text not null,                                  -- alamat siswa, boleh beda dgn alamat keluarga
     tinggal_bersama_id  smallint not null references public.master_tinggal_bersama(id),
