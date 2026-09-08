@@ -5,8 +5,6 @@ create or replace function public.fn_rpc_init_form(
   p_tempat_lahir    varchar(255),
   p_tanggal_lahir   date,
   p_lembaga_id      smallint,
-  p_tahun_ajaran_id smallint,
-  p_step_id         smallint default 1,
   p_kelas_id        smallint default null
 )
 returns jsonb
@@ -19,6 +17,7 @@ declare
   v_siswa_id      uuid;
   v_form_id       uuid;
   v_next_step     smallint;
+  v_ta_aktif_id   smallint;
 begin
   if v_owner_user_id is null then
     raise exception 'Unauthorized: user tidak terautentikasi'
@@ -27,9 +26,7 @@ begin
 
   -- 1. Validasi step & aturan bisnis linear DULU, sebelum insert apapun
   v_next_step := public.fn_assert_linear_step(
-    p_form_id         => null,
-    p_current_step    => p_step_id,
-    p_tahun_ajaran_id => p_tahun_ajaran_id
+    p_form_id         => null
   );
 
   -- 2. Baru cek NIK
@@ -37,6 +34,10 @@ begin
     raise exception 'NIK sudah terdaftar dalam sistem'
       using errcode = '23505';
   end if;
+
+  select id into v_ta_aktif_id
+  from public.master_tahun_ajaran
+  where is_active = true;
 
   -- 3. Insert biodata_siswa
   insert into public.biodata_siswa (
@@ -53,13 +54,14 @@ begin
   insert into public.form_pendaftaran (
     biodata_siswa_id, pendaftar_id, tahun_ajaran_id, step_id
   ) values (
-    v_siswa_id, v_owner_user_id, p_tahun_ajaran_id, v_next_step
+    v_siswa_id, v_owner_user_id, v_ta_aktif_id, v_next_step
   )
   returning id into v_form_id;
 
   return jsonb_build_object(
-    'form_id', v_form_id,
-    'siswa_id', v_siswa_id
+    'success', true,
+    'form_id', v_form_id,        -- Sangat berguna di Step 1 untuk disimpan frontend
+    'next_step_id', v_next_step -- Untuk tahu arah redirect berikutnya
   );
 
 exception

@@ -10,7 +10,6 @@ create or replace function public.fn_rpc_submit_biodata_siswa_detail(
   p_alamat             text,
   p_tinggal_bersama_id smallint,
   p_status_rumah_id    smallint,
-  p_step_id            smallint default 3,
   p_penyakit           text default null
 )
 returns jsonb
@@ -27,10 +26,13 @@ begin
     raise exception 'Unauthorized' using errcode = '28000';
   end if;
 
+  if p_form_id is null then
+    raise exception 'Form ID wajib diisi.' using errcode = 'BN400';
+  end if;
+
   -- 1. Validasi step & ownership form LEWAT HELPER (bukan manual)
   v_next_step := public.fn_assert_linear_step(
-    p_form_id      => p_form_id,
-    p_current_step => p_step_id
+    p_form_id      => p_form_id
   );
 
   -- 2. Ambil biodata_siswa_id dari form (sudah pasti valid & milik user ini, terverifikasi oleh helper di atas)
@@ -66,7 +68,8 @@ begin
 
   return jsonb_build_object(
     'success', true,
-    'next_step', v_next_step
+    'form_id', p_form_id,        -- Sangat berguna di Step 1 untuk disimpan frontend
+    'next_step_id', v_next_step -- Untuk tahu arah redirect berikutnya
   );
 
 exception
