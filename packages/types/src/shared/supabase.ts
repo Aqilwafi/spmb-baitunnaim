@@ -1045,6 +1045,22 @@ export type Database = {
         Returns: boolean
       }
       fn_is_superadmin: { Args: never; Returns: boolean }
+      fn_rpc_get_biodata_siswa_detail: {
+        Args: { p_form_id: string }
+        Returns: {
+          agama: Database["public"]["Enums"]["agama_enum"]
+          alamat: string
+          anak_ke: number
+          cita_cita: string
+          hobi: string
+          jumlah_saudara: number
+          nisn: unknown
+          no_kk: unknown
+          penyakit: string
+          status_rumah_id: number
+          tinggal_bersama_id: number
+        }[]
+      }
       fn_rpc_get_form_cards: {
         Args: { p_tahun_ajaran_id: number }
         Returns: {

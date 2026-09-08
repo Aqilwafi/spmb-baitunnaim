@@ -1,10 +1,37 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
-import type { EnumAgama } from "@bn/types";
+import type { EnumAgama, BiodataSiswaDetail } from "@bn/types";
+
+// Extends tipe BiodataSiswaDetail dengan NISN (diambil dari tabel biodata_siswa)
+export type BiodataSiswaDetailResultData = Pick<
+  BiodataSiswaDetail,
+  | "no_kk"
+  | "agama"
+  | "anak_ke"
+  | "jumlah_saudara"
+  | "hobi"
+  | "cita_cita"
+  | "penyakit"
+  | "alamat"
+  | "tinggal_bersama_id"
+  | "status_rumah_id"
+> & {
+  nisn: string | null;
+};
+
+export interface GetBiodataSiswaDetailParams {
+  formId: string;
+}
+
+export interface GetBiodataSiswaDetailResult {
+  success: boolean;
+  data?: BiodataSiswaDetailResultData | null;
+  message?: string;
+  code?: string;
+}
 
 export interface SubmitBiodataSiswaDetailParams {
   formId: string;
-  // stepId dihapus dari params
   nisn: string;
   noKk: string;
   agama: EnumAgama;
@@ -20,9 +47,43 @@ export interface SubmitBiodataSiswaDetailParams {
 
 export interface SubmitBiodataSiswaDetailResult {
   success: boolean;
-  nextStep: number;
+  nextStep?: number;
+  message?: string;
+  code?: string;
 }
 
+/**
+ * Mengambil detail biodata siswa berdasarkan formId
+ */
+export async function getBiodataSiswaDetail(
+  params: GetBiodataSiswaDetailParams
+): Promise<GetBiodataSiswaDetailResult> {
+  const supabase = await createSupabaseServer();
+
+  const { data, error } = await supabase.rpc("fn_rpc_get_biodata_siswa_detail", {
+    p_form_id: params.formId,
+  });
+
+  if (error) {
+    return {
+      success: false,
+      message: error.message,
+      code: error.code,
+    };
+  }
+
+  // Karena RPC RETURNS TABLE, data yang dikembalikan berupa array [row]
+  const result = (data as BiodataSiswaDetailResultData[])?.[0] ?? null;
+
+  return {
+    success: true,
+    data: result,
+  };
+}
+
+/**
+ * Menyimpan / memperbarui detail biodata siswa
+ */
 export async function submitBiodataSiswaDetail(
   params: SubmitBiodataSiswaDetailParams
 ): Promise<SubmitBiodataSiswaDetailResult> {
@@ -41,11 +102,15 @@ export async function submitBiodataSiswaDetail(
     p_alamat: params.alamat,
     p_tinggal_bersama_id: params.tinggalBersamaId,
     p_status_rumah_id: params.statusRumahId,
-    p_penyakit: params.penyakit ?? null, // Wajib null agar key p_penyakit tidak di-omit PostgREST
+    p_penyakit: params.penyakit ?? null,
   } as any);
 
   if (error) {
-    throw new Error(error.message);
+    return {
+      success: false,
+      message: error.message,
+      code: error.code,
+    };
   }
 
   const result = data as { success: boolean; next_step: number };

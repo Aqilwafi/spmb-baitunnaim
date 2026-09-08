@@ -2,7 +2,7 @@ import type { StepContainerProps } from "@/types/step.types";
 import BiodataSiswaDetailStep from "@/components/step/clients/BiodataSiswaStep";
 import { getMasterData } from "@/features/form/biodata-siswa-detail";
 
-//import { getBiodataSiswaDetailData } from "@/features/pendaftaran/biodata-detail";
+import { getBiodataSiswaDetail } from "@/services/biodata-siswa-detail";
 
 
 
@@ -17,15 +17,17 @@ export default async function BiodataSiswaContainer({
   const masterData = await getMasterData();
 
   const data = status === "complete" 
-    ? null
+    ? await getBiodataSiswaDetail({ formId: pendaftaran_id })
     : null;
+
+  console.log("BiodataSiswaContainer data:", data?.data);
 
   return (
     <BiodataSiswaDetailStep
       pendaftaran_id={pendaftaran_id}
       user_id={user_id}
       status={status}
-      data={data}
+      data={data?.data ?? null}
       statusRumahOptions={masterData.statusRumahOptions}
       tinggalBersamaOptions={masterData.tinggalBersamaOptions}
     />

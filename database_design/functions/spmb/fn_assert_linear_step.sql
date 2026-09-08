@@ -65,7 +65,7 @@ begin
 
     if v_db_step <> p_current_step then
       raise exception 'Langkah pendaftaran tidak sesuai. Anda berada di step %', v_db_step
-        using errcode = '40001';
+        using errcode = 'BN406';
     end if;
   end if;
 

@@ -6,6 +6,7 @@ import { CheckCircle2, UserCheck, ShieldCheck, FileText, Home, HeartHandshake, A
 import { Button, Radio } from "@bn/ui";
 import { submitBiodataSiswaDetailAction } from "@/actions/biodata-siswa-detail.actions";
 import type { MasterData } from "@bn/types";
+import type { BiodataSiswaDetailResultData } from "@/services/biodata-siswa-detail";
 
 export interface BiodataSiswaDetailData {
   nisn: string;
@@ -25,7 +26,7 @@ interface BiodataSiswaDetailStepProps {
   pendaftaran_id: string;
   user_id: string;
   status: "active" | "complete";
-  data: BiodataSiswaDetailData | null;
+  data: BiodataSiswaDetailResultData | null;
   statusRumahOptions: MasterData[];
   tinggalBersamaOptions: MasterData[];
 }
@@ -393,7 +394,7 @@ export default function BiodataSiswaDetailStep({
 
           <Button 
             type="submit" 
-            disabled={isPending || !isFormValid} 
+            //disabled={isPending || !isFormValid} sengaja aku matikan dulu untuk tes apakah masih loop
             className="rounded-xl w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending ? "Menyimpan..." : "Simpan Biodata Detail"}

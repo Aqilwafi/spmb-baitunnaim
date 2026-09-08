@@ -28,7 +28,7 @@ export async function submitBiodataSiswaDetailAction(
     return {
       success: true,
       message: "Biodata siswa detail berhasil disimpan.",
-      data: { nextStep: result.nextStep },
+      data: { nextStep: result.nextStep ?? 0},
     };
   } catch (err) {
     return {
