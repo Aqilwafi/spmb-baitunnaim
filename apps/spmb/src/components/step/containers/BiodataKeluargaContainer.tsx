@@ -1,4 +1,5 @@
 import type { StepContainerProps } from "@/types/step.types";
+import { EnumRelasiKeluarga } from "@bn/types";
 import BiodataKeluargaStep from "@/components/step/clients/BiodataKeluargaStep";
 // import { getBiodataKeluargaByRelation, getWaliRequirement } from "@/features/pendaftaran/biodata-keluarga";
 

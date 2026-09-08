@@ -24,8 +24,10 @@ export function mapToMasterData<T extends BasicMasterItem>(data: T[]): MasterDat
 export function mapStepOptions(data: MasterStep[]): MasterData[] {
   return data.map((step) => ({
     value: step.id,
-    label: step.label ?? step.code,
+    id: step.id,
+    label: step.label,
     order: step.step_order,
+    code: step.code,
   }));
 }
 

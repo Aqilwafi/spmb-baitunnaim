@@ -37,8 +37,8 @@ export interface StepConfigItem {
  * hasil render container di server — locked = null (tidak pernah dirender).
  */
 export interface StepElement {
-  id: number;
-  step_order: number;
+  id: number | null | undefined;
+  step_order: number | null | undefined;
   label: string;
   status: StepStatus;
   node: React.ReactNode;

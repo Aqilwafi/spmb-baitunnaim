@@ -73,7 +73,7 @@ export async function getSignedBuktiPembayaranUrl(
 ): Promise<string | null> {
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.storage
-    .from("bukti-pembayaran")
+    .from("SPMB")
     .createSignedUrl(buktiPembayaranUrl, 60); // URL berlaku selama 60 detik
 
   if (error) return null;

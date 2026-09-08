@@ -1,21 +1,47 @@
-// components/step/config/step-pages.config.tsx
-
+import InitFormContainer from "@/components/step/containers/InitFormContainer";
+import PembayaranContainer from "@/components/step/containers/PembayaranContainer";
+import BiodataSiswaContainer from "@/components/step/containers/BiodataSiswaContainer";
+import BiodataKeluargaContainer from "@/components/step/containers/BiodataKeluargaContainer";
 import ComingSoonContainer from "@/components/step/containers/ComingSoonContainer";
-import InitFormContainer from "../containers/InitFormContainer";
-import PembayaranContainer from "../containers/PembayaranContainer";
-import BiodataSiswaContainer from "../containers/BiodataSiswaContainer";
-import BiodataKeluargaContainer from "../containers/BiodataKeluargaContainer";
-import type { StepConfigItem } from "@/types/step.types";
 
-export const STEP_CONFIG: StepConfigItem[] = [
-  { id: 1,  step_order: 1,  code: "FORM",            label: "Buat Form",      container: InitFormContainer },
-  { id: 2,  step_order: 2,  code: "PAYMENT",          label: "Pembayaran",     container: PembayaranContainer },
-  { id: 3,  step_order: 3,  code: "BIODATA_STUDENT",  label: "Biodata Siswa",  container: BiodataSiswaContainer },
-  { id: 4,  step_order: 4,  code: "BIODATA_FATHER",   label: "Biodata Ayah",   container: BiodataKeluargaContainer },
-  { id: 5,  step_order: 5,  code: "BIODATA_MOTHER",   label: "Biodata Ibu",    container: BiodataKeluargaContainer },
-  { id: 6,  step_order: 6,  code: "BIODATA_WALI",     label: "Biodata Wali",   container: BiodataKeluargaContainer },
-  { id: 7,  step_order: 7,  code: "DOCUMENT_KK",      label: "Dokumen KK",     container: ComingSoonContainer },
-  { id: 8,  step_order: 8,  code: "DOCUMENT_KTP",     label: "Dokumen KTP",    container: ComingSoonContainer },
-  { id: 9,  step_order: 9,  code: "DOCUMENT_AKTE",    label: "Dokumen AKTE",   container: ComingSoonContainer },
-  { id: 10, step_order: 10, code: "FINALIZATION",     label: "Finalisasi",     container: ComingSoonContainer },
-];
+export const STEP_CONFIG = {
+  FORM: {
+    container: InitFormContainer,
+  },
+
+  PAYMENT: {
+    container: PembayaranContainer,
+  },
+
+  BIODATA_STUDENT: {
+    container: BiodataSiswaContainer,
+  },
+
+  BIODATA_FATHER: {
+    container: BiodataKeluargaContainer,
+  },
+
+  BIODATA_MOTHER: {
+    container: BiodataKeluargaContainer,
+  },
+
+  BIODATA_WALI: {
+    container: BiodataKeluargaContainer,
+  },
+
+  DOCUMENT_KK: {
+    container: ComingSoonContainer,
+  },
+
+  DOCUMENT_KTP: {
+    container: ComingSoonContainer,
+  },
+
+  DOCUMENT_AKTE: {
+    container: ComingSoonContainer,
+  },
+
+  FINALIZATION: {
+    container: ComingSoonContainer,
+  },
+} as const;

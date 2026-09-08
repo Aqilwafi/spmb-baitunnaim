@@ -11,11 +11,24 @@ import type { StepStatus } from "@/types/step.types";
  * - id > currentStepId  -> locked   (tidak dirender, tidak fetch)
  */
 export function computeStepStatus(
-  stepId: number,
-  currentStepId: number | null
+  stepOrder: number | null | undefined,
+  currentStepOrder: number | null | undefined
 ): StepStatus {
-  if (!currentStepId) return 'locked';
-  if (stepId < currentStepId) return "complete";
-  if (stepId === currentStepId) return "active";
+
+  if (stepOrder == null) {
+    return "locked";
+  }
+  if (currentStepOrder == null) {
+    return "locked";
+  }
+
+  if (stepOrder < currentStepOrder) {
+    return "complete";
+  }
+
+  if (stepOrder === currentStepOrder) {
+    return "active";
+  }
+
   return "locked";
 }
