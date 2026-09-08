@@ -11,7 +11,7 @@ interface SubmitPembayaranActionInput {
   filePath: string;
 }
 
-export interface SubmitPembayaranActionData {
+interface SubmitPembayaranActionData {
   nextStep: number;
 }
 

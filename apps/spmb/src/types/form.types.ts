@@ -6,11 +6,6 @@ export interface InitFormPendaftaranModalProps {
   kelas: MasterData[];
 }
 
-export interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps { 
-  selectedLembagaId: number | undefined;
-  onLembagaChange: (id: number) => void;
-}
-
 export interface FormCardsData {
   id: FormPendaftaran['id'];
   nama_lengkap: BiodataSiswa['nama_lengkap'];

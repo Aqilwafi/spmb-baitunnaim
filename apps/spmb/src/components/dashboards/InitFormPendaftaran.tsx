@@ -4,7 +4,12 @@ import { useState, useMemo } from 'react';
 import { Input, Label, Select } from '@bn/ui';
 import { User, School, GraduationCap, Lock, IdCard, MapPin, Calendar } from 'lucide-react';
 import { checkIsMI, isClassFieldLocked } from '@/helpers/biodata-rules';
-import { InitFormPendaftaranProps } from '@/types/form.types';
+import { InitFormPendaftaranModalProps } from '@/types/form.types';
+
+interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps { 
+  selectedLembagaId: number | undefined;
+  onLembagaChange: (id: number) => void;
+}
 
 export function InitFormPendaftaran({
   lembaga,

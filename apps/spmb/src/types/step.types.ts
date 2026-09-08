@@ -20,18 +20,6 @@ export interface StepContainerProps {
 }
 
 /**
- * Satu entri konfigurasi step dalam alur pendaftaran.
- * `container` menunjuk ke Server Component, BUKAN Client form langsung.
- */
-export interface StepConfigItem {
-  id: number;
-  step_order: number;
-  code: string;
-  label: string;
-  container: ComponentType<StepContainerProps>;
-}
-
-/**
  * Hasil komputasi per step yang dikirim dari page.tsx (Server)
  * ke AccordionOrchestrator (Client). `node` sudah berupa React element
  * hasil render container di server — locked = null (tidak pernah dirender).

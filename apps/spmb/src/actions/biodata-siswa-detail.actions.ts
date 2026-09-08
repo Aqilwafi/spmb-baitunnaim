@@ -4,13 +4,13 @@ import { revalidatePath } from "next/cache";
 import { processSubmitBiodataSiswaDetail } from "@/features/form/biodata-siswa-detail";
 import type { ActionResponse } from "@bn/types";
 
-export interface SubmitBiodataSiswaDetailActionInput {
+interface SubmitBiodataSiswaDetailActionInput {
   formId: string;
   // stepId dihapus
   rawPayload: unknown;
 }
 
-export interface SubmitBiodataSiswaDetailActionData {
+interface SubmitBiodataSiswaDetailActionData {
   nextStep: number;
 }
 
