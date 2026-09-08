@@ -39,7 +39,7 @@ export default function AccordionOrchestrator({
           >
             <Button
               variant="ghost"
-              onClick={() => toggleStep(step.id)}
+              onClick={() => toggleStep(step.id ?? 0)}
               disabled={isLocked}
               className="w-full flex justify-between items-center p-5 rounded-3xl shadow-none"
             >

@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck, AlertCircle } from "lucide-react";
 import { Button } from "@bn/ui";
-import { formatDateId } from "@bn/utils";
+import { formatDateTimeId } from "@bn/utils";
 import { useUploadPembayaran } from "@/hooks/usePembayaran";
 
 export interface PembayaranStepData {
@@ -80,7 +80,7 @@ export default function PembayaranStep({
               <Clock size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Diunggah Pada</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{formatDateId(data.uploaded_at)}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{formatDateTimeId(data.uploaded_at)}</p>
               </div>
             </div>
           </div>
