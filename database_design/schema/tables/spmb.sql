@@ -72,12 +72,10 @@ create table if not exists public.biodata_keluarga (
             penghasilan is not null
         )
     ),
-    constraint chk_wali_data check (relation_type <> 'WALI'
+    constraint chk_wali_data check (
+        (relation_type <> 'WALI' and detail_relation_type is null)
         or 
-        (   
-            relation_type='WALI' and status_hidup='HIDUP' 
-            and detail_relation_type is not null
-        )
+        (relation_type = 'WALI' and status_hidup = 'HIDUP' and detail_relation_type is not null)
     )
 );
 comment on table public.biodata_keluarga is
