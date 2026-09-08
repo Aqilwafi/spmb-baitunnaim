@@ -36,7 +36,7 @@ begin
 
   -- 1. Validasi step & aturan bisnis linear DULU, sebelum insert apapun
   v_next_step := public.fn_assert_linear_step(
-    p_form_id         => null,
+    p_form_id         => p_form_id,
   );
 
   select biodata_siswa_id into v_biodata_siswa_id

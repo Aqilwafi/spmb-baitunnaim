@@ -1015,14 +1015,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      fn_assert_linear_step: {
-        Args: {
-          p_current_step: number
-          p_form_id: string
-          p_tahun_ajaran_id?: number
-        }
-        Returns: number
-      }
+      fn_assert_linear_step: { Args: { p_form_id?: string }; Returns: number }
       fn_can_manage_publikasi: { Args: never; Returns: boolean }
       fn_can_manage_spmb: { Args: never; Returns: boolean }
       fn_can_manage_user_role: {
@@ -1033,7 +1026,7 @@ export type Database = {
         Args: { p_is_active: boolean }
         Returns: boolean
       }
-      fn_is_admin_email: { Args: { check_email: string }; Returns: boolean }
+      fn_check_email_is_admin: { Args: { p_email: string }; Returns: boolean }
       fn_is_administrator: { Args: never; Returns: boolean }
       fn_is_high_level_admin: { Args: never; Returns: boolean }
       fn_is_owner_form_data: {
@@ -1104,16 +1097,33 @@ export type Database = {
           p_lembaga_id: number
           p_nama_lengkap: string
           p_nik: unknown
-          p_step_id?: number
-          p_tahun_ajaran_id: number
           p_tanggal_lahir: string
           p_tempat_lahir: string
         }
         Returns: Json
       }
+      fn_rpc_is_admin_email: { Args: { p_email: string }; Returns: boolean }
       fn_rpc_is_guardian_required: {
         Args: { p_biodata_siswa_id: string }
         Returns: boolean
+      }
+      fn_rpc_submit_biodata_keluarga: {
+        Args: {
+          p_alamat?: string
+          p_detail_relation_type?: string
+          p_form_id: string
+          p_nama_lengkap: string
+          p_nik?: unknown
+          p_no_hp?: unknown
+          p_pekerjaan?: string
+          p_pendidikan_terakhir?: string
+          p_penghasilan?: string
+          p_relation_type: Database["public"]["Enums"]["family_relation_enum"]
+          p_status_hidup?: Database["public"]["Enums"]["life_status_enum"]
+          p_tanggal_lahir?: string
+          p_tempat_lahir?: string
+        }
+        Returns: Json
       }
       fn_rpc_submit_biodata_siswa_detail: {
         Args: {
@@ -1128,18 +1138,21 @@ export type Database = {
           p_no_kk: unknown
           p_penyakit?: string
           p_status_rumah_id: number
-          p_step_id?: number
           p_tinggal_bersama_id: number
         }
         Returns: Json
       }
       fn_rpc_submit_pembayaran: {
-        Args: { p_file_path: string; p_form_id: string; p_step_id: number }
+        Args: { p_file_path: string; p_form_id: string }
         Returns: Json
       }
       fn_validate_guardian_requirement: {
         Args: { p_biodata_siswa_id: string }
         Returns: undefined
+      }
+      fn_verify_storage_object_owner: {
+        Args: { p_bucket_id: string; p_file_path: string; p_owner_id: string }
+        Returns: boolean
       }
     }
     Enums: {

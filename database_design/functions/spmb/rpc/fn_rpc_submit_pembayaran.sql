@@ -5,8 +5,8 @@ create or replace function public.fn_rpc_submit_pembayaran(
 returns jsonb
 language plpgsql
 volatile
-security definer -- Penting agar query ke storage.objects & table internal berjalan aman
-set search_path = public, storage
+security invoker -- Tetap menjaga konteks hak akses RLS user yang memanggil
+set search_path = public
 as $$
 declare
   v_owner_user_id uuid := auth.uid();
@@ -28,13 +28,12 @@ begin
     p_form_id => p_form_id
   );
 
-  -- 4. Verifikasi Keberadaan File di Storage Supabase
-  select exists (
-    select 1 from storage.objects
-    where bucket_id = 'SPMB'
-      and name = p_file_path
-      and owner = v_owner_user_id
-  ) into v_file_exists;
+  -- 4. Verifikasi Keberadaan File via Helper Function
+  v_file_exists := public.fn_verify_storage_object_owner(
+    p_bucket_id => 'SPMB',
+    p_file_path => p_file_path,
+    p_owner_id  => v_owner_user_id
+  );
 
   if not v_file_exists then
     raise exception 'Berkas bukti pembayaran tidak ditemukan atau tidak valid.'
@@ -50,7 +49,13 @@ begin
   set step_id = v_next_step, updated_at = now()
   where id = p_form_id and pendaftar_id = v_owner_user_id;
 
-  -- 7. Return JSON Response (Menggunakan nama variabel yang benar)
+  -- Prevent Silent Failure
+  if not found then
+    raise exception 'Gagal memperbarui status formulir pendaftaran.' 
+      using errcode = '40000';
+  end if;
+
+  -- 7. Return JSON Response
   return jsonb_build_object(
     'success', true,
     'form_id', p_form_id,
@@ -59,6 +64,6 @@ begin
 end;
 $$;
 
--- Hak Akses
-revoke execute on function public.fn_rpc_submit_pembayaran(uuid, text) from public;
-grant execute on function public.fn_rpc_submit_pembayaran(uuid, text) to authenticated;
+-- Hak Akses RPC
+revoke execute on function public.fn_rpc_submit_pembayaran from public;
+grant execute on function public.fn_rpc_submit_pembayaran to authenticated;
