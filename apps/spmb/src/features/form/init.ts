@@ -9,10 +9,8 @@ import {
 import { getTahunAjaranAktif } from "../master/tahun-ajaran";
 import { mapInitFormPayload } from "../../helpers/mappers";
 import { pickId, genderLabel } from "@bn/utils";
+import type { ActionResponse, RpcSubmitResponse } from "@bn/types";
 
-export type InitFormPendaftaranResult =
-  | { success: true; message: string; data: { id: string } }
-  | { success: false; message: string };
 
 // Tipe data hasil kustomisasi di layer feature/UI (jenis_kelamin ter-format)
 export type InitFormStepData = Omit<InitFormStepDataRPCResponse, "jenis_kelamin"> & {
@@ -21,24 +19,32 @@ export type InitFormStepData = Omit<InitFormStepDataRPCResponse, "jenis_kelamin"
 
 const STEP_INIT_FORM = 1;
 
-export async function executeInitFormPendaftaran(
-  payload: Record<string, FormDataEntryValue>
-): Promise<InitFormPendaftaranResult> {
-  if (!(await checkUserAccess())) {
-    return { success: false, message: "Akses tidak diizinkan." };
-  }
+export async function executeInitFormPendaftaran(payload: Record<string, FormDataEntryValue>): Promise<ActionResponse<RpcSubmitResponse>> {
 
+  if (!(await checkUserAccess())) {
+      return {
+        success: false,
+        message: "Akses tidak diizinkan.",
+        error: { code: "UNAUTHORIZED" },
+      };
+    }
+    
   const parsed = initFormSchema.safeParse(mapInitFormPayload(payload));
   if (!parsed.success) {
     return {
       success: false,
       message: parsed.error.issues[0]?.message ?? "Data formulir tidak valid.",
+      error: { code: "UNAUTHORIZED" },
     };
   }
 
   const tahunAjaranId = await pickId(getTahunAjaranAktif());
   if (!tahunAjaranId) {
-    return { success: false, message: "Tahun ajaran aktif tidak ditemukan." };
+    return { 
+      success: false, 
+      message: "Tahun ajaran aktif tidak ditemukan.",
+      error: { code: "UNAUTHORIZED" },
+    };
   }
 
   try {

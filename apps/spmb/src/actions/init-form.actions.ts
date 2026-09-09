@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import {
   executeInitFormPendaftaran,
-  type InitFormPendaftaranResult,
+  type InitFormStepData,
 } from "@/features/form/init";
 
 export async function initFormPendaftaranAction(

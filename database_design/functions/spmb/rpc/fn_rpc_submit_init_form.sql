@@ -1,4 +1,4 @@
-create or replace function public.fn_rpc_init_form(
+create or replace function public.fn_rpc_submit_init_form(
   p_nik             public.dom_nik,
   p_nama_lengkap    varchar(255),
   p_gender          gender_enum,

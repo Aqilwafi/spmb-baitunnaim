@@ -4,13 +4,13 @@ import { emailField, registerPasswordField, usernameField } from "@bn/validators
 export const registerSchema = z
   .object({
     username: usernameField,
-    email:emailField,     
+    email: emailField,     
     password: registerPasswordField,
-    confirmPassword: z.string(),
+    confirmPassword: z.string().min(1, "Konfirmasi password wajib diisi"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password dan Konfirmasi Password tidak cocok",
-    path: ["confirm_password"],
+    path: ["confirmPassword"], // ✅ Disesuaikan menjadi camelCase
   });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

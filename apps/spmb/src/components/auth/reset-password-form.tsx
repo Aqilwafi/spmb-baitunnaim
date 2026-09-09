@@ -1,24 +1,18 @@
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
-
 import { resetPasswordAction } from "@/actions/auth.actions";
-
-import {
-  PasswordInput,
-  Button,
-} from "@bn/ui";
+import { PasswordInput, Button } from "@bn/ui";
 
 export default function SetPasswordForm() {
-  const [state, formAction, isPending] =
-    useActionState(resetPasswordAction, null);
+  const [state, formAction, isPending] = useActionState(
+    resetPasswordAction,
+    null
+  );
 
-  const [frontendError, setFrontendError] =
-    useState<string | null>(null);
+  const [linkError, setLinkError] = useState<string | null>(null);
 
-  const [linkError, setLinkError] =
-    useState<string | null>(null);
-
+  // Deteksi error expired/invalid token dari URL Hash (Supabase Auth / Provider style)
   useEffect(() => {
     const hash = window.location.hash;
     if (hash.includes("error=")) {
@@ -37,27 +31,7 @@ export default function SetPasswordForm() {
     }
   }, []);
 
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    const formData = new FormData(event.currentTarget);
-
-    const newPassword = formData.get("newPassword");
-    const confirmNewPassword = formData.get("confirmNewPassword");
-
-    if (newPassword !== confirmNewPassword) {
-      event.preventDefault();
-
-      setFrontendError(
-        "Password dan konfirmasi password tidak cocok!"
-      );
-
-      return;
-    }
-
-    setFrontendError(null);
-  };
-
+  // Tampilan jika token link dari email error / expired
   if (linkError) {
     return (
       <div className="flex flex-col gap-4 w-full">
@@ -73,39 +47,51 @@ export default function SetPasswordForm() {
   }
 
   return (
-    <form
-      action={formAction}
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 w-full"
-    >
-      <PasswordInput
-        id="newPassword"
-        name="newPassword"
-        label="Password Baru"
-        required
-      />
+    <form action={formAction} className="flex flex-col gap-4 w-full">
+      {/* Field: Password Baru */}
+      <div>
+        <PasswordInput
+          id="newPassword"
+          name="newPassword"
+          label="Password Baru"
+          required
+        />
+        {state?.errors?.newPassword && (
+          <p className="text-red-500 text-xs mt-1">
+            {state.errors.newPassword[0]}
+          </p>
+        )}
+      </div>
 
-      <PasswordInput
-        id="confirmNewPassword"
-        name="confirmNewPassword"
-        label="Konfirmasi Password Baru"
-        required
-      />
+      {/* Field: Konfirmasi Password Baru */}
+      <div>
+        <PasswordInput
+          id="confirmNewPassword"
+          name="confirmNewPassword"
+          label="Konfirmasi Password Baru"
+          required
+        />
+        {state?.errors?.confirmNewPassword && (
+          <p className="text-red-500 text-xs mt-1">
+            {state.errors.confirmNewPassword[0]}
+          </p>
+        )}
+      </div>
 
-      {(frontendError || state?.message) && (
-        <p className="text-sm text-red-500">
-          {frontendError || state?.message}
+      {/* Global Message (Sukses Reset / General Error) */}
+      {state?.message && (
+        <p
+          className={`text-sm ${
+            state.success ? "text-green-600" : "text-red-500"
+          }`}
+        >
+          {state.message}
         </p>
       )}
 
-      <Button
-        type="submit"
-        variant="primary"
-        disabled={isPending}
-      >
-        {isPending
-          ? "Menyimpan..."
-          : "Simpan Password Baru"}
+      {/* Submit Button */}
+      <Button type="submit" variant="primary" disabled={isPending}>
+        {isPending ? "Menyimpan..." : "Simpan Password Baru"}
       </Button>
     </form>
   );

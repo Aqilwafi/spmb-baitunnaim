@@ -1090,19 +1090,6 @@ export type Database = {
           tempat_lahir: string
         }[]
       }
-      fn_rpc_init_form: {
-        Args: {
-          p_gender: Database["public"]["Enums"]["gender_enum"]
-          p_kelas_id?: number
-          p_lembaga_id: number
-          p_nama_lengkap: string
-          p_nik: unknown
-          p_tanggal_lahir: string
-          p_tempat_lahir: string
-        }
-        Returns: Json
-      }
-      fn_rpc_is_admin_email: { Args: { p_email: string }; Returns: boolean }
       fn_rpc_is_guardian_required: {
         Args: { p_biodata_siswa_id: string }
         Returns: boolean
@@ -1119,6 +1106,7 @@ export type Database = {
           p_pendidikan_terakhir?: string
           p_penghasilan?: string
           p_relation_type: Database["public"]["Enums"]["family_relation_enum"]
+          p_same_address_as?: Database["public"]["Enums"]["family_relation_enum"]
           p_status_hidup?: Database["public"]["Enums"]["life_status_enum"]
           p_tanggal_lahir?: string
           p_tempat_lahir?: string
@@ -1139,6 +1127,18 @@ export type Database = {
           p_penyakit?: string
           p_status_rumah_id: number
           p_tinggal_bersama_id: number
+        }
+        Returns: Json
+      }
+      fn_rpc_submit_init_form: {
+        Args: {
+          p_gender: Database["public"]["Enums"]["gender_enum"]
+          p_kelas_id?: number
+          p_lembaga_id: number
+          p_nama_lengkap: string
+          p_nik: unknown
+          p_tanggal_lahir: string
+          p_tempat_lahir: string
         }
         Returns: Json
       }

@@ -1,30 +1,59 @@
-// packages/auth/src/features/register.ts
-
 import { registerSchema } from '../validators/register.schema';
 import { signUpWithPassword } from '../services/register';
 import { RegisterPayload, RegisterResponse } from "@bn/types";
+import { formatZodErrors } from "@bn/validators";
 
 export async function executeSharedRegister(payload: RegisterPayload): Promise<RegisterResponse> {
+  // 1. Validasi Zod (Jangan throw Error, kembalikan fieldErrors)
   const parsed = registerSchema.safeParse(payload);
-  if (!parsed.success) throw new Error(parsed.error.issues[0].message);
-
-  const result = signUpWithPassword(parsed.data.email, parsed.data.password);
   
-    if (!result) {
+  if (!parsed.success) {
+    return {
+      success: parsed.success,
+      message: "Validasi form gagal. Silakan periksa kembali input Anda.",
+      errors: formatZodErrors(parsed.error),
+      error: {
+        code: "VALIDATION_ERROR",
+      },
+      data: {
+        email: payload.email || "",
+      },
+    };
+  }
+  // 2. Eksekusi Service (Gunakan `await` karena ini operasi Async)
+  try {
+    const result = await signUpWithPassword(parsed.data.email, parsed.data.password);
+
+    if (!result || result.error) {
       return {
         success: false,
-        message: "Terjadi Kesalahan.",
-        error:{
-          code: ""
+        message: result?.error?.message || "Terjadi kesalahan saat mendaftar.",
+        error: {
+          code: result?.error?.code || "SIGNUP_FAILED",
         },
         data: {
-          email: payload.email 
-        }
-      }
+          email: parsed.data.email,
+        },
+      };
     }
-  
+
     return {
-        success: true,
-        message: "Silahkan periksa Email anda untuk melakukan aktivasi akun.",
-      }  
+      success: true,
+      message: "Silakan periksa email Anda untuk melakukan aktivasi akun.",
+      data: {
+        email: parsed.data.email,
+      },
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      message: err?.message || "Terjadi kesalahan server.",
+      error: {
+        code: "INTERNAL_SERVER_ERROR",
+      },
+      data: {
+        email: parsed.data.email,
+      },
+    };
+  }
 }
