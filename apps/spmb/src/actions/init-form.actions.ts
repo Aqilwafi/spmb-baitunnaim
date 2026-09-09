@@ -1,23 +1,26 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import {
-  executeInitFormPendaftaran,
-  type InitFormStepData,
-} from "@/features/form/init";
+import { executeInitFormStep } from "@/features/form/init";
+import type { InitFormResult } from "@/services/init-form";
+import type { ActionResponse } from "@bn/types";
 
 export async function initFormPendaftaranAction(
-  _prevState: any,
+  _prevState: ActionResponse<InitFormResult> | null,
   formData: FormData
-): Promise<InitFormPendaftaranResult> {
-  const payload = Object.fromEntries(formData);
+): Promise<ActionResponse<InitFormResult>> {
+  // 1. Ekstrak FormData ke plain object (properti sudah camelCase dari UI)
+  const payload = Object.fromEntries(formData.entries());
 
-  const result = await executeInitFormPendaftaran(payload);
+  // 2. Oper ke layer Features
+  const result = await executeInitFormStep(payload);
 
+  // 3. Jika gagal (validasi/bisnis error), langsung kembalikan ke UI
   if (!result.success) {
     return result;
   }
 
+  // 4. Jika sukses, lakukan cache revalidation
   revalidatePath("/dashboard");
   return result;
 }

@@ -88,7 +88,6 @@ export async function submitBiodataSiswaDetail(
   params: SubmitBiodataSiswaDetailParams
 ): Promise<SubmitBiodataSiswaDetailResult> {
   const supabase = await createSupabaseServer();
-  console.log("submitBiodataSiswaDetail: calling RPC with params:", params);
 
   const { data, error } = await supabase.rpc("fn_rpc_submit_biodata_siswa_detail", {
     p_form_id: params.formId,

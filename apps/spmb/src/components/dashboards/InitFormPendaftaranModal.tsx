@@ -8,34 +8,35 @@ import { initFormPendaftaranAction } from '@/actions/init-form.actions';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
 import { InitFormPendaftaranModalProps } from '@/types/form.types';
 
-
 export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaranModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLembagaId, setSelectedLembagaId] = useState<number | undefined>(undefined);
   
-  // Menggunakan useActionState (menggantikan useState untuk loading & logic form)
+  // Hook Server Action
   const [state, action, isPending] = useActionState(initFormPendaftaranAction, null);
 
   function handleClose() {
-  setIsOpen(false);
-  setSelectedLembagaId(undefined); // reset juga saat modal ditutup
-}
+    setIsOpen(false);
+    setSelectedLembagaId(undefined); // Reset state lokal
+  }
 
-
-  // Navigasi otomatis jika sukses
+  // Redirect jika submit berhasil (menggunakan formId dari InitFormResult)
   useEffect(() => {
-    if (state?.success && state.data) {
-      router.push(`/dashboard/pendaftaran/${state.data.id}`);
+    if (state?.success && state.data?.formId) {
+      router.push(`/dashboard/pendaftaran/${state.data.formId}`);
     }
   }, [state, router]);
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}> <Plus size={22} className="text-white" /> Pendaftaran Baru </Button>
+      <Button onClick={() => setIsOpen(true)}>
+        <Plus size={22} className="text-white" /> Pendaftaran Baru
+      </Button>
       
       <Modal open={isOpen} onClose={handleClose}>
         
+        {/* Header Modal */}
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Pendaftaran Baru</h2>
@@ -46,19 +47,21 @@ export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaran
           </Button>
         </div>
 
-        {/* Error message jika gagal */}
-        {state?.success === false && (
-          <div className="p-3 mb-4 text-sm text-red-600 bg-red-50 rounded-lg">
+        {/* Pesan Error Global / Server Error */}
+        {state?.success === false && state.message && (
+          <div className="p-3 mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl">
             {state.message}
           </div>
         )}
 
+        {/* Tag Form Melingkupi Fields & Submit Button */}
         <form action={action} className="space-y-6">
           <InitFormPendaftaran
             lembaga={lembaga}
             kelas={kelas}
             selectedLembagaId={selectedLembagaId}
             onLembagaChange={setSelectedLembagaId}
+            errors={state?.errors} // Disesuaikan: error (singular)
           />
 
           <Button

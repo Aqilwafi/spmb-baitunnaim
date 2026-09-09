@@ -10,3 +10,13 @@ export type MasterData = {
   end_year?: number;
   semester?: string;
 };
+
+export interface BaseRPCSubmitResponse {
+  form_id: string;
+  next_step_id?: number;
+}
+
+export interface FormSubmitResult {
+  formId: string;
+  nextStepId?: number;
+}

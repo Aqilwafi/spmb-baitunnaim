@@ -33,7 +33,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
             <User size={18} className="text-blue-600 mt-0.5 shrink-0" />
             <div>
               <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Nama Lengkap Siswa</p>
-              <p className="text-sm sm:text-base font-semibold text-gray-800 mt-0.5">{data.nama_lengkap}</p>
+              <p className="text-sm sm:text-base font-semibold text-gray-800 mt-0.5">{data.namaLengkap}</p>
             </div>
           </div>
 
@@ -50,7 +50,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
               <div className="w-[18px] h-[18px] flex items-center justify-center font-bold text-blue-600 shrink-0 text-sm">⚥</div>
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Jenis Kelamin</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.jenis_kelamin}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.genderFormatted}</p>
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
               <MapPin size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Tempat Lahir</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.tempat_lahir}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.tempatLahir}</p>
               </div>
             </div>
 
@@ -68,7 +68,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
               <Calendar size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Tanggal Lahir</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{formatDateId(data.tanggal_lahir)}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{formatDateId(data.tanggalLahir)}</p>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function InitFormStep({ data }: InitFormStepProps) {
               <School size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Lembaga Tujuan</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.lembaga_tujuan ?? "-"}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.lembagaTujuan ?? "-"}</p>
               </div>
             </div>
 

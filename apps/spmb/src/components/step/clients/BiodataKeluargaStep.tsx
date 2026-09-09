@@ -71,13 +71,6 @@ export default function BiodataKeluargaStep({
     // TODO: Panggil Server Action untuk menyimpan data / status skip wali
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    console.log("Submit Biodata Keluarga Single:", {
-      pendaftaran_id,
-      user_id,
-      relationType,
-      skipWali: relationType === "WALI" ? skipWali : false,
-      formData: skipWali ? null : formData,
-    });
     setSubmitting(false);
   };
 

@@ -4,12 +4,13 @@ import { mapGenderCode } from "@bn/utils";
 
 export function mapInitFormPayload(raw: Record<string, FormDataEntryValue>) {
   return {
-    nik: raw.nik,
-    namaLengkap: raw.nama_lengkap,
-    gender: mapGenderCode(raw.jenis_kelamin),
-    tempatLahir: raw.tempat_lahir,
-    tanggalLahir: raw.tanggal_lahir,
-    lembagaId: raw.lembaga_tujuan_id,
-    kelasId: raw.kelas_mi_id || undefined,
+    nik: (raw.nik as string) ?? "",
+    namaLengkap: (raw.namaLengkap as string) ?? "",
+    // Menggunakan mapGenderCode jika input select bernilai angka 1 / 2 atau kode
+    gender: mapGenderCode(raw.gender as string),
+    tempatLahir: (raw.tempatLahir as string) ?? "",
+    tanggalLahir: (raw.tanggalLahir as string) ?? "",
+    lembagaId: raw.lembagaId ? Number(raw.lembagaId) : undefined,
+    kelasId: raw.kelasId ? Number(raw.kelasId) : undefined,
   };
 }

@@ -1,14 +1,14 @@
 // services/init-form.ts
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
-import type { EnumGender } from "@bn/types";
+import type { EnumGender, BaseRPCSubmitResponse } from "@bn/types";
 
-export interface InitFormRPCResponse {
-  form_id: string;
-  siswa_id: string;
-}
+// ==========================================
+// 1. RAW TYPES (Internal Service Saja - snake_case)
+// Tipe data murni yang sesuai dengan RPC/Database
+// ==========================================
 
-export interface InitFormStepDataRPCResponse {
+interface InitFormStepDataRPCResponse {
   nama_lengkap: string;
   nik: string;
   jenis_kelamin: EnumGender;
@@ -18,7 +18,11 @@ export interface InitFormStepDataRPCResponse {
   kelas: string | null;
 }
 
-export async function initFormPendaftaranService(params: {
+// ==========================================
+// 2. DOMAIN TYPES (Export ke Outside/Features - camelCase)
+// Tipe data bersih yang dipakai oleh Feature & UI
+// ==========================================
+export interface InitFormPayload {
   nik: string;
   namaLengkap: string;
   gender: EnumGender;
@@ -26,12 +30,33 @@ export async function initFormPendaftaranService(params: {
   tanggalLahir: string;
   lembagaId: number;
   kelasId: number | null;
-  tahunAjaranId: number;
-  stepId: number;
-}): Promise<InitFormRPCResponse> {
+}
+
+export interface InitFormResult {
+  formId: string;
+  nextStepId?: number | null;
+}
+
+export interface InitFormStepData {
+  namaLengkap: string;
+  nik: string;
+  gender: EnumGender;
+  tempatLahir: string;
+  tanggalLahir: string;
+  lembagaTujuan: string | null;
+  kelas: string | null;
+}
+
+// ==========================================
+// 3. SERVICE FUNCTIONS
+// Tempat konversi (camelCase <-> snake_case)
+// ==========================================
+
+export async function insertInitFormStep(params: InitFormPayload): Promise<InitFormResult> {
   const supabase = await createSupabaseServer();
 
-  const { data, error } = await supabase.rpc("fn_rpc_init_form", {
+  // Mapping dari camelCase (input Feature) ke snake_case (ke RPC)
+  const { data, error } = await supabase.rpc("fn_rpc_submit_init_form", {
     p_nik: params.nik,
     p_nama_lengkap: params.namaLengkap,
     p_gender: params.gender,
@@ -39,19 +64,23 @@ export async function initFormPendaftaranService(params: {
     p_tanggal_lahir: params.tanggalLahir,
     p_lembaga_id: params.lembagaId,
     p_kelas_id: params.kelasId ?? undefined,
-    p_tahun_ajaran_id: params.tahunAjaranId,
-    p_step_id: params.stepId,
   });
 
   if (error) throw error;
 
-  return data as unknown as InitFormRPCResponse;
+  const rawData = data as unknown as BaseRPCSubmitResponse;
+
+  // Mapping balik response RPC ke camelCase
+  return {
+    formId: rawData.form_id,
+    nextStepId: rawData?.next_step_id ?? null,
+  };
 }
 
-export async function initFormStepDataService(
+export async function getInitFormStep(
   formId: string,
   tahunAjaranId: number
-): Promise<InitFormStepDataRPCResponse | null> {
+): Promise<InitFormStepData | null> {
   const supabase = await createSupabaseServer();
 
   const { data, error } = await supabase
@@ -62,6 +91,18 @@ export async function initFormStepDataService(
     .maybeSingle();
 
   if (error) throw error;
+  if (!data) return null;
 
-  return data as InitFormStepDataRPCResponse | null;
+  const rawData = data as unknown as InitFormStepDataRPCResponse;
+
+  // Mapping dari snake_case (RPC) ke camelCase (ke Feature)
+  return {
+    namaLengkap: rawData.nama_lengkap,
+    nik: rawData.nik,
+    gender: rawData.jenis_kelamin,
+    tempatLahir: rawData.tempat_lahir,
+    tanggalLahir: rawData.tanggal_lahir,
+    lembagaTujuan: rawData.lembaga_tujuan,
+    kelas: rawData.kelas,
+  };
 }

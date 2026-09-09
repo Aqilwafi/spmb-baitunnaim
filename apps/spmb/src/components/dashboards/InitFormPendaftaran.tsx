@@ -6,9 +6,11 @@ import { User, School, GraduationCap, Lock, IdCard, MapPin, Calendar } from 'luc
 import { checkIsMI, isClassFieldLocked } from '@/helpers/biodata-rules';
 import { InitFormPendaftaranModalProps } from '@/types/form.types';
 
-interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps { 
+interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps {
   selectedLembagaId: number | undefined;
   onLembagaChange: (id: number) => void;
+  // Opsional: Untuk menampilkan error dari useActionState
+  errors?: Record<string, string[]>; 
 }
 
 export function InitFormPendaftaran({
@@ -16,6 +18,7 @@ export function InitFormPendaftaran({
   kelas,
   selectedLembagaId,
   onLembagaChange,
+  errors,
 }: InitFormPendaftaranProps) {
   const [nik, setNik] = useState('');
 
@@ -45,18 +48,21 @@ export function InitFormPendaftaran({
 
       {/* Row 1: Nama Lengkap */}
       <div className="space-y-1.5 sm:space-y-2">
-        <Label htmlFor="nama_lengkap" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+        <Label htmlFor="namaLengkap" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
           <User size={14} className="text-blue-600 shrink-0" />
           <span>NAMA LENGKAP SISWA</span>
         </Label>
         <Input
-          id="nama_lengkap"
-          name="nama_lengkap"
+          id="namaLengkap"
+          name="namaLengkap" // Ubah ke camelCase
           type="text"
           required
           placeholder="Masukkan nama sesuai akta"
           className={inputBaseClass}
         />
+        {errors?.namaLengkap && (
+          <p className="text-[10px] text-red-500 ml-1">{errors.namaLengkap[0]}</p>
+        )}
       </div>
 
       {/* Row 2: NIK & Jenis Kelamin */}
@@ -73,7 +79,7 @@ export function InitFormPendaftaran({
           </div>
           <Input
             id="nik"
-            name="nik"
+            name="nik" // Tetap nik
             type="text"
             inputMode="numeric"
             required
@@ -88,6 +94,9 @@ export function InitFormPendaftaran({
           {nik && !isNikValid && (
             <p className="text-[10px] text-red-500 ml-1">NIK harus tepat 16 digit angka.</p>
           )}
+          {errors?.nik && (
+            <p className="text-[10px] text-red-500 ml-1">{errors.nik[0]}</p>
+          )}
         </div>
 
         <div className="space-y-1.5 sm:space-y-2">
@@ -95,7 +104,7 @@ export function InitFormPendaftaran({
             JENIS KELAMIN
           </Label>
           <Select
-            name="jenis_kelamin"
+            name="gender" // Ubah ke camelCase (gender)
             required
             placeholder="Pilih"
             options={[
@@ -104,39 +113,48 @@ export function InitFormPendaftaran({
             ]}
             className={inputBaseClass}
           />
+          {errors?.gender && (
+            <p className="text-[10px] text-red-500 ml-1">{errors.gender[0]}</p>
+          )}
         </div>
       </div>
 
       {/* Row 3: Tempat & Tanggal Lahir */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <div className="space-y-1.5 sm:space-y-2">
-          <Label htmlFor="tempat_lahir" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+          <Label htmlFor="tempatLahir" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
             <MapPin size={14} className="text-blue-600 shrink-0" />
             <span>TEMPAT LAHIR</span>
           </Label>
           <Input
-            id="tempat_lahir"
-            name="tempat_lahir"
+            id="tempatLahir"
+            name="tempatLahir" // Ubah ke camelCase
             type="text"
             required
             placeholder="Kota/Kabupaten lahir"
             className={inputBaseClass}
           />
+          {errors?.tempatLahir && (
+            <p className="text-[10px] text-red-500 ml-1">{errors.tempatLahir[0]}</p>
+          )}
         </div>
 
         <div className="space-y-1.5 sm:space-y-2">
-          <Label htmlFor="tanggal_lahir" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+          <Label htmlFor="tanggalLahir" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
             <Calendar size={14} className="text-blue-600 shrink-0" />
             <span>TANGGAL LAHIR</span>
           </Label>
           <Input
-            id="tanggal_lahir"
-            name="tanggal_lahir"
+            id="tanggalLahir"
+            name="tanggalLahir" // Ubah ke camelCase
             type="date"
             required
             max={todayDate}
             className={inputBaseClass}
           />
+          {errors?.tanggalLahir && (
+            <p className="text-[10px] text-red-500 ml-1">{errors.tanggalLahir[0]}</p>
+          )}
         </div>
       </div>
 
@@ -148,7 +166,7 @@ export function InitFormPendaftaran({
             <span>LEMBAGA TUJUAN</span>
           </Label>
           <Select
-            name="lembaga_tujuan_id"
+            name="lembagaId" // Ubah ke camelCase
             required
             placeholder="Pilih Lembaga"
             options={lembaga}
@@ -156,29 +174,38 @@ export function InitFormPendaftaran({
             onChange={(e) => onLembagaChange(Number(e.target.value))}
             className={inputBaseClass}
           />
+          {errors?.lembagaId && (
+            <p className="text-[10px] text-red-500 ml-1">{errors.lembagaId[0]}</p>
+          )}
         </div>
 
         <div className="space-y-1.5 sm:space-y-2">
-          <Label className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
-            <GraduationCap size={14} className="text-blue-600 shrink-0" />
-            <span>KELAS</span>
-            {isLocked && <Lock size={12} className="text-amber-500 shrink-0" />}
-          </Label>
-          {isLocked && <input type="hidden" name="kelas_mi_id" value="1" />}
-          <Select
-            name={isLocked ? undefined : 'kelas_mi_id'}
-            required={!isLocked}
-            disabled={isLocked}
-            placeholder={isLocked ? undefined : 'Pilih Kelas'}
-            value={isLocked ? '1' : undefined}
-            options={isLocked ? [{ value: 1, label: 'Non-MI' }] : kelas}
-            className={`${inputBaseClass} ${
-              isLocked
-                ? '!bg-gray-100 !text-gray-400 !border-gray-100 cursor-not-allowed italic'
-                : ''
-            }`}
-          />
-        </div>
+        <Label className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+          <GraduationCap size={14} className="text-blue-600 shrink-0" />
+          <span>KELAS</span>
+          {isLocked && <Lock size={12} className="text-amber-500 shrink-0" />}
+        </Label>
+
+        {/* ❌ HAPUS BARIS INI: <input type="hidden" name="kelasId" value="1" /> */}
+
+        <Select
+          // Saat isLocked = true, name di-set undefined agar TIDAK ikut terkirim di FormData
+          name={isLocked ? undefined : 'kelasId'} 
+          required={!isLocked}
+          disabled={isLocked}
+          placeholder={isLocked ? 'Non-MI (Tanpa Kelas)' : 'Pilih Kelas'}
+          value={isLocked ? '' : undefined}
+          options={isLocked ? [] : kelas}
+          className={`${inputBaseClass} ${
+            isLocked
+              ? '!bg-gray-100 !text-gray-400 !border-gray-100 cursor-not-allowed italic'
+              : ''
+          }`}
+        />
+        {errors?.kelasId && (
+          <p className="text-[10px] text-red-500 ml-1">{errors.kelasId[0]}</p>
+        )}
+      </div>
       </div>
     </div>
   );

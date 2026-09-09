@@ -1,54 +1,52 @@
-// features/form/init.ts
 import { checkUserAccess } from "@/features/auth/guards";
 import { initFormSchema, formIdParamsSchema } from "@bn/validators";
 import {
-  initFormPendaftaranService,
-  initFormStepDataService,
-  type InitFormStepDataRPCResponse,
+  insertInitFormStep,
+  getInitFormStep,
+  type InitFormStepData as ServiceInitFormStepData,
+  type InitFormResult,
 } from "@/services/init-form";
 import { getTahunAjaranAktif } from "../master/tahun-ajaran";
 import { mapInitFormPayload } from "../../helpers/mappers";
 import { pickId, genderLabel } from "@bn/utils";
-import type { ActionResponse, RpcSubmitResponse } from "@bn/types";
+import type { ActionResponse } from "@bn/types"; // Hapus RpcSubmitResponse
 
-
-// Tipe data hasil kustomisasi di layer feature/UI (jenis_kelamin ter-format)
-export type InitFormStepData = Omit<InitFormStepDataRPCResponse, "jenis_kelamin"> & {
-  jenis_kelamin: string;
+// 1. Disesuaikan dengan InitFormStepData dari Service (menggunakan camelCase)
+export type InitFormStepData = Omit<ServiceInitFormStepData, "gender"> & {
+  genderFormatted: string;
 };
 
-const STEP_INIT_FORM = 1;
-
-export async function executeInitFormPendaftaran(payload: Record<string, FormDataEntryValue>): Promise<ActionResponse<RpcSubmitResponse>> {
-
+export async function executeInitFormStep(
+  payload: Record<string, FormDataEntryValue>
+): Promise<ActionResponse<InitFormResult>> {
   if (!(await checkUserAccess())) {
-      return {
-        success: false,
-        message: "Akses tidak diizinkan.",
-        error: { code: "UNAUTHORIZED" },
-      };
-    }
-    
+    return {
+      success: false,
+      message: "Akses tidak diizinkan.",
+      error: { code: "UNAUTHORIZED" },
+    };
+  }
+
   const parsed = initFormSchema.safeParse(mapInitFormPayload(payload));
   if (!parsed.success) {
     return {
       success: false,
       message: parsed.error.issues[0]?.message ?? "Data formulir tidak valid.",
-      error: { code: "UNAUTHORIZED" },
+      error: { code: "VALIDATION_ERROR" },
     };
   }
 
   const tahunAjaranId = await pickId(getTahunAjaranAktif());
   if (!tahunAjaranId) {
-    return { 
-      success: false, 
+    return {
+      success: false,
       message: "Tahun ajaran aktif tidak ditemukan.",
-      error: { code: "UNAUTHORIZED" },
+      error: { code: "NOT_FOUND" },
     };
   }
 
   try {
-    const pendaftaran = await initFormPendaftaranService({
+    const pendaftaran = await insertInitFormStep({
       nik: parsed.data.nik,
       namaLengkap: parsed.data.namaLengkap,
       gender: parsed.data.gender,
@@ -56,40 +54,40 @@ export async function executeInitFormPendaftaran(payload: Record<string, FormDat
       tanggalLahir: parsed.data.tanggalLahir.toISOString().split("T")[0],
       lembagaId: parsed.data.lembagaId,
       kelasId: parsed.data.kelasId ?? null,
-      tahunAjaranId,
-      stepId: STEP_INIT_FORM,
     });
 
     return {
       success: true,
       message: "Berhasil!",
-      data: { id: pendaftaran.form_id },
+      data: pendaftaran, // Berisi { formId, nextStepId }
     };
   } catch (error) {
     console.error("executeInitFormPendaftaran error:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Terjadi kesalahan pada server.",
+      message:
+        error instanceof Error ? error.message : "Terjadi kesalahan pada server.",
     };
   }
 }
 
-export async function getInitFormStepData(formId: string): Promise<InitFormStepData | null> {
-  // 1. Validasi parameter formId
+export async function getInitFormStepData(
+  formId: string
+): Promise<InitFormStepData | null> {
   const parsed = formIdParamsSchema.safeParse(formId);
   if (!parsed.success) return null;
 
-  // 2. Ambil Tahun Ajaran Aktif
   const tahunAjaranId = await pickId(getTahunAjaranAktif());
   if (!tahunAjaranId) return null;
 
-  // 3. Panggil RPC Atomic (Ownership check via auth.uid() sudah ditangani di SQL)
-  const data = await initFormStepDataService(parsed.data, tahunAjaranId);
+  const data = await getInitFormStep(parsed.data, tahunAjaranId);
+  
   if (!data) return null;
 
-  // 4. Format tampilan sederhana di UI level
+  console.log(data);
+  
   return {
     ...data,
-    jenis_kelamin: genderLabel(data.jenis_kelamin),
+    genderFormatted: genderLabel(data.gender),
   };
 }
