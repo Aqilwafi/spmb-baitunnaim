@@ -6,12 +6,12 @@ import { revalidatePath } from "next/cache";
 import { submitPembayaranFeatures } from "@/features/upload/pembayaran";
 import type { ActionResponse } from "@bn/types";
 
-interface SubmitPembayaranActionInput {
+export interface SubmitPembayaranActionInput {
   formId: string;
   filePath: string;
 }
 
-interface SubmitPembayaranActionData {
+export interface SubmitPembayaranActionData {
   nextStep: number;
 }
 

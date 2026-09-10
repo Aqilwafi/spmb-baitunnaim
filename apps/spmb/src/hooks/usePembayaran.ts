@@ -1,5 +1,3 @@
-// apps/spmb/src/components/step/clients/hooks/useUploadPembayaran.ts
-
 "use client";
 
 import { useState, useCallback } from "react";
@@ -16,7 +14,6 @@ type UploadStage =
 
 interface UseUploadPembayaranParams {
   formId: string;
-  stepId?: number;
 }
 
 interface UseUploadPembayaranState {
@@ -25,7 +22,7 @@ interface UseUploadPembayaranState {
   nextStep: number | null;
 }
 
-export function useUploadPembayaran({ formId, stepId }: UseUploadPembayaranParams) {
+export function useUploadPembayaran({ formId }: UseUploadPembayaranParams) {
   const [state, setState] = useState<UseUploadPembayaranState>({
     stage: "idle",
     error: null,
@@ -43,13 +40,13 @@ export function useUploadPembayaran({ formId, stepId }: UseUploadPembayaranParam
       try {
         // 1. Minta signed upload token
         const tokenRes = await fetch("/api/request-upload", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                fileName: file.name,
-                fileType: file.type,
-                fileSize: file.size,
-            }),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fileName: file.name,
+            fileType: file.type,
+            fileSize: file.size,
+          }),
         });
 
         const tokenJson = await tokenRes.json();
@@ -78,14 +75,18 @@ export function useUploadPembayaran({ formId, stepId }: UseUploadPembayaranParam
         const result = await submitPembayaranAction({
           formId,
           filePath: path,
-          
         });
 
         if (!result.success) {
-          throw new Error(result.error.code || "Gagal mengirim bukti pembayaran.");
+          throw new Error(result.message || "Gagal mengirim bukti pembayaran.");
         }
 
-        setState({ stage: "success", error: null, nextStep: result?.data?.nextStep ?? null });
+        setState({
+          stage: "success",
+          error: null,
+          nextStep: result.data?.nextStep ?? null,
+        });
+
         return result.data;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Terjadi kesalahan tak terduga.";
@@ -93,7 +94,7 @@ export function useUploadPembayaran({ formId, stepId }: UseUploadPembayaranParam
         throw err;
       }
     },
-    [formId, stepId]
+    [formId]
   );
 
   return {

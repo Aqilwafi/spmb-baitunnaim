@@ -27,8 +27,9 @@ export async function submitPembayaran(
   const { data, error } = await supabase.rpc("fn_rpc_submit_pembayaran", {
     p_form_id: params.formId,
     p_file_path: params.filePath,
-    p_step_id: params.stepId,
   });
+
+  
 
   if (error) {
     throw new Error(error.message);
@@ -37,10 +38,10 @@ export async function submitPembayaran(
   // RPC return type di-generate sebagai `Json` karena SQL function return jsonb.
   // Bentuk aktualnya sudah pasti { success: boolean, next_step: number }
   // sesuai definisi fn_rpc_submit_pembayaran — assert di sini.
-  const result = data as { success: boolean; next_step: number };
+  const result = data as { success: boolean; next_step_id: number };
 
   return {
     success: result.success,
-    nextStep: result.next_step,
+    nextStep: result.next_step_id,
   };
 }

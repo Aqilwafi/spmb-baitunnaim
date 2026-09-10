@@ -83,8 +83,6 @@ export async function getInitFormStepData(
   const data = await getInitFormStep(parsed.data, tahunAjaranId);
   
   if (!data) return null;
-
-  console.log(data);
   
   return {
     ...data,

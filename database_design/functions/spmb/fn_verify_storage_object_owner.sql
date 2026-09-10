@@ -5,7 +5,6 @@ create or replace function public.fn_verify_storage_object_owner(
 )
 returns boolean
 language plpgsql
-security definer -- Membuka akses ke storage.objects secara aman
 set search_path = public, storage
 as $$
 begin
@@ -21,4 +20,4 @@ $$;
 
 -- Cabut akses dari publik/authenticated agar fungsi internal ini tidak dipanggil langsung via RPC client
 revoke execute on function public.fn_verify_storage_object_owner from public;
-revoke execute on function public.fn_verify_storage_object_owner from authenticated;
+grant execute on function public.fn_verify_storage_object_owner from authenticated;

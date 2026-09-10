@@ -20,8 +20,6 @@ export default async function BiodataSiswaContainer({
     ? await getBiodataSiswaDetail({ formId: pendaftaran_id })
     : null;
 
-  console.log("BiodataSiswaContainer data:", data?.data);
-
   return (
     <BiodataSiswaDetailStep
       pendaftaran_id={pendaftaran_id}

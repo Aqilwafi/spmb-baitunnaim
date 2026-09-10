@@ -2,42 +2,41 @@
 
 import { revalidatePath } from "next/cache";
 import { processSubmitBiodataSiswaDetail } from "@/features/form/biodata-siswa-detail";
-import type { ActionResponse } from "@bn/types";
 
-interface SubmitBiodataSiswaDetailActionInput {
-  formId: string;
-  // stepId dihapus
-  rawPayload: unknown;
-}
-
-interface SubmitBiodataSiswaDetailActionData {
-  nextStep: number;
-}
-
-export async function submitBiodataSiswaDetailAction(
-  input: SubmitBiodataSiswaDetailActionInput
-): Promise<ActionResponse<SubmitBiodataSiswaDetailActionData>> {
+export async function submitBiodataSiswaDetailAction(input: any) {
   try {
     const result = await processSubmitBiodataSiswaDetail({
       formId: input.formId,
       rawPayload: input.rawPayload,
     });
 
+    // 🔴 CEK JIKA RESULT GAGAL
+    if (!result.success) {
+      let fieldErrors: Record<string, string[]> | undefined = undefined;
+
+      if (result.code === "23505" || result.message?.toLowerCase().includes("nisn")) {
+        fieldErrors = { nisn: ["NISN sudah terdaftar dalam sistem."] };
+      }
+
+      return {
+        success: false,
+        message: result.message || "Gagal menyimpan biodata siswa detail.",
+        errors: fieldErrors,
+      };
+    }
+
+    // 🟢 HANYA DILAKUKAN JIKA BENAR-BENAR SUKSES
     revalidatePath("/dashboard");
 
     return {
       success: true,
       message: "Biodata siswa detail berhasil disimpan.",
-      data: { nextStep: result.nextStep ?? 0},
+      data: { nextStep: result.nextStep ?? 0 },
     };
-  } catch (err) {
+  } catch (err: any) {
     return {
       success: false,
-      message: err instanceof Error ? err.message : "Gagal menyimpan biodata siswa detail.",
-      error: {
-        code: "SUBMIT_BIODATA_SISWA_DETAIL_FAILED",
-        details: err instanceof Error ? err.message : err,
-      },
+      message: err?.message || "Terjadi kesalahan sistem.",
     };
   }
 }

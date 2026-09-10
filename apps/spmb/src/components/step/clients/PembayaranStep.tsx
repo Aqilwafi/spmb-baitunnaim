@@ -29,7 +29,6 @@ export default function PembayaranStep({
   const [file, setFile] = useState<File | null>(null);
   const { upload, isLoading, error, stage } = useUploadPembayaran({
     formId: pendaftaran_id,
-    stepId: step_id,
   });
 
   const handleUpload = async () => {

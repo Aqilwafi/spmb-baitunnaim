@@ -1,6 +1,7 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { EnumAgama, BiodataSiswaDetail } from "@bn/types";
+import { param } from "framer-motion/client";
 
 // Extends tipe BiodataSiswaDetail dengan NISN (diambil dari tabel biodata_siswa)
 export type BiodataSiswaDetailResultData = Pick<
@@ -59,6 +60,7 @@ export async function getBiodataSiswaDetail(
   params: GetBiodataSiswaDetailParams
 ): Promise<GetBiodataSiswaDetailResult> {
   const supabase = await createSupabaseServer();
+  
 
   const { data, error } = await supabase.rpc("fn_rpc_get_biodata_siswa_detail", {
     p_form_id: params.formId,
@@ -71,10 +73,11 @@ export async function getBiodataSiswaDetail(
       code: error.code,
     };
   }
+  
 
   // Karena RPC RETURNS TABLE, data yang dikembalikan berupa array [row]
   const result = (data as BiodataSiswaDetailResultData[])?.[0] ?? null;
-
+  
   return {
     success: true,
     data: result,
@@ -88,7 +91,7 @@ export async function submitBiodataSiswaDetail(
   params: SubmitBiodataSiswaDetailParams
 ): Promise<SubmitBiodataSiswaDetailResult> {
   const supabase = await createSupabaseServer();
-
+console.log("input:", params)
   const { data, error } = await supabase.rpc("fn_rpc_submit_biodata_siswa_detail", {
     p_form_id: params.formId,
     p_nisn: params.nisn,
@@ -104,6 +107,9 @@ export async function submitBiodataSiswaDetail(
     p_penyakit: params.penyakit ?? null,
   } as any);
 
+  console.log("data:", data)
+  console.log("error:", error)
+
   if (error) {
     return {
       success: false,
@@ -113,7 +119,7 @@ export async function submitBiodataSiswaDetail(
   }
 
   const result = data as { success: boolean; next_step: number };
-
+console.log("result:", result)
   return {
     success: result.success,
     nextStep: result.next_step,
