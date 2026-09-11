@@ -11,7 +11,14 @@ export type MasterData = {
   semester?: string;
 };
 
-export interface BaseRPCSubmitResponse {
+export type RpcSubmitResponse = {
+  success: boolean;
+  form_id: string;
+  next_step_id?: number;
+};
+
+export type BaseRPCSubmitResponse = {
+  success: boolean;
   form_id: string;
   next_step_id?: number;
 }

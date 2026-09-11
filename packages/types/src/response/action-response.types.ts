@@ -16,8 +16,3 @@ export type ActionResponse<T = undefined> =
         details?: unknown;
       };
     };
-
-export type RpcSubmitResponse = {
-  form_id: string;
-  next_step_id?: number;
-};
