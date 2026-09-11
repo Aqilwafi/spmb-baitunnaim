@@ -35,14 +35,3 @@ export async function processSubmitBiodataSiswaDetail(
     penyakit: data.penyakit,
   });
 }
-
-export async function getMasterData() {
-    const [statusRumahOptions, tinggalBersamaOptions] = await Promise.all([
-        getStatusRumahOptions(),
-        getTinggalBersamaOptions()
-    ]);
-    return {
-        statusRumahOptions,
-        tinggalBersamaOptions
-    };
-}

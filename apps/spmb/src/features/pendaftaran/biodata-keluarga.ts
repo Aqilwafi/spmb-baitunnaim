@@ -1,40 +1,80 @@
-import { biodataKeluargaFormSchema } from "@bn/validators";
-import { submitBiodataKeluarga } from "@/services/pendaftaran/biodata-keluarga";
-import type { ActionResponse } from "@bn/types";
+import "server-only";
+import { createSupabaseServer } from "@bn/supabase/server";
+import type {
+  EnumRelasiKeluarga,
+  EnumStatusHidup,
+  BiodataKeluarga,
+} from "@bn/types";
 
-interface ProcessSubmitBiodataKeluargaInput {
+// Types
+export interface SubmitBiodataKeluargaParams {
   formId: string;
-  rawPayload: unknown;
+  relationType: EnumRelasiKeluarga; // "AYAH" | "IBU" | "WALI"
+  namaLengkap: string;
+  statusHidup?: EnumStatusHidup; // "HIDUP" | "MENINGGAL"
+  detailRelationType?: string | null;
+  nik?: string | null;
+  tempatLahir?: string | null;
+  tanggalLahir?: string | null;
+  pekerjaan?: string | null;
+  pendidikanTerakhir?: string | null;
+  penghasilan?: string | null;
+  noHp?: string | null;
+  alamat?: string | null;
+  sameAddressAs?: EnumRelasiKeluarga | null;
 }
 
-export async function processSubmitBiodataKeluarga(
-  input: ProcessSubmitBiodataKeluargaInput
-): Promise<ActionResponse> {
-  // Parsing & Validasi menggunakan Zod Schema
-  const parsed = biodataKeluargaFormSchema.safeParse(input.rawPayload);
+export interface SubmitBiodataKeluargaResult {
+  success: boolean;
+  nextStep?: number;
+  message?: string;
+  code?: string;
+}
 
-  if (!parsed.success) {
-    const firstIssue = parsed.error.issues[0];
-    throw new Error(firstIssue?.message ?? "Data biodata keluarga tidak valid.");
+/**
+ * Menyimpan / memperbarui data biodata keluarga (Ayah / Ibu / Wali)
+ */
+export async function submitBiodataKeluarga(
+  params: SubmitBiodataKeluargaParams
+): Promise<SubmitBiodataKeluargaResult> {
+  const supabase = await createSupabaseServer();
+
+  console.log("input:", params);
+
+  const { data, error } = await supabase.rpc("fn_rpc_submit_biodata_keluarga", {
+    p_form_id: params.formId,
+    p_relation_type: params.relationType,
+    p_nama_lengkap: params.namaLengkap,
+    p_status_hidup: params.statusHidup ?? "HIDUP",
+    p_detail_relation_type: params.detailRelationType ?? null,
+    p_nik: params.nik ?? null,
+    p_tempat_lahir: params.tempatLahir ?? null,
+    p_tanggal_lahir: params.tanggalLahir ?? null,
+    p_pekerjaan: params.pekerjaan ?? null,
+    p_pendidikan_terakhir: params.pendidikanTerakhir ?? null,
+    p_penghasilan: params.penghasilan ?? null,
+    p_no_hp: params.noHp ?? null,
+    p_alamat: params.alamat ?? null,
+    p_same_address_as: params.sameAddressAs ?? null,
+  } as any);
+
+  console.log("data:", data);
+  console.log("error:", error);
+
+  if (error) {
+    return {
+      success: false,
+      message: error.message,
+      code: error.code,
+    };
   }
 
-  const data = parsed.data;
+  const result = data as { success: boolean; next_step: number };
 
-  // Memanggil service layer untuk persistence ke DB/API
-  return submitBiodataKeluarga({
-    formId: input.formId,
-    biodataSiswaId: data.biodataSiswaId,
-    relationType: data.relationType,
-    detailRelationType: data.detailRelationType,
-    namaLengkap: data.namaLengkap,
-    nik: data.nik,
-    statusHidup: data.statusHidup,
-    tempatLahir: data.tempatLahir,
-    tanggalLahir: data.tanggalLahir,
-    pekerjaan: data.pekerjaan,
-    pendidikanTerakhir: data.pendidikanTerakhir,
-    penghasilan: data.penghasilan,
-    noHp: data.noHp,
-    alamat: data.alamat,
-  });
+  console.log("result:", result);
+
+  return {
+    success: result.success,
+    nextStep: result.next_step,
+  };
 }

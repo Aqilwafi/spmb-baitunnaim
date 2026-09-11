@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Button, Radio } from "@bn/ui";
 import type { MasterData } from "@bn/types";
-import type { BiodataSiswaDetailResultData } from "@/services/pendaftaran/biodata-siswa-detail";
+import type { BiodataSiswaDetailResultData } from "@/services/biodata/siswa";
 
 interface BiodataSiswaDetailFormProps {
   data: BiodataSiswaDetailResultData | null;
@@ -23,19 +23,16 @@ export function BiodataSiswaDetailForm({
   isPending,
   state,
 }: BiodataSiswaDetailFormProps) {
-  const [formData, setFormData] = useState({
-    nisn: data?.nisn || "",
-    noKk: data?.no_kk || "",
-    agama: data?.agama || "ISLAM",
-    anakKe: data?.anak_ke || 1,
-    jumlahSaudara: data?.jumlah_saudara || 0,
-    hobi: data?.hobi || "",
-    citaCita: data?.cita_cita || "",
-    penyakit: data?.penyakit || "",
-    alamat: data?.alamat || "",
-    tinggalBersamaId: data?.tinggal_bersama_id || tinggalBersamaOptions[0]?.value || 1,
-    statusRumahId: data?.status_rumah_id || statusRumahOptions[0]?.value || 1,
-  });
+  // Hanya field yang butuh reaktivitas UI (live counter / highlight) yang di-useState.
+  // Sisanya uncontrolled (defaultValue) — konsisten dengan pola InitForm.
+  const [nisn, setNisn] = useState(data?.nisn || "");
+  const [noKk, setNoKk] = useState(data?.no_kk || "");
+  const [tinggalBersamaId, setTinggalBersamaId] = useState(
+    data?.tinggal_bersama_id || tinggalBersamaOptions[0]?.value || 1
+  );
+  const [statusRumahId, setStatusRumahId] = useState(
+    data?.status_rumah_id || statusRumahOptions[0]?.value || 1
+  );
 
   const handleNumericInput = (value: string, maxLength: number) => {
     return value.replace(/\D/g, "").slice(0, maxLength);
@@ -47,9 +44,8 @@ export function BiodataSiswaDetailForm({
     }
   };
 
-  const isNisnValid = formData.nisn.length === 10;
-  const isNoKkValid = formData.noKk.length === 16;
-  const isFormValid = isNisnValid && isNoKkValid && formData.alamat.trim() !== "";
+  const isNisnValid = nisn.length === 10;
+  const isNoKkValid = noKk.length === 16;
 
   const renderFieldError = (fieldError?: string | string[]) => {
     if (!fieldError) return null;
@@ -74,8 +70,8 @@ export function BiodataSiswaDetailForm({
         <div>
           <div className="flex justify-between items-center mb-1">
             <label className="text-xs font-semibold text-gray-700">NISN</label>
-            <span className={`text-[10px] ${formData.nisn.length === 10 ? "text-green-600 font-medium" : "text-gray-400"}`}>
-              {formData.nisn.length}/10 digit
+            <span className={`text-[10px] ${isNisnValid ? "text-green-600 font-medium" : "text-gray-400"}`}>
+              {nisn.length}/10 digit
             </span>
           </div>
           <input
@@ -84,16 +80,16 @@ export function BiodataSiswaDetailForm({
             inputMode="numeric"
             required
             maxLength={10}
-            value={formData.nisn}
-            onChange={(e) => setFormData({ ...formData, nisn: handleNumericInput(e.target.value, 10) })}
+            value={nisn}
+            onChange={(e) => setNisn(handleNumericInput(e.target.value, 10))}
             className={`w-full text-sm p-3 rounded-xl border focus:outline-none transition-colors ${
-              (formData.nisn && !isNisnValid) || state?.errors?.nisn
+              (nisn && !isNisnValid) || state?.errors?.nisn
                 ? "border-red-300 focus:border-red-500 bg-red-50/20"
                 : "border-gray-200 focus:border-blue-500"
             }`}
             placeholder="0012345678"
           />
-          {formData.nisn && !isNisnValid && (
+          {nisn && !isNisnValid && (
             <p className="text-[10px] text-red-500 mt-1">NISN harus tepat 10 digit angka.</p>
           )}
           {renderFieldError(state?.errors?.nisn)}
@@ -103,8 +99,8 @@ export function BiodataSiswaDetailForm({
         <div>
           <div className="flex justify-between items-center mb-1">
             <label className="text-xs font-semibold text-gray-700">Nomor KK</label>
-            <span className={`text-[10px] ${formData.noKk.length === 16 ? "text-green-600 font-medium" : "text-gray-400"}`}>
-              {formData.noKk.length}/16 digit
+            <span className={`text-[10px] ${isNoKkValid ? "text-green-600 font-medium" : "text-gray-400"}`}>
+              {noKk.length}/16 digit
             </span>
           </div>
           <input
@@ -113,16 +109,16 @@ export function BiodataSiswaDetailForm({
             inputMode="numeric"
             required
             maxLength={16}
-            value={formData.noKk}
-            onChange={(e) => setFormData({ ...formData, noKk: handleNumericInput(e.target.value, 16) })}
+            value={noKk}
+            onChange={(e) => setNoKk(handleNumericInput(e.target.value, 16))}
             className={`w-full text-sm p-3 rounded-xl border focus:outline-none transition-colors ${
-              (formData.noKk && !isNoKkValid) || state?.errors?.noKk
+              (noKk && !isNoKkValid) || state?.errors?.noKk
                 ? "border-red-300 focus:border-red-500 bg-red-50/20"
                 : "border-gray-200 focus:border-blue-500"
             }`}
             placeholder="3201234567890001"
           />
-          {formData.noKk && !isNoKkValid && (
+          {noKk && !isNoKkValid && (
             <p className="text-[10px] text-red-500 mt-1">Nomor KK harus tepat 16 digit angka.</p>
           )}
           {renderFieldError(state?.errors?.noKk)}
@@ -135,7 +131,7 @@ export function BiodataSiswaDetailForm({
             type="text"
             name="agama"
             readOnly
-            value={formData.agama}
+            defaultValue={data?.agama || "ISLAM"}
             className="w-full text-sm p-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-600 font-medium cursor-not-allowed focus:outline-none"
           />
           {renderFieldError(state?.errors?.agama)}
@@ -151,8 +147,7 @@ export function BiodataSiswaDetailForm({
               min={1}
               required
               onKeyDown={preventInvalidNumberKeys}
-              value={formData.anakKe}
-              onChange={(e) => setFormData({ ...formData, anakKe: Math.max(1, parseInt(e.target.value) || 1) })}
+              defaultValue={data?.anak_ke || 1}
               className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             />
             {renderFieldError(state?.errors?.anakKe)}
@@ -165,8 +160,7 @@ export function BiodataSiswaDetailForm({
               min={0}
               required
               onKeyDown={preventInvalidNumberKeys}
-              value={formData.jumlahSaudara}
-              onChange={(e) => setFormData({ ...formData, jumlahSaudara: Math.max(0, parseInt(e.target.value) || 0) })}
+              defaultValue={data?.jumlah_saudara || 0}
               className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             />
             {renderFieldError(state?.errors?.jumlahSaudara)}
@@ -180,8 +174,7 @@ export function BiodataSiswaDetailForm({
             type="text"
             name="hobi"
             required
-            value={formData.hobi}
-            onChange={(e) => setFormData({ ...formData, hobi: e.target.value })}
+            defaultValue={data?.hobi || ""}
             className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             placeholder="Membaca"
           />
@@ -195,8 +188,7 @@ export function BiodataSiswaDetailForm({
             type="text"
             name="citaCita"
             required
-            value={formData.citaCita}
-            onChange={(e) => setFormData({ ...formData, citaCita: e.target.value })}
+            defaultValue={data?.cita_cita || ""}
             className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             placeholder="Insinyur"
           />
@@ -210,8 +202,7 @@ export function BiodataSiswaDetailForm({
         <input
           type="text"
           name="penyakit"
-          value={formData.penyakit || ""}
-          onChange={(e) => setFormData({ ...formData, penyakit: e.target.value })}
+          defaultValue={data?.penyakit || ""}
           className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
           placeholder="Asma, Alergi (kosongkan jika tidak ada)"
         />
@@ -225,8 +216,7 @@ export function BiodataSiswaDetailForm({
           name="alamat"
           required
           rows={3}
-          value={formData.alamat}
-          onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
+          defaultValue={data?.alamat || ""}
           className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
           placeholder="Jl. Merdeka No. 123, RT 01/RW 02..."
         />
@@ -241,7 +231,7 @@ export function BiodataSiswaDetailForm({
             <label
               key={opt.value}
               className={`flex items-center gap-2 p-3 rounded-xl border text-xs font-medium cursor-pointer transition-colors ${
-                formData.tinggalBersamaId === opt.value
+                tinggalBersamaId === opt.value
                   ? "border-blue-500 bg-blue-50/50 text-blue-700"
                   : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
               }`}
@@ -249,8 +239,8 @@ export function BiodataSiswaDetailForm({
               <Radio
                 name="tinggalBersamaId"
                 value={opt.value}
-                checked={formData.tinggalBersamaId === opt.value}
-                onChange={() => setFormData({ ...formData, tinggalBersamaId: opt.value })}
+                checked={tinggalBersamaId === opt.value}
+                onChange={() => setTinggalBersamaId(opt.value)}
                 className="accent-blue-600 h-4 w-4"
               />
               <span>{opt.label}</span>
@@ -268,7 +258,7 @@ export function BiodataSiswaDetailForm({
             <label
               key={opt.value}
               className={`flex items-center gap-2 p-3 rounded-xl border text-xs font-medium cursor-pointer transition-colors ${
-                formData.statusRumahId === opt.value
+                statusRumahId === opt.value
                   ? "border-blue-500 bg-blue-50/50 text-blue-700"
                   : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
               }`}
@@ -276,8 +266,8 @@ export function BiodataSiswaDetailForm({
               <Radio
                 name="statusRumahId"
                 value={opt.value}
-                checked={formData.statusRumahId === opt.value}
-                onChange={() => setFormData({ ...formData, statusRumahId: opt.value })}
+                checked={statusRumahId === opt.value}
+                onChange={() => setStatusRumahId(opt.value)}
                 className="accent-blue-600 h-4 w-4"
               />
               <span>{opt.label}</span>
@@ -287,9 +277,10 @@ export function BiodataSiswaDetailForm({
         {renderFieldError(state?.errors?.statusRumahId)}
       </div>
 
+      {/* disabled hanya berdasar isPending — konsisten dengan InitForm, biar server jadi validator final */}
       <Button
         type="submit"
-        disabled={isPending || !isFormValid}
+        disabled={isPending}
         className="rounded-xl w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? "Menyimpan..." : "Simpan Biodata Detail"}

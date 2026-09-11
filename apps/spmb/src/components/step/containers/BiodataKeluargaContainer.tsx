@@ -1,7 +1,7 @@
 import type { StepContainerProps } from "@/types/step.types";
-import { EnumRelasiKeluarga } from "@bn/types";
+import { checkWaliRequirementStatus } from "@/features/pendaftaran/cek-wali";
 import BiodataKeluargaStep from "@/components/step/clients/BiodataKeluargaStep";
-// import { getBiodataKeluargaByRelation, getWaliRequirement } from "@/features/pendaftaran/biodata-keluarga";
+// import { getBiodataKeluargaByRelation } from "@/features/pendaftaran/biodata-keluarga";
 
 export default async function BiodataKeluargaContainer({
   pendaftaran_id,
@@ -22,14 +22,24 @@ export default async function BiodataKeluargaContainer({
 
   const relationType = relationMap[code || "BIODATA_FATHER"] || "AYAH";
 
+  // 1. Pengecekan requirement Wali HANYA jika sedang di step BIODATA_WALI
+  let isWaliMandatory = false ;
+
+  if (code === "BIODATA_WALI") {
+    // Fungsi ini hanya dieksekusi/query ke database di step WALI saja
+    isWaliMandatory = await checkWaliRequirementStatus(pendaftaran_id);
+
+    // 2. Jika Wali TIDAK wajib & status masih active,
+    // sembunyikan step ini (atau logic auto-skip step pendaftaran)
+    if (!isWaliMandatory && status === "active") {
+      return null; 
+    }
+  }
+
   // Ambil data spesifik berdasarkan relasi jika step sudah complete
   const data = status === "complete"
     ? null // await getBiodataKeluargaByRelation(pendaftaran_id, relationType)
     : null;
-
-  // Query khusus dari server: Apakah pendaftar wajib isi wali? (Misal berdasarkan umur/status orang tua)
-  // Contoh: const isWaliMandatory = await getWaliRequirement(pendaftaran_id);
-  const isWaliMandatory = false; // 👈 Mock nilai true/false dari server
 
   return (
     <BiodataKeluargaStep
@@ -38,7 +48,7 @@ export default async function BiodataKeluargaContainer({
       status={status}
       relationType={relationType}
       data={data}
-      isWaliMandatory={isWaliMandatory} // 👈 Pass ke client
+      isWaliMandatory={isWaliMandatory}
     />
   );
 }

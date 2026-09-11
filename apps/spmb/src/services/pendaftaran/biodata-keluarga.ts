@@ -1,6 +1,10 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
-import type { EnumRelasiKeluarga, EnumStatusHidup, BiodataKeluarga, ActionResponse, BaseRPCSubmitResponse, FormSubmitResult} from "@bn/types";
+import type {
+  EnumRelasiKeluarga,
+  EnumStatusHidup,
+  BiodataKeluarga,
+} from "@bn/types";
 
 // Types
 export interface SubmitBiodataKeluargaParams {
@@ -20,14 +24,9 @@ export interface SubmitBiodataKeluargaParams {
   sameAddressAs?: EnumRelasiKeluarga | null;
 }
 
-export interface GetBiodataKeluargaParams {
-  formId: string;
-  relationType: EnumRelasiKeluarga;
-}
-
-export interface GetBiodataKeluargaResult {
+export interface SubmitBiodataKeluargaResult {
   success: boolean;
-  data?: BiodataKeluarga | null;
+  nextStep?: number;
   message?: string;
   code?: string;
 }
@@ -36,13 +35,14 @@ export interface GetBiodataKeluargaResult {
  * Menyimpan / memperbarui data biodata keluarga (Ayah / Ibu / Wali)
  */
 export async function submitBiodataKeluarga(
-    formId: string,
-    params: SubmitBiodataKeluargaParams
-): Promise<ActionResponse<FormSubmitResult>> {
+  params: SubmitBiodataKeluargaParams
+): Promise<SubmitBiodataKeluargaResult> {
   const supabase = await createSupabaseServer();
 
+  console.log("input:", params);
+
   const { data, error } = await supabase.rpc("fn_rpc_submit_biodata_keluarga", {
-    p_form_id: formId,
+    p_form_id: params.formId,
     p_relation_type: params.relationType,
     p_nama_lengkap: params.namaLengkap,
     p_status_hidup: params.statusHidup ?? "HIDUP",
@@ -62,50 +62,16 @@ export async function submitBiodataKeluarga(
     return {
       success: false,
       message: error.message,
-      error: {
-        code: error.code,
-        details: error.details,
-      }
+      code: error.code,
     };
   }
 
-  const result = data as BaseRPCSubmitResponse ;
+  const result = data as { success: boolean; next_step: number };
+
+  console.log("result:", result);
 
   return {
     success: result.success,
-    message: "",
-    data: {
-        formId: result.form_id,
-        nextStepId: result?.next_step_id,
-    }
+    nextStep: result.next_step,
   };
 }
-
-/**
- * Mengambil data biodata keluarga spesifik berdasarkan formId dan relationType
- */
-// export async function getBiodataKeluarga(
-//   params: GetBiodataKeluargaParams
-// ): Promise<GetBiodataKeluargaResult> {
-//   const supabase = await createSupabaseServer();
-
-//   const { data, error } = await supabase.rpc("fn_rpc_get_biodata_keluarga", {
-//     p_form_id: params.formId,
-//     p_relation_type: params.relationType,
-//   } as any);
-
-//   if (error) {
-//     return {
-//       success: false,
-//       message: error.message,
-//       code: error.code,
-//     };
-//   }
-
-//   const result = (data as BiodataKeluarga[])?.[0] ?? null;
-
-//   return {
-//     success: true,
-//     data: result,
-//   };
-// }

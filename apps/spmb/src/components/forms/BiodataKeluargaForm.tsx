@@ -24,7 +24,7 @@ export function BiodataKeluargaForm({
 }: BiodataKeluargaFormProps) {
   const [skipWali, setSkipWali] = useState(false);
   const [statusHidup, setStatusHidup] = useState<LifeStatus>(data?.status_hidup || "HIDUP");
-  const [formData, setFormData] = useState<BiodataKeluargaItemData>({
+  const [formData, setFormData] = useState<Omit<BiodataKeluargaItemData, "alamat">>({
     relation_type: relationType,
     detail_relation_type: data?.detail_relation_type || "",
     nama_lengkap: data?.nama_lengkap || "",
@@ -36,7 +36,6 @@ export function BiodataKeluargaForm({
     pendidikan_terakhir: data?.pendidikan_terakhir || "",
     penghasilan: data?.penghasilan || "",
     no_hp: data?.no_hp || "",
-    alamat: data?.alamat || "",
   });
 
   const isHidup = statusHidup === "HIDUP";
@@ -262,19 +261,6 @@ export function BiodataKeluargaForm({
                     placeholder="Rp 3.000.000 - Rp 5.000.000"
                   />
                   {renderFieldError(state?.errors?.penghasilan)}
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Alamat Tempat Tinggal</label>
-                  <textarea
-                    name="alamat"
-                    rows={2}
-                    value={formData.alamat || ""}
-                    onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
-                    placeholder="Kosongkan jika sama dengan alamat domisili siswa"
-                  />
-                  {renderFieldError(state?.errors?.alamat)}
                 </div>
               </>
             )}

@@ -3,7 +3,6 @@ create or replace function public.fn_rpc_is_guardian_required(
 )
 returns boolean
 language plpgsql
-security definer
 set search_path = public
 as $$
 declare
@@ -40,3 +39,6 @@ begin
         coalesce(v_mother_alive, true) = false;
 end;
 $$;
+
+revoke execute on function public.fn_rpc_is_guardian_required from public;
+grant execute on function public.fn_rpc_is_guardian_required to authenticated;

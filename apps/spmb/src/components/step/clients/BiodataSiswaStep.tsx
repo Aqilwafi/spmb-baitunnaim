@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, UserCheck, ShieldCheck, FileText, Home, HeartHandshake } from "lucide-react";
 import { submitBiodataSiswaDetailAction } from "@/actions/pendaftaran/biodata-siswa-detail";
 import { BiodataSiswaDetailForm } from "@/components/forms/BiodataSiswaDetailForm";
 import type { MasterData } from "@bn/types";
-import type { BiodataSiswaDetailResultData } from "@/services/pendaftaran/biodata-siswa-detail";
+import type { BiodataSiswaDetailResultData } from "@/services/biodata/siswa";
 
 interface BiodataSiswaDetailStepProps {
   pendaftaran_id: string;
@@ -25,22 +25,17 @@ export default function BiodataSiswaDetailStep({
   tinggalBersamaOptions,
 }: BiodataSiswaDetailStepProps) {
   const router = useRouter();
-  const isSubmittedRef = useRef(false);
 
   const [state, action, isPending] = useActionState(
-    async (prevState: any, formPayload: FormData) => {
-      isSubmittedRef.current = true;
-      return await submitBiodataSiswaDetailAction({
-        formId: pendaftaran_id,
-        rawPayload: Object.fromEntries(formPayload),
-      });
-    },
+    (prevState: any, formData: FormData) =>
+      submitBiodataSiswaDetailAction(prevState, formData, pendaftaran_id),
     null
   );
 
+  // Konsisten dengan InitFormPendaftaranModal: cukup reaktif ke state?.success,
+  // tidak butuh ref tambahan karena useActionState sudah reaktif pasca-submit.
   useEffect(() => {
-    if (isSubmittedRef.current && state?.success) {
-      isSubmittedRef.current = false;
+    if (state?.success) {
       router.refresh();
     }
   }, [state, router]);

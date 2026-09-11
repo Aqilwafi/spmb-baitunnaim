@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck, AlertCircle } from "lucide-react";
+import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck, AlertCircle, CreditCard } from "lucide-react";
 import { Button } from "@bn/ui";
 import { formatDateTimeId } from "@bn/utils";
 import { useUploadPembayaran } from "@/hooks/usePembayaran";
@@ -116,6 +116,21 @@ export default function PembayaranStep({
             <p className="text-xs text-gray-500 mt-0.5">
               Silakan unggah bukti transfer atau bukti bayar untuk melanjutkan proses pendaftaran.
             </p>
+          </div>
+        </div>
+
+        {/* Informasion Rekening Tujuan */}
+        <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-2xl mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <CreditCard size={18} className="text-blue-600" />
+            <h3 className="text-xs sm:text-sm font-bold text-gray-800">
+              Rekening Pembayaran Resmi
+            </h3>
+          </div>
+          <div className="space-y-1 text-xs text-gray-700">
+            <p><span className="font-semibold text-gray-500">Bank:</span> Bank Mandiri / BCA</p>
+            <p><span className="font-semibold text-gray-500">No. Rekening:</span> 123-00-1234567-8</p>
+            <p><span className="font-semibold text-gray-500">Atas Nama:</span> Panitia SPMB / Yayasan</p>
           </div>
         </div>
 

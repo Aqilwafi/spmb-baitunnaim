@@ -1091,7 +1091,7 @@ export type Database = {
         }[]
       }
       fn_rpc_is_guardian_required: {
-        Args: { p_biodata_siswa_id: string }
+        Args: { p_form_id: string }
         Returns: boolean
       }
       fn_rpc_submit_biodata_keluarga: {

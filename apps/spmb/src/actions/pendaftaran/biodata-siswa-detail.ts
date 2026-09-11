@@ -2,15 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { processSubmitBiodataSiswaDetail } from "@/features/pendaftaran/biodata-siswa-detail";
+import type { ActionResponse, FormSubmitResult } from "@bn/types";
 
-export async function submitBiodataSiswaDetailAction(input: any) {
+export async function submitBiodataSiswaDetailAction(
+  _prevState: ActionResponse<FormSubmitResult> | null,
+  formData: FormData,
+  formId: string,
+): Promise<ActionResponse<FormSubmitResult>> {
   try {
     const result = await processSubmitBiodataSiswaDetail({
-      formId: input.formId,
-      rawPayload: input.rawPayload,
+      formId: formId,
+      rawPayload: formData,
     });
 
-    // 🔴 CEK JIKA RESULT GAGAL
     if (!result.success) {
       let fieldErrors: Record<string, string[]> | undefined = undefined;
 
@@ -25,13 +29,15 @@ export async function submitBiodataSiswaDetailAction(input: any) {
       };
     }
 
-    // 🟢 HANYA DILAKUKAN JIKA BENAR-BENAR SUKSES
     revalidatePath("/dashboard");
 
     return {
       success: true,
       message: "Biodata siswa detail berhasil disimpan.",
-      data: { nextStep: result.nextStep ?? 0 },
+      data: {
+        formId,
+        nextStepId: result.nextStep ?? 0,
+      },
     };
   } catch (err: any) {
     return {
