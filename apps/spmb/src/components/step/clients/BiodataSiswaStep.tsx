@@ -3,10 +3,10 @@
 import { useActionState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, UserCheck, ShieldCheck, FileText, Home, HeartHandshake } from "lucide-react";
-import { submitBiodataSiswaDetailAction } from "@/actions/biodata-siswa-detail.actions";
+import { submitBiodataSiswaDetailAction } from "@/actions/pendaftaran/biodata-siswa-detail";
 import { BiodataSiswaDetailForm } from "@/components/forms/BiodataSiswaDetailForm";
 import type { MasterData } from "@bn/types";
-import type { BiodataSiswaDetailResultData } from "@/services/biodata-siswa-detail";
+import type { BiodataSiswaDetailResultData } from "@/services/pendaftaran/biodata-siswa-detail";
 
 interface BiodataSiswaDetailStepProps {
   pendaftaran_id: string;

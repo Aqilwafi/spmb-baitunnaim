@@ -1,8 +1,8 @@
 import type { StepContainerProps } from "@/types/step.types";
 import BiodataSiswaDetailStep from "@/components/step/clients/BiodataSiswaStep";
-import { getMasterData } from "@/features/form/biodata-siswa-detail";
+import { getMasterData } from "@/features/pendaftaran/biodata-siswa-detail";
 
-import { getBiodataSiswaDetail } from "@/services/biodata-siswa-detail";
+import { getBiodataSiswaDetail } from "@/services/pendaftaran/biodata-siswa-detail";
 
 
 

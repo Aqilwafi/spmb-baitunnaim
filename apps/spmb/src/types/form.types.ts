@@ -16,3 +16,8 @@ export interface FormCardsData {
   admission_status: FormPendaftaran['admission_status'];
   updated_at: FormPendaftaran['updated_at'];
 }
+
+export type InitFormStepDataRPCResponse = Pick<BiodataSiswa, 'nama_lengkap' | 'nik' | 'jenis_kelamin' | 'tempat_lahir' | 'tanggal_lahir'> & {
+  lembaga_tujuan: string;
+  kelas: string | null;
+}

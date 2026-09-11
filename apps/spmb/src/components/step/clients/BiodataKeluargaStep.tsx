@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, User, ShieldCheck } from "lucide-react";
-import { submitBiodataKeluargaAction } from "@/actions/biodata-keluarga.actions";
+import { submitBiodataKeluargaAction } from "@/actions/pendaftaran/biodata-keluarga";
 import { BiodataKeluargaForm } from "@/components/forms/BiodataKeluargaForm";
 
 export type RelationType = "AYAH" | "IBU" | "WALI";

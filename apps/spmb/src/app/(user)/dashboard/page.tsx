@@ -1,6 +1,6 @@
 // @spmb/app/dashboard/page.tsx
 
-import { getDashboardSummary } from "@/features/dashboard/summary";
+import { getDashboardSummary } from "@/features/form/summary";
 import { EmptyPendaftaran } from '@/components/dashboards/EmptyPendaftaran';
 import { FormPendaftaranCard } from '@/components/dashboards/FormPendaftaranCard';
 import { InitFormPendaftaranModal } from '@/components/dashboards/InitFormPendaftaranModal';

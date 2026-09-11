@@ -1,6 +1,6 @@
 import { biodataSiswaDetailSubmitSchema } from "@bn/validators";
-import { submitBiodataSiswaDetail } from "@/services/biodata-siswa-detail";
-import type { SubmitBiodataSiswaDetailResult } from "@/services/biodata-siswa-detail";
+import { submitBiodataSiswaDetail } from "@/services/pendaftaran/biodata-siswa-detail";
+import type { SubmitBiodataSiswaDetailResult } from "@/services/pendaftaran/biodata-siswa-detail";
 import { getTinggalBersamaOptions, getStatusRumahOptions } from "../master/options";
 
 interface ProcessSubmitBiodataSiswaDetailInput {

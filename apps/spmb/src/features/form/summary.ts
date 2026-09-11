@@ -2,7 +2,7 @@
 
 import { getTahunAjaranAktif } from "@/features/master/tahun-ajaran";
 import { getLembagaOptions, getKelasOptions } from "@/features/master/options";
-import { formCardsServices } from "@/services/cards";
+import { formCardsServices } from "@/services/form/cards";
 import type { FormCardsData } from "@/types/form.types";
 import type { MasterData, MasterTahunAjaran } from "@bn/types";
 

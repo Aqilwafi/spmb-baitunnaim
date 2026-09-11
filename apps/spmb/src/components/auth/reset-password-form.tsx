@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
-import { resetPasswordAction } from "@/actions/auth.actions";
+import { resetPasswordAction } from "@/actions/auth/auth";
 import { PasswordInput, Button } from "@bn/ui";
 
 export default function SetPasswordForm() {

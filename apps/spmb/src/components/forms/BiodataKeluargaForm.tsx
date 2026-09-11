@@ -231,7 +231,7 @@ export function BiodataKeluargaForm({
                     value={formData.pendidikan_terakhir || ""}
                     onChange={(e) => setFormData({ ...formData, pendidikan_terakhir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
-                    placeholder="SMA / S1"
+                    placeholder="SD / SMP / SMA"
                   />
                   {renderFieldError(state?.errors?.pendidikan_terakhir)}
                 </div>

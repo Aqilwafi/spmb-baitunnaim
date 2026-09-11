@@ -11,18 +11,17 @@ export type MasterData = {
   semester?: string;
 };
 
-export type RpcSubmitResponse = {
-  success: boolean;
-  form_id: string;
-  next_step_id?: number;
-};
+export type InputRelationType = "AYAH" | "IBU" | "WALI";
+export type DBRelationType = "BIODATA_FATHER" | "BIODATA_MOTHER" | "BIODATA_WALI";
 
+// bn/types
+// base dari rpc langsung
 export type BaseRPCSubmitResponse = {
   success: boolean;
   form_id: string;
   next_step_id?: number;
 }
-
+// ini untuk nextjs server, pakai camelCase
 export interface FormSubmitResult {
   formId: string;
   nextStepId?: number;

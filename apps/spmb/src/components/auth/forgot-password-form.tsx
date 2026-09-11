@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { forgotPasswordAction } from "@/actions/auth.actions";
+import { forgotPasswordAction } from "@/actions/auth/auth";
 import { EmailInput, Button } from "@bn/ui";
 
 export default function ForgotPasswordForm() {

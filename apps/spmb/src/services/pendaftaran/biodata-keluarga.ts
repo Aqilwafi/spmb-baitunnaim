@@ -1,6 +1,6 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
-import type { EnumRelasiKeluarga, EnumStatusHidup, BiodataKeluarga, ActionResponse, RpcSubmitResponse, BaseRPCSubmitResponse, FormSubmitResult} from "@bn/types";
+import type { EnumRelasiKeluarga, EnumStatusHidup, BiodataKeluarga, ActionResponse, BaseRPCSubmitResponse, FormSubmitResult} from "@bn/types";
 
 // Types
 export interface SubmitBiodataKeluargaParams {

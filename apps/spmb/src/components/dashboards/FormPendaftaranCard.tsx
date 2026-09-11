@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@bn/ui";
 import { FormCardsData } from "@/types/form.types";
+import { formatDateTimeId } from "@bn/utils";
 
 export function FormPendaftaranCard({ data }: { data: FormCardsData[] }) {
   return (
@@ -44,7 +45,7 @@ export function FormPendaftaranCard({ data }: { data: FormCardsData[] }) {
                     </p>
 
                     <p className="text-xs text-gray-500">
-                      Terakhir diubah: {form.updated_at}
+                      Terakhir diubah: {formatDateTimeId(form.updated_at)}
                     </p>
                   </div>
                 </Link>

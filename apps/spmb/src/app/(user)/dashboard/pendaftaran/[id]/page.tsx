@@ -1,5 +1,5 @@
 import { isAccessAllowed } from "@/features/auth/guards";
-import { getDetailPendaftaran } from "@/features/form/detail";
+import { getDetailPendaftaran } from "@/features/form/detail-form";
 import { computeStepStatus } from "@/helpers/step-rules";
 import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
@@ -7,7 +7,7 @@ import ForbiddenScreen from "@/components/others/ForbiddenScreen";
 import NotFound from "@/app/not-found";
 import BackButton from "@/components/buttons/BackButton";
 import type { StepElement } from "@/types/step.types";
-import { getSteps } from "@/features/form/steps";
+import { getSteps } from "@/features/master/steps";
 
 export const dynamic = "force-dynamic";
 

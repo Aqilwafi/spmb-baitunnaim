@@ -1,6 +1,6 @@
 // features/form/detail.ts
 
-import { formDetailService } from "@/services/detail";
+import { formDetailService } from "@/services/form/detail";
 import type { DetailPendaftaran } from "@/types/step.types";
 import { getCurrentClaims } from "@bn/auth";
 import { pickId } from "@bn/utils";

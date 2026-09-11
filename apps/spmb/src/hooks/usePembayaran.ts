@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { createSupabaseBrowser } from "@bn/supabase/browser";
-import { submitPembayaranAction } from "@/actions/pembayaran-actions";
+import { uploadFileToSignedUrl } from "@/services/upload/file";
+import { submitPembayaranAction } from "@/actions/pendaftaran/pembayaran";
 
 type UploadStage =
   | "idle"
@@ -38,7 +38,7 @@ export function useUploadPembayaran({ formId }: UseUploadPembayaranParams) {
       setState({ stage: "requesting-token", error: null, nextStep: null });
 
       try {
-        // 1. Minta signed upload token
+        // 1. Request signed upload token dari API Route
         const tokenRes = await fetch("/api/request-upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -57,19 +57,17 @@ export function useUploadPembayaran({ formId }: UseUploadPembayaranParams) {
 
         const { path, token } = tokenJson as { path: string; token: string };
 
-        // 2. Upload langsung ke Supabase Storage
+        // 2. Direct upload ke Supabase Storage via Service Adapter
         setState((prev) => ({ ...prev, stage: "uploading" }));
 
-        const supabase = createSupabaseBrowser();
-        const { error: uploadError } = await supabase.storage
-          .from("SPMB")
-          .uploadToSignedUrl(path, token, file);
+        await uploadFileToSignedUrl({
+          bucket: "SPMB",
+          path,
+          token,
+          file,
+        });
 
-        if (uploadError) {
-          throw new Error(uploadError.message);
-        }
-
-        // 3. Submit ke server action -> service -> RPC
+        // 3. Submit metadata/path ke Server Action
         setState((prev) => ({ ...prev, stage: "submitting" }));
 
         const result = await submitPembayaranAction({

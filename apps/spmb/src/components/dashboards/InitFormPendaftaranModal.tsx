@@ -4,7 +4,7 @@ import { useActionState, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Modal } from '@bn/ui';
 import { X, Save, Loader2, Plus } from 'lucide-react';
-import { initFormPendaftaranAction } from '@/actions/init-form.actions';
+import { initFormAction } from '@/actions/pendaftaran/init-form';
 import { InitFormPendaftaran } from './InitFormPendaftaran';
 import { InitFormPendaftaranModalProps } from '@/types/form.types';
 
@@ -14,7 +14,7 @@ export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaran
   const [selectedLembagaId, setSelectedLembagaId] = useState<number | undefined>(undefined);
   
   // Hook Server Action
-  const [state, action, isPending] = useActionState(initFormPendaftaranAction, null);
+  const [state, action, isPending] = useActionState(initFormAction, null);
 
   function handleClose() {
     setIsOpen(false);

@@ -1,4 +1,4 @@
-import { submitPembayaran } from "@/services/pembayaran";
+import { submitPembayaran } from "@/services/pendaftaran/pembayaran";
 import { deleteBuktiBayarService } from "@/services/pembayaran-upload"; 
 
 interface SubmitPembayaranFeaturesInput {

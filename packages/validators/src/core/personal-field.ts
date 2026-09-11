@@ -48,10 +48,12 @@ export const tanggalLahirField = z.coerce
   }, "Usia minimal pendaftar adalah 1 tahun")
   .refine((date) => {
     const batasMasaLalu = new Date();
-    batasMasaLalu.setFullYear(batasMasaLalu.getFullYear() - 100);
+    batasMasaLalu.setFullYear(batasMasaLalu.getFullYear() - 150);
     return date >= batasMasaLalu;
-  }, "Tahun lahir tidak masuk akal");
-
+  }, "Tahun lahir tidak masuk akal")
+  // Transformaikan output akhir Zod langsung jadi ISO string YYYY-MM-DD
+  .transform((date) => date.toISOString().split("T")[0]);
+  
 export const alamatField = z
   .string()
   .trim()

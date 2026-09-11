@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { processSubmitBiodataSiswaDetail } from "@/features/form/biodata-siswa-detail";
+import { processSubmitBiodataSiswaDetail } from "@/features/pendaftaran/biodata-siswa-detail";
 
 export async function submitBiodataSiswaDetailAction(input: any) {
   try {

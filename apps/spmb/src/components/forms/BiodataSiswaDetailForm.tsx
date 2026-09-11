@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Button, Radio } from "@bn/ui";
 import type { MasterData } from "@bn/types";
-import type { BiodataSiswaDetailResultData } from "@/services/biodata-siswa-detail";
+import type { BiodataSiswaDetailResultData } from "@/services/pendaftaran/biodata-siswa-detail";
 
 interface BiodataSiswaDetailFormProps {
   data: BiodataSiswaDetailResultData | null;
