@@ -1,5 +1,5 @@
 import { insertPembayaran } from "@/services/pendaftaran/pembayaran";
-import { deleteBuktiBayarService } from "@/services/pembayaran-upload"; 
+import { deleteFileFromStorageService } from "@/services/file/delete"; 
 import { formIdParamsSchema, pembayaranUploadPathSchema, formatZodErrors } from "@bn/validators";
 import type { FormSubmitResult } from '@bn/types';
 import { checkUserAccess } from "../../auth/guards";
@@ -39,7 +39,7 @@ export async function submitPembayaran(input: ProcessDocumentUpload): Promise<Fo
     });
   } catch (err) {
     // Hapus file fisik/storage jika proses insert DB gagal / melempar error
-    await deleteBuktiBayarService(parsedFilePath.data.filePath);
+    await deleteFileFromStorageService(parsedFilePath.data.filePath);
     
     // Teruskan error ke Actions layer
     throw err;

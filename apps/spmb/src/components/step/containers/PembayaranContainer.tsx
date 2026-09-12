@@ -2,7 +2,7 @@
 
 import type { StepContainerProps } from "@/types/step.types";
 import PembayaranStep from "@/components/step/clients/PembayaranStep";
-import { getPembayaranStepData } from "@/features/upload/pembayaran";
+import { getPembayaranStepData } from "@/features/pendaftaran/data/pembayaran";
 
 export default async function PembayaranContainer({
   pendaftaran_id,

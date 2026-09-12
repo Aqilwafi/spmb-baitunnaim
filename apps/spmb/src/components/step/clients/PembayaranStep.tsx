@@ -5,7 +5,8 @@ import { useState } from "react";
 import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck, AlertCircle, CreditCard } from "lucide-react";
 import { Button } from "@bn/ui";
 import { formatDateTimeId } from "@bn/utils";
-import { useUploadPembayaran } from "@/hooks/usePembayaran";
+import { useFileUpload } from "@/hooks/useFileUpload"; // import hook generik
+import { pembayaranAction } from "@/actions/pendaftaran/pembayaran"; // sesuaikan path server action kamu
 
 export interface PembayaranStepData {
   bukti_bayar_url: string;
@@ -17,7 +18,7 @@ interface PembayaranStepProps {
   user_id: string;
   status: "active" | "complete";
   data: PembayaranStepData | null;
-  step_id?: number; // step_id AKTIF saat ini, dikirim ke RPC sebagai p_step_id (klaim, tetap divalidasi di server)
+  step_id?: number;
 }
 
 export default function PembayaranStep({
@@ -27,19 +28,46 @@ export default function PembayaranStep({
   step_id,
 }: PembayaranStepProps) {
   const [file, setFile] = useState<File | null>(null);
-  const { upload, isLoading, error, stage } = useUploadPembayaran({
-    formId: pendaftaran_id,
-  });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmittingAction, setIsSubmittingAction] = useState(false);
+
+  const { upload, isUploading } = useFileUpload();
+
+  const isLoading = isUploading || isSubmittingAction;
 
   const handleUpload = async () => {
     if (!file) return;
+    setErrorMessage(null);
+
+    // Step 1: Upload File ke Storage via useFileUpload
+    const uploadRes = await upload({
+      file,
+      category: "bukti-pembayaran",
+    });
+
+    if (!uploadRes.success) {
+      setErrorMessage(uploadRes.message);
+      return;
+    }
+
+    // Step 2: Kirim Path File ke Server Action
+    setIsSubmittingAction(true);
     try {
-      await upload(file);
-      // Tidak perlu manual redirect/set state di sini:
-      // server action sudah revalidatePath("/dashboard"),
-      // Next.js akan re-render server component dengan status "complete" otomatis.
-    } catch {
-      // error sudah ditangani & disimpan di state hook (lihat `error` di bawah)
+      const actionRes = await pembayaranAction({
+        formId: pendaftaran_id,
+        filePath: uploadRes.data as string, 
+      });
+
+      if (!actionRes.success) {
+        setErrorMessage(actionRes.message);
+      }
+      // Jika berhasil, revalidatePath di Server Action otomatis memicu re-render
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Gagal menyimpan data pembayaran."
+      );
+    } finally {
+      setIsSubmittingAction(false);
     }
   };
 
@@ -47,7 +75,6 @@ export default function PembayaranStep({
     return (
       <div className="flex flex-col gap-4 sm:gap-6 animate-in fade-in duration-500">
         <div className="p-4 sm:p-8 border rounded-[2rem] bg-white shadow-sm">
-
           <div className="flex items-center gap-3 mb-6 sm:mb-8">
             <div className="bg-green-100 p-2 rounded-full shrink-0">
               <CheckCircle2 className="text-green-600 w-5 h-5 sm:w-6 sm:h-6" />
@@ -104,7 +131,6 @@ export default function PembayaranStep({
   return (
     <div className="flex flex-col gap-4 sm:gap-6 animate-in fade-in duration-500">
       <div className="p-4 sm:p-8 border rounded-[2rem] bg-white shadow-sm">
-
         <div className="flex items-center gap-3 mb-6 sm:mb-8">
           <div className="bg-blue-100 p-2 rounded-full shrink-0">
             <UploadCloud className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6" />
@@ -119,7 +145,7 @@ export default function PembayaranStep({
           </div>
         </div>
 
-        {/* Informasion Rekening Tujuan */}
+        {/* Informasi Rekening Tujuan */}
         <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-2xl mb-6">
           <div className="flex items-center gap-2 mb-3">
             <CreditCard size={18} className="text-blue-600" />
@@ -143,14 +169,18 @@ export default function PembayaranStep({
             className="cursor-pointer text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
           />
           <Button onClick={handleUpload} disabled={!file || isLoading} className="rounded-xl">
-            {isLoading ? uploadingLabel(stage) : "Unggah Bukti Bayar"}
+            {isUploading
+              ? "Mengunggah berkas..."
+              : isSubmittingAction
+              ? "Menyimpan data..."
+              : "Unggah Bukti Bayar"}
           </Button>
         </div>
 
-        {error && (
+        {errorMessage && (
           <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-100 rounded-[1.5rem] mt-4">
             <AlertCircle className="text-red-600 mt-0.5 shrink-0" size={18} />
-            <p className="text-[11px] sm:text-xs text-red-800 leading-relaxed font-medium">{error}</p>
+            <p className="text-[11px] sm:text-xs text-red-800 leading-relaxed font-medium">{errorMessage}</p>
           </div>
         )}
 
@@ -163,17 +193,4 @@ export default function PembayaranStep({
       </div>
     </div>
   );
-}
-
-function uploadingLabel(stage: string): string {
-  switch (stage) {
-    case "requesting-token":
-      return "Menyiapkan unggahan...";
-    case "uploading":
-      return "Mengunggah berkas...";
-    case "submitting":
-      return "Menyimpan data...";
-    default:
-      return "Memproses...";
-  }
 }

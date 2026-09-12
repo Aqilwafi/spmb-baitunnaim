@@ -1,23 +1,24 @@
 // apps/spmb/src/actions/pembayaran-actions.ts
-
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { submitPembayaran } from "@/features/pendaftaran/submit/pembayaran";
 import { isValidationError } from "@bn/utils";
+import { submitPembayaran } from "@/features/pendaftaran/submit/pembayaran";
 import type { ActionResponse, FormSubmitResult } from "@bn/types";
 
+export interface PembayaranActionInput {
+  formId: string;
+  filePath: string;
+}
+
 export async function pembayaranAction(
-  _prevState: ActionResponse<FormSubmitResult> | null,
-  formData: FormData
+  input: PembayaranActionInput
 ): Promise<ActionResponse<FormSubmitResult>> {
   try {
-    const payload = {
-      formId: formData.get("formId") as string,
-      filePath: formData.get("filePath") as string,
-    };
-
-    const result = await submitPembayaran(payload);
+    const result = await submitPembayaran({
+      formId: input.formId,
+      filePath: input.filePath,
+    });
 
     revalidatePath("/dashboard");
 
@@ -27,7 +28,6 @@ export async function pembayaranAction(
       data: result,
     };
   } catch (error) {
-    // Handling error validasi Zod (termasuk formatZodErrors)
     if (isValidationError(error)) {
       return {
         success: false,
@@ -36,7 +36,6 @@ export async function pembayaranAction(
       };
     }
 
-    // Handling Standard JS Error / Server Error
     return {
       success: false,
       message: error instanceof Error ? error.message : "Terjadi kesalahan pada server.",

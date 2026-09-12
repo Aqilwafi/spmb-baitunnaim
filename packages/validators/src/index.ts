@@ -5,4 +5,5 @@ export * from './form/biodata-keluarga.schema';
 export * from './form/pendidikan-sebelumnya-schema';
 export * from './form/params.schema';
 export * from './form/pembayaran-upload.schema';
-export * from './utils';
+export * from './utils/utils';
+export * from './utils/request-upload-metadata.schema'

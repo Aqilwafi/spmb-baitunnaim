@@ -1,47 +1,32 @@
 // app/api/request-upload/route.ts
-
-import { NextResponse } from 'next/server'
-import { createSupabaseServer } from '@bn/supabase'
-import { requestUploadMetadataSchema } from '@bn/validators'
+import { NextResponse } from "next/server";
+import { isValidationError } from "@bn/utils";
+import { requestUpload } from "@/features/upload/request";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createSupabaseServer()
+    const body = await request.json();
+    const result = await requestUpload(body);
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const body = await request.json()
-    const validation = requestUploadMetadataSchema.safeParse(body)
-
-    if (!validation.success) {
+    // ✅ Mengembalikan JSON SignedUrlResponse (HTTP 200)
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    // ✅ Mengembalikan NextResponse.json untuk Validation Error (HTTP 400)
+    if (isValidationError(error)) {
       return NextResponse.json(
-        { error: validation.error.issues[0]?.message || 'Bad Request' },
+        {
+          success: false,
+          message: error.message,
+          errors: error.errors,
+        },
         { status: 400 }
-      )
+      );
     }
 
-    const { fileName } = validation.data
-    const filePath = `bukti-pembayaran/${user.id}/${Date.now()}-${fileName}`
-
-    const { data, error: storageError } = await supabase.storage
-      .from('SPMB')
-      .createSignedUploadUrl(filePath)
-
-    if (storageError) {
-      console.error('createSignedUploadUrl error:', storageError)
-      return NextResponse.json({ error: storageError.message }, { status: 500 })
-    }
-
-    return NextResponse.json({
-      signedUrl: data.signedUrl,
-      path: data.path,
-      token: data.token,
-    })
-  } catch (err) {
-    console.error('upload-tokens route error:', err)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    // ✅ Response Error Server (HTTP 500)
+    return NextResponse.json(
+      { error: "Terjadi kesalahan internal pada server." },
+      { status: 500 }
+    );
   }
 }
