@@ -22,7 +22,7 @@ export async function getInitForm(formId: string, tahunAjaranId: number): Promis
       p_form_id: formId,
       p_tahun_ajaran_id: tahunAjaranId,
     })
-    .maybeSingle();
+    .single();
 
   if (error) throw error;
   if (!data) return null;

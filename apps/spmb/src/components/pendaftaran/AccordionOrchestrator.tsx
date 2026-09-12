@@ -16,7 +16,7 @@ export default function AccordionOrchestrator({
   pendaftaran,
   stepElements,
 }: AccordionOrchestratorProps) {
-  const [openStep, setOpenStep] = useState<number | null>(pendaftaran.step_id);
+  const [openStep, setOpenStep] = useState<number | null>(pendaftaran.stepId);
 
   const toggleStep = (id: number) => {
     setOpenStep((prev) => (prev === id ? null : id));

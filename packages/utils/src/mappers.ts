@@ -32,14 +32,15 @@ export function mapStepOptions(data: MasterStep[]): MasterData[] {
 }
 
 // Override — TahunAjaran gak punya `label`, dan punya `semester`
-export function mapTahunAjaranOptions(data: MasterTahunAjaran[]): MasterData[] {
-  return data.map((item) => ({
+export function mapTahunAjaranAktif(item: MasterTahunAjaran): MasterData {
+  return {
     value: item.id,
+    id: item.id,
     label: `${item.semester} (${item.start_year}/${item.end_year})`,
-    start_year: item.start_year,
-    end_year: item.end_year,
+    startYear: item.start_year,
+    endYear: item.end_year,
     semester: item.semester,
-  }));
+  };
 }
 
 const GENDER_MAP: Record<string, 'MALE' | 'FEMALE'> = {

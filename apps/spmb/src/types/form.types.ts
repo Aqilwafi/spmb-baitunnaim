@@ -8,13 +8,13 @@ export interface InitFormPendaftaranModalProps {
 
 export interface FormCardsData {
   id: FormPendaftaran['id'];
-  nama_lengkap: BiodataSiswa['nama_lengkap'];
-  lembaga_label: MasterLembaga['label'];
-  kelas_label: MasterKelas['label'];
-  step_label: MasterStep['label'];
-  registration_status: FormPendaftaran['registration_status'];
-  admission_status: FormPendaftaran['admission_status'];
-  updated_at: FormPendaftaran['updated_at'];
+  namaLengkap: BiodataSiswa['nama_lengkap'];
+  lembagaLabel: MasterLembaga['label'];
+  kelasLabel: MasterKelas['label'];
+  stepLabel: MasterStep['label'];
+  registrationStatus: FormPendaftaran['registration_status'];
+  admissionStatus: FormPendaftaran['admission_status'];
+  updatedAt: FormPendaftaran['updated_at'];
 }
 
 export type InitFormStepDataRPCResponse = Pick<BiodataSiswa, 'nama_lengkap' | 'nik' | 'jenis_kelamin' | 'tempat_lahir' | 'tanggal_lahir'> & {

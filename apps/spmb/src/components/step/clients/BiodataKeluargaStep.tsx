@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, User, ShieldCheck } from "lucide-react";
-import { submitBiodataKeluargaAction } from "@/actions/pendaftaran/biodata-keluarga";
+import { biodataKeluargaAction } from "@/actions/pendaftaran/biodata-keluarga";
 import { BiodataKeluargaForm } from "@/components/forms/BiodataKeluargaForm";
 
 export type RelationType = "AYAH" | "IBU" | "WALI";
@@ -50,15 +50,10 @@ export default function BiodataKeluargaStep({
   };
 
   const [state, action, isPending] = useActionState(
-    async (prevState: any, formPayload: FormData) => {
-      isSubmittedRef.current = true;
-      return await submitBiodataKeluargaAction({
-        formId: pendaftaran_id,
-        rawPayload: Object.fromEntries(formPayload),
-      });
-    },
-    null
-  );
+      (prevState: any, formData: FormData) =>
+        biodataKeluargaAction(prevState, formData, pendaftaran_id),
+      null
+    );
 
   useEffect(() => {
     if (isSubmittedRef.current && state?.success) {

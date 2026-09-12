@@ -32,17 +32,11 @@ export interface StepElement {
   node: React.ReactNode;
 }
 
-export interface NamaSiswa {
-  nama_lengkap: BiodataSiswa['nama_lengkap'];         
-}
-
-export interface FormPartial {
+export interface DetailPendaftaran {
+  namaLengkap: BiodataSiswa['nama_lengkap'];
   id: FormPendaftaran['id'];
-  biodata_siswa_id: FormPendaftaran['biodata_siswa_id'];              
-  step_id: FormPendaftaran['step_id'];    
-  admission_status: FormPendaftaran['admission_status'];  
-}
-
-export interface DetailPendaftaran extends NamaSiswa, FormPartial {
-  pendaftar_id: string;
+  biodataSiswaId: FormPendaftaran['biodata_siswa_id'];
+  stepId: FormPendaftaran['step_id'];
+  admissionStatus: FormPendaftaran['admission_status'];
+  pendaftarId: string;
 }

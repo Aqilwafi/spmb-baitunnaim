@@ -3,9 +3,9 @@
 import { checkUserAccess } from "@/features/auth/guards";
 import { initFormSchema, formatZodErrors } from "@bn/validators";
 import { insertInitForm } from "@/services/pendaftaran/init";
-import { getTahunAjaranAktif } from "../../master/tahun-ajaran";
+import { getTahunAjaranAktifData } from "../../master/tahun-ajaran";
 import { mapInitFormPayload } from "../../../helpers/mappers";
-import { pickId, createValidationError } from "@bn/utils";
+import { createValidationError } from "@bn/utils";
 import type { FormSubmitResult } from '@bn/types';
 
 // 1. Disesuaikan dengan InitFormStepData dari Service (menggunakan camelCase)
@@ -25,8 +25,8 @@ export async function submitInitForm(payload: Record<string, FormDataEntryValue>
   }
 
   // 3. Logika Bisnis
-  const tahunAjaranId = await pickId(getTahunAjaranAktif());
-  if (!tahunAjaranId) {
+  const tahunAjaran = await getTahunAjaranAktifData();
+  if (!tahunAjaran.id) {
     throw new Error("Tahun ajaran aktif tidak ditemukan.");
   }
 

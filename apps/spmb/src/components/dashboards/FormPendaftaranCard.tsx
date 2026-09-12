@@ -23,29 +23,29 @@ export function FormPendaftaranCard({ data }: { data: FormCardsData[] }) {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-semibold text-gray-900">
-                        {form.nama_lengkap}
+                        {form.namaLengkap}
                       </h3>
 
-                      <p className="text-sm text-gray-600">{form.lembaga_label}</p>
+                      <p className="text-sm text-gray-600">{form.lembagaLabel}</p>
 
                       <p className="text-xs text-gray-500 mt-1">
-                        {form.kelas_label}
+                        {form.kelasLabel}
                       </p>
                     </div>
 
                     <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                      {form.registration_status} | {form.admission_status}
+                      {form.registrationStatus} | {form.admissionStatus}
                     </span>
                   </div>
 
                   <div className="mt-4 border-t border-gray-200 pt-3 space-y-1">
                     <p className="text-sm text-gray-700">
                       <span className="font-medium">Langkah Terakhir:</span>{" "}
-                      {form.step_label}
+                      {form.stepLabel}
                     </p>
 
                     <p className="text-xs text-gray-500">
-                      Terakhir diubah: {formatDateTimeId(form.updated_at)}
+                      Terakhir diubah: {formatDateTimeId(form.updatedAt)}
                     </p>
                   </div>
                 </Link>

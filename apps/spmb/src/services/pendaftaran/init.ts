@@ -15,8 +15,8 @@ export async function insertInitForm(params: InitFormInput): Promise<FormSubmitR
     p_tempat_lahir: params.tempatLahir,
     p_tanggal_lahir: params.tanggalLahir,
     p_lembaga_id: params.lembagaId,
-    p_kelas_id: params.kelasId ?? undefined,
-  });
+    p_kelas_id: params.kelasId,
+  } as any);
 
   if (error) throw error;
 

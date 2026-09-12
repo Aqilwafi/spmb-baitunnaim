@@ -1,23 +1,27 @@
 
-import { formIdParamsSchema } from "@bn/validators";
+import { formIdParamsSchema, formatZodErrors } from "@bn/validators";
 import { getInitForm, type InitFormStepData as ServiceInitFormStepData } from '@/services/form/init';
-import { getTahunAjaranAktif } from "../master/tahun-ajaran";
-import { pickId, genderLabel } from "@bn/utils";
+import { getTahunAjaranAktifData } from "../master/tahun-ajaran";
+import { genderLabel, createValidationError } from "@bn/utils";
 
 export type InitFormStepData = Omit<ServiceInitFormStepData, "gender"> & {
   genderFormatted: string;
 };
 
-export async function getInitFormData(
-  formId: string
-): Promise<InitFormStepData | null> {
+export async function getInitFormData(formId: string): Promise<InitFormStepData | null> {
+
+  const tahunAjaran = await getTahunAjaranAktifData();
+  if (!tahunAjaran.id) throw new Error("Tidak ada tahun ajaran aktif.");
+
   const parsed = formIdParamsSchema.safeParse(formId);
-  if (!parsed.success) return null;
+  if (!parsed.success) {
+     throw createValidationError(
+        formatZodErrors(parsed.error),
+        parsed.error.issues[0]?.message ?? "Data formulir tidak valid."
+      );
+  };
 
-  const tahunAjaranId = await pickId(getTahunAjaranAktif());
-  if (!tahunAjaranId) return null;
-
-  const data = await getInitForm(parsed.data, tahunAjaranId);
+  const data = await getInitForm(parsed.data, tahunAjaran.id);
 
   if (!data) return null;
 

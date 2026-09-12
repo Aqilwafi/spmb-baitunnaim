@@ -6,8 +6,8 @@ export type MasterData = {
   id?: number;
   code?: string;
   order?: number;
-  start_year?: number;
-  end_year?: number;
+  startYear?: number;
+  endYear?: number;
   semester?: string;
 };
 

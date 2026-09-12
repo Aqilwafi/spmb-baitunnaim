@@ -1,6 +1,5 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
-import type { ProcessFormInput } from "@/types/form.types";
 import type { BiodataSiswaDetailSubmitInput } from "@bn/validators";
 import type { FormSubmitResult, BaseRPCSubmitResponse } from "@bn/types";
 
@@ -19,7 +18,7 @@ export async function insertBiodataSiswaDetail(formId: string, params: BiodataSi
     p_alamat: params.alamat,
     p_tinggal_bersama_id: params.tinggalBersamaId,
     p_status_rumah_id: params.statusRumahId,
-    p_penyakit: params.penyakit ?? null,
+    p_penyakit: params.penyakit,
   } as any);
 
   if (error) throw error;

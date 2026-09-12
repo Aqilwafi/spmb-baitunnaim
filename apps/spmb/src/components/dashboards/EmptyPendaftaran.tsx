@@ -1,17 +1,17 @@
 // 📄 File: komponen tempat EmptyPendaftaran berada
 import { FileQuestion } from "lucide-react";
-import { MasterTahunAjaran } from "@bn/types"; // atau dari mana pun tipe ini diexport
+import { MasterData } from "@bn/types"; // atau dari mana pun tipe ini diexport
 
 interface EmptyPendaftaranProps {
   // 💡 Ganti tipe datanya di sini agar cocok dengan variabel tahunAjaranAktif kamu
-  tahunAjaran: MasterTahunAjaran | null; 
+  tahunAjaran: MasterData | null; 
 }
 
 export function EmptyPendaftaran({ tahunAjaran }: EmptyPendaftaranProps) {
   // 💡 Sesuaikan pemanggilan propertinya dengan kolom baru yang ada di tabel master baru kamu
   // Contoh: kalau di tabel baru namanya cuma 'tahun', ganti jadi tahunAjaran?.tahun
-  const tahunMulai = tahunAjaran?.start_year ?? "-"; 
-  const tahunSelesai = tahunAjaran?.end_year ?? "-"; 
+  const tahunMulai = tahunAjaran?.startYear ?? "-"; 
+  const tahunSelesai = tahunAjaran?.endYear ?? "-"; 
   const semester = tahunAjaran?.semester ?? "-";
 
   return (

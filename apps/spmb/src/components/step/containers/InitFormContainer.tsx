@@ -1,6 +1,6 @@
 // components/step/containers/InitFormContainer.tsx
 import type { StepContainerProps } from "@/types/step.types";
-import { getInitFormData } from "@/features/pendaftaran/submit/init-form";
+import { getInitFormData } from "@/features/form/init";
 import InitFormStep from "@/components/step/clients/InitFormStep";
 
 export default async function InitFormContainer({

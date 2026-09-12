@@ -19,6 +19,22 @@ export const pendidikanSebelumnyaFormSchema = z.object({
     .optional()
     .nullable(),
   catatan: z.string().trim().max(500).optional().nullable(),
-});
+}).refine(
+  (data) => {
+    const hasSchoolData = 
+      Boolean(data.namaSekolah?.trim()) && 
+      Boolean(data.npsn) && 
+      Boolean(data.alamatSekolah?.trim());
+      
+    const hasCatatan = Boolean(data.catatan?.trim());
+
+    // Harus mengisi salah satu: Data sekolah lengkap ATAU Catatan (belum pernah sekolah)
+    return hasSchoolData || hasCatatan;
+  },
+  {
+    message: "Harap isi Nama Sekolah, NPSN, dan Alamat Sekolah secara lengkap, atau isi Catatan jika belum pernah sekolah.",
+    path: ["catatan"], // Menampilkan error di bagian catatan atau global
+  }
+);
 
 export type PendidikanSebelumnyaInput = z.infer<typeof pendidikanSebelumnyaFormSchema>;

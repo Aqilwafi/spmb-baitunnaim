@@ -1,24 +1,15 @@
-// services/pendaftaran/tahun-ajaran.services.ts
+// features/pendaftaran/tahun-ajaran.services.ts
 
-import { MasterTahunAjaran } from "@bn/types";
+import { MasterData } from "@bn/types";
 import { getMasterTahunAjaran } from "@bn/services";
+import { mapTahunAjaranAktif } from "@bn/utils";
 
-export async function getTahunAjaranAktif (): Promise<MasterTahunAjaran | null> {
-
-    const tahunAjaran = await getMasterTahunAjaran();
+export async function getTahunAjaranAktifData(): Promise<MasterData> {
+    const rawData = await getMasterTahunAjaran();
     
-
-    if (!tahunAjaran) return null;
-
-    return {
-        id: tahunAjaran.id,
-        code: tahunAjaran.code,
-        semester: tahunAjaran.semester,
-        start_year: tahunAjaran.start_year,
-        end_year: tahunAjaran.end_year,
-        label:tahunAjaran.label,
-        is_active: tahunAjaran.is_active,
-        updated_at: tahunAjaran.updated_at,
-        created_at: tahunAjaran.created_at
+    if (!rawData) {
+        throw new Error("Tahun ajaran aktif tidak ditemukan di sistem.");
     }
+
+    return mapTahunAjaranAktif(rawData);
 }

@@ -1090,6 +1090,17 @@ export type Database = {
           tempat_lahir: string
         }[]
       }
+      fn_rpc_get_pendidikan_siswa_sebelumnya: {
+        Args: { p_form_id: string }
+        Returns: {
+          alamat_sekolah: string
+          catatan: string
+          nama_sekolah: string
+          nilai_rata_rata: number
+          npsn: unknown
+          tahun_lulus: number
+        }[]
+      }
       fn_rpc_is_guardian_required: {
         Args: { p_form_id: string }
         Returns: boolean
@@ -1144,6 +1155,18 @@ export type Database = {
       }
       fn_rpc_submit_pembayaran: {
         Args: { p_file_path: string; p_form_id: string }
+        Returns: Json
+      }
+      fn_rpc_submit_pendidikan_siswa_sebelumnya: {
+        Args: {
+          p_alamat_sekolah: string
+          p_catatan?: string
+          p_form_id: string
+          p_nama_sekolah: string
+          p_nilai_rata_rata: number
+          p_npsn: unknown
+          p_tahun_lulus: number
+        }
         Returns: Json
       }
       fn_validate_guardian_requirement: {
