@@ -1,6 +1,6 @@
 // packages/validators/src/pembayaran-upload.schema.ts
 import { z } from "zod";
-import { fileUploadField } from "../core/file-upload-field";
+import { fileUploadField, filePathField } from "../core/file-upload-field";
 
 // 1. Skema untuk Form di Client (jika fileUploadField cek instance File)
 export const pembayaranUploadSchema = z.object({
@@ -8,8 +8,22 @@ export const pembayaranUploadSchema = z.object({
 });
 export type PembayaranUploadInput = z.infer<typeof pembayaranUploadSchema>;
 
+// 2. Skema untuk Form Client saat Edit / Submit via String Path (file yang sudah diunggah)
+export const pembayaranUploadPathSchema = z.object({
+  filePath: filePathField("Bukti pembayaran"),
+});
+export type PembayaranUploadPathInput = z.infer<typeof pembayaranUploadPathSchema>;
 
-// 2. Skema untuk Request Signed URL di API Route (Metadata JSON)
+// 3. Skema Hybrid Form (bisa berupa File baru ATAU String Path file lama)
+export const pembayaranUploadFlexibleSchema = z.object({
+  buktiPembayaran: z.union([
+    fileUploadField("Bukti pembayaran"),
+    filePathField("Bukti pembayaran"),
+  ]),
+});
+export type PembayaranUploadFlexibleInput = z.infer<typeof pembayaranUploadFlexibleSchema>;
+
+// 4. Skema untuk Request Signed URL di API Route (Metadata JSON)
 export const requestUploadMetadataSchema = z.object({
   fileName: z
     .string()

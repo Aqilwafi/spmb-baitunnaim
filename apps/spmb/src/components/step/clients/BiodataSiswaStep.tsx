@@ -3,7 +3,7 @@
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, UserCheck, ShieldCheck, FileText, Home, HeartHandshake } from "lucide-react";
-import { submitBiodataSiswaDetailAction } from "@/actions/pendaftaran/biodata-siswa-detail";
+import { biodataSiswaDetailAction } from "@/actions/pendaftaran/biodata-siswa-detail";
 import { BiodataSiswaDetailForm } from "@/components/forms/BiodataSiswaDetailForm";
 import type { MasterData } from "@bn/types";
 import type { BiodataSiswaDetailResultData } from "@/services/biodata/siswa";
@@ -28,7 +28,7 @@ export default function BiodataSiswaDetailStep({
 
   const [state, action, isPending] = useActionState(
     (prevState: any, formData: FormData) =>
-      submitBiodataSiswaDetailAction(prevState, formData, pendaftaran_id),
+      biodataSiswaDetailAction(prevState, formData, pendaftaran_id),
     null
   );
 

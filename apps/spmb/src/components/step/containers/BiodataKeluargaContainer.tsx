@@ -1,5 +1,5 @@
 import type { StepContainerProps } from "@/types/step.types";
-import { checkWaliRequirementStatus } from "@/features/pendaftaran/cek-wali";
+import { checkWaliRequirementStatus } from "@/features/pendaftaran/data/cek-wali";
 import BiodataKeluargaStep from "@/components/step/clients/BiodataKeluargaStep";
 // import { getBiodataKeluargaByRelation } from "@/features/pendaftaran/biodata-keluarga";
 

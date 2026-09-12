@@ -2,26 +2,10 @@
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
+import type { ProcessDocumentUpload } from "@/types/form.types";
+import type { BaseRPCSubmitResponse, FormSubmitResult } from "@bn/types";
 
-export interface SubmitPembayaranParams {
-  formId: string;
-  filePath: string;
-  stepId: number;
-}
-
-export interface SubmitPembayaranResult {
-  success: boolean;
-  nextStep: number;
-}
-
-/**
- * Memanggil RPC fn_rpc_submit_pembayaran.
- * TIDAK melakukan authorization/ownership check di sini —
- * seluruhnya sudah ditangani oleh fn_assert_linear_step di dalam RPC.
- */
-export async function submitPembayaran(
-  params: SubmitPembayaranParams
-): Promise<SubmitPembayaranResult> {
+export async function insertPembayaran(params: ProcessDocumentUpload): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();
 
   const { data, error } = await supabase.rpc("fn_rpc_submit_pembayaran", {
@@ -29,19 +13,13 @@ export async function submitPembayaran(
     p_file_path: params.filePath,
   });
 
-  
+  if (error) throw error;
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  // RPC return type di-generate sebagai `Json` karena SQL function return jsonb.
-  // Bentuk aktualnya sudah pasti { success: boolean, next_step: number }
-  // sesuai definisi fn_rpc_submit_pembayaran — assert di sini.
-  const result = data as { success: boolean; next_step_id: number };
+  const result = data as unknown as BaseRPCSubmitResponse;
 
   return {
     success: result.success,
-    nextStep: result.next_step_id,
+    formId: result.form_id,
+    nextStepId: result.next_step_id,
   };
 }

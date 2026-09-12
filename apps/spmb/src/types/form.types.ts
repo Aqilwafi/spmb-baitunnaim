@@ -21,3 +21,13 @@ export type InitFormStepDataRPCResponse = Pick<BiodataSiswa, 'nama_lengkap' | 'n
   lembaga_tujuan: string;
   kelas: string | null;
 }
+
+export interface ProcessFormInput {
+  formId: string;
+  payload: Record<string, FormDataEntryValue>;
+}
+
+export interface ProcessDocumentUpload {
+  formId: string;
+  filePath: string;
+}

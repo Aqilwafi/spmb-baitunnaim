@@ -3,53 +3,43 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { submitPembayaranFeatures } from "@/features/upload/pembayaran";
-import type { ActionResponse } from "@bn/types";
+import { submitPembayaran } from "@/features/pendaftaran/submit/pembayaran";
+import { isValidationError } from "@bn/utils";
+import type { ActionResponse, FormSubmitResult } from "@bn/types";
 
-export interface SubmitPembayaranActionInput {
-  formId: string;
-  filePath: string;
-}
-
-export interface SubmitPembayaranActionData {
-  nextStep: number;
-}
-
-export async function submitPembayaranAction(
-  input: SubmitPembayaranActionInput
-): Promise<ActionResponse<SubmitPembayaranActionData>> {
+export async function pembayaranAction(
+  _prevState: ActionResponse<FormSubmitResult> | null,
+  formData: FormData
+): Promise<ActionResponse<FormSubmitResult>> {
   try {
-    const result = await submitPembayaranFeatures({
-    formId: input.formId,
-    filePath: input.filePath,
-  });
-
-  if (!result.success || result.nextStep === undefined) {
-    return {
-      success: false,
-      message: result.error ?? "Gagal mengirim bukti pembayaran.",
-      error: {
-        code: "SUBMIT_PEMBAYARAN_FAILED",
-        details: result.error,
-      },
+    const payload = {
+      formId: formData.get("formId") as string,
+      filePath: formData.get("filePath") as string,
     };
-  }
 
-  revalidatePath("/dashboard");
+    const result = await submitPembayaran(payload);
 
-  return {
-    success: true,
-    message: "Bukti pembayaran berhasil dikirim.",
-    data: { nextStep: result.nextStep },
-  };
-  } catch (err) {
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      message: "Bukti pembayaran berhasil dikirim.",
+      data: result,
+    };
+  } catch (error) {
+    // Handling error validasi Zod (termasuk formatZodErrors)
+    if (isValidationError(error)) {
+      return {
+        success: false,
+        message: error.message,
+        errors: error.errors,
+      };
+    }
+
+    // Handling Standard JS Error / Server Error
     return {
       success: false,
-      message: err instanceof Error ? err.message : "Gagal mengirim bukti pembayaran.",
-      error: {
-        code: "SUBMIT_PEMBAYARAN_FAILED",
-        details: err instanceof Error ? err.message : err,
-      },
+      message: error instanceof Error ? error.message : "Terjadi kesalahan pada server.",
     };
   }
 }

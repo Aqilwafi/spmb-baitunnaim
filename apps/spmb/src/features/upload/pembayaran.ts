@@ -1,24 +1,19 @@
-import { submitPembayaran } from "@/services/pendaftaran/pembayaran";
-import { deleteBuktiBayarService } from "@/services/pembayaran-upload"; 
+import { getPembayaranByFormId, getSignedBuktiPembayaranUrl } from "@bn/services";
+import type { PembayaranStepData } from "@/components/step/clients/PembayaranStep";
 
-interface SubmitPembayaranFeaturesInput {
-  formId: string;
-  filePath: string;
-}
+export async function getPembayaranStepData(
+  formId: string
+): Promise<PembayaranStepData | null> {
+  const pembayaran = await getPembayaranByFormId(formId);
+  if (!pembayaran) return null;
 
-export async function submitPembayaranFeatures(
-  input: SubmitPembayaranFeaturesInput,
-): Promise<{ success: boolean; nextStep?: number; error?: string }> {
-  try {
-    const step_id = 2;
-    const result = await submitPembayaran({ ...input, stepId: step_id });
+  const signedUrl = await getSignedBuktiPembayaranUrl(
+    pembayaran.bukti_pembayaran_url
+  );
+  if (!signedUrl) return null;
 
-    return { success: true, nextStep: result.nextStep };
-  } catch (err) {
-    await deleteBuktiBayarService(input.filePath);
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : "Gagal mengirim bukti pembayaran.",
-    };
-  }
+  return {
+    bukti_bayar_url: signedUrl,
+    uploaded_at: pembayaran.tanggal_transfer ?? pembayaran.created_at,
+  };
 }

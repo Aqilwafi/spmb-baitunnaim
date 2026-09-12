@@ -3,7 +3,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { submitInitForm } from "@/features/pendaftaran/init-form";
+import { submitInitForm } from "@/features/pendaftaran/submit/init-form";
 import { isValidationError } from "@bn/utils";
 import type { ActionResponse, FormSubmitResult} from "@bn/types";
 

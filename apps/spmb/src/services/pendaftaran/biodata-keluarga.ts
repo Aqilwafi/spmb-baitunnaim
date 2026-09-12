@@ -1,48 +1,15 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
-import type {
-  EnumRelasiKeluarga,
-  EnumStatusHidup,
-  BiodataKeluarga,
-} from "@bn/types";
+import type { BiodataKeluargaInput } from "@bn/validators";
+import type { FormSubmitResult, BaseRPCSubmitResponse } from "@bn/types";
 
-// Types
-export interface SubmitBiodataKeluargaParams {
-  formId: string;
-  relationType: EnumRelasiKeluarga; // "AYAH" | "IBU" | "WALI"
-  namaLengkap: string;
-  statusHidup?: EnumStatusHidup; // "HIDUP" | "MENINGGAL"
-  detailRelationType?: string | null;
-  nik?: string | null;
-  tempatLahir?: string | null;
-  tanggalLahir?: string | null;
-  pekerjaan?: string | null;
-  pendidikanTerakhir?: string | null;
-  penghasilan?: string | null;
-  noHp?: string | null;
-  alamat?: string | null;
-  sameAddressAs?: EnumRelasiKeluarga | null;
-}
-
-export interface SubmitBiodataKeluargaResult {
-  success: boolean;
-  nextStep?: number;
-  message?: string;
-  code?: string;
-}
-
-/**
- * Menyimpan / memperbarui data biodata keluarga (Ayah / Ibu / Wali)
- */
-export async function submitBiodataKeluarga(
-  params: SubmitBiodataKeluargaParams
-): Promise<SubmitBiodataKeluargaResult> {
+export async function insertBiodataKeluarga(formId: string, params: BiodataKeluargaInput): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();
 
   console.log("input:", params);
 
   const { data, error } = await supabase.rpc("fn_rpc_submit_biodata_keluarga", {
-    p_form_id: params.formId,
+    p_form_id: formId,
     p_relation_type: params.relationType,
     p_nama_lengkap: params.namaLengkap,
     p_status_hidup: params.statusHidup ?? "HIDUP",
@@ -54,24 +21,15 @@ export async function submitBiodataKeluarga(
     p_pendidikan_terakhir: params.pendidikanTerakhir ?? null,
     p_penghasilan: params.penghasilan ?? null,
     p_no_hp: params.noHp ?? null,
-    p_alamat: params.alamat ?? null,
-    p_same_address_as: params.sameAddressAs ?? null,
   } as any);
 
-  if (error) {
-    return {
-      success: false,
-      message: error.message,
-      code: error.code,
-    };
-  }
+  if (error) throw error;
 
-  const result = data as { success: boolean; next_step: number };
-
-  console.log("result:", result);
+  const result = data as BaseRPCSubmitResponse;
 
   return {
     success: result.success,
-    nextStep: result.next_step,
+    formId: result.form_id,
+    nextStepId: result.next_step_id,
   };
 }

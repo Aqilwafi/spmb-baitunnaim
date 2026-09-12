@@ -23,6 +23,7 @@ export type BaseRPCSubmitResponse = {
 }
 // ini untuk nextjs server, pakai camelCase
 export interface FormSubmitResult {
+  success: boolean;
   formId: string;
   nextStepId?: number;
 }
