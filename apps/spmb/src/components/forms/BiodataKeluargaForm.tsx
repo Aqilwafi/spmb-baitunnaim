@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { AlertTriangle, AlertCircle } from "lucide-react";
 import { Button } from "@bn/ui";
-import type { RelationType, LifeStatus, BiodataKeluargaItemData } from "@/components/step/clients/BiodataKeluargaStep";
+import type { BiodataKeluargaItemData } from "@/types/biodata.types";
+import type { EnumStatusHidup, EnumRelasiKeluarga } from "@bn/types";
+
 
 interface BiodataKeluargaFormProps {
-  relationType: RelationType;
+  relationType: EnumRelasiKeluarga;
   data: BiodataKeluargaItemData | null;
   isWaliMandatory?: boolean;
   action: (formData: FormData) => void;
@@ -23,23 +25,23 @@ export function BiodataKeluargaForm({
   state,
 }: BiodataKeluargaFormProps) {
   const [skipWali, setSkipWali] = useState(false);
-  const [statusHidup, setStatusHidup] = useState<LifeStatus>(data?.status_hidup || "HIDUP");
+  const [statusHidup, setStatusHidup] = useState<EnumStatusHidup>(data?.statusHidup || "HIDUP");
   const [formData, setFormData] = useState<Omit<BiodataKeluargaItemData, "alamat">>({
-    relation_type: relationType,
-    detail_relation_type: data?.detail_relation_type || "",
-    nama_lengkap: data?.nama_lengkap || "",
+    relationType: relationType,
+    detailRelationType: data?.detailRelationType || "",
+    namaLengkap: data?.namaLengkap || "",
     nik: data?.nik || "",
-    status_hidup: data?.status_hidup || "HIDUP",
-    tempat_lahir: data?.tempat_lahir || "",
-    tanggal_lahir: data?.tanggal_lahir || "",
+    statusHidup: data?.statusHidup || "HIDUP",
+    tempatLahir: data?.tempatLahir || "",
+    tanggalLahir: data?.tanggalLahir || "",
     pekerjaan: data?.pekerjaan || "",
-    pendidikan_terakhir: data?.pendidikan_terakhir || "",
+    pendidikanTerakhir: data?.pendidikanTerakhir || "",
     penghasilan: data?.penghasilan || "",
-    no_hp: data?.no_hp || "",
+    noHp: data?.noHp || "",
   });
 
   const isHidup = statusHidup === "HIDUP";
-  const labelMap: Record<RelationType, string> = {
+  const labelMap: Record<EnumRelasiKeluarga, string> = {
     AYAH: "Ayah",
     IBU: "Ibu",
     WALI: "Wali",
@@ -119,9 +121,9 @@ export function BiodataKeluargaForm({
               name="status_hidup"
               value={statusHidup}
               onChange={(e) => {
-                const val = e.target.value as LifeStatus;
+                const val = e.target.value as EnumStatusHidup;
                 setStatusHidup(val);
-                setFormData({ ...formData, status_hidup: val });
+                setFormData({ ...formData, statusHidup: val });
               }}
               className="text-xs p-2 rounded-lg border border-gray-300 bg-white font-medium focus:outline-none focus:border-blue-500"
             >
@@ -139,8 +141,8 @@ export function BiodataKeluargaForm({
                   type="text"
                   name="detail_relation_type"
                   required
-                  value={formData.detail_relation_type || ""}
-                  onChange={(e) => setFormData({ ...formData, detail_relation_type: e.target.value })}
+                  value={formData.detailRelationType || ""}
+                  onChange={(e) => setFormData({ ...formData, detailRelationType: e.target.value })}
                   className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                   placeholder="Contoh: Kakek, Paman"
                 />
@@ -155,8 +157,8 @@ export function BiodataKeluargaForm({
                 type="text"
                 name="nama_lengkap"
                 required
-                value={formData.nama_lengkap}
-                onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
+                value={formData.namaLengkap}
+                onChange={(e) => setFormData({ ...formData, namaLengkap: e.target.value })}
                 className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                 placeholder="Sesuai KTP"
               />
@@ -187,8 +189,8 @@ export function BiodataKeluargaForm({
                     type="text"
                     name="no_hp"
                     required={isHidup}
-                    value={formData.no_hp || ""}
-                    onChange={(e) => setFormData({ ...formData, no_hp: e.target.value })}
+                    value={formData.noHp || ""}
+                    onChange={(e) => setFormData({ ...formData, noHp: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                     placeholder="081234567890"
                   />
@@ -201,8 +203,8 @@ export function BiodataKeluargaForm({
                     type="text"
                     name="tempat_lahir"
                     required={isHidup}
-                    value={formData.tempat_lahir || ""}
-                    onChange={(e) => setFormData({ ...formData, tempat_lahir: e.target.value })}
+                    value={formData.tempatLahir || ""}
+                    onChange={(e) => setFormData({ ...formData, tempatLahir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                   />
                   {renderFieldError(state?.errors?.tempat_lahir)}
@@ -214,8 +216,8 @@ export function BiodataKeluargaForm({
                     type="date"
                     name="tanggal_lahir"
                     required={isHidup}
-                    value={formData.tanggal_lahir || ""}
-                    onChange={(e) => setFormData({ ...formData, tanggal_lahir: e.target.value })}
+                    value={formData.tanggalLahir || ""}
+                    onChange={(e) => setFormData({ ...formData, tanggalLahir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                   />
                   {renderFieldError(state?.errors?.tanggal_lahir)}
@@ -227,8 +229,8 @@ export function BiodataKeluargaForm({
                     type="text"
                     name="pendidikan_terakhir"
                     required={isHidup}
-                    value={formData.pendidikan_terakhir || ""}
-                    onChange={(e) => setFormData({ ...formData, pendidikan_terakhir: e.target.value })}
+                    value={formData.pendidikanTerakhir || ""}
+                    onChange={(e) => setFormData({ ...formData, pendidikanTerakhir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                     placeholder="SD / SMP / SMA"
                   />

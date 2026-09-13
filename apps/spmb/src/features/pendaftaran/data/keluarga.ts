@@ -8,7 +8,7 @@ interface RPCParams extends BaseRPCParams {
     relationType: EnumRelasiKeluarga
 }
 
-export async function getBiodataKeluarga({formId, relationType}: RPCParams): Promise<BiodataKeluargaItemData|null> {
+export async function getBiodataKeluargaData({formId, relationType}: RPCParams): Promise<BiodataKeluargaItemData|null> {
   const supabase = await createSupabaseServer();
 
   const { data, error } = await supabase.rpc('fn_rpc_get_biodata_keluarga', {

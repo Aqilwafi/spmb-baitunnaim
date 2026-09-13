@@ -44,7 +44,6 @@ export default async function BiodataKeluargaContainer({
     <BiodataKeluargaStep
       formId={formId}
       status={status}
-      code={code}
       relationType={relationType}
       data={data}
       isWaliMandatory={isWaliMandatory}

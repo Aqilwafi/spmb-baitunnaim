@@ -6,14 +6,11 @@ import { CheckCircle2, User, ShieldCheck } from "lucide-react";
 import { biodataKeluargaAction } from "@/actions/pendaftaran/biodata-keluarga";
 import { BiodataKeluargaForm } from "@/components/forms/BiodataKeluargaForm";
 import type { BiodataKeluargaItemData } from "@/types/biodata.types";
-
-export type RelationType = "AYAH" | "IBU" | "WALI";
-export type LifeStatus = "HIDUP" | "MENINGGAL";
+import type { EnumRelasiKeluarga } from "@bn/types";
 
 
 interface BiodataKeluargaStepProps {
   formId: string;
-  userId: string;
   status: "active" | "complete";
   relationType: BiodataKeluargaItemData['relationType'];
   data: BiodataKeluargaItemData | null;
@@ -30,7 +27,7 @@ export default function BiodataKeluargaStep({
   const router = useRouter();
   const isSubmittedRef = useRef(false);
 
-  const labelMap: Record<RelationType, string> = {
+  const labelMap: Record<EnumRelasiKeluarga, string> = {
     AYAH: "Ayah",
     IBU: "Ibu",
     WALI: "Wali",
