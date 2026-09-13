@@ -1,17 +1,17 @@
 // components/step/containers/InitFormContainer.tsx
 import type { StepContainerProps } from "@/types/step.types";
-import { getInitFormData } from "@/features/form/init";
+import { getInitFormData } from "@/features/pendaftaran/data/init";
 import InitFormStep from "@/components/step/clients/InitFormStep";
 
 export default async function InitFormContainer({
-  pendaftaran_id,
+  formId,
   status,
 }: StepContainerProps) {
   if (status !== "complete") {
     return null;
   }
 
-  const data = await getInitFormData(pendaftaran_id);
+  const data = await getInitFormData(formId);
 
   if (!data) {
     return (

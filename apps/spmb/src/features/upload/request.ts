@@ -3,7 +3,7 @@
 import { getCurrentClaims } from "@bn/auth";
 import { createValidationError } from "@bn/utils";
 import { requestUploadMetadataSchema, formatZodErrors } from "@bn/validators";
-import { requestSignedUrl, type SignedUrlResponse } from "@/services/file/url";
+import { requestSignedUrl, type SignedUrlResponse } from "@/services/file/upload-url";
 
 export type RequestUploadInput = unknown; // Menampung raw JSON body dari request
 

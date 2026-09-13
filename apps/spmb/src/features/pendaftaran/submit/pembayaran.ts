@@ -1,12 +1,11 @@
-import { insertPembayaran } from "@/services/pendaftaran/pembayaran";
+import { insertPembayaran } from "@/services/pendaftaran/mutasi/pembayaran";
 import { deleteFileFromStorageService } from "@/services/file/delete"; 
 import { formIdParamsSchema, pembayaranUploadPathSchema, formatZodErrors } from "@bn/validators";
-import type { FormSubmitResult } from '@bn/types';
 import { checkUserAccess } from "../../auth/guards";
 import {  createValidationError } from "@bn/utils";
-import type { ProcessDocumentUpload } from "@/types/form.types";
+import type { FormSubmitResult, ProcessDocumentPayload } from "@/types/form.types";
 
-export async function submitPembayaran(input: ProcessDocumentUpload): Promise<FormSubmitResult> {
+export async function submitPembayaran({formId, filePath}: ProcessDocumentPayload): Promise<FormSubmitResult> {
   
   // 1. Auth
   if (!(await checkUserAccess())) {
@@ -14,7 +13,7 @@ export async function submitPembayaran(input: ProcessDocumentUpload): Promise<Fo
   }
 
   // 2. Validasi formId
-  const parsedFormId = formIdParamsSchema.safeParse({ formId: input.formId });
+  const parsedFormId = formIdParamsSchema.safeParse({ formId: formId});
   if (!parsedFormId.success) {
     throw createValidationError(
       formatZodErrors(parsedFormId.error),
@@ -23,7 +22,7 @@ export async function submitPembayaran(input: ProcessDocumentUpload): Promise<Fo
   }
 
   // 3. Validasi & sanitasi filePath
-  const parsedFilePath = pembayaranUploadPathSchema.safeParse({ filePath: input.filePath });
+  const parsedFilePath = pembayaranUploadPathSchema.safeParse({ filePath: filePath });
   if (!parsedFilePath.success) {
     throw createValidationError(
       formatZodErrors(parsedFilePath.error),
@@ -35,7 +34,9 @@ export async function submitPembayaran(input: ProcessDocumentUpload): Promise<Fo
   try {
     return await insertPembayaran({
       formId: parsedFormId.data,
-      filePath: parsedFilePath.data.filePath,
+      input: {
+        filePath: parsedFilePath.data.filePath,
+      },
     });
   } catch (err) {
     // Hapus file fisik/storage jika proses insert DB gagal / melempar error

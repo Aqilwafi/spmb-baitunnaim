@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
 import { submitBiodataSiswaDetail } from "@/features/pendaftaran/submit/biodata-siswa-detail";
-import type { ActionResponse, FormSubmitResult } from "@bn/types";
+import type { ActionResponse } from "@bn/types";
+import type { FormSubmitResult } from "@/types/form.types";
 
 export async function biodataSiswaDetailAction(
   _prevState: ActionResponse<FormSubmitResult> | null,

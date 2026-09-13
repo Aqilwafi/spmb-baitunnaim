@@ -3,7 +3,7 @@
 import { checkUserAccess } from "@/features/auth/guards";
 import { formIdParamsSchema, formatZodErrors} from "@bn/validators";
 import { createValidationError } from "@bn/utils";
-import { checkWaliRequirement } from "@/services/pendaftaran/cek-wali";
+import { checkWaliRequirement } from "@/services/form/cek-wali";
 
 export async function checkWaliRequirementStatus(formId: string): Promise<boolean> {
 

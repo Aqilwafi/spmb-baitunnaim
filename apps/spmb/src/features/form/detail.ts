@@ -1,7 +1,7 @@
 // features/form/detail.ts
 
 import { getFormDetail } from "@/services/form/detail";
-import type { DetailPendaftaran } from "@/types/step.types";
+import type { DetailPendaftaran } from "@/types/form.types";
 import { getCurrentClaims } from "@bn/auth";
 import { getTahunAjaranAktifData } from "../master/tahun-ajaran";
 import { formIdParamsSchema, formatZodErrors } from "@bn/validators";

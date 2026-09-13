@@ -1,15 +1,12 @@
 import type { StepContainerProps } from "@/types/step.types";
 import BiodataSiswaDetailStep from "@/components/step/clients/BiodataSiswaStep";
 import { getStatusRumahOptions, getTinggalBersamaOptions } from "@/features/master/options";
-
-import { getBiodataSiswaDetail } from "@/services/biodata/siswa";
-
-
+import { getBiodataSiswaDetail } from "@/services/pendaftaran/data/siswa";
 
 export default async function BiodataSiswaContainer({
-  pendaftaran_id,
-  user_id,
+  formId,
   status,
+  code,
 }: StepContainerProps) {
   if (status === "locked") {
     return null;
@@ -21,15 +18,15 @@ export default async function BiodataSiswaContainer({
       ]);
 
   const data = status === "complete" 
-    ? await getBiodataSiswaDetail({ formId: pendaftaran_id })
+    ? await getBiodataSiswaDetail(formId)
     : null;
 
   return (
     <BiodataSiswaDetailStep
-      pendaftaran_id={pendaftaran_id}
-      user_id={user_id}
+      formId={formId}
       status={status}
-      data={data?.data ?? null}
+      code={code}
+      data={data}
       statusRumahOptions={statusRumahOptions}
       tinggalBersamaOptions={tinggalBersamaOptions}
     />

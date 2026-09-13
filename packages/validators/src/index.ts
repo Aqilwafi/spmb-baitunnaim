@@ -7,3 +7,4 @@ export * from './form/params.schema';
 export * from './form/pembayaran-upload.schema';
 export * from './utils/utils';
 export * from './utils/request-upload-metadata.schema'
+export * from './form/dokumen-upload.schema';

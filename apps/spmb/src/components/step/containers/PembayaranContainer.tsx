@@ -2,12 +2,12 @@
 
 import type { StepContainerProps } from "@/types/step.types";
 import PembayaranStep from "@/components/step/clients/PembayaranStep";
-import { getPembayaranStepData } from "@/features/pendaftaran/data/pembayaran";
+import { getPembayaranData } from "@/features/pendaftaran/data/pembayaran";
 
 export default async function PembayaranContainer({
-  pendaftaran_id,
-  user_id,
+  formId,
   status,
+  code,
 }: StepContainerProps) {
   if (status === "locked") {
     return null;
@@ -15,14 +15,14 @@ export default async function PembayaranContainer({
 
   // Ambil data asli jika complete, passing null jika active
   const data = status === "complete" 
-    ? await getPembayaranStepData(pendaftaran_id) 
+    ? await getPembayaranData(formId) 
     : null;
 
   return (
     <PembayaranStep
-      pendaftaran_id={pendaftaran_id}
-      user_id={user_id}
+      formId={formId}
       status={status}
+      code={code}
       data={data}
     />
   );

@@ -11,9 +11,9 @@ export const checkUserAccess = async (): Promise<boolean> => {
   return isAllowed;
 };
 
-export async function isAccessAllowed(pendaftaranId: string) {
+export async function isAccessAllowed(formId: string) {
   
-  const safe = formIdParamsSchema.safeParse(pendaftaranId);
+  const safe = formIdParamsSchema.safeParse(formId);
   if (!safe.success) {
     return { allowed: false, reason: "INVALID_FORMAT" };
   }

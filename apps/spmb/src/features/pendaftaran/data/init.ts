@@ -1,14 +1,15 @@
 
 import { formIdParamsSchema, formatZodErrors } from "@bn/validators";
-import { getInitForm, type InitFormStepData as ServiceInitFormStepData } from '@/services/form/init';
-import { getTahunAjaranAktifData } from "../master/tahun-ajaran";
+import { getInitForm } from '@/services/pendaftaran/data/init';
+import { getTahunAjaranAktifData } from "../../master/tahun-ajaran";
 import { genderLabel, createValidationError } from "@bn/utils";
+import type { InitFormStepData } from "@/types/form.types";
 
-export type InitFormStepData = Omit<ServiceInitFormStepData, "gender"> & {
+export type FormattedInitFormStepData = Omit<InitFormStepData, "gender"> & {
   genderFormatted: string;
 };
 
-export async function getInitFormData(formId: string): Promise<InitFormStepData | null> {
+export async function getInitFormData(formId: string): Promise<FormattedInitFormStepData> {
 
   const tahunAjaran = await getTahunAjaranAktifData();
   if (!tahunAjaran.id) throw new Error("Tidak ada tahun ajaran aktif.");
@@ -21,9 +22,9 @@ export async function getInitFormData(formId: string): Promise<InitFormStepData 
       );
   };
 
-  const data = await getInitForm(parsed.data, tahunAjaran.id);
+  const data = await getInitForm({formId: parsed.data});
 
-  if (!data) return null;
+  if (!data) throw new Error("Tidak ada data valid");
 
   return {
     ...data,

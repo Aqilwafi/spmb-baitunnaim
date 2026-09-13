@@ -4,10 +4,10 @@ import { useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Button, Radio } from "@bn/ui";
 import type { MasterData } from "@bn/types";
-import type { BiodataSiswaDetailResultData } from "@/services/biodata/siswa";
+import type { BiodataSiswaDetailItemData } from "@/types/biodata.types";
 
 interface BiodataSiswaDetailFormProps {
-  data: BiodataSiswaDetailResultData | null;
+  data: BiodataSiswaDetailItemData | null;
   statusRumahOptions: MasterData[];
   tinggalBersamaOptions: MasterData[];
   action: (formData: FormData) => void;
@@ -26,12 +26,12 @@ export function BiodataSiswaDetailForm({
   // Hanya field yang butuh reaktivitas UI (live counter / highlight) yang di-useState.
   // Sisanya uncontrolled (defaultValue) — konsisten dengan pola InitForm.
   const [nisn, setNisn] = useState(data?.nisn || "");
-  const [noKk, setNoKk] = useState(data?.no_kk || "");
+  const [noKk, setNoKk] = useState(data?.noKk || "");
   const [tinggalBersamaId, setTinggalBersamaId] = useState(
-    data?.tinggal_bersama_id || tinggalBersamaOptions[0]?.value || 1
+    data?.tinggalBersamaId || tinggalBersamaOptions[0]?.value || 1
   );
   const [statusRumahId, setStatusRumahId] = useState(
-    data?.status_rumah_id || statusRumahOptions[0]?.value || 1
+    data?.statusRumahId || statusRumahOptions[0]?.value || 1
   );
 
   const handleNumericInput = (value: string, maxLength: number) => {
@@ -147,7 +147,7 @@ export function BiodataSiswaDetailForm({
               min={1}
               required
               onKeyDown={preventInvalidNumberKeys}
-              defaultValue={data?.anak_ke || 1}
+              defaultValue={data?.anakKe || 1}
               className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             />
             {renderFieldError(state?.errors?.anakKe)}
@@ -160,7 +160,7 @@ export function BiodataSiswaDetailForm({
               min={0}
               required
               onKeyDown={preventInvalidNumberKeys}
-              defaultValue={data?.jumlah_saudara || 0}
+              defaultValue={data?.jumlahSaudara || 0}
               className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             />
             {renderFieldError(state?.errors?.jumlahSaudara)}
@@ -188,7 +188,7 @@ export function BiodataSiswaDetailForm({
             type="text"
             name="citaCita"
             required
-            defaultValue={data?.cita_cita || ""}
+            defaultValue={data?.citaCita || ""}
             className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
             placeholder="Insinyur"
           />
@@ -277,7 +277,6 @@ export function BiodataSiswaDetailForm({
         {renderFieldError(state?.errors?.statusRumahId)}
       </div>
 
-      {/* disabled hanya berdasar isPending — konsisten dengan InitForm, biar server jadi validator final */}
       <Button
         type="submit"
         disabled={isPending}

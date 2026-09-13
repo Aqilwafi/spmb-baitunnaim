@@ -1,3 +1,5 @@
+
+import 'server-only';
 import { createSupabaseServer } from "@bn/supabase/server";
 
 export interface SignedUrlResponse {
@@ -19,3 +21,4 @@ export async function requestSignedUrl(params: string): Promise<SignedUrlRespons
     return data;
     
 }
+

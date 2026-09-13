@@ -1,0 +1,39 @@
+// components/step/containers/DokumenContainer.tsx
+
+import type { StepContainerProps } from "@/types/step.types";
+import DokumenStep from "@/components/step/clients/DokumenStep";
+import { getDokumenData } from "@/features/pendaftaran/data/dokumen";
+
+export default async function DokumenContainer({
+  formId,
+  status,
+  code,
+}: StepContainerProps) {
+  if (status === "locked") {
+    return null;
+  }
+
+  // Mapping dari code config step ke jenisDokumen (uppercase untuk database/validator)
+  const documentTypeCodeMap: Record<string, "KK_TYPE_DOC" | "KTP_TYPE_DOC" | "AKTE_TYPE_DOC"> = {
+    DOCUMENT_KK: "KK_TYPE_DOC",
+    DOCUMENT_KTP: "KTP_TYPE_DOC",
+    DOCUMENT_AKTE: "AKTE_TYPE_DOC",
+  };
+
+  const jenisDokumen = documentTypeCodeMap[code || "DOCUMENT_KK"] || "KK_TYPE_DOC";
+
+  // Ambil data asli jika complete, passing null jika active
+  const data = status === "complete" 
+    ? await getDokumenData(formId, jenisDokumen) 
+    : null;
+
+  return (
+    <DokumenStep
+      formId={formId}
+      status={status}
+      code={code}
+      jenisDokumen={jenisDokumen}
+      data={data}
+    />
+  );
+}

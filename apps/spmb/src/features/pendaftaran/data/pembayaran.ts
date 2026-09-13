@@ -1,19 +1,31 @@
-import { getPembayaranByFormId, getSignedBuktiPembayaranUrl } from "@bn/services";
-import type { PembayaranStepData } from "@/components/step/clients/PembayaranStep";
 
-export async function getPembayaranStepData(
-  formId: string
-): Promise<PembayaranStepData | null> {
-  const pembayaran = await getPembayaranByFormId(formId);
+import { formIdParamsSchema, formatZodErrors } from "@bn/validators";
+import { createValidationError } from "@bn/utils";
+import type { PembayaranStepData } from "@/types/form.types";
+import { getPembayaran } from "@/services/pendaftaran/data/pembayaran";
+import { getSignedUrl } from "@/services/file/access-url";
+
+
+export async function getPembayaranData(formId: string): Promise<PembayaranStepData | null> {
+
+  const parsed = formIdParamsSchema.safeParse(formId);
+  if (!parsed.success) {
+     throw createValidationError(
+        formatZodErrors(parsed.error),
+        parsed.error.issues[0]?.message ?? "Data formulir tidak valid."
+      );
+  };
+
+  const pembayaran = await getPembayaran({formId: parsed.data});
   if (!pembayaran) return null;
 
-  const signedUrl = await getSignedBuktiPembayaranUrl(
-    pembayaran.bukti_pembayaran_url
+  const signedUrl = await getSignedUrl(
+    pembayaran.urlBuktiBayar
   );
   if (!signedUrl) return null;
 
   return {
-    bukti_bayar_url: signedUrl,
-    uploaded_at: pembayaran.tanggal_transfer ?? pembayaran.created_at,
+    ...pembayaran,
+    urlBuktiBayar: signedUrl,
   };
 }

@@ -1,25 +1,26 @@
-// apps/spmb/src/actions/pembayaran-actions.ts
+// apps/spmb/src/actions/dokumen-actions.ts
 "use server";
 
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
-import { submitPembayaran } from "@/features/pendaftaran/submit/pembayaran";
+import { submitDokumen } from "@/features/pendaftaran/submit/dokumen";
 import type { ActionResponse } from "@bn/types";
-import type { FormSubmitResult, ProcessDocumentPayload } from "@/types/form.types";
-import type { RPCPembayaranDanDokumen } from "@/types/rpc.types";
+import type { FormSubmitResult } from "@/types/form.types";
+import type { ProcessDocumentFeaturePayload } from "@/features/pendaftaran/submit/dokumen";
 
-export async function pembayaranAction({formId, filePath}: ProcessDocumentPayload): Promise<ActionResponse<FormSubmitResult>> {
+export async function dokumenAction({ formId, filePath, jenisDokumen }: ProcessDocumentFeaturePayload): Promise<ActionResponse<FormSubmitResult>> {
   try {
-    const result = await submitPembayaran({
-      formId: formId,
-      filePath: filePath,
+    const result = await submitDokumen({
+      formId,
+      filePath,
+      jenisDokumen,
     });
 
     revalidatePath("/dashboard");
 
     return {
       success: true,
-      message: "Bukti pembayaran berhasil dikirim.",
+      message: "Dokumen berhasil dikirim.",
       data: result,
     };
   } catch (error) {

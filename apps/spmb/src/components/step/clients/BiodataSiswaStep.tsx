@@ -6,34 +6,30 @@ import { CheckCircle2, UserCheck, ShieldCheck, FileText, Home, HeartHandshake } 
 import { biodataSiswaDetailAction } from "@/actions/pendaftaran/biodata-siswa-detail";
 import { BiodataSiswaDetailForm } from "@/components/forms/BiodataSiswaDetailForm";
 import type { MasterData } from "@bn/types";
-import type { BiodataSiswaDetailResultData } from "@/services/biodata/siswa";
+import type { StepContainerProps } from "@/types/step.types";
+import type { BiodataSiswaDetailItemData } from "@/types/biodata.types";
 
-interface BiodataSiswaDetailStepProps {
-  pendaftaran_id: string;
-  user_id: string;
-  status: "active" | "complete";
-  data: BiodataSiswaDetailResultData | null;
+interface BiodataSiswaDetailStepProps extends StepContainerProps {
+  data: BiodataSiswaDetailItemData | null;  // tambahkan | null
   statusRumahOptions: MasterData[];
   tinggalBersamaOptions: MasterData[];
 }
 
-export default function BiodataSiswaDetailStep({
-  pendaftaran_id,
-  status,
-  data,
-  statusRumahOptions,
-  tinggalBersamaOptions,
-}: BiodataSiswaDetailStepProps) {
+  export default function BiodataSiswaDetailStep({
+    formId,
+    status,
+    data,
+    statusRumahOptions,
+    tinggalBersamaOptions,
+  }: BiodataSiswaDetailStepProps) {
   const router = useRouter();
 
   const [state, action, isPending] = useActionState(
     (prevState: any, formData: FormData) =>
-      biodataSiswaDetailAction(prevState, formData, pendaftaran_id),
+      biodataSiswaDetailAction(prevState, formData, formId),
     null
   );
 
-  // Konsisten dengan InitFormPendaftaranModal: cukup reaktif ke state?.success,
-  // tidak butuh ref tambahan karena useActionState sudah reaktif pasca-submit.
   useEffect(() => {
     if (state?.success) {
       router.refresh();
@@ -69,7 +65,7 @@ export default function BiodataSiswaDetailStep({
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Identitas</p>
                 <p className="text-sm font-semibold text-gray-800 mt-0.5">NISN: {data.nisn}</p>
-                <p className="text-xs text-gray-600">No. KK: {data.no_kk}</p>
+                <p className="text-xs text-gray-600">No. KK: {data.noKk}</p>
                 <p className="text-xs text-gray-600">Agama: {data.agama}</p>
               </div>
             </div>
@@ -78,8 +74,8 @@ export default function BiodataSiswaDetailStep({
               <HeartHandshake size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Profil Keluarga & Pribadi</p>
-                <p className="text-sm font-semibold text-gray-800 mt-0.5">Anak ke-{data.anak_ke} dari {data.jumlah_saudara} saudara</p>
-                <p className="text-xs text-gray-600">Hobi: {data.hobi} | Cita-cita: {data.cita_cita}</p>
+                <p className="text-sm font-semibold text-gray-800 mt-0.5">Anak ke-{data.anakKe} dari {data.jumlahSaudara} saudara</p>
+                <p className="text-xs text-gray-600">Hobi: {data.hobi} | Cita-cita: {data.citaCita}</p>
                 {data.penyakit && <p className="text-xs text-red-500">Riwayat Penyakit: {data.penyakit}</p>}
               </div>
             </div>
@@ -90,10 +86,10 @@ export default function BiodataSiswaDetailStep({
                 <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Domisili & Tempat Tinggal</p>
                 <p className="text-sm font-semibold text-gray-800 mt-0.5">{data.alamat}</p>
                 <p className="text-xs text-gray-600 mt-1">
-                  Tinggal Bersama: <span className="font-medium text-gray-800">{getLabelById(tinggalBersamaOptions, data.tinggal_bersama_id)}</span>
+                  Tinggal Bersama: <span className="font-medium text-gray-800">{getLabelById(tinggalBersamaOptions, data.tinggalBersamaId)}</span>
                 </p>
                 <p className="text-xs text-gray-600">
-                  Status Rumah: <span className="font-medium text-gray-800">{getLabelById(statusRumahOptions, data.status_rumah_id)}</span>
+                  Status Rumah: <span className="font-medium text-gray-800">{getLabelById(statusRumahOptions, data.statusRumahId)}</span>
                 </p>
               </div>
             </div>

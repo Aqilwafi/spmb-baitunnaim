@@ -1,5 +1,6 @@
-import { MasterData } from "@bn/types";
-import type { BiodataSiswa, FormPendaftaran, MasterStep, MasterLembaga, MasterKelas } from "@bn/types";
+import { MasterData, BaseDocumentPayload, EnumGender, Pembayaran } from "@bn/types";
+import type { BiodataSiswa, FormPendaftaran, MasterStep, MasterLembaga, MasterKelas} from "@bn/types";
+
 
 export interface InitFormPendaftaranModalProps {
   lembaga: MasterData[];
@@ -17,17 +18,51 @@ export interface FormCardsData {
   updatedAt: FormPendaftaran['updated_at'];
 }
 
-export type InitFormStepDataRPCResponse = Pick<BiodataSiswa, 'nama_lengkap' | 'nik' | 'jenis_kelamin' | 'tempat_lahir' | 'tanggal_lahir'> & {
-  lembaga_tujuan: string;
-  kelas: string | null;
+export interface DetailPendaftaran {
+  id: FormPendaftaran['id'];
+  stepId: FormPendaftaran['step_id'];
 }
 
-export interface ProcessFormInput {
+export interface InitFormStepData {
+  namaLengkap: BiodataSiswa['nama_lengkap'];
+  nik: BiodataSiswa['nik'];
+  gender: EnumGender;
+  tempatLahir: BiodataSiswa['tempat_lahir'];
+  tanggalLahir: BiodataSiswa['tanggal_lahir'];
+  lembagaTujuan: MasterLembaga['label'];
+  kelas: MasterKelas['label'] | null;
+}
+
+export interface PembayaranStepData {
+  urlBuktiBayar: Pembayaran['bukti_pembayaran_url'];
+  paymentStatus: Pembayaran['payment_status'];
+  uploadedAt: Pembayaran['created_at'];
+  verifiedAt: Pembayaran['verified_at'];
+  verifiedBy: string | null;
+}
+
+export interface FormSubmitResult {
+  success: boolean;
   formId: string;
+  nextStepId?: number;
+}
+
+export interface BaseFormPayload {
   payload: Record<string, FormDataEntryValue>;
 }
 
-export interface ProcessDocumentUpload {
-  formId: string;
-  filePath: string;
+export interface ProcessFormPayload extends BaseFormPayload {
+  formId: FormPendaftaran['id'];
+} 
+
+export interface ProcessDocumentPayload extends BaseDocumentPayload {
+  formId: FormPendaftaran['id'];
 }
+
+interface ProcessDetailDocumentPayload extends ProcessDocumentPayload {
+    documentType: string;
+}
+
+
+
+

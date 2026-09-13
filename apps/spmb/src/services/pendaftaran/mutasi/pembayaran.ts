@@ -2,15 +2,20 @@
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase";
-import type { ProcessDocumentUpload } from "@/types/form.types";
-import type { BaseRPCSubmitResponse, FormSubmitResult } from "@bn/types";
+import type { FormSubmitResult } from '@/types/form.types';
+import type { PembayaranUploadPathInput } from "@bn/validators";
+import type { BaseRPCSubmitResponse, BaseRPCParams} from "@/types/rpc.types";
 
-export async function insertPembayaran(params: ProcessDocumentUpload): Promise<FormSubmitResult> {
+interface RPCParams extends BaseRPCParams {
+  input: PembayaranUploadPathInput;
+}
+
+export async function insertPembayaran({formId, input}: RPCParams): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();
 
   const { data, error } = await supabase.rpc("fn_rpc_submit_pembayaran", {
-    p_form_id: params.formId,
-    p_file_path: params.filePath,
+    p_form_id: formId,
+    p_file_path: input.filePath,
   });
 
   if (error) throw error;

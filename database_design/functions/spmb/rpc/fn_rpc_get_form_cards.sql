@@ -1,6 +1,4 @@
-create or replace function public.fn_rpc_get_form_cards(
-  p_tahun_ajaran_id smallint
-)
+create or replace function public.fn_rpc_get_form_cards()
 returns table (
   id uuid,
   nama_lengkap varchar,
@@ -15,36 +13,24 @@ language sql
 stable
 set search_path = public
 as $$
-  with active_ta as (
-    -- pastikan tahun ajaran ada, aktif, dan belum dihapus
-    select id 
-    from master_tahun_ajaran 
-    where id = p_tahun_ajaran_id 
-      and is_active = true 
-  ),
-  my_siswa as (
-    -- saring biodata milik user ini saja
-    select id, nama_lengkap, lembaga_id, kelas_id
-    from biodata_siswa
-    where owner_user_id = auth.uid()
-      and deleted_at is null
-  )
   select
     fp.id,
-    ms.nama_lengkap,
+    bs.nama_lengkap,
     ml.label as lembaga_label,
     mk.label as kelas_label,
     mst.label as step_label,
     fp.registration_status,
     fp.admission_status,
     fp.updated_at
-  from my_siswa ms
-  join form_pendaftaran fp on fp.biodata_siswa_id = ms.id
-  join active_ta ta on ta.id = fp.tahun_ajaran_id
-  left join master_lembaga ml on ml.id = ms.lembaga_id
-  left join master_kelas mk on mk.id = ms.kelas_id
+  from form_pendaftaran fp
+  join biodata_siswa bs on bs.id = fp.biodata_siswa_id
+  left join master_lembaga ml on ml.id = bs.lembaga_id
+  left join master_kelas mk on mk.id = bs.kelas_id
   left join master_step mst on mst.id = fp.step_id
-  where fp.deleted_at is null
+  where fp.tahun_ajaran_id = public.fn_get_active_tahun_ajaran_id()
+    and fp.pendaftar_id = auth.uid()
+    and fp.deleted_at is null
+    and bs.deleted_at is null
   order by fp.updated_at desc;
 $$;
 

@@ -1027,6 +1027,7 @@ export type Database = {
         Returns: boolean
       }
       fn_check_email_is_admin: { Args: { p_email: string }; Returns: boolean }
+      fn_get_active_tahun_ajaran_id: { Args: never; Returns: number }
       fn_is_administrator: { Args: never; Returns: boolean }
       fn_is_high_level_admin: { Args: never; Returns: boolean }
       fn_is_owner_form_data: {
@@ -1038,6 +1039,26 @@ export type Database = {
         Returns: boolean
       }
       fn_is_superadmin: { Args: never; Returns: boolean }
+      fn_rpc_get_biodata_keluarga: {
+        Args: {
+          p_form_id: string
+          p_relation_type: Database["public"]["Enums"]["family_relation_enum"]
+        }
+        Returns: {
+          alamat: string
+          detail_relation_type: string
+          nama_lengkap: string
+          nik: unknown
+          no_hp: unknown
+          pekerjaan: string
+          pendidikan_terakhir: string
+          penghasilan: string
+          relation_type: Database["public"]["Enums"]["family_relation_enum"]
+          status_hidup: Database["public"]["Enums"]["life_status_enum"]
+          tanggal_lahir: string
+          tempat_lahir: string
+        }[]
+      }
       fn_rpc_get_biodata_siswa_detail: {
         Args: { p_form_id: string }
         Returns: {
@@ -1054,8 +1075,22 @@ export type Database = {
           tinggal_bersama_id: number
         }[]
       }
+      fn_rpc_get_dokumen_by_tipe: {
+        Args: { p_form_id: string; p_tipe_dokumen_id: number }
+        Returns: {
+          catatan_verifikasi: string
+          document_status: Database["public"]["Enums"]["document_status_enum"]
+          file_url: string
+          form_pendaftaran_id: string
+          id: string
+          tipe_dokumen_id: number
+          uploaded_at: string
+          verified_at: string
+          verified_by: string
+        }[]
+      }
       fn_rpc_get_form_cards: {
-        Args: { p_tahun_ajaran_id: number }
+        Args: never
         Returns: {
           admission_status: Database["public"]["Enums"]["admission_status_enum"]
           id: string
@@ -1068,18 +1103,15 @@ export type Database = {
         }[]
       }
       fn_rpc_get_form_detail: {
-        Args: { p_form_id: string; p_tahun_ajaran_id: number }
+        Args: { p_form_id: string }
         Returns: {
-          admission_status: Database["public"]["Enums"]["admission_status_enum"]
-          biodata_siswa_id: string
           id: string
-          nama_lengkap: string
           pendaftar_id: string
           step_id: number
         }[]
       }
       fn_rpc_get_init_form_step_data: {
-        Args: { p_form_id: string; p_tahun_ajaran_id: number }
+        Args: { p_form_id: string }
         Returns: {
           jenis_kelamin: Database["public"]["Enums"]["gender_enum"]
           kelas: string
@@ -1088,6 +1120,16 @@ export type Database = {
           nik: string
           tanggal_lahir: string
           tempat_lahir: string
+        }[]
+      }
+      fn_rpc_get_pembayaran_data: {
+        Args: { p_form_id: string }
+        Returns: {
+          bukti_pembayaran_url: string
+          created_at: string
+          payment_status: Database["public"]["Enums"]["payment_status_enum"]
+          verified_at: string
+          verified_by: string
         }[]
       }
       fn_rpc_get_pendidikan_siswa_sebelumnya: {
@@ -1141,6 +1183,14 @@ export type Database = {
         }
         Returns: Json
       }
+      fn_rpc_submit_dokumen: {
+        Args: {
+          p_document_type_code: string
+          p_file_path: string
+          p_form_id: string
+        }
+        Returns: Json
+      }
       fn_rpc_submit_init_form: {
         Args: {
           p_gender: Database["public"]["Enums"]["gender_enum"]
@@ -1172,6 +1222,10 @@ export type Database = {
       fn_validate_guardian_requirement: {
         Args: { p_biodata_siswa_id: string }
         Returns: undefined
+      }
+      fn_validate_step_document: {
+        Args: { p_document_type_code: string; p_step_order: number }
+        Returns: number
       }
       fn_verify_storage_object_owner: {
         Args: { p_bucket_id: string; p_file_path: string; p_owner_id: string }

@@ -1,25 +1,26 @@
-// components/step/clients/PembayaranStep.tsx
+// components/step/clients/DokumenStep.tsx
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, UploadCloud, Receipt, Clock, ShieldCheck, AlertCircle, CreditCard } from "lucide-react";
+import { CheckCircle2, UploadCloud, FileText, Clock, ShieldCheck, AlertCircle } from "lucide-react";
 import { Button } from "@bn/ui";
-import type { PembayaranStepData } from "@/types/form.types";
+import type { DokumenStepData } from "@/types/form.types";
 import type { StepContainerProps } from "@/types/step.types";
 import { formatDateTimeId } from "@bn/utils";
-import { useFileUpload } from "@/hooks/useFileUpload"; // import hook generik
-import { pembayaranAction } from "@/actions/pendaftaran/pembayaran"; // sesuaikan path server action kamu
+import { useFileUpload } from "@/hooks/useFileUpload";
+import { dokumenAction } from "@/actions/pendaftaran/dokumen";
 
-
-interface PembayaranStepProps extends StepContainerProps {
-  data: PembayaranStepData | null;
+interface DokumenStepProps extends StepContainerProps {
+  jenisDokumen: "KK_TYPE_DOC" | "KTP_TYPE_DOC" | "AKTE_TYPE_DOC";
+  data: DokumenStepData | null;
 }
 
-export default function PembayaranStep({
+export default function DokumenStep({
   formId,
   status,
+  jenisDokumen,
   data,
-}: PembayaranStepProps) {
+}: DokumenStepProps) {
   const [file, setFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmittingAction, setIsSubmittingAction] = useState(false);
@@ -28,6 +29,12 @@ export default function PembayaranStep({
 
   const isLoading = isUploading || isSubmittingAction;
 
+  const labelMap: Record<typeof jenisDokumen, string> = {
+    KK_TYPE_DOC: "Kartu Keluarga (KK)",
+    KTP_TYPE_DOC: "KTP Orang Tua / Wali",
+    AKTE_TYPE_DOC: "Akte Kelahiran",
+  };
+
   const handleUpload = async () => {
     if (!file) return;
     setErrorMessage(null);
@@ -35,7 +42,7 @@ export default function PembayaranStep({
     // Step 1: Upload File ke Storage via useFileUpload
     const uploadRes = await upload({
       file,
-      category: "bukti-pembayaran",
+      category: "dokumen-pendaftaran",
     });
 
     if (!uploadRes.success) {
@@ -43,23 +50,21 @@ export default function PembayaranStep({
       return;
     }
 
-    // Step 2: Kirim Path File ke Server Action
+    // Step 2: Kirim Path File & Jenis Dokumen ke Server Action
     setIsSubmittingAction(true);
     try {
-      const actionRes = await pembayaranAction({
-        formId: formId,
-        input: {
-          filePath: uploadRes.data as string,
-        },
+      const actionRes = await dokumenAction({
+        formId,
+        filePath: uploadRes.data as string,
+        jenisDokumen,
       });
 
       if (!actionRes.success) {
         setErrorMessage(actionRes.message);
       }
-      // Jika berhasil, revalidatePath di Server Action otomatis memicu re-render
     } catch (error) {
       setErrorMessage(
-        error instanceof Error ? error.message : "Gagal menyimpan data pembayaran."
+        error instanceof Error ? error.message : "Gagal menyimpan data dokumen."
       );
     } finally {
       setIsSubmittingAction(false);
@@ -76,22 +81,22 @@ export default function PembayaranStep({
             </div>
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">
-                Bukti Pembayaran Diterima
+                {labelMap[jenisDokumen]} Berhasil Diunggah
               </h2>
               <p className="text-xs text-gray-500 mt-0.5">
-                Bukti bayar di bawah ini telah tercatat oleh sistem.
+                Dokumen ini telah tercatat dan diverifikasi oleh sistem.
               </p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="p-3 sm:p-4 bg-gray-50/70 rounded-2xl border border-gray-100/80 flex items-start gap-3">
-              <Receipt size={18} className="text-blue-600 mt-0.5 shrink-0" />
+              <FileText size={18} className="text-blue-600 mt-0.5 shrink-0" />
               <div className="flex-1">
-                <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Bukti Bayar</p>
+                <p className="text-[10px] uppercase tracking-[0.05em] text-gray-400 font-bold">Pratinjau Berkas</p>
                 <img
-                  src={data.urlBuktiBayar}
-                  alt="Bukti bayar"
+                  src={data.fileUrl}
+                  alt={labelMap[jenisDokumen]}
                   className="mt-2 w-full max-w-sm rounded-xl border border-gray-100"
                 />
               </div>
@@ -109,13 +114,7 @@ export default function PembayaranStep({
           <div className="flex items-start gap-3 p-4 bg-amber-50/50 border border-amber-100 rounded-[1.5rem] mt-6">
             <ShieldCheck className="text-amber-600 mt-0.5 shrink-0" size={18} />
             <p className="text-[11px] sm:text-xs text-amber-800 leading-relaxed font-medium">
-              Bukti bayar tidak dapat diubah secara mandiri. Jika terdapat kesalahan unggah, harap hubungi bagian admin sekretariat pendaftaran.
-            </p>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-dashed border-gray-200">
-            <p className="text-center text-[10px] sm:text-xs text-gray-400 italic leading-snug px-4">
-              Langkah pembayaran ini selesai dicatat oleh sistem pada saat bukti bayar diunggah.
+              Dokumen tidak dapat diubah secara mandiri. Jika terdapat kesalahan berkas, harap hubungi bagian admin sekretariat pendaftaran.
             </p>
           </div>
         </div>
@@ -132,26 +131,11 @@ export default function PembayaranStep({
           </div>
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">
-              Unggah Bukti Pembayaran
+              Unggah {labelMap[jenisDokumen]}
             </h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Silakan unggah bukti transfer atau bukti bayar untuk melanjutkan proses pendaftaran.
+              Silakan unggah dokumen persyaratan yang sah dan terbaca dengan jelas.
             </p>
-          </div>
-        </div>
-
-        {/* Informasi Rekening Tujuan */}
-        <div className="p-4 bg-blue-50/50 border border-blue-100 rounded-2xl mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <CreditCard size={18} className="text-blue-600" />
-            <h3 className="text-xs sm:text-sm font-bold text-gray-800">
-              Rekening Pembayaran Resmi
-            </h3>
-          </div>
-          <div className="space-y-1 text-xs text-gray-700">
-            <p><span className="font-semibold text-gray-500">Bank:</span> Bank Mandiri / BCA</p>
-            <p><span className="font-semibold text-gray-500">No. Rekening:</span> 123-00-1234567-8</p>
-            <p><span className="font-semibold text-gray-500">Atas Nama:</span> Panitia SPMB / Yayasan</p>
           </div>
         </div>
 
@@ -168,7 +152,7 @@ export default function PembayaranStep({
               ? "Mengunggah berkas..."
               : isSubmittingAction
               ? "Menyimpan data..."
-              : "Unggah Bukti Bayar"}
+              : `Unggah ${labelMap[jenisDokumen]}`}
           </Button>
         </div>
 
@@ -182,7 +166,7 @@ export default function PembayaranStep({
         <div className="flex items-start gap-3 p-4 bg-amber-50/50 border border-amber-100 rounded-[1.5rem] mt-6">
           <ShieldCheck className="text-amber-600 mt-0.5 shrink-0" size={18} />
           <p className="text-[11px] sm:text-xs text-amber-800 leading-relaxed font-medium">
-            Pastikan file yang diunggah jelas dan sesuai dengan nominal pembayaran yang tertera.
+            Pastikan dokumen berbentuk foto atau PDF yang jernih agar mudah diverifikasi oleh panitia.
           </p>
         </div>
       </div>

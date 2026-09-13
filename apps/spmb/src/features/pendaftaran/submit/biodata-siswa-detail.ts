@@ -1,18 +1,18 @@
+// @spmb features/pendaftaran/submit/biodata-siswa-detail.ts
 
-import type { FormSubmitResult } from "@bn/types";
 import { createValidationError } from "@bn/utils";
-import type { ProcessFormInput } from "@/types/form.types";
+import type { ProcessFormPayload, FormSubmitResult } from "@/types/form.types";
 import { checkUserAccess } from "@/features/auth/guards";
 import { biodataSiswaDetailSubmitSchema, formIdParamsSchema, formatZodErrors} from "@bn/validators";
-import { insertBiodataSiswaDetail } from "@/services/pendaftaran/biodata-siswa-detail";
+import { insertBiodataSiswaDetail } from "@/services/pendaftaran/mutasi/biodata-siswa-detail";
 
-export async function submitBiodataSiswaDetail(input: ProcessFormInput): Promise<FormSubmitResult> {
+export async function submitBiodataSiswaDetail({formId, payload}: ProcessFormPayload): Promise<FormSubmitResult> {
 
   if (!(await checkUserAccess())) {
     throw new Error("Akses tidak diizinkan.");
   }
 
-  const parsedFormId = formIdParamsSchema.safeParse(input.formId);
+  const parsedFormId = formIdParamsSchema.safeParse(formId);
 
   if (!parsedFormId.success) {
     throw createValidationError(
@@ -21,7 +21,7 @@ export async function submitBiodataSiswaDetail(input: ProcessFormInput): Promise
     );
   }
 
-  const parsedPayload = biodataSiswaDetailSubmitSchema.safeParse(input.payload);
+  const parsedPayload = biodataSiswaDetailSubmitSchema.safeParse(payload);
 
   if (!parsedPayload.success) {
     throw createValidationError(
@@ -30,5 +30,8 @@ export async function submitBiodataSiswaDetail(input: ProcessFormInput): Promise
     );
   }
 
-  return insertBiodataSiswaDetail(parsedFormId.data, parsedPayload.data);
+  return insertBiodataSiswaDetail({
+    formId: parsedFormId.data,
+    input: parsedPayload.data,
+  });
 }

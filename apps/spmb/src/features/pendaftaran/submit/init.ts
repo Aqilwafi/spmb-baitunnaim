@@ -2,14 +2,14 @@
 
 import { checkUserAccess } from "@/features/auth/guards";
 import { initFormSchema, formatZodErrors } from "@bn/validators";
-import { insertInitForm } from "@/services/pendaftaran/init";
+import { insertInitForm } from "@/services/pendaftaran/mutasi/init";
 import { getTahunAjaranAktifData } from "../../master/tahun-ajaran";
 import { mapInitFormPayload } from "../../../helpers/mappers";
 import { createValidationError } from "@bn/utils";
-import type { FormSubmitResult } from '@bn/types';
+import type { FormSubmitResult, BaseFormPayload } from '@/types/form.types';
 
 // 1. Disesuaikan dengan InitFormStepData dari Service (menggunakan camelCase)
-export async function submitInitForm(payload: Record<string, FormDataEntryValue>): Promise<FormSubmitResult> {
+export async function submitInitForm({payload}: BaseFormPayload): Promise<FormSubmitResult> {
   // 1. Guard Access
   if (!(await checkUserAccess())) {
     throw new Error("Akses tidak diizinkan.");

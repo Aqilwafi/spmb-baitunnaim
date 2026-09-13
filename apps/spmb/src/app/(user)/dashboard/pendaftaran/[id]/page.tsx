@@ -1,5 +1,5 @@
 import { isAccessAllowed } from "@/features/auth/guards";
-import { getDetailPendaftaranData } from "@/features/form/detail-form";
+import { getDetailPendaftaranData } from "@/features/form/detail";
 import { computeStepStatus } from "@/helpers/step-rules";
 import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
@@ -11,11 +11,7 @@ import { getStepList } from "@/features/master/steps";
 
 export const dynamic = "force-dynamic";
 
-export default async function DetailPendaftaranPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function DetailPendaftaranPage({params}: {params: Promise<{ id: string }>;}) {
   const { id } = await params;
 
   const { allowed } = await isAccessAllowed(id);
@@ -55,7 +51,7 @@ export default async function DetailPendaftaranPage({
 
     return {
       id: step.id,
-      step_order: step.order,
+      stepOrder: step.order,
       label: step.label,
       status,
 
@@ -64,8 +60,7 @@ export default async function DetailPendaftaranPage({
           ? null
           : (
               <Container
-                pendaftaran_id={detailPendaftaranData.id}
-                user_id={detailPendaftaranData.pendaftarId}
+                formId={detailPendaftaranData.id}
                 status={status}
                 code={step.code ?? ""}
               />

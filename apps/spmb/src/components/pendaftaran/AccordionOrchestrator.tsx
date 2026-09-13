@@ -5,7 +5,8 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronUp, ChevronDown, Lock } from "lucide-react";
 import { Card, Button } from "@bn/ui";
-import type { StepElement, DetailPendaftaran } from "@/types/step.types";
+import type { StepElement } from "@/types/step.types";
+import type { DetailPendaftaran } from "@/types/form.types";
 
 interface AccordionOrchestratorProps {
   pendaftaran: DetailPendaftaran;
@@ -50,7 +51,7 @@ export default function AccordionOrchestrator({
                     ${isActive ? "bg-blue-600 text-white" : ""}
                     ${isLocked ? "bg-gray-100 text-gray-400" : ""}`}
                 >
-                  {isComplete ? "✓" : step.step_order}
+                  {isComplete ? "✓" : step.stepOrder}
                 </div>
 
                 <span className={`font-bold ${isLocked ? "text-gray-400" : "text-gray-700"}`}>

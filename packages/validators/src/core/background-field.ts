@@ -34,20 +34,23 @@ export const penyakitField = z
   .nullable()
   .transform((val) => (val === "" ? null : val)); // <--- Mengubah "" menjadi null
 
-export const pendidikanField = z.enum(
-  ["TIDAK_SEKOLAH", "SD", "SMP", "SMA", "D3", "D4", "S1", "S2", "S3"],
-  { error: "Pendidikan terakhir wajib dipilih" }
-);
+export const pendidikanField = z
+  .string()
+  .max(50, "Maksimal 50 karakter")
+  .nullable()
+  .optional();
 
-export const pekerjaanField = z.enum(
-  ["TIDAK_BEKERJA", "PNS", "TNI_POLRI", "SWASTA", "WIRASWASTA", "BURUH", "NELAYAN", "PETANI", "PENSIUNAN", "LAINNYA"],
-  { error: "Pekerjaan wajib dipilih" }
-);
+export const pekerjaanField = z
+  .string()
+  .max(50, "Maksimal 50 karakter")
+  .nullable()
+  .optional();
 
-export const penghasilanField = z.enum(
-  ["NO_INCOME", "UNDER_1M", "1M_2M", "2M_5M", "5M_10M", "OVER_10M"],
-  { error: "Rentang penghasilan wajib dipilih" }
-);
+export const penghasilanField = z
+  .string()
+  .max(50, "Maksimal 50 karakter")
+  .nullable()
+  .optional();
 
 export const statusRumahIdField = masterIdField("Status rumah");
 export const tinggalBersamaIdField = masterIdField("Tinggal bersama");

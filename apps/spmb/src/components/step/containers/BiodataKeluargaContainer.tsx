@@ -1,14 +1,13 @@
 import type { StepContainerProps } from "@/types/step.types";
-import { checkWaliRequirementStatus } from "@/features/pendaftaran/data/cek-wali";
+import { checkWaliRequirementStatus } from "@/features/form/cek-wali";
 import BiodataKeluargaStep from "@/components/step/clients/BiodataKeluargaStep";
 // import { getBiodataKeluargaByRelation } from "@/features/pendaftaran/biodata-keluarga";
 
 export default async function BiodataKeluargaContainer({
-  pendaftaran_id,
-  user_id,
+  formId,
   status,
   code,
-}: StepContainerProps & { code?: string }) {
+}: StepContainerProps) {
   if (status === "locked") {
     return null;
   }
@@ -27,7 +26,7 @@ export default async function BiodataKeluargaContainer({
 
   if (code === "BIODATA_WALI") {
     // Fungsi ini hanya dieksekusi/query ke database di step WALI saja
-    isWaliMandatory = await checkWaliRequirementStatus(pendaftaran_id);
+    isWaliMandatory = await checkWaliRequirementStatus(formId);
 
     // 2. Jika Wali TIDAK wajib & status masih active,
     // sembunyikan step ini (atau logic auto-skip step pendaftaran)
@@ -43,9 +42,9 @@ export default async function BiodataKeluargaContainer({
 
   return (
     <BiodataKeluargaStep
-      pendaftaran_id={pendaftaran_id}
-      user_id={user_id}
+      formId={formId}
       status={status}
+      code={code}
       relationType={relationType}
       data={data}
       isWaliMandatory={isWaliMandatory}

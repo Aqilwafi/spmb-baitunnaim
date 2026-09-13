@@ -1,6 +1,5 @@
 create or replace function public.fn_rpc_get_init_form_step_data(
-  p_form_id uuid,
-  p_tahun_ajaran_id smallint
+  p_form_id uuid
 )
 returns table (
   nama_lengkap varchar,
@@ -28,8 +27,8 @@ as $$
   left join master_lembaga l on l.id = bs.lembaga_id
   left join master_kelas k on k.id = bs.kelas_id
   where fp.id = p_form_id
-    and fp.tahun_ajaran_id = p_tahun_ajaran_id
-    and bs.owner_user_id = auth.uid()
+    and fp.tahun_ajaran_id = public.fn_get_active_tahun_ajaran_id()
+    and fp.pendaftar_id = auth.uid()
     and fp.deleted_at is null
     and bs.deleted_at is null;
 $$;

@@ -34,8 +34,8 @@ as $$
   join public.biodata_siswa bs on bs.id = fp.biodata_siswa_id
   left join public.biodata_siswa_detail bsd on bsd.id = bs.id
   where fp.id = p_form_id
+    and fp.tahun_ajaran_id = public.fn_get_active_tahun_ajaran_id()
     and fp.pendaftar_id = auth.uid()
-    and bs.owner_user_id = auth.uid()
     and fp.deleted_at is null
     and bs.deleted_at is null;
 $$;

@@ -3,10 +3,10 @@
 
 import { CheckCircle2, User, IdCard, MapPin, Calendar, School, GraduationCap, ShieldCheck } from "lucide-react";
 import { formatDateId } from "@bn/utils";
-import type { InitFormStepData } from "@/features/form/init";
+import type { FormattedInitFormStepData } from "@/features/pendaftaran/data/init";
 
 interface InitFormStepProps {
-  data: InitFormStepData;
+  data: FormattedInitFormStepData;
 }
 
 export default function InitFormStep({ data }: InitFormStepProps) {

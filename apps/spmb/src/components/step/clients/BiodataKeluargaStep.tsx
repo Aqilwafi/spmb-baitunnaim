@@ -5,36 +5,23 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, User, ShieldCheck } from "lucide-react";
 import { biodataKeluargaAction } from "@/actions/pendaftaran/biodata-keluarga";
 import { BiodataKeluargaForm } from "@/components/forms/BiodataKeluargaForm";
+import type { BiodataKeluargaItemData } from "@/types/biodata.types";
 
 export type RelationType = "AYAH" | "IBU" | "WALI";
 export type LifeStatus = "HIDUP" | "MENINGGAL";
 
-export interface BiodataKeluargaItemData {
-  relation_type: RelationType;
-  detail_relation_type?: string | null;
-  nama_lengkap: string;
-  nik?: string | null;
-  status_hidup: LifeStatus;
-  tempat_lahir?: string | null;
-  tanggal_lahir?: string | null;
-  pekerjaan?: string | null;
-  pendidikan_terakhir?: string | null;
-  penghasilan?: string | null;
-  no_hp?: string | null;
-  alamat?: string | null;
-}
 
 interface BiodataKeluargaStepProps {
-  pendaftaran_id: string;
-  user_id: string;
+  formId: string;
+  userId: string;
   status: "active" | "complete";
-  relationType: RelationType;
+  relationType: BiodataKeluargaItemData['relationType'];
   data: BiodataKeluargaItemData | null;
   isWaliMandatory?: boolean;
 }
 
 export default function BiodataKeluargaStep({
-  pendaftaran_id,
+  formId,
   status,
   relationType,
   data,
@@ -51,7 +38,7 @@ export default function BiodataKeluargaStep({
 
   const [state, action, isPending] = useActionState(
       (prevState: any, formData: FormData) =>
-        biodataKeluargaAction(prevState, formData, pendaftaran_id),
+        biodataKeluargaAction(prevState, formData, formId),
       null
     );
 
@@ -84,27 +71,27 @@ export default function BiodataKeluargaStep({
           <div className="p-4 bg-gray-50/70 rounded-2xl border border-gray-100/80 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase tracking-wider font-bold bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full">
-                {data.relation_type} {data.detail_relation_type && `(${data.detail_relation_type})`}
+                {data.relationType} {data.detailRelationType && `(${data.detailRelationType})`}
               </span>
               <span
                 className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                  data.status_hidup === "HIDUP"
+                  data.statusHidup === "HIDUP"
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"
                 }`}
               >
-                {data.status_hidup}
+                {data.statusHidup}
               </span>
             </div>
 
-            <p className="text-sm font-bold text-gray-800">{data.nama_lengkap}</p>
+            <p className="text-sm font-bold text-gray-800">{data.namaLengkap}</p>
 
-            {data.status_hidup === "HIDUP" && (
+            {data.statusHidup === "HIDUP" && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-600 pt-2 border-t border-gray-200/60">
                 <p><span className="text-gray-400">NIK:</span> {data.nik || "-"}</p>
-                <p><span className="text-gray-400">No. HP:</span> {data.no_hp || "-"}</p>
+                <p><span className="text-gray-400">No. HP:</span> {data.noHp || "-"}</p>
                 <p><span className="text-gray-400">Pekerjaan:</span> {data.pekerjaan || "-"}</p>
-                <p><span className="text-gray-400">Pendidikan:</span> {data.pendidikan_terakhir || "-"}</p>
+                <p><span className="text-gray-400">Pendidikan:</span> {data.pendidikanTerakhir || "-"}</p>
                 <p><span className="text-gray-400">Penghasilan:</span> {data.penghasilan || "-"}</p>
                 <p className="sm:col-span-2"><span className="text-gray-400">Alamat:</span> {data.alamat || "-"}</p>
               </div>

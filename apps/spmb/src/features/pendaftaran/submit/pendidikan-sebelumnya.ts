@@ -1,18 +1,18 @@
 
-import type { FormSubmitResult } from "@bn/types";
+
 import { createValidationError } from "@bn/utils";
-import type { ProcessFormInput } from "@/types/form.types";
+import type { ProcessFormPayload, FormSubmitResult } from "@/types/form.types";
 import { checkUserAccess } from "@/features/auth/guards";
 import { pendidikanSebelumnyaFormSchema, formIdParamsSchema, formatZodErrors} from "@bn/validators";
-import { insertPendidikanSebelumnya } from "@/services/pendaftaran/pendidikan-sebelumnya";
+import { insertPendidikanSebelumnya } from "@/services/pendaftaran/mutasi/pendidikan-sebelumnya";
 
-export async function submitPendidikanSebelumnya(input: ProcessFormInput): Promise<FormSubmitResult> {
+export async function submitPendidikanSebelumnya({formId, payload}: ProcessFormPayload): Promise<FormSubmitResult> {
 
   if (!(await checkUserAccess())) {
     throw new Error("Akses tidak diizinkan.");
   }
 
-  const parsedFormId = formIdParamsSchema.safeParse(input.formId);
+  const parsedFormId = formIdParamsSchema.safeParse(formId);
 
   if (!parsedFormId.success) {
     throw createValidationError(
@@ -21,7 +21,7 @@ export async function submitPendidikanSebelumnya(input: ProcessFormInput): Promi
     );
   }
 
-  const parsedPayload = pendidikanSebelumnyaFormSchema.safeParse(input.payload);
+  const parsedPayload = pendidikanSebelumnyaFormSchema.safeParse(payload);
 
   if (!parsedPayload.success) {
     throw createValidationError(
@@ -30,5 +30,8 @@ export async function submitPendidikanSebelumnya(input: ProcessFormInput): Promi
     );
   }
 
-  return insertPendidikanSebelumnya(parsedFormId.data, parsedPayload.data);
+  return insertPendidikanSebelumnya({
+    formId: parsedFormId.data,
+    input: parsedPayload.data
+  });
 }
