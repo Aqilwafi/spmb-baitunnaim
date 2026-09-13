@@ -2,7 +2,7 @@
 
 import type { StepContainerProps } from "@/types/step.types";
 import DokumenStep from "@/components/step/clients/DokumenStep";
-import { getDokumenData } from "@/features/pendaftaran/data/dokumen";
+import { getDokumenDataByTipe } from "@/features/pendaftaran/data/dokumen";
 
 export default async function DokumenContainer({
   formId,
@@ -13,18 +13,26 @@ export default async function DokumenContainer({
     return null;
   }
 
-  // Mapping dari code config step ke jenisDokumen (uppercase untuk database/validator)
+  // Mapping string code ke string tipe dokumen
   const documentTypeCodeMap: Record<string, "KK_TYPE_DOC" | "KTP_TYPE_DOC" | "AKTE_TYPE_DOC"> = {
     DOCUMENT_KK: "KK_TYPE_DOC",
     DOCUMENT_KTP: "KTP_TYPE_DOC",
     DOCUMENT_AKTE: "AKTE_TYPE_DOC",
   };
 
+  // Mapping string code ke number untuk RPC (p_tipe_dokumen_id)
+  const documentTypeIdMap: Record<string, number> = {
+    DOCUMENT_KK: 1,
+    DOCUMENT_KTP: 2,
+    DOCUMENT_AKTE: 3,
+  };
+
   const jenisDokumen = documentTypeCodeMap[code || "DOCUMENT_KK"] || "KK_TYPE_DOC";
+  const jenisDokumenId = documentTypeIdMap[code || "DOCUMENT_KK"] ?? 1;
 
   // Ambil data asli jika complete, passing null jika active
   const data = status === "complete" 
-    ? await getDokumenData(formId, jenisDokumen) 
+    ? await getDokumenDataByTipe(formId, jenisDokumenId) 
     : null;
 
   return (

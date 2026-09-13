@@ -1,5 +1,5 @@
 import { MasterData, BaseDocumentPayload, EnumGender, Pembayaran } from "@bn/types";
-import type { BiodataSiswa, FormPendaftaran, MasterStep, MasterLembaga, MasterKelas} from "@bn/types";
+import type { BiodataSiswa, FormPendaftaran, MasterStep, MasterLembaga, MasterKelas, Dokumen} from "@bn/types";
 
 
 export interface InitFormPendaftaranModalProps {
@@ -38,6 +38,18 @@ export interface PembayaranStepData {
   paymentStatus: Pembayaran['payment_status'];
   uploadedAt: Pembayaran['created_at'];
   verifiedAt: Pembayaran['verified_at'];
+  verifiedBy: string | null;
+}
+
+export interface DokumenStepData {
+  id: Dokumen['id'];
+  formPendaftaranId: Dokumen['form_pendaftaran_id'];
+  tipeDokumenId: Dokumen['tipe_dokumen_id'];
+  fileUrl: Dokumen['file_url'];
+  documentStatus: Dokumen['document_status'];
+  catatanVerifikasi: Dokumen['catatan_verifikasi'];
+  verifiedAt: Dokumen['verified_at'];
+  uploadedAt: Dokumen['uploaded_at'];
   verifiedBy: string | null;
 }
 
