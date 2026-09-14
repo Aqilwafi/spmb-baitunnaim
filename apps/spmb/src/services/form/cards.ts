@@ -8,7 +8,7 @@ export async function getFormCard(tahunAjaranId: number): Promise<FormCardsData[
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase.rpc("fn_rpc_get_form_cards", {
     p_tahun_ajaran_id: tahunAjaranId,
-  });
+  } as any);
 
   if (error) throw error;
 

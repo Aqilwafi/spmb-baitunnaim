@@ -2,7 +2,9 @@ import InitFormContainer from "@/components/step/containers/InitFormContainer";
 import PembayaranContainer from "@/components/step/containers/PembayaranContainer";
 import BiodataSiswaContainer from "@/components/step/containers/BiodataSiswaContainer";
 import BiodataKeluargaContainer from "@/components/step/containers/BiodataKeluargaContainer";
+import DokumenContainer from "@/components/step/containers/DokumenContainer";
 import ComingSoonContainer from "@/components/step/containers/ComingSoonContainer";
+
 
 export const STEP_CONFIG = {
   FORM: {
@@ -30,15 +32,15 @@ export const STEP_CONFIG = {
   },
 
   DOCUMENT_KK: {
-    container: ComingSoonContainer,
+    container: DokumenContainer,
   },
 
   DOCUMENT_KTP: {
-    container: ComingSoonContainer,
+    container: DokumenContainer,
   },
 
   DOCUMENT_AKTE: {
-    container: ComingSoonContainer,
+    container: DokumenContainer,
   },
 
   FINALIZATION: {
