@@ -1,4 +1,4 @@
-import type { EnumRelasiKeluarga, EnumStatusHidup, BiodataKeluarga, BiodataSiswaDetail, BiodataSiswa } from "@bn/types";
+import type { EnumRelasiKeluarga, EnumStatusHidup, BiodataKeluarga, BiodataSiswaDetail, BiodataSiswa, PendidikanSiswaSebelumnya } from "@bn/types";
 
 export interface BiodataSiswaDetailItemData {
   noKk: BiodataSiswaDetail["no_kk"];
@@ -12,6 +12,15 @@ export interface BiodataSiswaDetailItemData {
   tinggalBersamaId: BiodataSiswaDetail["tinggal_bersama_id"];
   statusRumahId: BiodataSiswaDetail["status_rumah_id"];
   nisn: BiodataSiswa['nisn'];
+}
+
+export interface PendidikanSiswaItemData {
+  namaSekolah: PendidikanSiswaSebelumnya['nama_sekolah'];
+  alamatSekolah: PendidikanSiswaSebelumnya['alamat_sekolah'];
+  npsn: PendidikanSiswaSebelumnya['npsn'];
+  tahunLulus: PendidikanSiswaSebelumnya['tahun_lulus'];
+  nilaiRataRata: PendidikanSiswaSebelumnya['nilai_rata_rata'];
+  catatan: PendidikanSiswaSebelumnya['catatan'];
 }
 
 export interface BiodataKeluargaItemData {

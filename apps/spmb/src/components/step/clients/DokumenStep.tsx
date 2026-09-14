@@ -42,7 +42,7 @@ export default function DokumenStep({
     // Step 1: Upload File ke Storage via useFileUpload
     const uploadRes = await upload({
       file,
-      category: "dokumen-pendaftaran",
+      category: "berkas-pendaftaran",
     });
 
     if (!uploadRes.success) {

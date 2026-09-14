@@ -48,9 +48,7 @@ export default function PembayaranStep({
     try {
       const actionRes = await pembayaranAction({
         formId: formId,
-        input: {
-          filePath: uploadRes.data as string,
-        },
+        filePath: uploadRes.data as string,
       });
 
       if (!actionRes.success) {

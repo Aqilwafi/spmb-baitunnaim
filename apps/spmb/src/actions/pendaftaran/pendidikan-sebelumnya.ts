@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
-import { submitPendidikanSebelumnya } from "@/features/pendaftaran/submit/pendidikan-sebelumnya";
+import { submitPendidikanSebelumnya } from "@/features/pendaftaran/submit/pendidikan";
 import type { ActionResponse } from "@bn/types";
 import type { FormSubmitResult } from "@/types/form.types";
 

@@ -4,7 +4,7 @@ import { createValidationError } from "@bn/utils";
 import type { ProcessFormPayload, FormSubmitResult } from "@/types/form.types";
 import { checkUserAccess } from "@/features/auth/guards";
 import { pendidikanSebelumnyaFormSchema, formIdParamsSchema, formatZodErrors} from "@bn/validators";
-import { insertPendidikanSebelumnya } from "@/services/pendaftaran/mutasi/pendidikan-sebelumnya";
+import { insertPendidikanSebelumnya } from "@/services/pendaftaran/mutasi/pendidikan";
 
 export async function submitPendidikanSebelumnya({formId, payload}: ProcessFormPayload): Promise<FormSubmitResult> {
 
