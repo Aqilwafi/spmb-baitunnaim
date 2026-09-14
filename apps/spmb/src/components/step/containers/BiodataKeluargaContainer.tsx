@@ -28,11 +28,6 @@ export default async function BiodataKeluargaContainer({
     // Fungsi ini hanya dieksekusi/query ke database di step WALI saja
     isWaliMandatory = await checkWaliRequirementStatus(formId);
 
-    // 2. Jika Wali TIDAK wajib & status masih active,
-    // sembunyikan step ini (atau logic auto-skip step pendaftaran)
-    if (!isWaliMandatory && status === "active") {
-      return null; 
-    }
   }
 
   // Ambil data spesifik berdasarkan relasi jika step sudah complete

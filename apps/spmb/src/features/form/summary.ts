@@ -28,7 +28,7 @@ export async function getDashboardSummaryData(): Promise<DashboardSummary | null
     if (!tahunAjaran.id) throw new Error("Tidak ada tahun ajaran aktif.");
 
     // cards bergantung pada tahunAjaran.id, sehingga tidak bisa digabung ke Promise.all di atas
-    const cards = await getFormCard(tahunAjaran.id);
+    const cards = await getFormCard();
 
     return {
         tahunAjaran,

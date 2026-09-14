@@ -20,11 +20,10 @@ begin
         return false;
     end if;
 
-    -- 2. Konversi status_hidup langsung menjadi Boolean
-    -- TRUE jika 'HIDUP', FALSE jika 'MENINGGAL'
+    -- 2. Gunakan bool_or untuk menggantikan max() pada tipe data boolean
     select
-        max(case when relation_type = 'AYAH' then status_hidup = 'HIDUP' end),
-        max(case when relation_type = 'IBU'  then status_hidup = 'HIDUP' end)
+        bool_or(case when relation_type = 'AYAH' then status_hidup = 'HIDUP' end),
+        bool_or(case when relation_type = 'IBU'  then status_hidup = 'HIDUP' end)
     into
         v_father_alive,
         v_mother_alive
@@ -32,7 +31,6 @@ begin
     where biodata_siswa_id = v_biodata_siswa_id;
 
     -- 3. Return TRUE jika dan hanya jika KEDUANYA FALSE (sudah meninggal)
-    --    Dalam arti lain, minimal salah satu masih hidup, maka wali tidak wajib
     return
         coalesce(v_father_alive, true) = false
         and

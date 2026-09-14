@@ -16,12 +16,12 @@ import {
 
 export const biodataKeluargaFormSchema = z
   .object({
-    biodataSiswaId: z.string().uuid(),
     relationType: familyRelationField,
+    isSkipped: z.union([z.boolean(), z.string()]).optional().transform((val) => val === true || val === "true").default(false),
     detailRelationType: z.string().trim().max(50).optional().nullable(),
-    namaLengkap: namaLengkapField,
+    namaLengkap: namaLengkapField.optional().nullable(),
     nik: nikField.optional().nullable(),
-    statusHidup: lifeStatusField.default("HIDUP"),
+    statusHidup: lifeStatusField.optional().nullable(),
     tempatLahir: tempatLahirField.optional().nullable(),
     tanggalLahir: tanggalLahirField.optional().nullable(),
     pekerjaan: pekerjaanField.optional().nullable(),
@@ -31,6 +31,16 @@ export const biodataKeluargaFormSchema = z
     alamat: alamatField.optional().nullable(),
   })
   .superRefine((data, ctx) => {
+    if (data.isSkipped) return;
+
+    if (!data.namaLengkap || data.namaLengkap.trim() === "") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["namaLengkap"],
+        message: "Nama lengkap wajib diisi",
+      });
+    }
+
     if (data.statusHidup === "HIDUP") {
       const requiredFields = [
         ["nik", data.nik],
@@ -54,6 +64,8 @@ export const biodataKeluargaFormSchema = z
     }
   })
   .superRefine((data, ctx) => {
+    if (data.isSkipped) return;
+
     if (data.relationType === "WALI") {
       if (data.statusHidup !== "HIDUP") {
         ctx.addIssue({

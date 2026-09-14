@@ -6,7 +6,6 @@ import { Button } from "@bn/ui";
 import type { BiodataKeluargaItemData } from "@/types/biodata.types";
 import type { EnumStatusHidup, EnumRelasiKeluarga } from "@bn/types";
 
-
 interface BiodataKeluargaFormProps {
   relationType: EnumRelasiKeluarga;
   data: BiodataKeluargaItemData | null;
@@ -91,8 +90,8 @@ export function BiodataKeluargaForm({
       {/* OPSI SKIP WALI */}
       {relationType === "WALI" && skipWali ? (
         <form action={action} className="p-6 bg-blue-50/60 border border-blue-100 rounded-2xl text-center space-y-3">
-          <input type="hidden" name="is_skipped" value="true" />
-          <input type="hidden" name="relation_type" value="WALI" />
+          <input type="hidden" name="isSkipped" value="true" />
+          <input type="hidden" name="relationType" value="WALI" />
           <p className="text-xs sm:text-sm text-blue-800 font-medium">
             Anda memilih untuk melewatinya. Klik tombol di bawah untuk menyimpan pilihan ini dan melanjutkan.
           </p>
@@ -104,7 +103,7 @@ export function BiodataKeluargaForm({
         /* FORM ISIAN BIASA */
         <form action={action} className="space-y-4">
           {/* Hidden Field untuk Relation Type */}
-          <input type="hidden" name="relation_type" value={relationType} />
+          <input type="hidden" name="relationType" value={relationType} />
 
           {/* Pesan Error Global */}
           {state?.success === false && state?.message && (
@@ -118,7 +117,7 @@ export function BiodataKeluargaForm({
           <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
             <label className="text-xs font-semibold text-gray-700">Status Keberadaan:</label>
             <select
-              name="status_hidup"
+              name="statusHidup"
               value={statusHidup}
               onChange={(e) => {
                 const val = e.target.value as EnumStatusHidup;
@@ -139,14 +138,14 @@ export function BiodataKeluargaForm({
                 <label className="block text-xs font-semibold text-gray-700 mb-1">Hubungan Wali</label>
                 <input
                   type="text"
-                  name="detail_relation_type"
+                  name="detailRelationType"
                   required
                   value={formData.detailRelationType || ""}
                   onChange={(e) => setFormData({ ...formData, detailRelationType: e.target.value })}
                   className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                   placeholder="Contoh: Kakek, Paman"
                 />
-                {renderFieldError(state?.errors?.detail_relation_type)}
+                {renderFieldError(state?.errors?.detailRelationType)}
               </div>
             )}
 
@@ -155,14 +154,14 @@ export function BiodataKeluargaForm({
               <label className="block text-xs font-semibold text-gray-700 mb-1">Nama Lengkap</label>
               <input
                 type="text"
-                name="nama_lengkap"
+                name="namaLengkap"
                 required
                 value={formData.namaLengkap}
                 onChange={(e) => setFormData({ ...formData, namaLengkap: e.target.value })}
                 className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                 placeholder="Sesuai KTP"
               />
-              {renderFieldError(state?.errors?.nama_lengkap)}
+              {renderFieldError(state?.errors?.namaLengkap)}
             </div>
 
             {/* Field Input jika Status Keberadaan HIDUP */}
@@ -187,54 +186,54 @@ export function BiodataKeluargaForm({
                   <label className="block text-xs font-semibold text-gray-700 mb-1">No. HP / WhatsApp</label>
                   <input
                     type="text"
-                    name="no_hp"
+                    name="noHp"
                     required={isHidup}
                     value={formData.noHp || ""}
                     onChange={(e) => setFormData({ ...formData, noHp: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                     placeholder="081234567890"
                   />
-                  {renderFieldError(state?.errors?.no_hp)}
+                  {renderFieldError(state?.errors?.noHp)}
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">Tempat Lahir</label>
                   <input
                     type="text"
-                    name="tempat_lahir"
+                    name="tempatLahir"
                     required={isHidup}
                     value={formData.tempatLahir || ""}
                     onChange={(e) => setFormData({ ...formData, tempatLahir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                   />
-                  {renderFieldError(state?.errors?.tempat_lahir)}
+                  {renderFieldError(state?.errors?.tempatLahir)}
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">Tanggal Lahir</label>
                   <input
                     type="date"
-                    name="tanggal_lahir"
+                    name="tanggalLahir"
                     required={isHidup}
                     value={formData.tanggalLahir || ""}
                     onChange={(e) => setFormData({ ...formData, tanggalLahir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                   />
-                  {renderFieldError(state?.errors?.tanggal_lahir)}
+                  {renderFieldError(state?.errors?.tanggalLahir)}
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">Pendidikan Terakhir</label>
                   <input
                     type="text"
-                    name="pendidikan_terakhir"
+                    name="pendidikanTerakhir"
                     required={isHidup}
                     value={formData.pendidikanTerakhir || ""}
                     onChange={(e) => setFormData({ ...formData, pendidikanTerakhir: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
                     placeholder="SD / SMP / SMA"
                   />
-                  {renderFieldError(state?.errors?.pendidikan_terakhir)}
+                  {renderFieldError(state?.errors?.pendidikanTerakhir)}
                 </div>
 
                 <div>

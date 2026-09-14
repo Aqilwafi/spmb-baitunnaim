@@ -17,7 +17,7 @@ export default async function DashboardPage() {
   }
 
   const { tahunAjaran, lembagaOptions, kelasOptions, cards, hasPendaftaran } = data;
-
+ 
   return (
     <main className="min-h-full bg-[#f8f9fa]">
       <div className="flex justify-end">

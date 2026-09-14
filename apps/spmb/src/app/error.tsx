@@ -40,7 +40,7 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
         <p className="text-gray-500 text-sm leading-relaxed max-w-[300px] mx-auto">
           {error.message || "Maaf, kami mengalami kendala tak terduga saat memproses permintaan Anda. Silakan coba beberapa saat lagi."}
         </p>
-
+        
         {/* Action Buttons */}
         <div className="w-full pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button

@@ -1152,7 +1152,8 @@ export type Database = {
           p_alamat?: string
           p_detail_relation_type?: string
           p_form_id: string
-          p_nama_lengkap: string
+          p_is_skipped?: boolean
+          p_nama_lengkap?: string
           p_nik?: unknown
           p_no_hp?: unknown
           p_pekerjaan?: string

@@ -11,6 +11,7 @@ interface RPCParams extends BaseRPCParams {
 export async function insertBiodataKeluarga({formId, input}: RPCParams): Promise<FormSubmitResult> {
   
   const supabase = await createSupabaseServer();
+  console.log("services:", input)
 
   const { data, error } = await supabase.rpc("fn_rpc_submit_biodata_keluarga", {
     p_form_id: formId,
@@ -25,6 +26,8 @@ export async function insertBiodataKeluarga({formId, input}: RPCParams): Promise
     p_pendidikan_terakhir: input.pendidikanTerakhir,
     p_penghasilan: input.penghasilan,
     p_no_hp: input.noHp,
+    p_is_skipped: input.isSkipped,
+    
   } as any);
 
   if (error) throw error;

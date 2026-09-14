@@ -13,6 +13,8 @@ export async function submitBiodataKeluarga({formId, payload}: ProcessFormPayloa
     throw new Error("Akses tidak diizinkan.");
   }
 
+  console.log('Features:', payload)
+
   const parsedFormId = formIdParamsSchema.safeParse(formId);
   
     if (!parsedFormId.success) {
@@ -21,7 +23,7 @@ export async function submitBiodataKeluarga({formId, payload}: ProcessFormPayloa
         parsedFormId.error.issues[0]?.message ?? "Data formulir tidak valid."
       );
     }
-  
+  // if not wali, jangan panggil validasi, gimana?
     const parsedPayload = biodataKeluargaFormSchema.safeParse(payload);
   
     if (!parsedPayload.success) {
