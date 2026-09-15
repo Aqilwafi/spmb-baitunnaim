@@ -18,7 +18,7 @@ export async function submitDokumen({ formId, filePath, jenisDokumen }: ProcessD
   }
 
   // 2. Validasi formId
-  const parsedFormId = formIdParamsSchema.safeParse({ formId });
+  const parsedFormId = formIdParamsSchema.safeParse(formId);
   if (!parsedFormId.success) {
     throw createValidationError(
       formatZodErrors(parsedFormId.error),

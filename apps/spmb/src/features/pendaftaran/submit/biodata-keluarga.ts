@@ -12,9 +12,7 @@ export async function submitBiodataKeluarga({formId, payload}: ProcessFormPayloa
   if (!(await checkUserAccess())) {
     throw new Error("Akses tidak diizinkan.");
   }
-
-  console.log('Features:', payload)
-
+  
   const parsedFormId = formIdParamsSchema.safeParse(formId);
   
     if (!parsedFormId.success) {

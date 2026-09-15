@@ -1,37 +1,26 @@
-import "server-only";
-import { createSupabaseServer } from "@bn/supabase/server";
+import { formatZodErrors, formIdParamsSchema } from "@bn/validators";
+import { createValidationError } from "@bn/utils";
 import type { EnumRelasiKeluarga } from "@bn/types";
 import type { BiodataKeluargaItemData } from "@/types/biodata.types";
-import type { RPCGetBiodataKeluarga, BaseRPCParams} from "@/types/rpc.types";
+import type { BaseRPCParams } from "@/types/rpc.types";
+import { getTahunAjaranAktifData } from "@/features/master/tahun-ajaran";
+import { getBiodataKeluarga } from "@/services/pendaftaran/data/keluarga";
 
-interface RPCParams extends BaseRPCParams {
-    relationType: EnumRelasiKeluarga
+interface FeatureParams extends BaseRPCParams {
+    relationType: EnumRelasiKeluarga;
 }
 
-export async function getBiodataKeluargaData({formId, relationType}: RPCParams): Promise<BiodataKeluargaItemData|null> {
-  const supabase = await createSupabaseServer();
+export async function getBiodataKeluargaData({ formId, relationType }: FeatureParams): Promise<BiodataKeluargaItemData | null> {
+    const tahunAjaran = await getTahunAjaranAktifData();
+    if (!tahunAjaran.id) throw new Error("Tidak ada tahun ajaran aktif.");
+ 
+    const parsed = formIdParamsSchema.safeParse(formId);
+    if (!parsed.success) {
+       throw createValidationError(
+          formatZodErrors(parsed.error),
+          parsed.error.issues[0]?.message ?? "Data formulir tidak valid."
+       );
+    }
 
-  const { data, error } = await supabase.rpc('fn_rpc_get_biodata_keluarga', {
-    p_form_id: formId,
-    p_relation_type: relationType,
-  })
-  .maybeSingle<RPCGetBiodataKeluarga>();
-
-  if (error) throw error;
-  if (!data) return null;
-  
-  return {
-    relationType: data.relation_type,
-    detailRelationType: data.detail_relation_type,
-    namaLengkap: data.nama_lengkap,
-    nik: data.nik,
-    statusHidup: data.status_hidup,
-    tempatLahir: data.tempat_lahir,
-    tanggalLahir: data.tanggal_lahir,
-    pekerjaan: data.pekerjaan,
-    pendidikanTerakhir: data.pendidikan_terakhir,
-    penghasilan: data.penghasilan,
-    noHp: data.no_hp,
-    alamat: data.alamat,
-  };
+    return await getBiodataKeluarga({ formId: parsed.data, relationType });
 }

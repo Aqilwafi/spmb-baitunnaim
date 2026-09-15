@@ -26,7 +26,7 @@ export default function DokumenStep({
   const [isSubmittingAction, setIsSubmittingAction] = useState(false);
 
   const { upload, isUploading } = useFileUpload();
-
+  
   const isLoading = isUploading || isSubmittingAction;
 
   const labelMap: Record<typeof jenisDokumen, string> = {
@@ -43,6 +43,7 @@ export default function DokumenStep({
     const uploadRes = await upload({
       file,
       category: "berkas-pendaftaran",
+      documentType: jenisDokumen
     });
 
     if (!uploadRes.success) {

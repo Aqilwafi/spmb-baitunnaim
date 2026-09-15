@@ -12,8 +12,6 @@ export async function requestUpload(input: RequestUploadInput): Promise<SignedUr
     // 1. Guard Access
     const claims = await getCurrentClaims();
     if (!claims) throw new Error("Akses tidak diizinkan.");
-  
-    
 
     // 2. Parse & Validasi Payload JSON
     const validation = requestUploadMetadataSchema.safeParse(input);

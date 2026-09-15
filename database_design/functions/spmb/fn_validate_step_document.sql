@@ -1,5 +1,5 @@
 create or replace function fn_validate_step_document(
-    p_step_order smallint,
+    p_form_id uuid,
     p_document_type_code text
 )
 returns smallint
@@ -7,14 +7,25 @@ language plpgsql
 as $$
 declare
     v_step_code text;
+    v_step_id smallint;
     v_expected_doc_code text;
     v_document_type_id smallint;
 begin
-    -- 1. Ambil code step berdasarkan step_order
+
+    select step_id
+    into v_step_id
+    from form_pendaftaran
+    where id = p_form_id;
+
+    if v_step_id is null then
+        return null;
+    end if;
+
+    -- Ambil code step berdasarkan step_order
     select code 
     into v_step_code
     from master_step
-    where step_order = p_step_order;
+    where id = v_step_id;
 
     -- Jika step tidak ditemukan, return null
     if v_step_code is null then

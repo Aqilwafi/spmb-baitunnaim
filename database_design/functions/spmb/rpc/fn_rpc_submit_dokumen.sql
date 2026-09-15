@@ -32,7 +32,7 @@ begin
 
     -- 4. Validasi Kesesuaian Step dengan Tipe Dokumen Sekaligus Ambil ID-nya
     v_tipe_dokumen_id := public.fn_validate_step_document(
-        p_step_order => v_next_step,
+        p_form_id => p_form_id,
         p_document_type_code => p_document_type_code
     );
 

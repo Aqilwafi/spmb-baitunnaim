@@ -6,7 +6,6 @@ import { isValidationError } from "@bn/utils";
 import { submitPembayaran } from "@/features/pendaftaran/submit/pembayaran";
 import type { ActionResponse } from "@bn/types";
 import type { FormSubmitResult, ProcessDocumentPayload } from "@/types/form.types";
-import type { RPCPembayaranDanDokumen } from "@/types/rpc.types";
 
 export async function pembayaranAction({formId, filePath}: ProcessDocumentPayload): Promise<ActionResponse<FormSubmitResult>> {
   try {

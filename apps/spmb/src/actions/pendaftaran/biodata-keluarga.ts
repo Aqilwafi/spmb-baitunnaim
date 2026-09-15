@@ -13,7 +13,6 @@ export async function biodataKeluargaAction(
 ): Promise<ActionResponse<FormSubmitResult>> {
   try {
     const payload = Object.fromEntries(formData.entries());
-    console.log('Actions:', payload)
     const result = await submitBiodataKeluarga({
       formId: formId,
       payload: payload,

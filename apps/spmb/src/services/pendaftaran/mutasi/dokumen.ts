@@ -12,12 +12,15 @@ interface RPCParams extends BaseRPCParams {
 
 export async function insertDokumen({formId, input}: RPCParams): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();
+  console.log('input service:', input)
 
   const { data, error } = await supabase.rpc('fn_rpc_submit_dokumen', {
     p_form_id: formId,
     p_file_path: input.filePath,
     p_document_type_code: input.jenisDokumen,
   });
+
+  console.log('service error:', error)
 
   if (error) throw error;
 

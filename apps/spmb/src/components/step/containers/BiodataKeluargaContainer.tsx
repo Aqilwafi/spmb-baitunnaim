@@ -1,7 +1,7 @@
 import type { StepContainerProps } from "@/types/step.types";
 import { checkWaliRequirementStatus } from "@/features/form/cek-wali";
 import BiodataKeluargaStep from "@/components/step/clients/BiodataKeluargaStep";
-// import { getBiodataKeluargaByRelation } from "@/features/pendaftaran/biodata-keluarga";
+import { getBiodataKeluargaData } from "@/features/pendaftaran/data/keluarga";
 
 export default async function BiodataKeluargaContainer({
   formId,
@@ -31,9 +31,9 @@ export default async function BiodataKeluargaContainer({
   }
 
   // Ambil data spesifik berdasarkan relasi jika step sudah complete
-  const data = status === "complete"
-    ? null // await getBiodataKeluargaByRelation(pendaftaran_id, relationType)
-    : null;
+  const data = status === "complete" 
+  ? await getBiodataKeluargaData({ formId, relationType: relationType }) 
+  : null;
 
   return (
     <BiodataKeluargaStep
