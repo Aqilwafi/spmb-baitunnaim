@@ -36,11 +36,7 @@ export async function registerAction(_prevState: any, formData: FormData): Promi
     };
   }
 
-  return {
-    success: true,
-    message: "Registrasi berhasil. Silakan cek email Anda untuk verifikasi.",
-    data: { email },
-  };
+  redirect("/login");
 }
 
 // 2. LOGIN ACTION
