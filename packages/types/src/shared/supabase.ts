@@ -1192,6 +1192,10 @@ export type Database = {
         }
         Returns: Json
       }
+      fn_rpc_submit_finalisasi_form_pendaftaran: {
+        Args: { p_form_id: string }
+        Returns: Json
+      }
       fn_rpc_submit_init_form: {
         Args: {
           p_gender: Database["public"]["Enums"]["gender_enum"]
@@ -1225,7 +1229,7 @@ export type Database = {
         Returns: undefined
       }
       fn_validate_step_document: {
-        Args: { p_document_type_code: string; p_step_order: number }
+        Args: { p_document_type_code: string; p_form_id: string }
         Returns: number
       }
       fn_verify_storage_object_owner: {

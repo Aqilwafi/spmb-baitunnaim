@@ -1,6 +1,6 @@
 // packages/utils/src/mappers.ts (atau lokasi yang sesuai)
 
-import type { MasterData } from '@bn/types';
+import type { MasterData, EnumStatusAdmisi } from '@bn/types';
 import type {
   MasterStep,
   MasterTahunAjaran,
@@ -79,4 +79,16 @@ export function lookupLabelById<T extends BasicMasterItem>(
   if (id == null) return "-";
   const found = data.find((item) => item.id === id);
   return found?.label ?? found?.code ?? "-";
+}
+
+const ADMISSION_STATUS_LABEL: Record<EnumStatusAdmisi, string> = {
+  PROCESS: "Sedang Diproses",
+  AWAITING: "Masuk Antrean",
+  ACCEPTED: "Diterima",
+  REJECTED: "Ditolak",
+};
+
+export function admissionStatusLabel(value: EnumStatusAdmisi | null | undefined): string {
+  if (!value) return "-";
+  return ADMISSION_STATUS_LABEL[value] ?? value;
 }

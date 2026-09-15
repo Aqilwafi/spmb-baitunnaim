@@ -4,6 +4,7 @@ import BiodataSiswaContainer from "@/components/step/containers/BiodataSiswaCont
 import PendidikanSebelumnyaContainer from "../containers/PendidikanSebelumnyaContainer";
 import BiodataKeluargaContainer from "@/components/step/containers/BiodataKeluargaContainer";
 import DokumenContainer from "@/components/step/containers/DokumenContainer";
+import FinalisasiContainer from "../containers/FinalisasiContainer";
 import ComingSoonContainer from "@/components/step/containers/ComingSoonContainer";
 
 
@@ -49,6 +50,6 @@ export const STEP_CONFIG = {
   },
 
   FINALIZATION: {
-    container: ComingSoonContainer,
+    container: FinalisasiContainer,
   },
 } as const;

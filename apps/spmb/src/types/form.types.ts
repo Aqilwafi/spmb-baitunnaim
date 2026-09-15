@@ -74,7 +74,12 @@ export interface ProcessDocumentPayload extends BaseDocumentPayload {
 interface ProcessDetailDocumentPayload extends ProcessDocumentPayload {
     documentType: string;
 }
-
+export interface FinalisasiResult {
+  formId: FormPendaftaran['id'];
+  admissionStatus: FormPendaftaran['admission_status'];
+  finalizedAt: FormPendaftaran['finalized_at'];
+  finalizedBy: FormPendaftaran['finalized_by'];
+}
 
 
 
