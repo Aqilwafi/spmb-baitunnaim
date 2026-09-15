@@ -10,7 +10,7 @@ export default function HomePage() {
         {/* Header Area */}
         <div className="flex flex-col items-center gap-3 text-center">
           <div className="relative w-[120px] h-[120px] shadow-sm rounded-full">
-            <CompanyLogo />
+            <CompanyLogo className="w-30 h-25 mt-2" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
             {"BAITUN NA'IM"}
