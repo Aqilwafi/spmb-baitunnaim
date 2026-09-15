@@ -11,7 +11,7 @@ for select
 using (
     public.fn_can_manage_spmb()
     or
-    public.fn_is_owner_siswa_data(id)
+    public.fn_is_owner_siswa_data(biodata_siswa_id)
 );
 
 drop policy if exists "RLS: pendidikan_siswa_sebelumnya: insert"

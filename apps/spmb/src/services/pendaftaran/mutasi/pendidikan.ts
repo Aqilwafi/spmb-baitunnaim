@@ -10,6 +10,7 @@ interface RPCParams extends BaseRPCParams {
 
 export async function insertPendidikanSebelumnya({formId, input}: RPCParams): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();
+  console.log('services:', input)
 
   const { data, error } = await supabase.rpc("fn_rpc_submit_pendidikan_siswa_sebelumnya", {
     p_form_id: formId,
@@ -20,6 +21,8 @@ export async function insertPendidikanSebelumnya({formId, input}: RPCParams): Pr
     p_nilai_rata_rata: input.nilaiRataRata,
     p_catatan: input.catatan,
   } as any);
+
+  console.log('error service:', error)
 
   if (error) throw error;
 

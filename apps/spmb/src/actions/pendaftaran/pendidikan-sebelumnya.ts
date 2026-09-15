@@ -14,6 +14,7 @@ export async function pendidikanSebelumnyaAction(
   
   try {
     const payload = Object.fromEntries(formData.entries());
+    console.log ('action:', formData)
     const result = await submitPendidikanSebelumnya({
       formId: formId,
       payload: payload,

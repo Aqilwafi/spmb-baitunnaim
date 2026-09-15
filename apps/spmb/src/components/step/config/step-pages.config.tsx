@@ -1,6 +1,7 @@
 import InitFormContainer from "@/components/step/containers/InitFormContainer";
 import PembayaranContainer from "@/components/step/containers/PembayaranContainer";
 import BiodataSiswaContainer from "@/components/step/containers/BiodataSiswaContainer";
+import PendidikanSebelumnyaContainer from "../containers/PendidikanSebelumnyaContainer";
 import BiodataKeluargaContainer from "@/components/step/containers/BiodataKeluargaContainer";
 import DokumenContainer from "@/components/step/containers/DokumenContainer";
 import ComingSoonContainer from "@/components/step/containers/ComingSoonContainer";
@@ -17,6 +18,10 @@ export const STEP_CONFIG = {
 
   BIODATA_STUDENT: {
     container: BiodataSiswaContainer,
+  },
+
+  PENDIDIKAN_SISWA: {
+    container: PendidikanSebelumnyaContainer,
   },
 
   BIODATA_FATHER: {

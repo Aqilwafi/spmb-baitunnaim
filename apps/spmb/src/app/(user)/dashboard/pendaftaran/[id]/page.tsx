@@ -27,7 +27,8 @@ export default async function DetailPendaftaranPage({params}: {params: Promise<{
   }
 
   // Ambil seluruh step dari database
-  const steps = await getStepList();
+  const rawSteps = await getStepList();
+  const steps = [...rawSteps].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   // Cari step yang sedang aktif berdasarkan step_id pada pendaftaran
   const currentStep = steps.find(
