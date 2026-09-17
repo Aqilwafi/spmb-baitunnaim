@@ -18,7 +18,7 @@ export const requestUploadMetadataSchema = z
       .positive()
       .max(5 * 1024 * 1024, "Ukuran file maksimal 5MB"),
     category: uploadCategoryEnum,
-    documentType: z.enum(["KTP_TYPE_DOC", "KK_TYPE_DOC", "AKTE_TYPE_DOC"]).optional(),
+    documentType: z.enum(["KTP_AYAH_TYPE_DOC", "KTP_IBU_TYPE_DOC","KK_TYPE_DOC", "AKTE_TYPE_DOC"]).optional(),
   })
   // 🔒 Menjamin documentType terisi jika kategori berkas-pendaftaran
   .refine(

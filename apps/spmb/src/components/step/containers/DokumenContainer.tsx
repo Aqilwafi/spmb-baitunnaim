@@ -14,16 +14,18 @@ export default async function DokumenContainer({
   }
 
   // Mapping string code ke string tipe dokumen
-  const documentTypeCodeMap: Record<string, "KK_TYPE_DOC" | "KTP_TYPE_DOC" | "AKTE_TYPE_DOC"> = {
+  const documentTypeCodeMap: Record<string, "KK_TYPE_DOC" | "KTP_AYAH_TYPE_DOC" |"KTP_IBU_TYPE_DOC" | "AKTE_TYPE_DOC"> = {
     DOCUMENT_KK: "KK_TYPE_DOC",
-    DOCUMENT_KTP: "KTP_TYPE_DOC",
+    DOCUMENT_KTP_IBU: "KTP_IBU_TYPE_DOC",
+    DOCUMENT_KTP_AYAH: 'KTP_AYAH_TYPE_DOC',
     DOCUMENT_AKTE: "AKTE_TYPE_DOC",
   };
 
   // Mapping string code ke number untuk RPC (p_tipe_dokumen_id)
   const documentTypeIdMap: Record<string, number> = {
     DOCUMENT_KK: 1,
-    DOCUMENT_KTP: 2,
+    DOCUMENT_KTP_AYAH: 4,
+    DOCUMENT_KTP_IBU: 2,
     DOCUMENT_AKTE: 3,
   };
 

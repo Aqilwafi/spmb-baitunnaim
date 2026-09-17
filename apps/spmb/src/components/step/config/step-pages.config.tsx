@@ -41,10 +41,12 @@ export const STEP_CONFIG = {
     container: DokumenContainer,
   },
 
-  DOCUMENT_KTP: {
+  DOCUMENT_KTP_AYAH: {
     container: DokumenContainer,
   },
-
+  DOCUMENT_KTP_IBU: {
+    container: DokumenContainer,
+  },
   DOCUMENT_AKTE: {
     container: DokumenContainer,
   },

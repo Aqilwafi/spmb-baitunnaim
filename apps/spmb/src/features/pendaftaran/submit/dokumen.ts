@@ -4,11 +4,12 @@ import { formIdParamsSchema, dokumenUploadPathSchema, formatZodErrors } from "@b
 import { checkUserAccess } from "../../auth/guards";
 import { createValidationError } from "@bn/utils";
 import type { FormSubmitResult } from "@/types/form.types";
+import type { DokumenUploadPathInput } from "@bn/validators";
 
 export interface ProcessDocumentFeaturePayload {
   formId: string;
   filePath: string;
-  jenisDokumen: "KK_TYPE_DOC" | "KTP_TYPE_DOC" | "AKTE_TYPE_DOC";
+  jenisDokumen: DokumenUploadPathInput['jenisDokumen'];
 }
 
 export async function submitDokumen({ formId, filePath, jenisDokumen }: ProcessDocumentFeaturePayload): Promise<FormSubmitResult> {

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { fileUploadField, filePathField } from "../core/file-upload-field";
 
-export const jenisDokumenEnum = z.enum(["KK_TYPE_DOC", "KTP_TYPE_DOC", "AKTE_TYPE_DOC"]);
+export const jenisDokumenEnum = z.enum(["KK_TYPE_DOC", "KTP_AYAH_TYPE_DOC", "KTP_IBU_TYPE_DOC", "AKTE_TYPE_DOC"]);
 export type JenisDokumen = z.infer<typeof jenisDokumenEnum>;
 
 export const dokumenUploadSchema = z.object({

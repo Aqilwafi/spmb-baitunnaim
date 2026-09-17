@@ -21,6 +21,7 @@ export default async function DetailPendaftaranPage({params}: {params: Promise<{
   }
 
   const detailPendaftaranData = await getDetailPendaftaranData(id);
+  console.log('page:', detailPendaftaranData)
 
   if (!detailPendaftaranData) {
     return <NotFound />;

@@ -11,7 +11,7 @@ import { useFileUpload } from "@/hooks/useFileUpload";
 import { dokumenAction } from "@/actions/pendaftaran/dokumen";
 
 interface DokumenStepProps extends StepContainerProps {
-  jenisDokumen: "KK_TYPE_DOC" | "KTP_TYPE_DOC" | "AKTE_TYPE_DOC";
+  jenisDokumen: "KK_TYPE_DOC" | "KTP_AYAH_TYPE_DOC" |"KTP_IBU_TYPE_DOC" | "AKTE_TYPE_DOC";
   data: DokumenStepData | null;
 }
 
@@ -31,7 +31,8 @@ export default function DokumenStep({
 
   const labelMap: Record<typeof jenisDokumen, string> = {
     KK_TYPE_DOC: "Kartu Keluarga (KK)",
-    KTP_TYPE_DOC: "KTP Orang Tua / Wali",
+    KTP_AYAH_TYPE_DOC: "KTP Orang Tua / Wali",
+    KTP_IBU_TYPE_DOC: "KTP Orang Tua / Wali",
     AKTE_TYPE_DOC: "Akte Kelahiran",
   };
 
