@@ -5,7 +5,7 @@ import { Button } from "@bn/ui";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { logoutAction } from "@/actions/auth.actions";
+import { logoutAction } from "@/actions/auth";
 
 type LogoutButtonProps = {
   showLabel?: boolean;

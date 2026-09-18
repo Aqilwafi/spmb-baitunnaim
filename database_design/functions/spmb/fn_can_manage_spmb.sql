@@ -4,11 +4,11 @@ language sql
 stable
 set search_path = public
 as $$
-    select (
-        public.fn_is_high_level_admin() 
-        or
-        coalesce(
-            (auth.jwt() -> 'app_metadata' -> 'access_rights')::jsonb @> '[4]'::jsonb, false
-        )
-    ); 
+  select
+    public.fn_is_administrator()
+    or
+    public.fn_is_panitia_spmb();
 $$;
+
+revoke execute on function public.fn_can_manage_spmb() from public;
+grant execute on function public.fn_can_manage_spmb() to authenticated;

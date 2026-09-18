@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { registerPasswordField } from "@bn/validators";
+import { registerPasswordField, usernameField } from "@bn/validators";
 
 export const resetPasswordSchema = z
   .object({
+    username: usernameField.optional(),
     newPassword: registerPasswordField,
     confirmNewPassword: z.string(),
   })

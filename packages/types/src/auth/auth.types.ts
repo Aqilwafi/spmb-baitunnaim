@@ -9,7 +9,7 @@ export type Credetials = {
 };  
 
 export type RegisterPayload = Credetials & {
-  username: string;
+  username?: string;
   confirm_password: string;
 };
 
@@ -18,19 +18,16 @@ export type LoginPayload = Credetials;
 export type ForgotPasswordPayload = Pick<Credetials, 'email'>;
 
 export type ResetPasswordPayload = {
+  username?: string;
   newPassword: string;
   confirmNewPassword: string;
 };
-
-
-
 
 // belum pernah dipakai
 
 export type Profile = Tables<'profiles'>;
 export type MasterRole = Tables<'master_roles'>;
 export type UserRole = Tables<'user_roles'>;
-type RoleCode = MasterRole['code'];
 
 export type AuthClaims = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {
   app_metadata: {

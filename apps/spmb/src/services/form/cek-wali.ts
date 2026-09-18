@@ -1,5 +1,5 @@
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 
 export async function checkWaliRequirement(formId: string): Promise<boolean> {
   const supabase = await createSupabaseServer();

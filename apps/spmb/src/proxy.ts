@@ -1,5 +1,5 @@
 // apps/spmb/src/middleware.ts
-import { updateSession } from "@bn/supabase";
+import { updateSession } from "@bn/supabase/proxy";
 import { type NextRequest, type NextResponse } from "next/server";
 import { ROUTES } from "@bn/constants";
 

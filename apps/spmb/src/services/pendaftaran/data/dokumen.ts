@@ -1,5 +1,5 @@
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { DokumenStepData } from "@/types/form.types";
 import type { RPCGetDokumen, BaseRPCParams} from "@/types/rpc.types";
 

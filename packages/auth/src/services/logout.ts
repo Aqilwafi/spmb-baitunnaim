@@ -1,4 +1,4 @@
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 
 export async function signOut() {
 

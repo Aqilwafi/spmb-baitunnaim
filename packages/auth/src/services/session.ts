@@ -1,7 +1,7 @@
 // packages/auth/src/core-user.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 
 export async function getSession() {
 

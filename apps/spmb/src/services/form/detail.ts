@@ -1,7 +1,7 @@
 // @/services/detail.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { DetailPendaftaran } from "@/types/form.types";
 
 export async function getFormDetail(formId: string, tahunAjaranId: number): Promise<DetailPendaftaran> {

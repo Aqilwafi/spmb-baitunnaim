@@ -1,7 +1,7 @@
 // apps/spmb/src/services/pendaftara/data/finalisasi
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { FinalisasiResult } from '@/types/form.types';
 
 export async function getFinalisasi(formId: string, tahunAjaranId: number): Promise<FinalisasiResult> {

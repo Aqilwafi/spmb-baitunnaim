@@ -1,7 +1,7 @@
 // apps/spmb/src/services/pembayaran.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { FormSubmitResult } from '@/types/form.types';
 import type { PembayaranUploadPathInput } from "@bn/validators";
 import type { BaseRPCSubmitResponse, BaseRPCParams} from "@/types/rpc.types";

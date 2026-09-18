@@ -9,9 +9,8 @@ as $$
   select 
     p_target_role_id not in (1, 2)
     and 
-    (
-      coalesce(
-        (auth.jwt() -> 'app_metadata' -> 'access_rights')::jsonb @> '[1, 2]'::jsonb, false
-      )
-    );
+    public.fn_is_administrator
 $$;
+
+revoke execute on function public.fn_can_manage_user_role from public;
+grant execute on function public.fn_can_manage_user_role to authenticated;

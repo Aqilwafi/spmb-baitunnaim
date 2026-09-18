@@ -1,24 +1,28 @@
-CREATE OR REPLACE FUNCTION public.audit_trigger()
-RETURNS TRIGGER AS $$
-DECLARE
-    v_user_id UUID;
-BEGIN
-    -- 1. 🚫 Skip self-audit (hindari infinite loop)
-    IF TG_TABLE_NAME IN ('audit_trail', 'activity_logs') THEN
-        IF TG_OP = 'DELETE' THEN RETURN OLD; ELSE RETURN NEW; END IF;
-    END IF;
+create or replace function public.audit_trigger()
+returns trigger 
+language plpgsql
+security definer
+set search_path = public, pg_catalog, auth
+as $$
+declare
+    v_user_id uuid;
+begin
+    -- 1. 🚫 skip self-audit (hindari infinite loop)
+    if tg_table_name in ('audit_trail', 'activity_logs') then
+        if tg_op = 'DELETE' then return old; else return new; end if;
+    end if;
 
-    -- 2. 🚫 Skip update tanpa perubahan data sama sekali
-    IF TG_OP = 'UPDATE' AND NEW IS NOT DISTINCT FROM OLD THEN
-        RETURN NEW;
-    END IF;
+    -- 2. 🚫 skip update tanpa perubahan data sama sekali
+    if tg_op = 'UPDATE' and new is not distinct from old then
+        return new;
+    end if;
 
-    -- 3. Ambil ID user yang sedang login (bisa NULL jika lewat migration/backend script)
+    -- 3. ambil id user yang sedang login (bisa null jika lewat migration/backend script)
     v_user_id := auth.uid();
 
-    -- 4. 🛡️ Proses pencatatan ke tabel audit
-    BEGIN
-        INSERT INTO public.audit_trail (
+    -- 4. 🛡️ proses pencatatan ke tabel audit
+    begin
+        insert into public.audit_trail (
             user_id,
             table_name,
             record_id,
@@ -26,91 +30,94 @@ BEGIN
             old_data,
             new_data
         )
-        VALUES (
+        values (
             v_user_id,
-            TG_TABLE_NAME,
-            COALESCE(NEW.id, OLD.id),
-            TG_OP,
-            CASE WHEN TG_OP IN ('UPDATE', 'DELETE') THEN to_jsonb(OLD) ELSE NULL END,
-            CASE WHEN TG_OP IN ('INSERT', 'UPDATE') THEN to_jsonb(NEW) ELSE NULL END
+            tg_table_name,
+            coalesce(new.id, old.id),
+            tg_op::public.audit_operation_enum,
+            case when tg_op in ('UPDATE', 'DELETE') then to_jsonb(old) else null end,
+            case when tg_op in ('INSERT', 'UPDATE') then to_jsonb(new) else null end
         );
-    EXCEPTION
-        WHEN OTHERS THEN
-            NULL;
-    END;
+    exception
+        when others then
+            null;
+    end;
 
-    -- 5. Return akhir sebagai penutup fungsi trigger AFTER
-    IF TG_OP = 'DELETE' THEN 
-        RETURN OLD; 
-    ELSE 
-        RETURN NEW; 
-    END IF;
-END;
-$$ LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, pg_catalog, auth;
+    -- 5. return akhir sebagai penutup fungsi trigger after
+    if tg_op = 'DELETE' then 
+        return old; 
+    else 
+        return new; 
+    end if;
+end;
+$$;
 
--- 🔒 LANGKAH WAJIB: Amankan fungsi dari celah API luar
-REVOKE EXECUTE ON FUNCTION public.audit_trigger() FROM PUBLIC;
-REVOKE EXECUTE ON FUNCTION public.audit_trigger() FROM authenticated;
-REVOKE EXECUTE ON FUNCTION public.audit_trigger() FROM anon;
+-- 🔒 langkah wajib: amankan fungsi dari celah api luar
+revoke execute on function public.audit_trigger() from public;
+revoke execute on function public.audit_trigger() from authenticated;
+revoke execute on function public.audit_trigger() from anon;
 
--- Izin eksekusi hanya diberikan ke internal database (postgres) agar trigger tetap bekerja
-GRANT EXECUTE ON FUNCTION public.audit_trigger() TO postgres;
+-- izin eksekusi hanya diberikan ke internal database (postgres) agar trigger tetap bekerja
+grant execute on function public.audit_trigger() to postgres;
 
-CREATE TRIGGER tr_audit_biodata_siswa
-AFTER INSERT OR UPDATE OR DELETE
-ON biodata_siswa
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_biodata_siswa
+after insert or update or delete
+on biodata_siswa
+for each row
+execute function public.audit_trigger();
 
-CREATE TRIGGER tr_audit_biodata_keluarga
-AFTER INSERT OR UPDATE OR DELETE
-ON biodata_keluarga
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_biodata_siswa_detail
+after insert or update or delete
+on biodata_siswa_detail
+for each row
+execute function public.audit_trigger();
 
-CREATE TRIGGER tr_audit_form_pendaftaran
-AFTER INSERT OR UPDATE OR DELETE
-ON form_pendaftaran
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_biodata_keluarga
+after insert or update or delete
+on biodata_keluarga
+for each row
+execute function public.audit_trigger();
 
-CREATE TRIGGER tr_audit_dokumen
-AFTER INSERT OR UPDATE OR DELETE
-ON dokumen
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_form_pendaftaran
+after insert or update or delete
+on form_pendaftaran
+for each row
+execute function public.audit_trigger();
 
-CREATE TRIGGER tr_audit_pembayaran
-AFTER INSERT OR UPDATE OR DELETE
-ON pembayaran
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_dokumen
+after insert or update or delete
+on dokumen
+for each row
+execute function public.audit_trigger();
 
-CREATE TRIGGER tr_audit_pendidikan_siswa_sebelumnya
-AFTER INSERT OR UPDATE OR DELETE
-ON pendidikan_siswa_sebelumnya
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_pembayaran
+after insert or update or delete
+on pembayaran
+for each row
+execute function public.audit_trigger();
+
+create trigger tr_audit_pendidikan_siswa_sebelumnya
+after insert or update or delete
+on pendidikan_siswa_sebelumnya
+for each row
+execute function public.audit_trigger();
 
 -- publikasi
-CREATE TRIGGER tr_audit_posts
-AFTER INSERT OR UPDATE OR DELETE
-ON posts
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_posts
+after insert or update or delete
+on posts
+for each row
+execute function public.audit_trigger();
 
 -- authority
+create trigger tr_audit_profiles
+after insert or update or delete
+on profiles
+for each row
+execute function public.audit_trigger();
 
-CREATE TRIGGER tr_audit_profiles
-AFTER INSERT OR UPDATE OR DELETE
-ON profiles
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
-
-CREATE TRIGGER tr_audit_user_roles
-AFTER INSERT OR UPDATE OR DELETE
-ON user_roles
-FOR EACH ROW
-EXECUTE FUNCTION public.audit_trigger();
+create trigger tr_audit_user_roles
+after insert or update or delete
+on user_roles
+for each row
+execute function public.audit_trigger();

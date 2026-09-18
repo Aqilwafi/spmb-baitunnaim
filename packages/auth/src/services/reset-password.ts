@@ -1,7 +1,7 @@
 // packages/auth/src/services/reset-password.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 
 export async function getCurrentUser() {
   const supabase = await createSupabaseServer();

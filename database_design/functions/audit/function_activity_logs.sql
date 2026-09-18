@@ -4,10 +4,11 @@ create or replace function public.activity_logger(
     p_metadata JSONB default '{}'::jsonb,
     p_user_id UUID default null
 )
+returns void 
 language plpgsql
 security definer
 set search_path = public, pg_catalog, auth
-return void as $$
+as $$
 begin
     insert into public.activity_logs (
         user_id,
@@ -22,7 +23,7 @@ begin
         p_metadata
     );
 end;
-$$
+$$;
 
 -- LANGKAH PENGAMANAN TAMBAHAN (Wajib):
 -- 1. Cabut hak akses dari semua orang di internet (anon & authenticated)

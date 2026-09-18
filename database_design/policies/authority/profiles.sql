@@ -9,7 +9,7 @@ create policy "RLS: profiles: select"
 on public.profiles
 for select
 using (
-    public.fn_is_high_level_admin()
+    public.fn_is_administrator()
     or
     id = auth.uid()
 );
@@ -29,12 +29,12 @@ create policy "RLS: profiles: update"
 on public.profiles
 for update  
 using (
-    public.fn_is_high_level_admin()
+    public.fn_is_administrator()
     or
     id = auth.uid()
 )
 with check (
-    public.fn_is_high_level_admin()
+    public.fn_is_administrator()
     or
     id = auth.uid()
 );

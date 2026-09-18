@@ -1,7 +1,7 @@
 // spmb @/services/init-form.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { InitFormInput } from "@bn/validators";
 import type { FormSubmitResult } from "@/types/form.types";
 import type { BaseRPCSubmitResponse } from "@/types/rpc.types";

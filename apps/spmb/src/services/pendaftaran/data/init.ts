@@ -1,6 +1,6 @@
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { InitFormStepData } from "@/types/form.types";
 import type { RPCGetInitResult, BaseRPCParams } from "@/types/rpc.types";
 

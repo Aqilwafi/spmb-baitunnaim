@@ -2,7 +2,7 @@
 // @bn/services
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import { Dokumen } from "@bn/types";
 
 export async function getDokumen(): Promise<Dokumen[]> {

@@ -1,7 +1,7 @@
 // @/services/cards.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import type { FormCardsData } from "@/types/form.types";
 
 export async function getFormCard(): Promise<FormCardsData[]> {

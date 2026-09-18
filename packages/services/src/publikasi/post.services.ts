@@ -2,7 +2,7 @@
 // @bn/services
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import { withCache } from "@bn/utils";
 import type { Posts, PostTag, PostImages, PostStatusEnum } from "@bn/types";
 

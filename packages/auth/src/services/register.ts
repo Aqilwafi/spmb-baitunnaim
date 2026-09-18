@@ -1,7 +1,7 @@
 // packages/auth/src/services/login.ts
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 
 export async function signUpWithPassword(email: string, password: string) {
   const supabase = await createSupabaseServer();

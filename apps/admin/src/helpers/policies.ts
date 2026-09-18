@@ -1,4 +1,4 @@
-// apps/admin/src/utils/policies.ts
+// apps/admin/src/helpers/policies.ts
 
 const isSuperAdmin = (roles: (string | number)[]) => roles.includes(1);
 const isAdministrator = (roles: (string | number)[]) => roles.includes(2);

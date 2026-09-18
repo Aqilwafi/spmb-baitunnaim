@@ -3,7 +3,7 @@
 import { getCurrentClaims } from "@bn/auth";
 import { validateAccess } from "@bn/auth/utils";
 import { Unauthorized, Forbidden, Button } from "@bn/ui";
-import { hasSpmbAccess, hasPublikasiAccess, hasManageAccess } from "@/utils/policies";
+import { hasSpmbAccess, hasPublikasiAccess, hasManageAccess } from "@/helpers/policies";
 import Sidebar from "@/components/others/Sidebar";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";

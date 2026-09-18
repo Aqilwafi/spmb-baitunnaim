@@ -1,5 +1,5 @@
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import { Pembayaran } from "@bn/types";
 
 export async function getPembayaran(): Promise<Pembayaran[]> {

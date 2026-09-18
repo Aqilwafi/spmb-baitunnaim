@@ -1,4 +1,4 @@
-// app/auth/callback/route.ts
+// apps/admin/src/app/auth/callback/route.ts
 import { NextResponse } from 'next/server';
 import { createSupabaseServer } from '@bn/supabase/server';
 
@@ -8,30 +8,36 @@ export async function GET(request: Request) {
   const type = requestUrl.searchParams.get('type');
   const error = requestUrl.searchParams.get('error');
   const errorCode = requestUrl.searchParams.get('error_code');
-  const next = requestUrl.searchParams.get('next') ?? '/dashboard';
+  
+  // Default redirect ke set-password untuk flow invite/forgot password, atau ambil dari parameter 'next'
+  const next = requestUrl.searchParams.get('next') ?? '/auth/set-password';
 
+  // Jika ada error dari Supabase, lempar kembali ke halaman login/error
   if (error) {
-    const loginUrl = new URL('/login', requestUrl.origin);
+    const loginUrl = new URL('/auth/login', requestUrl.origin);
     loginUrl.searchParams.set('error', errorCode ?? error);
     return NextResponse.redirect(loginUrl);
   }
 
+  // Jika menggunakan token_hash dan type (standar email link Supabase SSR)
   if (token_hash && type) {
     const supabase = await createSupabaseServer();
     const { error: verifyError } = await supabase.auth.verifyOtp({
       token_hash,
-      type,
+      type: type as any,
     });
 
     if (verifyError) {
       console.error('Verify OTP error:', verifyError.name, verifyError.message);
-      const loginUrl = new URL('/login', requestUrl.origin);
+      const loginUrl = new URL('/auth/login', requestUrl.origin);
       loginUrl.searchParams.set('error', 'invalid_token');
       return NextResponse.redirect(loginUrl);
     }
 
+    // Jika sukses verifikasi, arahkan ke halaman tujuan (misal: /auth/set-password)
     return NextResponse.redirect(new URL(next, requestUrl.origin));
   }
 
-  return NextResponse.redirect(new URL('/login', requestUrl.origin));
+  // Fallback jika parameter tidak lengkap
+  return NextResponse.redirect(new URL('/auth/login', requestUrl.origin));
 }

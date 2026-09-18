@@ -3,7 +3,7 @@
 
 import "server-only";
 import { withCache } from "@bn/utils";
-import { createSupabaseStatic } from "@bn/supabase";
+import { createSupabaseStatic } from "@bn/supabase/static";
 import {
   MasterCategories,
   MasterKelas,

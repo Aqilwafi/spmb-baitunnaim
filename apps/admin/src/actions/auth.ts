@@ -2,6 +2,7 @@
 
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { 
@@ -27,6 +28,21 @@ export async function loginAction(_prevState: any, formData: FormData): Promise<
   if (!result.success) {
     return result;
   } 
+
+  const headersList = await headers();
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headersList.get("x-real-ip") ??
+    null;
+
+  const userAgent = headersList.get("user-agent");
+  console.log("LOGIN AUDIT", {
+    ip,
+    userAgent,
+    forwardedFor: headersList.get("x-forwarded-for"),
+    realIp: headersList.get("x-real-ip"),
+  });
+
 
   revalidatePath("/", "layout");
   redirect("/dashboard");

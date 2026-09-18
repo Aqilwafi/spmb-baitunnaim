@@ -22,8 +22,7 @@ begin
     )
     into v_access_rights
     from public.user_roles
-    where user_id = v_user_id
-      and is_active = true;
+    where user_id = v_user_id;
 
     -- sinkronkan ke auth.users
     update auth.users

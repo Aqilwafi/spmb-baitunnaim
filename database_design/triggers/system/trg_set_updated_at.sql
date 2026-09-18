@@ -96,7 +96,7 @@ execute function public.fn_set_updated_at();
 -- publikasi table
 
 
-drop trigger if exists trg_posts_updated_at 
+drop trigger if exists trg_posts_updated_at     
 on public.posts;
 
 create trigger trg_posts_updated_at

@@ -2,7 +2,7 @@
 
 "use server";
 
-import { createSupabaseServer } from "@bn/supabase";
+import { createSupabaseServer } from "@bn/supabase/server";
 import { executeSharedAdminInvite } from '@bn/auth/admin';
 import { redirect } from "next/navigation";
 

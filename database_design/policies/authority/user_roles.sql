@@ -9,7 +9,7 @@ create policy "RLS: user_roles: select"
 on public.user_roles
 for select
 using (
-    public.fn_is_high_level_admin()
+    public.fn_is_administrator()
     or
     user_id = auth.uid()
 );
@@ -24,24 +24,13 @@ with check (
     public.fn_can_manage_user_role(role_id)
 );
 
-drop policy if exists "RLS: user_roles: update"
-on public.user_roles;
-
-create policy "RLS: user_roles: update"
-on public.user_roles
-for update  
-using (
-    public.fn_can_manage_user_role(role_id)
-)
-with check (
-    public.fn_can_manage_user_role(role_id)
-);
-
 drop policy if exists "RLS: user_roles: delete"
 on public.user_roles;
 
 create policy "RLS: user_roles: delete"
 on public.user_roles
 for delete
-using (false); 
+using (
+    public.fn_can_manage_user_role(role_id)
+);
 
