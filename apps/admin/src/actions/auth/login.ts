@@ -20,7 +20,7 @@ export async function loginAction(_prevState: BaseResponse | null, formData: For
     const result = await executeSharedLogin({
       payload,
       logData,
-      eventType: 'spmb_login'
+      eventType: 'admin_login'
     });
 
     if (!result.success) {

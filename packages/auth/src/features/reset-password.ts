@@ -1,12 +1,12 @@
 import { resetPasswordSchema } from "../validators/reset-password.schema";
-import { logDataSchema } from "../validators/log-data.schema";
 import { updateUserPassword } from "../services/reset-password";
 import { getUser } from "../services/session"; 
 import { executeSharedLogout } from "./logout";
-import { authLogger } from "../services/logger/authLogs";
 import { BaseAuthResponse,AuthActivityLogs, BaseFormPayload } from "@bn/types";
-import { formatZodErrors } from "@bn/validators";
+import { formatZodErrors, logDataSchema } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
+import { activityLogger } from "@bn/services";
+
 
 interface ExecuteResetPasswordParams extends BaseFormPayload {
   logData: AuthActivityLogs;
@@ -37,8 +37,8 @@ export async function executeSharedResetPassword({payload, logData}: ExecuteRese
 
     if (!result.success) {
           
-        await authLogger ({
-          event: 'Reset Password',
+        await activityLogger<AuthActivityLogs> ({
+          event: 'reset_password',
           status: "failed",
           metadata: {
             credential: userData.user.email,
@@ -50,16 +50,19 @@ export async function executeSharedResetPassword({payload, logData}: ExecuteRese
       }
       
         // log berhasl login
-      await authLogger ({
+      await activityLogger<AuthActivityLogs> ({
         userId: result.id,
-        event: 'User Register',
+        event: 'reset_password',
         status: 'success',
         metadata: {
+          id: result.id,
           credential: result.credential,
           ...parsedLogData.data
         }
       });
 
-      await executeSharedLogout(result.id);
+      await executeSharedLogout({ 
+        eventType: 'reset_password_logout'
+      });
       return result;
 }

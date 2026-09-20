@@ -28,3 +28,13 @@ export const usernameField = z
   .max(25, "Username terlalu panjang")
   .optional()
   .or(z.literal(""));
+
+// --- FIELD TAMBAHAN (Role ID & User ID) ---
+export const roleIdField = z
+  .number()
+  .int("Role ID harus berupa bilangan bulat")
+  .positive("Role ID tidak valid");
+
+export const userIdField = z
+  .string()
+  .uuid("Format User ID harus berupa UUID yang valid");

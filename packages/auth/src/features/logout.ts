@@ -1,24 +1,49 @@
 // packages/auth/src/features/logout.ts
 
 import { signOut } from '../services/logout';
-import { authLogger } from '../services/logger/authLogs';
+import { getCurrentClaims } from './session';
+import { activityLogger } from '@bn/services';
+import type { AuthActivityLogs } from '@bn/types';
 
-export async function executeSharedLogout(userId?: string) {
+interface LogoutParams {
+  eventType?: string;
+  logData?: AuthActivityLogs; // Opsional: jika ingin membawa metadata tambahan seperti IP/UserAgent
+}
 
+export async function executeSharedLogout({ eventType = 'user_logout', logData }: LogoutParams) {
+  
+  const claims = await getCurrentClaims();
+  const userId = claims?.sub ?? null;
+  const userEmail = claims?.email ?? undefined;
+
+  // 2. Jalankan proses logout
   const result = await signOut();
 
+  // 3. Catat log jika gagal
   if (result.error) {
-    await authLogger ({
+    await activityLogger<AuthActivityLogs>({
       userId: userId,
-      event: 'User Logout',
+      event: eventType,
       status: 'failed',
-      metadata: result.error
+      metadata: {
+        credential: userEmail,
+        error: result.error,
+        ...logData
+      }
     });
+    return result;
   }
-  await authLogger ({
-      userId: userId,
-      event: 'User Logout',
-      status: 'success',
-      metadata: {}
-    });
+
+  // 4. Catat log jika sukses
+  await activityLogger<AuthActivityLogs>({
+    userId: userId, // ID didapat otomatis dari server
+    event: eventType,
+    status: 'success',
+    metadata: {
+      credential: userEmail,
+      ...logData
+    }
+  });
+
+  return result;
 }

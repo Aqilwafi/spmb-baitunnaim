@@ -1,10 +1,11 @@
 import { MasterData, BaseDocumentPayload, EnumGender, Pembayaran, BaseFormPayload } from "@bn/types";
 import type { BiodataSiswa, FormPendaftaran, MasterStep, MasterLembaga, MasterKelas, Dokumen} from "@bn/types";
 
+export type { BaseFormPayload }
 
 export interface InitFormPendaftaranModalProps {
   lembaga: MasterData[];
-  kelas: MasterData[];
+  kelas: MasterData[];  
 }
 
 export interface FormCardsData {

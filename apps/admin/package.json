@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@bn/auth": "workspace:*",
+    "@bn/utils": "workspace:*",
+    "@bn/services": "workspace:*",
     "@bn/constants": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/ui": "workspace:*",

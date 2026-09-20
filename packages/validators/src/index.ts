@@ -8,3 +8,4 @@ export * from './form/pembayaran-upload.schema';
 export * from './utils/utils';
 export * from './utils/request-upload-metadata.schema'
 export * from './form/dokumen-upload.schema';
+export * from './audit/log-data.schema';

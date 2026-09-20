@@ -18,17 +18,17 @@ export async function logoutAction(): Promise<BaseResponse> {
     };
     
     await executeSharedLogout({
-      eventType: 'spmb_logout',
+      eventType: 'admin_logout',
       logData: logData
     });
     revalidatePath("/", "layout");
-    redirect("/login");
+    redirect("/");
 
   } catch (error) {
 
     return {
       success: false,
-      message: error instanceof Error ? error.message : "Terjadi kesalahan saat logout.",
+      message: "Terjadi kesalahan saat logout.",
     };
   }
 }

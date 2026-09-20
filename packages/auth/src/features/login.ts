@@ -1,20 +1,20 @@
 import { loginSchema } from "../validators/login.schema";
-import { logDataSchema } from "../validators/log-data.schema";
 import { signInWithPassword } from "../services/login";
-import { authLogger } from "../services/logger/authLogs";
+import { logDataSchema } from "@bn/validators";
+import { activityLogger } from "@bn/services";
 import { formatZodErrors } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
-import type { BaseFormPayload, AuthActivityLogs, BaseResponse, BaseAuthResponse } from "@bn/types";
-
+import type { BaseFormPayload, AuthActivityLogs, BaseResponse } from "@bn/types";
 
 interface ExecuteLoginParams extends BaseFormPayload {
   logData: AuthActivityLogs;
+  eventType?: string;
 }
 
 const GENERIC_LOGIN_RESPONSE = 'Email atau Password salah.';
 
-export async function executeSharedLogin({payload, logData}: ExecuteLoginParams): Promise<BaseResponse> {
- 
+export async function executeSharedLogin({payload, logData, eventType = 'user_login'}: ExecuteLoginParams): Promise<BaseResponse> {
+  
   const parsed = loginSchema.safeParse(payload);
   const parsedLogData = logDataSchema.safeParse(logData);
   
@@ -37,9 +37,11 @@ export async function executeSharedLogin({payload, logData}: ExecuteLoginParams)
     password: parsed.data.password
   });
   
+  // Jika Login Gagal
   if (!result.success) {
-    await authLogger ({
-      event: 'User Login',
+    await activityLogger<AuthActivityLogs> ({
+      userId: null, // Gagal login berarti belum punya user_id actor yang valid
+      event: eventType,
       status: "failed",
       metadata: {
         credential: parsed.data.email,
@@ -47,15 +49,17 @@ export async function executeSharedLogin({payload, logData}: ExecuteLoginParams)
         ...parsedLogData.data
       }
     });
+
     return {
       success: result.success,
       message: GENERIC_LOGIN_RESPONSE,
     };
   }
 
-  await authLogger ({
-    userId: result.id,
-    event: 'User Login',
+  // Jika Login Berhasil
+  await activityLogger<AuthActivityLogs> ({
+    userId: result.id, // ID user yang berhasil login sebagai actor
+    event: eventType,
     status: 'success',
     metadata: {
       credential: result.credential,
@@ -64,7 +68,7 @@ export async function executeSharedLogin({payload, logData}: ExecuteLoginParams)
   });
 
   return {
-      success: result.success,
-      message: GENERIC_LOGIN_RESPONSE,
-    };
+    success: result.success,
+    message: GENERIC_LOGIN_RESPONSE, // Sesuaikan jika ingin pesan sukses berbeda
+  };
 }

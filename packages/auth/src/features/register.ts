@@ -1,10 +1,9 @@
 import { registerSchema } from '../validators/register.schema';
-import { logDataSchema } from '../validators/log-data.schema';
 import { signUpWithPassword } from '../services/register';
-import { authLogger } from '../services/logger/authLogs';
-import { BaseFormPayload, AuthActivityLogs } from "@bn/types";
-import { formatZodErrors } from "@bn/validators";
+import { activityLogger } from '@bn/services';
+import { formatZodErrors, logDataSchema } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
+import type { BaseFormPayload, AuthActivityLogs } from "@bn/types";
 
 interface ExecuteRegisterParams extends BaseFormPayload {
   logData: AuthActivityLogs;
@@ -37,8 +36,8 @@ export async function executeSharedRegister({payload, logData}: ExecuteRegisterP
 
   if (!result.success) {
       
-    await authLogger ({
-      event: 'User Register',
+    await activityLogger<AuthActivityLogs> ({
+      event: 'spmb_register',
       status: "failed",
       metadata: {
         credential: parsed.data.email,
@@ -49,9 +48,9 @@ export async function executeSharedRegister({payload, logData}: ExecuteRegisterP
   }
   
     // log berhasl login
-  await authLogger ({
+  await activityLogger<AuthActivityLogs> ({
     userId: result.id,
-    event: 'User Register',
+    event: 'spmb_register',
     status: 'success',
     metadata: {
       credential: result.credential,

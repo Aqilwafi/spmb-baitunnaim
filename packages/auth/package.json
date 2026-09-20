@@ -11,15 +11,15 @@
       "import": "./src/features/index.ts",
       "default": "./src/features/index.ts"
     },
-    "./admin": {
-      "types": "./src/features/admin/index.ts",
-      "import": "./src/features/admin/index.ts",
-      "default": "./src/features/admin/index.ts"
-    },
     "./utils": {
       "types": "./src/utils/index.ts",
       "import": "./src/utils/index.ts",
       "default": "./src/utils/index.ts"
+    },
+    "./validators": {
+      "types": "./src/validators/index.ts",
+      "import": "./src/validators/index.ts",
+      "default": "./src/validators/index.ts"
     }
   },
   "files": ["dist"],
@@ -30,6 +30,7 @@
   "dependencies": {
     "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
+    "@bn/services": "workspace:*",
     "@bn/types": "workspace:*",
     "@bn/utils": "workspace:*",
     "server-only": "^0.0.1",

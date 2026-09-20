@@ -11,11 +11,13 @@ export async function resetPasswordForEmail(email: string, redirectUrl: string):
   if (error) {
     return {
       success: false,
-      code: error.code
+      code: error.code,
+      credential: email
     }
   }
   return {
     success: true,
-    message: 'Request Reset Password Berhasil'
+    message: 'Request Reset Password Berhasil',
+    credential: email
   }
 }

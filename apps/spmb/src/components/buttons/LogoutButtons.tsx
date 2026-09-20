@@ -1,11 +1,11 @@
 // components/buttons/LogoutButton.tsx
 'use client';
 
-import { Button } from "@bn/ui"; // 💡 Import langsung dari shared UI package monorepo kamu
+import { Button } from "@bn/ui"; 
 import { LogOut } from "lucide-react";
-import { executeSharedLogout } from "@bn/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { logoutAction } from "@/actions/auth/logout";
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -13,13 +13,14 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     setIsLoading(true);
-    const response = await executeSharedLogout();
+    const response = await logoutAction();
     
-    if (!response?.error) {
+    // Periksa berdasarkan properti 'success' dari BaseResponse
+    if (response?.success) {
       router.refresh();
       router.push("/login");
     } else {
-      alert(response?.error || "Gagal logout");
+      alert(response?.message || "Gagal logout");
       setIsLoading(false);
     }
   };
