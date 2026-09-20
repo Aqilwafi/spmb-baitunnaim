@@ -2,18 +2,28 @@
 
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
+import type { BaseAuthResponse } from "@bn/types";
 
-export async function getCurrentUser() {
+export async function updateUserPassword(newPassword: string, username?:string): Promise<BaseAuthResponse> {
   const supabase = await createSupabaseServer();
-  return supabase.auth.getUser();
-}
+  const { data, error } = await supabase.auth.updateUser({ 
+    password: newPassword, 
+    data: {
+      username: username
+    } 
+  });
 
-export async function updateUserPassword(newPassword: string, username?:string) {
-  const supabase = await createSupabaseServer();
-  return supabase.auth.updateUser({ password: newPassword, data: {username} });
-}
+  if (error) {
+    return {
+      success: false,
+      code: error.code
+    };
+  }
 
-export async function signOutCurrentSession() {
-  const supabase = await createSupabaseServer();
-  return supabase.auth.signOut();
+  return {
+    success: true,
+    message: 'Reset Password Berhasil',
+    id: data.user.id,
+    credential: data.user.email
+  };
 }

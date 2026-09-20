@@ -1,67 +1,65 @@
 import { resetPasswordSchema } from "../validators/reset-password.schema";
-import {
-  getCurrentUser,
-  updateUserPassword,
-  signOutCurrentSession,
-} from "../services/reset-password";
-import { ResetPasswordPayload, ResetPasswordResponse } from "@bn/types";
-import { formatZodErrors } from "@bn/validators"; // Helper Zod terpisah
+import { logDataSchema } from "../validators/log-data.schema";
+import { updateUserPassword } from "../services/reset-password";
+import { getUser } from "../services/session"; 
+import { executeSharedLogout } from "./logout";
+import { authLogger } from "../services/logger/authLogs";
+import { BaseAuthResponse,AuthActivityLogs, BaseFormPayload } from "@bn/types";
+import { formatZodErrors } from "@bn/validators";
+import { createValidationError } from "@bn/utils";
 
-export async function executeSharedResetPassword(
-  payload: ResetPasswordPayload,
-): Promise<ResetPasswordResponse> {
-  // 1. Validasi Zod (Termasuk matching newPassword & confirmNewPassword via .refine)
+interface ExecuteResetPasswordParams extends BaseFormPayload {
+  logData: AuthActivityLogs;
+}
+
+export async function executeSharedResetPassword({payload, logData}: ExecuteResetPasswordParams): Promise<BaseAuthResponse>{
+
   const parsed = resetPasswordSchema.safeParse(payload);
-  
+  const parsedLogData = logDataSchema.safeParse(logData);
+
   if (!parsed.success) {
-    return {
-      success: false,
-      message: "Validasi form gagal. Silakan periksa kembali input password Anda.",
-      errors: formatZodErrors(parsed.error), // 👈 Mengisi state.errors.newPassword & confirmNewPassword
-      error: { code: "VALIDATION_ERROR" },
-    };
+    throw createValidationError(
+      formatZodErrors(parsed.error),
+      parsed.error.issues[0]?.message ?? "Data formulir tidak valid."
+    );
   }
-
-  // 2. Eksekusi Service
-  try {
-    const {
-      data: { user },
-      error: userError,
-    } = await getCurrentUser();
-
-    if (userError || !user) {
-      return {
-        success: false,
-        message:
-          "Sesi tidak ditemukan atau kedaluwarsa. Silakan klik ulang link dari email Anda.",
-        error: { code: "SESSION_EXPIRED" },
-      };
-    }
-
-    const { error } = await updateUserPassword(parsed.data.newPassword);
-
-    if (error) {
-      console.error("Shared Update Password Error:", error.message);
-      return {
-        success: false,
-        message: "Gagal memperbarui password. Silakan coba lagi.",
-        error: { code: "UPDATE_PASSWORD_FAILED" },
-      };
-    }
-
-    // Invalidate sesi recovery setelah berhasil
-    await signOutCurrentSession();
-
-    return {
-      success: true,
-      message: "Password Anda berhasil diperbarui. Silakan login dengan password baru.",
-    };
-  } catch (err: any) {
-    console.error("Reset Password Exception:", err);
-    return {
-      success: false,
-      message: "Terjadi kesalahan server saat memperbarui password.",
-      error: { code: "INTERNAL_SERVER_ERROR" },
-    };
+  
+  if (!parsedLogData.success) {
+    throw createValidationError(
+      formatZodErrors(parsedLogData.error),
+      parsedLogData.error.issues[0]?.message ?? "Data formulir tidak valid."
+    );
   }
+    const { data: userData, error: userError } = await getUser();
+    if (userError) throw userError;
+
+    const result = await updateUserPassword(parsed.data.newPassword);
+
+    if (!result.success) {
+          
+        await authLogger ({
+          event: 'Reset Password',
+          status: "failed",
+          metadata: {
+            credential: userData.user.email,
+            code: result.code,
+            ...parsedLogData.data
+          }
+        });
+        return result;
+      }
+      
+        // log berhasl login
+      await authLogger ({
+        userId: result.id,
+        event: 'User Register',
+        status: 'success',
+        metadata: {
+          credential: result.credential,
+          ...parsedLogData.data
+        }
+      });
+
+      await executeSharedLogout(result.id);
+      return result;
 }

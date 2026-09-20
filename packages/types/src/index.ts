@@ -1,6 +1,6 @@
 export * from './auth/auth.types';
 export * from './response/auth-response.types';
-export * from './response/action-response.types';
+export * from './shared/response.types';
 export * from './auth/users.types';
 export * from './publikasi/post.types'
 export * from './shared/supabase';

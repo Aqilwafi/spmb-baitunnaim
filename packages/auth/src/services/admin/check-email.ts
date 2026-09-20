@@ -11,8 +11,6 @@ export async function isAdminEmail(email: string): Promise<boolean> {
 
   if (error) {
     console.error("isAdminEmail RPC Error:", error.message);
-    // Fail-safe: kalau RPC error, anggap admin (block), 
-    // lebih aman drop 1 legit request daripada ke-bypass proteksi
     return true;
   }
 

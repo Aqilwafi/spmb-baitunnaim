@@ -1,24 +1,51 @@
 "use client";
 
 import { useActionState } from "react";
-import { registerAction } from "@/actions/auth/auth"; 
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { registerAction } from "@/actions/auth/register"; 
 import { TextInput, EmailInput, PasswordInput, Button } from "@bn/ui";
 
 export default function RegisterForm() {
-  const [state, formAction, isPending] = useActionState(registerAction, null);
+  const [state, action, isPending] = useActionState(
+    (prevState: any, formData: FormData) =>
+      registerAction(prevState, formData),
+      null
+  );
+  
+
+  // Helper untuk merender error per field agar seragam
+  const renderFieldError = (fieldError?: string | string[]) => {
+    if (!fieldError) return null;
+    const message = Array.isArray(fieldError) ? fieldError[0] : fieldError;
+    return <p className="text-[10px] text-red-500 mt-1">{message}</p>;
+  };
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 w-full">
+    <form action={action} className="flex flex-col gap-4 w-full">
+      {/* Global Message (Banner Error / Success) */}
+      {state?.message && (
+        <div className={`flex items-start gap-3 p-4 border rounded-xl ${
+          state.success 
+            ? "bg-green-50 border-green-200 text-green-700" 
+            : "bg-red-50 border-red-200 text-red-600"
+        }`}>
+          {state.success ? (
+            <CheckCircle2 className="mt-0.5 shrink-0" size={18} />
+          ) : (
+            <AlertCircle className="mt-0.5 shrink-0" size={18} />
+          )}
+          <p className="text-xs font-medium leading-relaxed">{state.message}</p>
+        </div>
+      )}
+
       {/* Field: Email */}
       <div>
         <EmailInput 
           name="email"
           required 
-          defaultValue={state?.data?.email || ""}
+          defaultValue={state?.data || ""}
         />
-        {state?.errors?.email && (
-          <p className="text-red-500 text-xs mt-1">{state.errors.email[0]}</p>
-        )}
+        {renderFieldError(state?.errors?.email)}
       </div>
 
       {/* Field: Username */}
@@ -26,13 +53,11 @@ export default function RegisterForm() {
         <TextInput 
           id="username" 
           name="username" 
-          defaultValue={state?.data?.username || ""} 
+          defaultValue={state?.data || ""} 
           label="Username" 
           placeholder="(opsional) silakan isi sebagai nama akun anda"
         />
-        {state?.errors?.username && (
-          <p className="text-red-500 text-xs mt-1">{state.errors.username[0]}</p>
-        )}
+        {renderFieldError(state?.errors?.username)}
       </div>
 
       {/* Field: Password */}
@@ -40,11 +65,8 @@ export default function RegisterForm() {
         <PasswordInput 
           name="password" 
           required
-          // defaultValue TIDAK DIPAKAI agar password otomatis kosong jika form error/re-render
         />
-        {state?.errors?.password && (
-          <p className="text-red-500 text-xs mt-1">{state.errors.password[0]}</p>
-        )}
+        {renderFieldError(state?.errors?.password)}
       </div>
 
       {/* Field: Confirm Password */}
@@ -54,22 +76,12 @@ export default function RegisterForm() {
           name="confirmPassword"
           label="Konfirmasi Password" 
           required 
-          // defaultValue TIDAK DIPAKAI
         />
-        {state?.errors?.confirmPassword && (
-          <p className="text-red-500 text-xs mt-1">{state.errors.confirmPassword[0]}</p>
-        )}
+        {renderFieldError(state?.errors?.confirmPassword)}
       </div>
 
-      {/* Global Message (Sukses / Server Error) */}
-      {state?.message && (
-        <p className={`text-sm ${state.success ? "text-green-600" : "text-red-500"}`}>
-          {state.message}
-        </p>
-      )}
-
       {/* Submit Button */}
-      <Button type="submit" variant="primary" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending} className="rounded-xl">
         {isPending ? "Mendaftar..." : "Daftar"}
       </Button>
     </form>

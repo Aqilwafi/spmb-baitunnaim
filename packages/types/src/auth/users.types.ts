@@ -14,7 +14,7 @@ export type UserRolesUpdate = TablesUpdate<'profiles'>;
 
 export type UsersData = Pick<Profiles, 'id' | 'username' | 'phone'> & {
     email: string;
-    roles: Pick<UserRoles, 'role_id' | 'is_active'>[];
+    roles: Pick<UserRoles, 'role_id' >[];
     role_names?: string[]; 
     last_login: Date | null; 
 };

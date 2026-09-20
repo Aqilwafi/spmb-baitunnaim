@@ -1,4 +1,4 @@
-import { MasterData, BaseDocumentPayload, EnumGender, Pembayaran } from "@bn/types";
+import { MasterData, BaseDocumentPayload, EnumGender, Pembayaran, BaseFormPayload } from "@bn/types";
 import type { BiodataSiswa, FormPendaftaran, MasterStep, MasterLembaga, MasterKelas, Dokumen} from "@bn/types";
 
 
@@ -59,9 +59,7 @@ export interface FormSubmitResult {
   nextStepId?: number;
 }
 
-export interface BaseFormPayload {
-  payload: Record<string, FormDataEntryValue>;
-}
+
 
 export interface ProcessFormPayload extends BaseFormPayload {
   formId: FormPendaftaran['id'];

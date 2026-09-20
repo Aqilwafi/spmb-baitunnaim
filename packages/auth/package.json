@@ -31,6 +31,7 @@
     "@bn/validators": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/types": "workspace:*",
+    "@bn/utils": "workspace:*",
     "server-only": "^0.0.1",
     "zod": "^4.4.3"
   },

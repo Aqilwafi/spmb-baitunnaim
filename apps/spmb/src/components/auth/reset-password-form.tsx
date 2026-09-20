@@ -1,18 +1,21 @@
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
-import { resetPasswordAction } from "@/actions/auth/auth";
+import { AlertCircle, CheckCircle2, AlertTriangle } from "lucide-react";
+import { resetPasswordAction } from "@/actions/auth/reset-password";
 import { PasswordInput, Button } from "@bn/ui";
 
 export default function SetPasswordForm() {
-  const [state, formAction, isPending] = useActionState(
-    resetPasswordAction,
-    null
-  );
+
+  const [state, action, isPending] = useActionState(
+      (prevState: any, formData: FormData) =>
+        resetPasswordAction(prevState, formData),
+        null
+    );
 
   const [linkError, setLinkError] = useState<string | null>(null);
 
-  // Deteksi error expired/invalid token dari URL Hash (Supabase Auth / Provider style)
+  // Deteksi error expired/invalid token dari URL Hash
   useEffect(() => {
     const hash = window.location.hash;
     if (hash.includes("error=")) {
@@ -31,14 +34,25 @@ export default function SetPasswordForm() {
     }
   }, []);
 
-  // Tampilan jika token link dari email error / expired
+  // Helper untuk merender error per-field
+  const renderFieldError = (fieldError?: string | string[]) => {
+    if (!fieldError) return null;
+    const message = Array.isArray(fieldError) ? fieldError[0] : fieldError;
+    return <p className="text-[10px] text-red-500 mt-1">{message}</p>;
+  };
+
+  // Tampilan jika token link dari email error / expired (menggunakan Banner)
   if (linkError) {
     return (
       <div className="flex flex-col gap-4 w-full">
-        <p className="text-sm text-red-500">{linkError}</p>
+        <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-900">
+          <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+          <p className="text-xs font-medium leading-relaxed">{linkError}</p>
+        </div>
         <Button
           variant="primary"
           onClick={() => (window.location.href = "/lupa-password")}
+          className="rounded-xl"
         >
           Minta Link Baru
         </Button>
@@ -47,7 +61,23 @@ export default function SetPasswordForm() {
   }
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 w-full">
+    <form action={action} className="flex flex-col gap-4 w-full">
+      {/* Global Message (Banner Sukses / Error) */}
+      {state?.message && (
+        <div className={`flex items-start gap-3 p-4 border rounded-xl ${
+          state.success 
+            ? "bg-green-50 border-green-200 text-green-700" 
+            : "bg-red-50 border-red-200 text-red-600"
+        }`}>
+          {state.success ? (
+            <CheckCircle2 className="mt-0.5 shrink-0" size={18} />
+          ) : (
+            <AlertCircle className="mt-0.5 shrink-0" size={18} />
+          )}
+          <p className="text-xs font-medium leading-relaxed">{state.message}</p>
+        </div>
+      )}
+
       {/* Field: Password Baru */}
       <div>
         <PasswordInput
@@ -56,11 +86,7 @@ export default function SetPasswordForm() {
           label="Password Baru"
           required
         />
-        {state?.errors?.newPassword && (
-          <p className="text-red-500 text-xs mt-1">
-            {state.errors.newPassword[0]}
-          </p>
-        )}
+        {renderFieldError(state?.errors?.newPassword)}
       </div>
 
       {/* Field: Konfirmasi Password Baru */}
@@ -71,26 +97,11 @@ export default function SetPasswordForm() {
           label="Konfirmasi Password Baru"
           required
         />
-        {state?.errors?.confirmNewPassword && (
-          <p className="text-red-500 text-xs mt-1">
-            {state.errors.confirmNewPassword[0]}
-          </p>
-        )}
+        {renderFieldError(state?.errors?.confirmNewPassword)}
       </div>
 
-      {/* Global Message (Sukses Reset / General Error) */}
-      {state?.message && (
-        <p
-          className={`text-sm ${
-            state.success ? "text-green-600" : "text-red-500"
-          }`}
-        >
-          {state.message}
-        </p>
-      )}
-
       {/* Submit Button */}
-      <Button type="submit" variant="primary" disabled={isPending}>
+      <Button type="submit" variant="primary" disabled={isPending} className="rounded-xl">
         {isPending ? "Menyimpan..." : "Simpan Password Baru"}
       </Button>
     </form>

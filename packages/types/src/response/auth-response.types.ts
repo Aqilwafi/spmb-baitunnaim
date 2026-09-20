@@ -1,20 +1,26 @@
 // packages/types/src/response/auth-response.types.ts
 
-import type { ActionResponse } from "./action-response.types";
+import type { BaseResponse } from "../shared/response.types";
 
-export type LoginResponse = ActionResponse<{
-  email:string;
-}>;
+export interface BaseAuthResponse {
+  success: boolean;
+  message?: string;
+  code?: string;
+  cause?: string;
+  credential?: string;
+  id?: string;
+    
+}
 
-export type RegisterResponse = ActionResponse<{
+export type RegisterResponse = BaseResponse<{
   email:string;
   username?: string;
 }>;
 
-export type LogoutResponse = ActionResponse;
+export type LogoutResponse = BaseResponse;
 
-export type ForgotPasswordResponse = ActionResponse<{
+export type ForgotPasswordResponse = BaseResponse<{
   email:string;
 }>;
 
-export type ResetPasswordResponse = ActionResponse;
+export type ResetPasswordResponse = BaseResponse;

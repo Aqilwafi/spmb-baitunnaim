@@ -3,12 +3,12 @@
 
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
-import type { ActionResponse } from "@bn/types";
+import type { BaseResponse } from "@bn/types";
 import type { FormSubmitResult } from "@/types/form.types";
 import { BaseRPCParams } from "@/types/rpc.types";
 import { submitFinalisasi } from "@/features/pendaftaran/submit/finalisasi";
 
-export async function finalisasiPendaftaranAction({formId}: BaseRPCParams): Promise<ActionResponse<FormSubmitResult>> {
+export async function finalisasiPendaftaranAction({formId}: BaseRPCParams): Promise<BaseResponse<FormSubmitResult>> {
   try {
     const result = await submitFinalisasi({
       formId: formId,

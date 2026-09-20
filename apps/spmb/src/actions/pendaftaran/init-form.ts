@@ -5,13 +5,13 @@
 import { revalidatePath } from "next/cache";
 import { submitInitForm } from "@/features/pendaftaran/submit/init";
 import { isValidationError } from "@bn/utils";
-import type { ActionResponse} from "@bn/types";
+import type { BaseResponse} from "@bn/types";
 import type { FormSubmitResult } from "@/types/form.types";
 
 export async function initFormAction(
-  _prevState: ActionResponse<FormSubmitResult> | null,
+  _prevState: BaseResponse<FormSubmitResult> | null,
   formData: FormData
-): Promise<ActionResponse<FormSubmitResult>> {
+): Promise<BaseResponse<FormSubmitResult>> {
   try {
     const payload = Object.fromEntries(formData.entries());
     const result = await submitInitForm({payload});

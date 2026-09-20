@@ -1,46 +1,70 @@
 import { loginSchema } from "../validators/login.schema";
+import { logDataSchema } from "../validators/log-data.schema";
 import { signInWithPassword } from "../services/login";
-import { LoginResponse, LoginPayload } from "@bn/types";
-import { formatZodErrors } from "@bn/validators"; // Helper Zod terpisah
+import { authLogger } from "../services/logger/authLogs";
+import { formatZodErrors } from "@bn/validators";
+import { createValidationError } from "@bn/utils";
+import type { BaseFormPayload, AuthActivityLogs, BaseResponse, BaseAuthResponse } from "@bn/types";
 
-export async function executeSharedLogin(payload: LoginPayload): Promise<LoginResponse> {
-  // 1. Validasi Zod
+
+interface ExecuteLoginParams extends BaseFormPayload {
+  logData: AuthActivityLogs;
+}
+
+const GENERIC_LOGIN_RESPONSE = 'Email atau Password salah.';
+
+export async function executeSharedLogin({payload, logData}: ExecuteLoginParams): Promise<BaseResponse> {
+ 
   const parsed = loginSchema.safeParse(payload);
+  const parsedLogData = logDataSchema.safeParse(logData);
   
   if (!parsed.success) {
+    throw createValidationError(
+      formatZodErrors(parsed.error),
+      parsed.error.issues[0]?.message ?? "Format Data tidak valid."
+    );
+  }
+
+  if (!parsedLogData.success) {
+    throw createValidationError(
+      formatZodErrors(parsedLogData.error),
+      parsedLogData.error.issues[0]?.message ?? "Format Data tidak valid."
+    );
+  }
+
+  const result = await signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password
+  });
+  
+  if (!result.success) {
+    await authLogger ({
+      event: 'User Login',
+      status: "failed",
+      metadata: {
+        credential: parsed.data.email,
+        code: result.code,
+        ...parsedLogData.data
+      }
+    });
     return {
-      success: false,
-      message: "Validasi form gagal. Silakan periksa kembali input Anda.",
-      errors: formatZodErrors(parsed.error), // 👈 Mengisi state.errors per-field untuk UI
-      error: { code: "VALIDATION_ERROR" },
-      data: { email: (payload.email as string) || "" },
+      success: result.success,
+      message: GENERIC_LOGIN_RESPONSE,
     };
   }
 
-  // 2. Eksekusi Service Auth
-  try {
-    const { error } = await signInWithPassword(parsed.data.email, parsed.data.password);
-
-    if (error) {
-      return {
-        success: false,
-        message: "Email atau password salah.", // Pesan global di bawah form
-        error: { code: error.code ?? "AUTH_ERROR" },
-        data: { email: parsed.data.email },
-      };
+  await authLogger ({
+    userId: result.id,
+    event: 'User Login',
+    status: 'success',
+    metadata: {
+      credential: result.credential,
+      ...parsedLogData.data
     }
+  });
 
-    return { 
-      success: true, 
-      message: "Login berhasil.",
-      data: { email: parsed.data.email },
+  return {
+      success: result.success,
+      message: GENERIC_LOGIN_RESPONSE,
     };
-  } catch (err: any) {
-    return {
-      success: false,
-      message: err?.message || "Terjadi kesalahan sistem saat login.",
-      error: { code: "INTERNAL_SERVER_ERROR" },
-      data: { email: parsed.data.email },
-    };
-  }
 }

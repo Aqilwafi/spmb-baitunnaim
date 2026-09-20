@@ -4,10 +4,10 @@
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
 import { submitPembayaran } from "@/features/pendaftaran/submit/pembayaran";
-import type { ActionResponse } from "@bn/types";
+import type { BaseResponse } from "@bn/types";
 import type { FormSubmitResult, ProcessDocumentPayload } from "@/types/form.types";
 
-export async function pembayaranAction({formId, filePath}: ProcessDocumentPayload): Promise<ActionResponse<FormSubmitResult>> {
+export async function pembayaranAction({formId, filePath}: ProcessDocumentPayload): Promise<BaseResponse<FormSubmitResult>> {
   try {
     const result = await submitPembayaran({
       formId: formId,

@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { uploadFileToSignedUrl } from "@/services/file/upload";
 import type { RequestUploadMetadataInput } from "@bn/validators";
-import type { ActionResponse } from "@bn/types";
+import type { BaseResponse } from "@bn/types";
 
 export interface UploadFileOptions {
   file: File;
@@ -19,7 +19,7 @@ export function useFileUpload() {
     file,
     category,
     documentType,
-  }: UploadFileOptions): Promise<ActionResponse<string>> => {
+  }: UploadFileOptions): Promise<BaseResponse<string>> => {
     setIsUploading(true);
 
     try {
@@ -57,7 +57,7 @@ export function useFileUpload() {
         file,
       });
 
-      // 3. Return Berhasil (Format ActionResponse<string>)
+      // 3. Return Berhasil (Format BaseResponse<string>)
       return {
         success: true,
         message: "File berhasil diunggah ke storage.",

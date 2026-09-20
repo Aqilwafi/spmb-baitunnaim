@@ -3,14 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
 import { submitBiodataSiswaDetail } from "@/features/pendaftaran/submit/biodata-siswa-detail";
-import type { ActionResponse } from "@bn/types";
+import type { BaseResponse } from "@bn/types";
 import type { FormSubmitResult } from "@/types/form.types";
 
 export async function biodataSiswaDetailAction(
-  _prevState: ActionResponse<FormSubmitResult> | null,
+  _prevState: BaseResponse<FormSubmitResult> | null,
   formData: FormData,
   formId: string,
-): Promise<ActionResponse<FormSubmitResult>> {
+): Promise<BaseResponse<FormSubmitResult>> {
   
   try {
     const payload = Object.fromEntries(formData.entries());

@@ -1,59 +1,63 @@
 import { registerSchema } from '../validators/register.schema';
+import { logDataSchema } from '../validators/log-data.schema';
 import { signUpWithPassword } from '../services/register';
-import { RegisterPayload, RegisterResponse } from "@bn/types";
+import { authLogger } from '../services/logger/authLogs';
+import { BaseFormPayload, AuthActivityLogs } from "@bn/types";
 import { formatZodErrors } from "@bn/validators";
+import { createValidationError } from "@bn/utils";
 
-export async function executeSharedRegister(payload: RegisterPayload): Promise<RegisterResponse> {
-  // 1. Validasi Zod (Jangan throw Error, kembalikan fieldErrors)
-  const parsed = registerSchema.safeParse(payload);
+interface ExecuteRegisterParams extends BaseFormPayload {
+  logData: AuthActivityLogs;
+}
+
+export async function executeSharedRegister({payload, logData}: ExecuteRegisterParams) {
   
+  const parsed = registerSchema.safeParse(payload);
+  const parsedLogData = logDataSchema.safeParse(logData);
+
   if (!parsed.success) {
-    return {
-      success: parsed.success,
-      message: "Validasi form gagal. Silakan periksa kembali input Anda.",
-      errors: formatZodErrors(parsed.error),
-      error: {
-        code: "VALIDATION_ERROR",
-      },
-      data: {
-        email: payload.email || "",
-      },
-    };
+    throw createValidationError(
+      formatZodErrors(parsed.error),
+      parsed.error.issues[0]?.message ?? "Data formulir tidak valid."
+    );
   }
-  // 2. Eksekusi Service (Gunakan `await` karena ini operasi Async)
-  try {
-    const result = await signUpWithPassword(parsed.data.email, parsed.data.password);
 
-    if (!result || result.error) {
-      return {
-        success: false,
-        message: result?.error?.message || "Terjadi kesalahan saat mendaftar.",
-        error: {
-          code: result?.error?.code || "SIGNUP_FAILED",
-        },
-        data: {
-          email: parsed.data.email,
-        },
-      };
+  if (!parsedLogData.success) {
+    throw createValidationError(
+      formatZodErrors(parsedLogData.error),
+      parsedLogData.error.issues[0]?.message ?? "Data formulir tidak valid."
+    );
+  }
+  
+  const result = await signUpWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+    username: parsed.data.username ?? null
+  });
+
+  if (!result.success) {
+      
+    await authLogger ({
+      event: 'User Register',
+      status: "failed",
+      metadata: {
+        credential: parsed.data.email,
+        ...parsedLogData.data
+      }
+    });
+    return result;
+  }
+  
+    // log berhasl login
+  await authLogger ({
+    userId: result.id,
+    event: 'User Register',
+    status: 'success',
+    metadata: {
+      credential: result.credential,
+      ...parsedLogData.data
     }
+  });
+  return result;
 
-    return {
-      success: true,
-      message: "Silakan periksa email Anda untuk melakukan aktivasi akun.",
-      data: {
-        email: parsed.data.email,
-      },
-    };
-  } catch (err: any) {
-    return {
-      success: false,
-      message: err?.message || "Terjadi kesalahan server.",
-      error: {
-        code: "INTERNAL_SERVER_ERROR",
-      },
-      data: {
-        email: parsed.data.email,
-      },
-    };
-  }
 }

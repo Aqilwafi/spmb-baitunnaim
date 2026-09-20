@@ -4,11 +4,11 @@
 import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
 import { submitDokumen } from "@/features/pendaftaran/submit/dokumen";
-import type { ActionResponse } from "@bn/types";
+import type { BaseResponse } from "@bn/types";
 import type { FormSubmitResult } from "@/types/form.types";
 import type { ProcessDocumentFeaturePayload } from "@/features/pendaftaran/submit/dokumen";
 
-export async function dokumenAction({ formId, filePath, jenisDokumen }: ProcessDocumentFeaturePayload): Promise<ActionResponse<FormSubmitResult>> {
+export async function dokumenAction({ formId, filePath, jenisDokumen }: ProcessDocumentFeaturePayload): Promise<BaseResponse<FormSubmitResult>> {
   try {
 
     const result = await submitDokumen({

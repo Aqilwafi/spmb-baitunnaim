@@ -1,26 +1,32 @@
 // packages/types/src/auth/auth.types.ts
 
 import type { Tables } from '../shared/supabase';
-import type { Session, User, JwtPayload } from '../shared/core.types'; // Pastikan package ini mengekspor tipe asli Supabase
+import type { Session, User, JwtPayload } from '../shared/core.types';
 
-export type Credetials = {
+export interface AuthActivityLogs {
+  ip?: string | null;         
+  userAgent?: string | null; 
+  forwardedFor?: string | null;
+  realIp?: string | null;
+  credential?: string;
+  id?: string;
+  code?: string;
+  message?: string;
+  [key: string]: any;
+}
+
+export interface Credentials {
   email: string;
   password: string;
 };  
 
-export type RegisterPayload = Credetials & {
-  username?: string;
-  confirm_password: string;
+export interface RegisterPayload extends Credentials {
+  username?: string | null;
 };
 
-export type LoginPayload = Credetials;
-
-export type ForgotPasswordPayload = Pick<Credetials, 'email'>;
-
-export type ResetPasswordPayload = {
-  username?: string;
-  newPassword: string;
-  confirmNewPassword: string;
+export interface ResetPasswordPayload {
+  newPassword: Credentials['password'];
+  username?: string | null;
 };
 
 // belum pernah dipakai

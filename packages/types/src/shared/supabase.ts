@@ -39,6 +39,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          metadata: Json | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          metadata?: Json | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          metadata?: Json | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      audit_trail: {
+        Row: {
+          action: Database["public"]["Enums"]["audit_operation_enum"]
+          created_at: string
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          record_id: string | null
+          table_name: string
+          user_id: string | null
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["audit_operation_enum"]
+          created_at?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: string | null
+          table_name: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["audit_operation_enum"]
+          created_at?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: string | null
+          table_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       biodata_keluarga: {
         Row: {
           alamat: string | null
@@ -928,6 +988,8 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           id: string
+          is_legacy: boolean | null
+          old_user_id: string | null
           phone: string | null
           updated_at: string
           username: string | null
@@ -936,6 +998,8 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           id: string
+          is_legacy?: boolean | null
+          old_user_id?: string | null
           phone?: string | null
           updated_at?: string
           username?: string | null
@@ -944,6 +1008,8 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           id?: string
+          is_legacy?: boolean | null
+          old_user_id?: string | null
           phone?: string | null
           updated_at?: string
           username?: string | null
@@ -972,7 +1038,6 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          is_active: boolean
           role_id: number
           updated_at: string
           user_id: string
@@ -980,7 +1045,6 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          is_active?: boolean
           role_id: number
           updated_at?: string
           user_id: string
@@ -988,7 +1052,6 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
-          is_active?: boolean
           role_id?: number
           updated_at?: string
           user_id?: string
@@ -1038,6 +1101,7 @@ export type Database = {
         Args: { p_biodata_siswa_id: string }
         Returns: boolean
       }
+      fn_is_panitia_spmb: { Args: never; Returns: boolean }
       fn_is_superadmin: { Args: never; Returns: boolean }
       fn_rpc_get_biodata_keluarga: {
         Args: {

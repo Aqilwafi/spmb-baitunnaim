@@ -11,6 +11,10 @@ export type MasterData = {
   semester?: string;
 };
 
+export interface BaseFormPayload {
+  payload: Record<string, FormDataEntryValue>;
+}
+
 export interface BaseDocumentPayload {
   filePath: string;
 }
