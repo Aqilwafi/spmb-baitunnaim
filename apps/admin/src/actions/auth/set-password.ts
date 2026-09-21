@@ -1,11 +1,12 @@
 "use server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { executeSharedResetPassword } from "@bn/auth";
-import type { BaseResponse } from "@bn/types";
+import { revalidatePath } from "next/cache";
+import { executeSharedLogin, executeSharedResetPassword } from "@bn/auth";
 import { isValidationError } from "@bn/utils";
+import type { BaseResponse } from "@bn/types";
 
-export async function resetPasswordAction(_prevState: any, formData: FormData): Promise<BaseResponse> {
+export async function setPasswordAction(_prevState: BaseResponse | null, formData: FormData): Promise<BaseResponse> {
   try {
     const payload = Object.fromEntries(formData.entries());
     const headersList = await headers();
@@ -17,16 +18,15 @@ export async function resetPasswordAction(_prevState: any, formData: FormData): 
     };
 
     const result = await executeSharedResetPassword({
-        payload: payload,
-        logData: logData,
-        eventType: 'spmb_reset_password'
+      payload,
+      logData,
+      eventType: 'admin_set_new_password'
     });
 
     if (!result.success) {
       return result;
     }
 
-    redirect("/login?reset=success");
   } catch (error) {
     if (isValidationError(error)) {
       return {
@@ -35,10 +35,11 @@ export async function resetPasswordAction(_prevState: any, formData: FormData): 
         errors: error.errors,
       };
     }
-
     return {
       success: false,
       message: 'Terjadi kesalahan pada server.'
-    };
+    } 
   }
+
+  redirect("/");
 }

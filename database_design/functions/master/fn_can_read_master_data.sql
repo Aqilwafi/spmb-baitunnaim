@@ -7,7 +7,7 @@ stable
 set search_path = public
 as $$
     select
-        public.fn_is_high_level_admin()
+        public.fn_is_administrator()
         or (
             auth.uid() is not null 
             and p_is_active

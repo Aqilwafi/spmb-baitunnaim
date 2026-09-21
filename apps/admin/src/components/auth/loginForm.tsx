@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { loginAction } from "@/actions/auth";
+import { loginAction } from "@/actions/auth/login";
 import { Button, EmailInput, PasswordInput } from "@bn/ui"; 
 
 export default function LoginForm() {
@@ -11,7 +11,7 @@ export default function LoginForm() {
     <form action={formAction} className="flex flex-col gap-4 w-full">
       
       {/* ✨ Semua input diurus oleh 1 komponen */}
-      <EmailInput required defaultValue={(state && state.success === false) ? state.data?.email : ""}/>
+      <EmailInput required defaultValue={(state && state.success === false) ? state.data : ""}/>
       <PasswordInput required/>
 
       {state?.message && <p className="text-red-500 text-sm">{state.message}</p>}

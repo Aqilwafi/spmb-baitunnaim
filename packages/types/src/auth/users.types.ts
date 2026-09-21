@@ -1,3 +1,4 @@
+import { User } from '@supabase/supabase-js';
 import type {
   Tables,
   TablesInsert,
@@ -12,9 +13,8 @@ export type UserRoles = Tables<'user_roles'>;
 export type UserRolesInsert = TablesInsert<'profiles'>;
 export type UserRolesUpdate = TablesUpdate<'profiles'>;
 
-export type UsersData = Pick<Profiles, 'id' | 'username' | 'phone'> & {
-    email: string;
-    roles: Pick<UserRoles, 'role_id' >[];
-    role_names?: string[]; 
-    last_login: Date | null; 
+export type UsersData = Profiles & {
+  user_roles: {
+    role_id: number;
+  };
 };

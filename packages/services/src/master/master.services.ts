@@ -13,6 +13,7 @@ import {
   MasterTahunAjaran,
   MasterTinggalBersama,
   MasterTipeDokumen,
+  MasterRoles
 } from "@bn/types";
 
 const supabaseStatic = createSupabaseStatic();
@@ -111,4 +112,15 @@ export const getMasterCategories = () =>
     },
     ["master_categories"],
     ["master_categories"]
+  )();
+
+  export const getMasterRoles = () =>
+  withCache<MasterRoles[]>(
+    async () => {
+      const { data, error } = await supabaseStatic.from("master_roles").select("*");
+      if (error) throw new Error(error.message);
+      return data as MasterRoles[];
+    },
+    ["master_roles"],
+    ["master_roles"]
   )();

@@ -32,7 +32,7 @@ export interface ResetPasswordPayload {
 // belum pernah dipakai
 
 export type Profile = Tables<'profiles'>;
-export type MasterRole = Tables<'master_roles'>;
+
 export type UserRole = Tables<'user_roles'>;
 
 export type AuthClaims = Omit<JwtPayload, "app_metadata" | "user_metadata"> & {

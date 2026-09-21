@@ -2,7 +2,7 @@ import { resetPasswordSchema } from "../validators/reset-password.schema";
 import { updateUserPassword } from "../services/reset-password";
 import { getUser } from "../services/session"; 
 import { executeSharedLogout } from "./logout";
-import { BaseAuthResponse,AuthActivityLogs, BaseFormPayload } from "@bn/types";
+import { BaseResponse, AuthActivityLogs, BaseFormPayload } from "@bn/types";
 import { formatZodErrors, logDataSchema } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
 import { activityLogger } from "@bn/services";
@@ -10,9 +10,10 @@ import { activityLogger } from "@bn/services";
 
 interface ExecuteResetPasswordParams extends BaseFormPayload {
   logData: AuthActivityLogs;
+  eventType?: string;
 }
 
-export async function executeSharedResetPassword({payload, logData}: ExecuteResetPasswordParams): Promise<BaseAuthResponse>{
+export async function executeSharedResetPassword({payload, logData, eventType = 'spmb_reset_password'}: ExecuteResetPasswordParams): Promise<BaseResponse>{
 
   const parsed = resetPasswordSchema.safeParse(payload);
   const parsedLogData = logDataSchema.safeParse(logData);
@@ -36,9 +37,8 @@ export async function executeSharedResetPassword({payload, logData}: ExecuteRese
     const result = await updateUserPassword(parsed.data.newPassword);
 
     if (!result.success) {
-          
         await activityLogger<AuthActivityLogs> ({
-          event: 'reset_password',
+          event: eventType,
           status: "failed",
           metadata: {
             credential: userData.user.email,
@@ -46,13 +46,15 @@ export async function executeSharedResetPassword({payload, logData}: ExecuteRese
             ...parsedLogData.data
           }
         });
-        return result;
+        return {
+          success: result.success,
+          message: ''
+        };
       }
       
-        // log berhasl login
       await activityLogger<AuthActivityLogs> ({
         userId: result.id,
-        event: 'reset_password',
+        event: eventType,
         status: 'success',
         metadata: {
           id: result.id,
@@ -62,7 +64,10 @@ export async function executeSharedResetPassword({payload, logData}: ExecuteRese
       });
 
       await executeSharedLogout({ 
-        eventType: 'reset_password_logout'
+        eventType: eventType
       });
-      return result;
+      return {
+        success: result.success,
+        message: ''
+      };
 }

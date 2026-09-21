@@ -1,7 +1,7 @@
 'use server';
 
 import { headers } from "next/headers";
-import { executeAdminInvite } from "@bn/auth/admin";
+import { executeAdminInvite } from "@/features/users/invite";
 import { isValidationError } from "@bn/utils";
 
 export async function inviteAdminAction(_prevState: unknown, formData: FormData) {
