@@ -1,7 +1,7 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { PembayaranStepData } from "@/types/form.types";
-import type { RPCGetPembayaranResult, BaseRPCParams} from "@/types/rpc.types";
+import type { RPCGetPembayaranResult, BaseRPCParams} from "@bn/types";
 
 export async function getPembayaran({ formId }: BaseRPCParams): Promise<PembayaranStepData | null> {
   const supabase = await createSupabaseServer();

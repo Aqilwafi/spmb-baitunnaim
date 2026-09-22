@@ -1,7 +1,7 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { DokumenStepData } from "@/types/form.types";
-import type { RPCGetDokumen, BaseRPCParams} from "@/types/rpc.types";
+import type { RPCGetDokumen, BaseRPCParams} from "@bn/types";
 
 interface RPCParams extends BaseRPCParams {
     tipeDokumenId: number

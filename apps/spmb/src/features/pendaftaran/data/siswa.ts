@@ -2,7 +2,7 @@
 import { formatZodErrors, formIdParamsSchema } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
 import type { BiodataSiswaDetailItemData } from "@/types/biodata.types";
-import type { BaseRPCParams } from "@/types/rpc.types";
+import type { BaseRPCParams } from "@bn/types";
 import { getTahunAjaranAktifData } from "@/features/master/tahun-ajaran";
 import { getBiodataSiswaDetail } from "@/services/pendaftaran/data/siswa";
 

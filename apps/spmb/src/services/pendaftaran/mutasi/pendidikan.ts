@@ -2,7 +2,7 @@ import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { PendidikanSebelumnyaInput } from "@bn/validators";
 import type { FormSubmitResult } from "@/types/form.types";
-import type { BaseRPCParams, BaseRPCSubmitResponse,  } from "@/types/rpc.types";
+import type { BaseRPCParams, BaseRPCSubmitResponse,  } from "@bn/types";
 
 interface RPCParams extends BaseRPCParams {
   input: PendidikanSebelumnyaInput;

@@ -2,7 +2,7 @@ import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { EnumRelasiKeluarga } from "@bn/types";
 import type { BiodataKeluargaItemData } from "@/types/biodata.types";
-import type { RPCGetBiodataKeluarga, BaseRPCParams} from "@/types/rpc.types";
+import type { RPCGetBiodataKeluarga, BaseRPCParams} from "@bn/types";
 
 interface RPCParams extends BaseRPCParams {
     relationType: EnumRelasiKeluarga

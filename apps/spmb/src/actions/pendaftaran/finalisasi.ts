@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { isValidationError } from "@bn/utils";
 import type { BaseResponse } from "@bn/types";
 import type { FormSubmitResult } from "@/types/form.types";
-import { BaseRPCParams } from "@/types/rpc.types";
+import { BaseRPCParams } from "@bn/types";
 import { submitFinalisasi } from "@/features/pendaftaran/submit/finalisasi";
 
 export async function finalisasiPendaftaranAction({formId}: BaseRPCParams): Promise<BaseResponse<FormSubmitResult>> {

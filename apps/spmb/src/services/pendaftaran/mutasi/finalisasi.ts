@@ -3,7 +3,7 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { FormSubmitResult } from '@/types/form.types';
-import type { BaseRPCSubmitResponse, BaseRPCParams} from "@/types/rpc.types";
+import type { BaseRPCSubmitResponse, BaseRPCParams} from "@bn/types";
 
 export async function insertFinalisasi({formId}: BaseRPCParams): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();

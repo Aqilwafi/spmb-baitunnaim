@@ -4,7 +4,7 @@ import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { InitFormInput } from "@bn/validators";
 import type { FormSubmitResult } from "@/types/form.types";
-import type { BaseRPCSubmitResponse } from "@/types/rpc.types";
+import type { BaseRPCSubmitResponse } from "@bn/types";
 
 export async function insertInitForm(input: InitFormInput): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();

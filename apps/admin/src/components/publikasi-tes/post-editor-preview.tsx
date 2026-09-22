@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TiptapEditor } from "@/components/editor";
+import { TiptapEditor } from "./editor"; 
 import { Eye, Edit3, Image as ImageIcon, Tag, Building, Folder } from "lucide-react";
 
 // Mock Data Dummy (Substitusi Data dari Database)

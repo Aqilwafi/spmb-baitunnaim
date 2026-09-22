@@ -56,6 +56,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         canManage={canManage}
         user={user}
       />
+      {/* Background dan padding global sudah dipegang oleh <main> ini */}
       <main className="flex-1 overflow-y-auto p-6">
         {children}
       </main>

@@ -10,3 +10,4 @@ export * from './spmb/biodata-core.types';
 export * from './spmb/pendaftaran-core.types';
 export * from './shared/enum.types';
 export * from './shared/log.types';
+export * from './shared/rpc.types';

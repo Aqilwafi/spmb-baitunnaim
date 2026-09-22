@@ -1,7 +1,7 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
 import type { BiodataSiswaDetailItemData } from "@/types/biodata.types";
-import type { BaseRPCParams } from "@/types/rpc.types";
+import type { BaseRPCParams } from "@bn/types";
 
 export async function getBiodataSiswaDetail({formId}: BaseRPCParams): Promise<BiodataSiswaDetailItemData|null> {
   const supabase = await createSupabaseServer();

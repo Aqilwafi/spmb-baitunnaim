@@ -4,7 +4,7 @@ import { createValidationError } from "@bn/utils";
 import type { FormSubmitResult } from "@/types/form.types";
 import { checkUserAccess } from "@/features/auth/guards";
 import { formIdParamsSchema, formatZodErrors} from "@bn/validators";
-import { BaseRPCParams } from "@/types/rpc.types";
+import { BaseRPCParams } from "@bn/types";
 import { insertFinalisasi } from "@/services/pendaftaran/mutasi/finalisasi";
 
 export async function submitFinalisasi({formId}: BaseRPCParams): Promise<FormSubmitResult> {
