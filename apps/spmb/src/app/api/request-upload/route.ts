@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     // ✅ Mengembalikan NextResponse.json untuk Validation Error (HTTP 400)
+    
     if (isValidationError(error)) {
       return NextResponse.json(
         {

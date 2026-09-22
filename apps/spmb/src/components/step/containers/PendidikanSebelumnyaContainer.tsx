@@ -11,10 +11,10 @@ export default async function PendidikanSebelumnyaContainer({
     return null;
   }
 
-  // Jika ada master data yang diperlukan (misal: jenis sekolah, dll), ambil di sini via Promise.all
-  const data = status === "complete" 
-    ? await getPendidikanSiswaSebelumnya({ formId: formId })
-    : null;
+  const data =
+    status === "complete"
+      ? await getPendidikanSiswaSebelumnya({ formId })
+      : null;
 
   return (
     <PendidikanSebelumnyaStep

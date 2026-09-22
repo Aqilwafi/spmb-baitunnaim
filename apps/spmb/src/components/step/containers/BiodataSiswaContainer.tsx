@@ -13,13 +13,14 @@ export default async function BiodataSiswaContainer({
   }
 
   const [statusRumahOptions, tinggalBersamaOptions] = await Promise.all([
-          getStatusRumahOptions(),
-          getTinggalBersamaOptions()
-      ]);
+    getStatusRumahOptions(),
+    getTinggalBersamaOptions(),
+  ]);
 
-  const data = status === "complete" 
-    ? await getBiodataSiswaDetailData({formId})
-    : null;
+  const data =
+    status === "complete"
+      ? await getBiodataSiswaDetailData({ formId })
+      : null;
 
   return (
     <BiodataSiswaDetailStep

@@ -11,7 +11,7 @@ import { ArrowLeft } from 'lucide-react';
 export default async function DashboardPendaftaranLayout({ children }: { children: React.ReactNode }) {
   const claims = await getCurrentClaims();
 
-  if (!claims) return <Unauthorized />;
+  if (!claims) return <Unauthorized link="/login" />;
 
   const claimsData = claims;
 

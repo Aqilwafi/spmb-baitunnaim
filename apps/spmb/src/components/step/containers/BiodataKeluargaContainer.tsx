@@ -21,19 +21,17 @@ export default async function BiodataKeluargaContainer({
 
   const relationType = relationMap[code || "BIODATA_FATHER"] || "AYAH";
 
-  // 1. Pengecekan requirement Wali HANYA jika sedang di step BIODATA_WALI
-  let isWaliMandatory = false ;
-
+  // Check requirement Wali HANYA jika step terkait adalah BIODATA_WALI
+  let isWaliMandatory = false;
   if (code === "BIODATA_WALI") {
-    // Fungsi ini hanya dieksekusi/query ke database di step WALI saja
     isWaliMandatory = await checkWaliRequirementStatus(formId);
-
   }
 
   // Ambil data spesifik berdasarkan relasi jika step sudah complete
-  const data = status === "complete" 
-  ? await getBiodataKeluargaData({ formId, relationType: relationType }) 
-  : null;
+  const data =
+    status === "complete"
+      ? await getBiodataKeluargaData({ formId, relationType })
+      : null;
 
   return (
     <BiodataKeluargaStep

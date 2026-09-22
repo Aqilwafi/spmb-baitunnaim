@@ -14,7 +14,7 @@ export default function ForgotPasswordPage() {
         
         <div className="flex flex-col items-center gap-2 text-center mt-4">
           <div className="relative w-[100px] h-[100px] shadow-sm rounded-full">
-            <CompanyLogo />
+            <CompanyLogo className="w-25 h-20 mt-2" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
             {"BAITUN NA'IM"}

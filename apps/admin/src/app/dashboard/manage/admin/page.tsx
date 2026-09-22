@@ -3,11 +3,14 @@
 import BackButton from "@/components/buttons/BackButton";
 import { ShieldUser } from "lucide-react";
 import { getListUsers } from "@/features/users/list";
+import { getMasterRolesOptions } from "@/features/users/roles/role";
 import ManageAdminClient from "@/components/manage/ManageAdminClient";
 
 export default async function ManageAdminPage() {
   // Panggil data langsung di dalam Server Component
   const users = await getListUsers([2, 4, 5]);
+  const roleList = await getMasterRolesOptions([4, 5]);
+  
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -33,7 +36,7 @@ export default async function ManageAdminPage() {
         </div>
 
         {/* Client Component untuk Tabel dan Tombol Invite */}
-        <ManageAdminClient users={users} />
+        <ManageAdminClient users={users} roleList={roleList} />
 
       </div>
     </div>

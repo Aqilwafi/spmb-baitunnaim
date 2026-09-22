@@ -5,7 +5,7 @@ import {  admissionStatusLabel, createValidationError } from "@bn/utils";
 import type { FinalisasiResult } from "@/types/form.types";
 import { getFinalisasi, getIsFinalForm } from "@/services/pendaftaran/data/finalisasi";
 
-export type FormattedFinalisasi = Omit<FinalisasiResult, "admissionStatus"> & {
+export type FormattedFinalisasi = FinalisasiResult & {
   formattedAdmissionStatus: string;
 };
 

@@ -19,6 +19,8 @@ export async function insertDokumen({formId, input}: RPCParams): Promise<FormSub
     p_document_type_code: input.jenisDokumen,
   });
 
+  
+
   if (error) throw error;
 
   const result = data as unknown as BaseRPCSubmitResponse;

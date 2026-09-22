@@ -2,7 +2,7 @@ import { UserX, LogIn } from "lucide-react";
 import { Button } from "../core/button";
 import Link from "next/link";
 
-export function Unauthorized({link}: any) {
+export function Unauthorized({ link = "/login" }: { link?: string }) {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-50 p-6 min-h-screen">
       <div className="flex flex-col items-center gap-6 p-10 bg-white shadow-2xl rounded-[2.5rem] w-full max-w-lg text-center border border-blue-50">
@@ -21,10 +21,13 @@ export function Unauthorized({link}: any) {
         </p>
 
         <div className="w-full pt-4">
-          <Button onClick={link} className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-blue-100"> 
-            <LogIn size={18} />
-            Login Kembali
-          </Button> 
+          {/* Bungkus Button dengan Link */}
+          <Link href={link} className="w-full block">
+            <Button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-blue-100"> 
+              <LogIn size={18} />
+              Login Kembali
+            </Button> 
+          </Link>
         </div>
       </div>
     </div>

@@ -30,7 +30,7 @@ export const usernameField = z
   .or(z.literal(""));
 
 // --- FIELD TAMBAHAN (Role ID & User ID) ---
-export const roleIdField = z
+export const roleIdField = z.coerce
   .number()
   .int("Role ID harus berupa bilangan bulat")
   .positive("Role ID tidak valid");

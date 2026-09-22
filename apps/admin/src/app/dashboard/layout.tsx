@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const claims = await getCurrentClaims();
-  if (!claims) return <Unauthorized />;
+  if (!claims) return <Unauthorized link="/" />;
 
   const user = {
     email: claims.email || "",

@@ -1,4 +1,3 @@
-// components/pendaftaran/AccordionOrchestrator.tsx
 "use client";
 
 import { useState } from "react";
@@ -24,7 +23,7 @@ export default function AccordionOrchestrator({
   };
 
   return (
-    <section className="p-6 space-y-4 max-w-3xl mx-auto">
+    <div className="space-y-3 sm:space-y-4">
       {stepElements.map((step) => {
         const isOpen = openStep === step.id;
         const isLocked = step.status === "locked";
@@ -34,7 +33,7 @@ export default function AccordionOrchestrator({
         return (
           <Card
             key={step.id}
-            className={`rounded-3xl shadow-sm p-0 transition-all duration-200
+            className={`rounded-2xl sm:rounded-3xl shadow-sm p-0 transition-all duration-200 overflow-hidden
               ${isLocked ? "border-gray-100 opacity-60" : "hover:border-blue-300"}
               ${isActive ? "ring-2 ring-blue-500 border-blue-500 shadow-md" : ""}`}
           >
@@ -42,11 +41,11 @@ export default function AccordionOrchestrator({
               variant="ghost"
               onClick={() => toggleStep(step.id ?? 0)}
               disabled={isLocked}
-              className="w-full flex justify-between items-center p-5 rounded-3xl shadow-none"
+              className="w-full !flex !justify-between !items-center p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl shadow-none h-auto"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-colors
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0 transition-colors
                     ${isComplete ? "bg-green-500 text-white" : ""}
                     ${isActive ? "bg-blue-600 text-white" : ""}
                     ${isLocked ? "bg-gray-100 text-gray-400" : ""}`}
@@ -54,17 +53,17 @@ export default function AccordionOrchestrator({
                   {isComplete ? "✓" : step.stepOrder}
                 </div>
 
-                <span className={`font-bold ${isLocked ? "text-gray-400" : "text-gray-700"}`}>
+                <span className={`font-bold text-sm sm:text-base text-left ${isLocked ? "text-gray-400" : "text-gray-800"}`}>
                   {step.label}
                 </span>
               </div>
 
               {isLocked ? (
-                <Lock size={16} className="text-gray-300" />
+                <Lock size={16} className="text-gray-300 shrink-0" />
               ) : isOpen ? (
-                <ChevronUp className="text-gray-400" />
+                <ChevronUp className="text-gray-400 shrink-0" />
               ) : (
-                <ChevronDown className="text-gray-400" />
+                <ChevronDown className="text-gray-400 shrink-0" />
               )}
             </Button>
 
@@ -77,7 +76,8 @@ export default function AccordionOrchestrator({
                   transition={{ duration: 0.25, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="px-5 pb-6 border-t pt-4 bg-white rounded-b-3xl">
+                  {/* Container konten accordion tanpa padding berlebih */}
+                  <div className="px-3 sm:px-6 pb-4 sm:pb-6 border-t border-gray-100 pt-3 sm:pt-4 bg-white">
                     {step.node}
                   </div>
                 </motion.div>
@@ -86,6 +86,6 @@ export default function AccordionOrchestrator({
           </Card>
         );
       })}
-    </section>
+    </div>
   );
 }

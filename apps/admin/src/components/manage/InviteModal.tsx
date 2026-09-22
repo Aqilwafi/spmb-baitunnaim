@@ -5,13 +5,15 @@
 import { Modal, Button } from "@bn/ui";
 import { X } from "lucide-react";
 import InviteAdminForm from "@/components/auth/InviteForm"; // Sesuaikan path jika berbeda
+import { MasterData } from "@bn/types";
 
 interface InviteModalProps {
   open: boolean;
   onClose: () => void;
+  roleList: MasterData[];
 }
 
-export default function InviteModal({ open, onClose }: InviteModalProps) {
+export default function InviteModal({ open, onClose, roleList  }: InviteModalProps) {
   return (
     <Modal open={open} onClose={onClose}>
       <div className="relative">
@@ -28,7 +30,7 @@ export default function InviteModal({ open, onClose }: InviteModalProps) {
 
         {/* Bungkus Form */}
         <div className="pt-2">
-          <InviteAdminForm onSuccess={onClose} />
+          <InviteAdminForm onSuccess={onClose} roleList={roleList} />
         </div>
       </div>
     </Modal>

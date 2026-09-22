@@ -3,15 +3,17 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
-import { Mail, UserPlus } from "lucide-react";
+import { Mail, UserPlus, ShieldCheck, User } from "lucide-react";
 import { inviteAdminAction } from "@/actions/auth/invite";
-import { Button } from "@bn/ui"; // ✨ Import Button dari @bn/ui
+import { Button, Input, Label, Select } from "@bn/ui"; 
+import { MasterData } from "@bn/types";
 
 interface InviteAdminFormProps {
   onSuccess?: () => void;
+  roleList: MasterData[];
 }
 
-export default function InviteAdminForm({ onSuccess }: InviteAdminFormProps) {
+export default function InviteAdminForm({ onSuccess, roleList }: InviteAdminFormProps) {
   const [state, formAction, isPending] =
     useActionState(inviteAdminAction, null);
 
@@ -25,6 +27,9 @@ export default function InviteAdminForm({ onSuccess }: InviteAdminFormProps) {
     }
   }, [state, onSuccess]);
 
+  const inputBaseClass =
+    "w-full px-4 py-3 sm:px-5 sm:py-4 rounded-xl sm:rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 text-sm sm:text-base transition-colors";
+
   return (
     <div className="bg-white p-2">
       <div className="flex items-center gap-2 mb-4">
@@ -35,34 +40,56 @@ export default function InviteAdminForm({ onSuccess }: InviteAdminFormProps) {
       </div>
 
       <form action={formAction} className="flex flex-col gap-4">
-        <div>
-          <label className="text-sm font-medium text-gray-700 mb-1 block">
-            Email Admin
-          </label>
+        {/* Field Email */}
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label htmlFor="email" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+            <Mail size={14} className="text-blue-600 shrink-0" />
+            <span>EMAIL ADMIN</span>
+          </Label>
 
           <div className="relative">
-            <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-            <input
+            <Input
+              id="email"
               type="email"
               name="email"
               required
               placeholder="admin@example.com"
-              className="
-                text-black
-                w-full
-                rounded-xl
-                border
-                border-gray-300
-                pl-10
-                pr-4
-                py-3
-                outline-none
-                focus:ring-2
-                focus:ring-blue-500
-                focus:border-blue-500
-              "
+              className={inputBaseClass}
             />
           </div>
+        </div>
+
+        {/* Field Username (Opsional) */}
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label htmlFor="username" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+            <User size={14} className="text-blue-600 shrink-0" />
+            <span>USERNAME <span className="text-gray-400 font-normal">(OPSIONAL)</span></span>
+          </Label>
+
+          <div className="relative">
+            <Input
+              id="username"
+              type="text"
+              name="username"
+              placeholder="username_admin"
+              className={inputBaseClass}
+            />
+          </div>
+        </div>
+
+        {/* Field Role Dropdown */}
+        <div className="space-y-1.5 sm:space-y-2">
+          <Label className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+            <ShieldCheck size={14} className="text-blue-600 shrink-0" />
+            <span>ROLE ADMIN</span>
+          </Label>
+          <Select
+            name="roleId"
+            required
+            placeholder="Pilih Role"
+            options={roleList}
+            className={inputBaseClass}
+          />
         </div>
 
         {state?.message && (
@@ -75,14 +102,14 @@ export default function InviteAdminForm({ onSuccess }: InviteAdminFormProps) {
           </p>
         )}
 
-        {/* Mengganti tag button HTML biasa dengan komponen Button @bn/ui */}
+        {/* Tombol Submit */}
         <Button
           type="submit"
           variant="primary"
           isLoading={isPending}
-          className="w-full rounded-xl"
+          className="w-full rounded-xl py-4 mt-2"
         >
-          Kirim Invite
+          Kirim Undangan
         </Button>
       </form>
     </div>

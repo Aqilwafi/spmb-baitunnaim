@@ -62,12 +62,15 @@ export const getMasterTahunAjaran = () =>
         .select("*")
         .eq("is_active", true)
         .maybeSingle();
+      
       if (error) throw new Error(error.message);
+      
       return data as MasterTahunAjaran | null;
     },
     ["master_tahun_ajaran"],
     ["master_tahun_ajaran"]
   )();
+
   
 
 export const getMasterStatusRumah = () =>

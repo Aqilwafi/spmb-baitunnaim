@@ -15,7 +15,6 @@ export default function LogoutButton() {
     setIsLoading(true);
     const response = await logoutAction();
     
-    // Periksa berdasarkan properti 'success' dari BaseResponse
     if (response?.success) {
       router.refresh();
       router.push("/login");
@@ -30,10 +29,14 @@ export default function LogoutButton() {
       onClick={handleLogout}
       disabled={isLoading}
       variant="ghost" 
-      className="text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center gap-2 rounded-xl"
+      className="text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center gap-1.5 rounded-xl px-2.5 sm:px-3 py-1.5"
+      title="Logout"
     >
-      <LogOut size={16} />
-      {isLoading ? "Keluar..." : "Logout"}
+      <LogOut size={18} className="shrink-0" />
+      {/* Teks disembunyikan di mobile, hanya muncul di layar sm ke atas */}
+      <span className="hidden sm:inline font-medium text-xs sm:text-sm">
+        {isLoading ? "Keluar..." : "Logout"}
+      </span>
     </Button>
   );
 }

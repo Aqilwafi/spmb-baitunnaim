@@ -45,11 +45,11 @@ declare
 
     -- 5. Cek kelengkapan dokumen wajib (Pastikan ke-3 dokumen wajib SUDAH DI-UPLOAD)
     -- Status tidak harus VERIFIED, yang penting file-nya sudah di-submit oleh pendaftar
-    select (count(distinct mtd.code) = 3) into v_is_dokumen_lengkap
+    select (count(distinct mtd.code) = 4) into v_is_dokumen_lengkap
     from public.dokumen d
     join public.master_tipe_dokumen mtd on mtd.id = d.tipe_dokumen_id
     where d.form_pendaftaran_id = p_form_id 
-        and mtd.code in ('KK_TYPE_DOC', 'KTP_TYPE_DOC', 'AKTE_TYPE_DOC')
+        and mtd.code in ('KK_TYPE_DOC', 'KTP_AYAH_TYPE_DOC', 'KTP_IBU_TYPE_DOC','AKTE_TYPE_DOC')
         and d.file_url is not null;
 
     if not v_is_dokumen_lengkap then

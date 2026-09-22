@@ -5,6 +5,7 @@ import { createSupabaseServer } from "@bn/supabase/server";
 import type { Profile, UserRoles } from "@bn/types";
 
 export interface UserData {
+    userRoleId: UserRoles['id'];
     id: Profile['id'];
     email: Profile['email'];
     username: Profile['username'];
@@ -17,20 +18,22 @@ export interface UserData {
 export async function getUsersByRoleIds(roleIds: number[]): Promise<UserData[]> {
     const supabase = await createSupabaseServer();
  
+    // Mulai query dari user_roles sebagai tabel utama
     const { data, error } = await supabase
-        .from('profiles')
+        .from('user_roles')
         .select(`
             id,
-            username,
-            email,
-            phone,
+            role_id,
             created_at,
-            user_roles!inner (
-                role_id,
+            profiles!inner (
+                id,
+                username,
+                email,
+                phone,
                 created_at
             )
         `)
-        .in('user_roles.role_id', roleIds);
+        .in('role_id', roleIds);
 
     if (error) {
         throw error;
@@ -42,20 +45,18 @@ export async function getUsersByRoleIds(roleIds: number[]): Promise<UserData[]> 
 
     // Mapping data mentah dari Supabase ke interface UserData
     return data.map((item) => {
-        // Karena relasi join mengembalikan array, ambil elemen pertama 
-        // (atau sesuaikan jika user punya banyak role yang cocok)
-        const userRole = Array.isArray(item.user_roles) 
-            ? item.user_roles[0] 
-            : item.user_roles;
+        // Karena profiles adalah relasi tunggal (belongs-to dari sudut pandang user_roles)
+        const profile = Array.isArray(item.profiles) ? item.profiles[0] : item.profiles;
 
         return {
-            id: item.id,
-            email: item.email,
-            username: item.username,
-            phone: item.phone,
-            roleId: userRole?.role_id, // Fallback default jika kosong
-            accountCreatedAt: item.created_at,
-            roleAssignedAt: userRole?.created_at,
+            userRoleId: item.id,
+            id: profile?.id,
+            email: profile?.email,
+            username: profile?.username,
+            phone: profile?.phone,
+            roleId: item.role_id,
+            accountCreatedAt: profile?.created_at,
+            roleAssignedAt: item.created_at,
         };
     });
 }

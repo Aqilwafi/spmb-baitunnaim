@@ -9,6 +9,7 @@ export async function getTahunAjaranAktifData(): Promise<MasterData> {
     
     if (!rawData) {
         throw new Error("Tahun ajaran aktif tidak ditemukan di sistem.");
+        //return null;
     }
 
     return mapTahunAjaranAktif(rawData);

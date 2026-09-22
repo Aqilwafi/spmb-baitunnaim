@@ -11,15 +11,15 @@ export default async function FinalisasiContainer({
     return null;
   }
 
-  console.log (status)
   const isFinal = await  getIsFinalData(formId);
-  console.log(isFinal)
 
   // ubah status manual dari active menjadi completed jika getIsFinalData = true.
 
   const data = isFinal
       ? await getFinalisasiData(formId) 
       : null;
+  
+  
 
   // Step 11 bersifat konfirmasi akhir, jadi tidak perlu fetch data dari database khusus step ini, 
   // kecuali Anda ingin mengambil ringkasan status pendaftaran/pembayaran.

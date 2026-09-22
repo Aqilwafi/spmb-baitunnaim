@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
 import LoginForm from "@/components/auth/loginForm";
 
-export default function LoginPage() {
+export default function HomePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
       <div className="flex flex-col items-center gap-6 max-w-md w-full mx-auto">

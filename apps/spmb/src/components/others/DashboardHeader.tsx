@@ -1,23 +1,48 @@
-import LogoutButton from "@/components/buttons/LogoutButtons"; // Sesuaikan path import-nya
+// components/others/DashboardHeader.tsx
+
+import LogoutButton from "@/components/buttons/LogoutButtons";
+import BackButton from "@/components/buttons/BackButton";
 import { CompanyLogo } from "@bn/ui";
 
-export default function DashboardHeader({ name }: { name: string }) {
+interface DashboardHeaderProps {
+  name: string;
+  showBackButton?: boolean;
+}
+
+export default function DashboardHeader({
+  name,
+  showBackButton = true,
+}: DashboardHeaderProps) {
   return (
-    <header className="flex justify-between items-center max-w-5xl mx-auto h-16 px-4 md:px-6">
-      {/* Kontainer Halo & Logo */}
-      <div className="flex items-center gap-3 text-gray-700 font-medium text-sm md:text-base">
-        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-gray-200 border border-gray-100 flex-shrink-0">
-          <CompanyLogo className="w-full h-full object-cover" />
+    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <div className="flex justify-between items-center max-w-5xl mx-auto h-14 sm:h-16 px-3 sm:px-6 gap-2">
+        {/* Sisi Kiri: Back Button (Opsional) + User Info */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          {showBackButton && (
+            <div className="shrink-0">
+              <BackButton />
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-gray-100 border border-gray-200 shrink-0">
+              <CompanyLogo className="w-full h-full object-cover" />
+            </div>
+
+            <span className="text-xs sm:text-sm font-semibold text-gray-800 truncate">
+              <span className="hidden sm:inline font-normal text-gray-500">
+                Halo,{" "}
+              </span>
+              {name}
+            </span>
+          </div>
         </div>
 
-        <span className="truncate max-w-[150px] sm:max-w-none">
-          <span className="hidden sm:inline text-gray-800 font-normal">Halo, </span>
-          {name}
-        </span>
+        {/* Sisi Kanan: Logout Button */}
+        <div className="shrink-0">
+          <LogoutButton />
+        </div>
       </div>
-
-      {/* Langsung pakai komponen LogoutButton yang sudah ada */}
-      <LogoutButton />
     </header>
   );
 }
