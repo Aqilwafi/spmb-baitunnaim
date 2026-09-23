@@ -16,8 +16,9 @@ export async function inviteAdminAction(_prevState: unknown, formData: FormData)
             realIp: headersList.get("x-real-ip"),
         };
         const siteUrl = `${process.env.NEXT_PUBLIC_ADMIN_URL!}/auth/callback?next=/set-password`;
+        console.log('➡️ [DEBUG] Sending invite with redirectTo:', siteUrl);
         const result = await executeAdminInvite({payload, logData, redirectUrl: siteUrl});
-
+        
         if (!result.success) {
             return result;
         }

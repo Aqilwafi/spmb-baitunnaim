@@ -10,11 +10,11 @@ export async function GET(request: Request) {
   const errorCode = requestUrl.searchParams.get('error_code');
   
   // Default redirect ke set-password untuk flow invite/forgot password, atau ambil dari parameter 'next'
-  const next = requestUrl.searchParams.get('next') ?? '/auth/set-password';
+  const next = requestUrl.searchParams.get('next') ?? '/set-password';
 
   // Jika ada error dari Supabase, lempar kembali ke halaman login/error
   if (error) {
-    const loginUrl = new URL('/auth/login', requestUrl.origin);
+    const loginUrl = new URL('/', requestUrl.origin);
     loginUrl.searchParams.set('error', errorCode ?? error);
     return NextResponse.redirect(loginUrl);
   }
@@ -24,12 +24,12 @@ export async function GET(request: Request) {
     const supabase = await createSupabaseServer();
     const { error: verifyError } = await supabase.auth.verifyOtp({
       token_hash,
-      type: type as any,
+      type,
     });
 
     if (verifyError) {
       console.error('Verify OTP error:', verifyError.name, verifyError.message);
-      const loginUrl = new URL('/auth/login', requestUrl.origin);
+      const loginUrl = new URL('/', requestUrl.origin);
       loginUrl.searchParams.set('error', 'invalid_token');
       return NextResponse.redirect(loginUrl);
     }
@@ -39,5 +39,5 @@ export async function GET(request: Request) {
   }
 
   // Fallback jika parameter tidak lengkap
-  return NextResponse.redirect(new URL('/auth/login', requestUrl.origin));
+  return NextResponse.redirect(new URL('/', requestUrl.origin));
 }
