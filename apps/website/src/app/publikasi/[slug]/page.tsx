@@ -16,7 +16,7 @@ export default async function PublikasiDetailPage({ params }: Props) {
     <div className="flex flex-col min-h-screen text-black bg-white">
       <Navbar />
       <main className="flex-1 pt-22">
-        <PostDetail post={post} />
+        {/* <PostDetail post={post} /> */}
       </main>
       <Footer />
     </div>

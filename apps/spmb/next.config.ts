@@ -1,3 +1,4 @@
+import type { NextConfig } from "next";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
@@ -11,17 +12,26 @@ if (process.env.NODE_ENV !== "production") {
   dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 }
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   output: "standalone",
   transpilePackages: [
-    "@bn/ui",
-    "@bn/supabase",
-    "@bn/auth",
     "@bn/validators",
+    "@bn/constants",
     "@bn/services",
-    "@bn/utils"
+    "@bn/supabase",
+    "@bn/utils",
+    "@bn/auth",
+    "@bn/ui",
   ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "rywammolujagaasauldp.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

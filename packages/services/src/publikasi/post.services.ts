@@ -2,14 +2,14 @@
 // @bn/services
 
 import "server-only";
-import { createSupabaseServer } from "@bn/supabase/server";
+import { createSupabaseStatic } from "@bn/supabase/static";
 import { withCache } from "@bn/utils";
 import type { Posts, PostTag, PostImages, PostStatusEnum } from "@bn/types";
 
 export const getPosts = () =>
   withCache<Posts[]>(
     async () => {
-      const supabase = await createSupabaseServer();
+      const supabase = await createSupabaseStatic();
       const { data, error } = await supabase
         .from("posts")
         .select("*")
@@ -26,7 +26,7 @@ export const getPosts = () =>
 export const getPostsByStatus = (statusPosts: PostStatusEnum) =>
   withCache<Posts[]>(
     async () => {
-      const supabase = await createSupabaseServer();
+      const supabase = await createSupabaseStatic();
       const { data, error } = await supabase
         .from("posts")
         .select("*")
@@ -44,7 +44,7 @@ export const getPostsByStatus = (statusPosts: PostStatusEnum) =>
 export const getPublishedPostBySlug = (slug: string) =>
   withCache<Posts | null>(
     async () => {
-      const supabase = await createSupabaseServer();
+      const supabase = await createSupabaseStatic();
       const { data, error } = await supabase
         .from("posts")
         .select("*")
@@ -63,7 +63,7 @@ export const getPublishedPostBySlug = (slug: string) =>
 export const getPostTagByPostId = (postsId: number[]) =>
   withCache<PostTag[]>(
     async () => {
-      const supabase = await createSupabaseServer();
+      const supabase = await createSupabaseStatic();
       const { data, error } = await supabase
         .from("post_tag")
         .select("*")
@@ -80,7 +80,7 @@ export const getPostTagByPostId = (postsId: number[]) =>
 export const getPostImagesByPostId = (postsId: number[]) =>
   withCache<PostImages[]>(
     async () => {
-      const supabase = await createSupabaseServer();
+      const supabase = await createSupabaseStatic();
       const { data, error } = await supabase
         .from("post_images")
         .select("*")

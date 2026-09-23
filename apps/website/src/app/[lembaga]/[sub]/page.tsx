@@ -17,7 +17,7 @@ export default async function SubLembagaPage({ params }: Props) {
       <Navbar />
       <main className="flex-1 pt-22">
         <Hero />
-        <PostDetail post={post} />
+        {/* <PostDetail post={post} /> */}
       </main>
       <Footer />
     </div>

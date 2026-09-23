@@ -11,7 +11,7 @@ export default async function PublikasiPage() {
     <div className="flex flex-col min-h-screen text-black bg-white">
       <Navbar />
       <main className="flex-1 pt-22">
-        <PublikasiList posts={posts} />
+        {/* <PublikasiList posts={posts} /> */}
       </main>
       <Footer />
     </div>
