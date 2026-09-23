@@ -39,7 +39,7 @@ export async function executeAdminInvite({payload, logData, redirectUrl}: Execut
       );
     };
 
-  const result = await inviteUserByEmail(parsed.data.email, parsed.data.roleId, redirectUrl);
+  const result = await inviteUserByEmail(parsed.data.email, parsed.data.roleId, redirectUrl, parsed.data.username ?? null);
 
   if (!result.success) {
     await activityLogger<AuthActivityLogs> ({

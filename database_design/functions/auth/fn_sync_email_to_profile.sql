@@ -14,3 +14,5 @@ begin
     return new;
 end;
 $$;
+
+revoke execute on function public.fn_sync_email_to_profile() from public, anon, authenticated;
