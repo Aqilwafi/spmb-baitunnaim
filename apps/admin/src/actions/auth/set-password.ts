@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { executeSharedLogin, executeSharedResetPassword } from "@bn/auth";
 import { isValidationError } from "@bn/utils";
 import type { BaseResponse } from "@bn/types";
+import { BaseErrorMessage, LogAuthEvent } from "@bn/constants";
 
 export async function setPasswordAction(_prevState: BaseResponse | null, formData: FormData): Promise<BaseResponse> {
   try {
@@ -20,7 +21,7 @@ export async function setPasswordAction(_prevState: BaseResponse | null, formDat
     const result = await executeSharedResetPassword({
       payload,
       logData,
-      eventType: 'admin_set_new_password'
+      eventType: LogAuthEvent.ADMIN_SET_NEW_PASSWORD
     });
 
     if (!result.success) {
@@ -37,7 +38,7 @@ export async function setPasswordAction(_prevState: BaseResponse | null, formDat
     }
     return {
       success: false,
-      message: 'Terjadi kesalahan pada server.'
+      message: BaseErrorMessage.SERVER_ERROR
     } 
   }
 

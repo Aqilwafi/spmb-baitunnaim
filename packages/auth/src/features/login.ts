@@ -5,15 +5,14 @@ import { activityLogger } from "@bn/services";
 import { formatZodErrors } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
 import type { BaseFormPayload, AuthActivityLogs, BaseResponse } from "@bn/types";
+import { DefaultAuthMessage, DeafultValidationMessage, LogStatus } from "@bn/constants";
 
 interface ExecuteLoginParams extends BaseFormPayload {
   logData: AuthActivityLogs;
-  eventType?: string;
+  eventType: string;
 }
 
-const GENERIC_LOGIN_RESPONSE = 'Email atau Password salah.';
-
-export async function executeSharedLogin({payload, logData, eventType = 'user_login'}: ExecuteLoginParams): Promise<BaseResponse> {
+export async function executeSharedLogin({payload, logData, eventType}: ExecuteLoginParams): Promise<BaseResponse> {
   
   const parsed = loginSchema.safeParse(payload);
   const parsedLogData = logDataSchema.safeParse(logData);
@@ -21,14 +20,14 @@ export async function executeSharedLogin({payload, logData, eventType = 'user_lo
   if (!parsed.success) {
     throw createValidationError(
       formatZodErrors(parsed.error),
-      parsed.error.issues[0]?.message ?? "Format Data tidak valid."
+      parsed.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
     );
   }
 
   if (!parsedLogData.success) {
     throw createValidationError(
       formatZodErrors(parsedLogData.error),
-      parsedLogData.error.issues[0]?.message ?? "Format Data tidak valid."
+      parsedLogData.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
     );
   }
 
@@ -42,7 +41,7 @@ export async function executeSharedLogin({payload, logData, eventType = 'user_lo
     await activityLogger<AuthActivityLogs> ({
       userId: null, // Gagal login berarti belum punya user_id actor yang valid
       event: eventType,
-      status: "failed",
+      status: LogStatus.FAILED,
       metadata: {
         credential: parsed.data.email,
         code: result.code,
@@ -52,7 +51,7 @@ export async function executeSharedLogin({payload, logData, eventType = 'user_lo
 
     return {
       success: result.success,
-      message: GENERIC_LOGIN_RESPONSE,
+      message: DefaultAuthMessage.GENERIC_LOGIN_RESPONSE,
     };
   }
 
@@ -60,7 +59,7 @@ export async function executeSharedLogin({payload, logData, eventType = 'user_lo
   await activityLogger<AuthActivityLogs> ({
     userId: result.id, // ID user yang berhasil login sebagai actor
     event: eventType,
-    status: 'success',
+    status: LogStatus.SUCCESS,
     metadata: {
       credential: result.credential,
       ...parsedLogData.data
@@ -69,6 +68,6 @@ export async function executeSharedLogin({payload, logData, eventType = 'user_lo
 
   return {
     success: result.success,
-    message: GENERIC_LOGIN_RESPONSE, // Sesuaikan jika ingin pesan sukses berbeda
+    message: DefaultAuthMessage.GENERIC_LOGIN_RESPONSE, // Sesuaikan jika ingin pesan sukses berbeda
   };
 }

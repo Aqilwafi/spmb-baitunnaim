@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { executeAdminInvite } from "@/features/users/invite";
 import { isValidationError } from "@bn/utils";
+import { BaseErrorMessage } from "@bn/constants";
 
 export async function inviteAdminAction(_prevState: unknown, formData: FormData) {
     try {
@@ -33,7 +34,7 @@ export async function inviteAdminAction(_prevState: unknown, formData: FormData)
         }
         return {
             success: false,
-            message: 'Terjadi kesalahan pada server.'
+            message: BaseErrorMessage.SERVER_ERROR
         } 
     }
     

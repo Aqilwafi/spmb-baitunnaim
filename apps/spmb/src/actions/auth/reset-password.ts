@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { executeSharedResetPassword } from "@bn/auth";
 import type { BaseResponse } from "@bn/types";
 import { isValidationError } from "@bn/utils";
+import { LogAuthEvent, BaseErrorMessage } from "@bn/constants";
 
 export async function resetPasswordAction(_prevState: any, formData: FormData): Promise<BaseResponse> {
   try {
@@ -19,7 +20,7 @@ export async function resetPasswordAction(_prevState: any, formData: FormData): 
     const result = await executeSharedResetPassword({
         payload: payload,
         logData: logData,
-        eventType: 'spmb_reset_password'
+        eventType: LogAuthEvent.SPMB_FORGOT_PASSWORD
     });
 
     if (!result.success) {
@@ -38,7 +39,7 @@ export async function resetPasswordAction(_prevState: any, formData: FormData): 
 
     return {
       success: false,
-      message: 'Terjadi kesalahan pada server.'
+      message: BaseErrorMessage.SERVER_ERROR
     };
   }
 }

@@ -8,6 +8,7 @@ import { activityLogger } from "@bn/services";
 import { assignRole } from "@/services/users/roles/assign";
 import { roleAssignmentSchema } from "@bn/auth/validators";
 import { getCurrentUser } from "@bn/auth";
+import { DeafultValidationMessage, LogAuthEvent, LogStatus } from "@bn/constants";
 
 interface ExecuteAssignRoleParams extends BaseFormPayload {
   logData: AuthActivityLogs;
@@ -28,14 +29,14 @@ export async function executeAssignRole({payload, logData}: ExecuteAssignRolePar
   if (!parsed.success) {
       throw createValidationError(
         formatZodErrors(parsed.error),
-        parsed.error.issues[0]?.message ?? "Data tidak valid."
+        parsed.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
       );
     };
       
     if (!parsedLogData.success) {
       throw createValidationError(
         formatZodErrors(parsedLogData.error),
-        parsedLogData.error.issues[0]?.message ?? "Data tidak valid."
+        parsedLogData.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
       );
     };
 
@@ -44,8 +45,8 @@ export async function executeAssignRole({payload, logData}: ExecuteAssignRolePar
   if (!result.success) {
     await activityLogger ({
       userId: user.id,
-      event: 'assign_role',
-      status: "failed",
+      event: LogAuthEvent.ADMIN_ASSIGN_ROLE,
+      status: LogStatus.FAILED,
       metadata: {
         credential: result.credential,
         code: result.code,
@@ -60,8 +61,8 @@ export async function executeAssignRole({payload, logData}: ExecuteAssignRolePar
 
   await activityLogger ({
       userId: user.id,
-      event: 'assign_role',
-      status: "success",
+      event: LogAuthEvent.ADMIN_ASSIGN_ROLE,
+      status: LogStatus.SUCCESS,
       metadata: {
         id: result.id,
         credential: result.credential,

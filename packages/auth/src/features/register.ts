@@ -4,6 +4,7 @@ import { activityLogger } from '@bn/services';
 import { formatZodErrors, logDataSchema } from "@bn/validators";
 import { createValidationError } from "@bn/utils";
 import type { BaseFormPayload, AuthActivityLogs } from "@bn/types";
+import { DeafultValidationMessage, LogStatus, LogAuthEvent } from '@bn/constants';
 
 interface ExecuteRegisterParams extends BaseFormPayload {
   logData: AuthActivityLogs;
@@ -17,14 +18,14 @@ export async function executeSharedRegister({payload, logData}: ExecuteRegisterP
   if (!parsed.success) {
     throw createValidationError(
       formatZodErrors(parsed.error),
-      parsed.error.issues[0]?.message ?? "Data formulir tidak valid."
+      parsed.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
     );
   }
 
   if (!parsedLogData.success) {
     throw createValidationError(
       formatZodErrors(parsedLogData.error),
-      parsedLogData.error.issues[0]?.message ?? "Data formulir tidak valid."
+      parsedLogData.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
     );
   }
   
@@ -37,8 +38,8 @@ export async function executeSharedRegister({payload, logData}: ExecuteRegisterP
   if (!result.success) {
       
     await activityLogger<AuthActivityLogs> ({
-      event: 'spmb_register',
-      status: "failed",
+      event: LogAuthEvent.SPMB_REGISTER,
+      status: LogStatus.FAILED,
       metadata: {
         credential: parsed.data.email,
         ...parsedLogData.data
@@ -50,8 +51,8 @@ export async function executeSharedRegister({payload, logData}: ExecuteRegisterP
     // log berhasl login
   await activityLogger<AuthActivityLogs> ({
     userId: result.id,
-    event: 'spmb_register',
-    status: 'success',
+    event: LogAuthEvent.SPMB_REGISTER,
+    status: LogStatus.SUCCESS,
     metadata: {
       credential: result.credential,
       ...parsedLogData.data

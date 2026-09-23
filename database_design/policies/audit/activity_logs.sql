@@ -7,7 +7,7 @@ create policy "RLS: activity_logs: select"
 on public.activity_logs
 for select
 using (
-    public.is_high_level_admin()
+    public.fn_is_administrator()
 );
 
 drop policy if exists "RLS: activity_logs: insert"

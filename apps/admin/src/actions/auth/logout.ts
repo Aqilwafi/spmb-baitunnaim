@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { executeSharedLogout } from "@bn/auth";
 import type { BaseResponse } from "@bn/types";
+import { BaseErrorMessage, LogAuthEvent } from "@bn/constants";
 
 export async function logoutAction(): Promise<BaseResponse> {
   try {
@@ -18,7 +19,7 @@ export async function logoutAction(): Promise<BaseResponse> {
     };
     
     await executeSharedLogout({
-      eventType: 'admin_logout',
+      eventType: LogAuthEvent.ADMIN_LOGOUT,
       logData: logData
     });
     revalidatePath("/", "layout");
@@ -28,7 +29,7 @@ export async function logoutAction(): Promise<BaseResponse> {
 
     return {
       success: false,
-      message: "Terjadi kesalahan saat logout.",
+      message: BaseErrorMessage.SERVER_ERROR,
     };
   }
 }

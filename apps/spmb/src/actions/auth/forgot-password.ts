@@ -3,9 +3,7 @@ import { headers } from "next/headers";
 import { executeSharedForgotPassword } from "@bn/auth";
 import type { BaseResponse } from "@bn/types";
 import { isValidationError } from "@bn/utils";
-
-const GENERIC_FORGOT_PASSWORD_MESSAGE =
-  "Instruksi pemulihan telah dikirim ke email Anda jika akun tersebut terdaftar.";
+import { BaseErrorMessage, DefaultAuthMessage } from "@bn/constants";
 
 export async function forgotPasswordAction(_prevState: any, formData: FormData): Promise<BaseResponse> {
   try {
@@ -28,7 +26,7 @@ export async function forgotPasswordAction(_prevState: any, formData: FormData):
     if (result.message) {
       return {
         success: true,
-        message: GENERIC_FORGOT_PASSWORD_MESSAGE
+        message: result.message,
       };
 
     }
@@ -44,11 +42,11 @@ export async function forgotPasswordAction(_prevState: any, formData: FormData):
 
     return {
       success: false,
-      message: "Terjadi kesalahan pada server.",
+      message: BaseErrorMessage.SERVER_ERROR
     };
   }
   return {
     success: true,
-    message: GENERIC_FORGOT_PASSWORD_MESSAGE,
+    message: DefaultAuthMessage.GENERIC_FORGOT_PASSWORD_MESSAGE,
   }
 }

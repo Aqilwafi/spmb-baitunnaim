@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { executeSharedRegister } from "@bn/auth";
 import { isValidationError } from "@bn/utils";
 import type { BaseResponse } from "@bn/types";
+import { BaseErrorMessage } from "@bn/constants";
 
 export async function registerAction(_prevState: any, formData: FormData): Promise<BaseResponse> {
   try {
@@ -40,7 +41,7 @@ export async function registerAction(_prevState: any, formData: FormData): Promi
 
     return {
       success: false,
-      message: "Terjadi kesalahan pada server.",
+      message: BaseErrorMessage.SERVER_ERROR,
     };
   }
 

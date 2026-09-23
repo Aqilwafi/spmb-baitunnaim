@@ -31,3 +31,23 @@ export const formatDateId = (dateString: string | Date | null | undefined): stri
     timeZone: 'Asia/Jakarta',
   });
 };
+
+export const formatDetailDateTimeId = (dateString: string | Date | null | undefined): string => {
+  if (!dateString) return "-";
+
+  const date = new Date(dateString);
+
+  if (isNaN(date.getTime())) return "-";
+
+  const formatted = date.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'Asia/Jakarta',
+  });
+
+  return `${formatted} WIB`;
+};

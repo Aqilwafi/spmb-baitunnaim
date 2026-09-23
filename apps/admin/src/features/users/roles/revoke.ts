@@ -8,6 +8,7 @@ import { activityLogger } from "@bn/services";
 import { roleAssignmentSchema } from "@bn/auth/validators";
 import { getCurrentUser } from "@bn/auth";
 import { revokeRole } from "@/services/users/roles/revoke";
+import { DeafultValidationMessage, LogAuthEvent, LogStatus } from "@bn/constants";
 
 interface ExecuteRevokeRoleParams extends BaseFormPayload {
   logData: AuthActivityLogs;
@@ -28,14 +29,14 @@ export async function executeRevokeRole({payload, logData}: ExecuteRevokeRolePar
   if (!parsed.success) {
       throw createValidationError(
         formatZodErrors(parsed.error),
-        parsed.error.issues[0]?.message ?? "Data tidak valid."
+        parsed.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
       );
     };
       
     if (!parsedLogData.success) {
       throw createValidationError(
         formatZodErrors(parsedLogData.error),
-        parsedLogData.error.issues[0]?.message ?? "Data tidak valid."
+        parsedLogData.error.issues[0]?.message ?? DeafultValidationMessage.GENERIC_VALIDATION_ERROR
       );
     };
 
@@ -44,8 +45,8 @@ export async function executeRevokeRole({payload, logData}: ExecuteRevokeRolePar
   if (!result.success) {
     await activityLogger ({
       userId: user.id,
-      event: 'revoke_role',
-      status: "failed",
+      event: LogAuthEvent.ADMIN_REVOKE_ROLE,
+      status: LogStatus.FAILED,
       metadata: {
         id: parsed.data.userId,
         credential: parsed.data.email,
@@ -61,8 +62,8 @@ export async function executeRevokeRole({payload, logData}: ExecuteRevokeRolePar
 
   await activityLogger ({
       userId: user.id,
-      event: 'revoke_role',
-      status: "success",
+      event: LogAuthEvent.ADMIN_REVOKE_ROLE,
+      status: LogStatus.SUCCESS,
       metadata: {
         id: result.id,
         credential: parsed.data.email,

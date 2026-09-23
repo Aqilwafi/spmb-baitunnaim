@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { executeSharedLogin } from "@bn/auth";
 import { isValidationError } from "@bn/utils";
 import type { BaseResponse } from "@bn/types";
+import { BaseErrorMessage, LogAuthEvent } from "@bn/constants";
 
 export async function loginAction(_prevState: BaseResponse | null, formData: FormData): Promise<BaseResponse> {
   try {
@@ -20,7 +21,7 @@ export async function loginAction(_prevState: BaseResponse | null, formData: For
     const result = await executeSharedLogin({
       payload,
       logData,
-      eventType: 'admin_login'
+      eventType: LogAuthEvent.ADMIN_LOGIN
     });
 
     if (!result.success) {
@@ -37,7 +38,7 @@ export async function loginAction(_prevState: BaseResponse | null, formData: For
     }
     return {
       success: false,
-      message: 'Terjadi kesalahan pada server.'
+      message: BaseErrorMessage.SERVER_ERROR
     } 
   }
 

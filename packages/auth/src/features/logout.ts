@@ -4,13 +4,14 @@ import { signOut } from '../services/logout';
 import { getCurrentClaims } from './session';
 import { activityLogger } from '@bn/services';
 import type { AuthActivityLogs } from '@bn/types';
+import { LogStatus } from '@bn/constants';
 
 interface LogoutParams {
-  eventType?: string;
+  eventType: string;
   logData?: AuthActivityLogs; // Opsional: jika ingin membawa metadata tambahan seperti IP/UserAgent
 }
 
-export async function executeSharedLogout({ eventType = 'user_logout', logData }: LogoutParams) {
+export async function executeSharedLogout({ eventType, logData }: LogoutParams) {
   
   const claims = await getCurrentClaims();
   const userId = claims?.sub ?? null;
@@ -24,7 +25,7 @@ export async function executeSharedLogout({ eventType = 'user_logout', logData }
     await activityLogger<AuthActivityLogs>({
       userId: userId,
       event: eventType,
-      status: 'failed',
+      status: LogStatus.FAILED,
       metadata: {
         credential: userEmail,
         error: result.error,
@@ -38,7 +39,7 @@ export async function executeSharedLogout({ eventType = 'user_logout', logData }
   await activityLogger<AuthActivityLogs>({
     userId: userId, // ID didapat otomatis dari server
     event: eventType,
-    status: 'success',
+    status: LogStatus.SUCCESS,
     metadata: {
       credential: userEmail,
       ...logData

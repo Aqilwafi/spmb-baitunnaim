@@ -1,5 +1,5 @@
 import { getPembayaranList, type PembayaranList } from "@/services/spmb/pembayaran/pembayaran-list";
-import { getVerifikator } from "@/services/users/verifikator";
+import { getUsernames } from "@/services/users/name";
 import { maskId } from "@bn/utils";
 import type { EnumStatusPembayaran } from "@bn/types";
 
@@ -28,7 +28,7 @@ export async function getPembayaranListData(): Promise<FormattedPembayaranList[]
     // 2. Ambil data verifikator sekaligus jika ada ID-nya
     let verifikatorMap = new Map<string, string>();
     if (verifikatorIds.length > 0) {
-        const verifikatorData = await getVerifikator(verifikatorIds);
+        const verifikatorData = await getUsernames(verifikatorIds);
         
         verifikatorData.forEach((v: any) => {
             const identifier = v.username || v.email;

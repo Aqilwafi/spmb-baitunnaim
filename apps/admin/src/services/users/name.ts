@@ -10,7 +10,7 @@ interface VerifikatorName {
     username: Profiles['username'];
 }
 
-export async function getVerifikator(userIds: string[]): Promise<VerifikatorName[]> {
+export async function getUsernames(userIds: string[]): Promise<VerifikatorName[]> {
     const supabase = await createSupabaseServer();
 
     // 1. Ambil data dari tabel profiles berdasarkan array userIds
