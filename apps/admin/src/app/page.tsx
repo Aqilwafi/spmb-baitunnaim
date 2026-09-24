@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
+import { Card } from "@bn/ui";
 import LoginForm from "@/components/auth/LoginForm";
 
 export default function HomePage() {
