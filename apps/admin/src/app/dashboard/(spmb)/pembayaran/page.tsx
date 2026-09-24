@@ -1,6 +1,6 @@
 // apps/admin/src/app/dashboard/pembayaran/page.tsx
 import { getPembayaranListData } from "@/features/spmb/pembayaran/pembayaran-list"; // sesuaikan path
-import PembayaranTable from "@/components/pembayaran/PembyaranTable";
+import PembayaranClient from "@/components/pembayaran/PembayaranClient"; // Ganti dengan PembayaranClient
 import { ShieldUser } from "lucide-react";
 import BackButton from "@/components/buttons/BackButton";
 
@@ -28,8 +28,8 @@ export default async function PembayaranPage() {
         </div>
       </div>
 
-      {/* Tabel Data */}
-      <PembayaranTable data={pembayaranData} />
+      {/* Pembayaran Client (Berisi Tabel & Modal) */}
+      <PembayaranClient data={pembayaranData} />
     </div>
   );
 }

@@ -6,10 +6,11 @@ import { createPortal } from "react-dom";
 export interface ModalProps {
   open: boolean;
   onClose?: () => void;
-  children: ReactNode;
+  children?: ReactNode;
+  className?: string; // Tambahkan prop className opsional di sini
 }
 
-export function Modal({ open, onClose, children }: ModalProps) {
+export function Modal({ open, onClose, children, className = "max-w-lg" }: ModalProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -30,14 +31,14 @@ export function Modal({ open, onClose, children }: ModalProps) {
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop — klik untuk tutup jika onClose tersedia */}
+      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Konten modal */}
-      <div className="relative rounded-2xl bg-white p-8 shadow-2xl max-w-lg w-full m-4">
+      {/* Konten modal dengan class dinamis */}
+      <div className={`relative rounded-2xl bg-white p-6 md:p-8 shadow-2xl w-full m-4 ${className}`}>
         {children}
       </div>
     </div>,

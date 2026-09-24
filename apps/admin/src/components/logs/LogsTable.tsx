@@ -10,7 +10,7 @@ import {
   TableCell 
 } from "@bn/ui";
 import { Button } from "@bn/ui"; 
-import { formatDetailDateTimeId } from "@bn/utils";
+import { formatDetailDateTimeId, formatDateTimeLog } from "@bn/utils";
 import { Activity, X, ShieldAlert, CheckCircle2 } from "lucide-react";
 
 interface ActivityLogsTableProps {
@@ -28,9 +28,9 @@ export default function ActivityLogsTable({ data }: ActivityLogsTableProps) {
             <TableHead className="bg-gray-50 border-b border-gray-200 text-gray-700 font-semibold sticky top-0 z-10">
               <TableRow>
                 <TableHeader className="py-3.5 px-4 bg-gray-50">Waktu</TableHeader>
-                <TableHeader className="py-3.5 px-4 bg-gray-50">Actor</TableHeader>
-                <TableHeader className="py-3.5 px-4 bg-gray-50">Event</TableHeader>
-                <TableHeader className="py-3.5 px-4 bg-gray-50">Status</TableHeader>
+                <TableHeader className="py-3.5 px-2 bg-gray-50">Actor</TableHeader>
+                <TableHeader className="py-3.5 px-1 bg-gray-50">Event</TableHeader>
+                <TableHeader className="py-3.5 px-1 bg-gray-50">Status</TableHeader>
                 <TableHeader className="py-3.5 px-4 bg-gray-50">Credential / Target</TableHeader>
                 <TableHeader className="py-3.5 px-4 bg-gray-50 text-center">Aksi</TableHeader>
               </TableRow>
@@ -45,29 +45,25 @@ export default function ActivityLogsTable({ data }: ActivityLogsTableProps) {
                     <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
                       {/* Waktu */}
                       <TableCell className="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">
-                        {new Date(item.createdAt || item.created_at).toLocaleString("id-ID", {
-                          dateStyle: "medium",
-                          timeStyle: "medium",
-                        })}
+                        {formatDateTimeLog(item.createdAt || item.created_at)}
                       </TableCell>
 
                       {/* Actor (Username / Email / Anonimus: creds) */}
-                      <TableCell className="py-3.5 px-4 text-xs font-medium text-gray-900">
-                        <span className="truncate max-w-[180px] block" title={item.actorName}>
-                          {item.actorName || "-"}
-                        </span>
-                      </TableCell>
-
+                     <TableCell className="py-3.5 px-2 text-xs font-medium text-gray-900">
+                      <span className="break-words block">
+                        {item.actorName || "-"}
+                      </span>
+                    </TableCell>
                       {/* Event */}
-                      <TableCell className="py-3.5 px-4 font-semibold text-gray-900">
+                      <TableCell className="py-3.5 px-1 font-semibold text-gray-900">
                         <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-md text-xs font-mono">
                           {item.event}
                         </span>
                       </TableCell>
 
                       {/* Status */}
-                      <TableCell className="py-3.5 px-4">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold uppercase rounded-md border ${
+                      <TableCell className="py-3.5 px-1">
+                        <span className={`inline-flex items-center gap-1 px-1 py-1 text-xs font-bold uppercase rounded-md border ${
                           isSuccess 
                             ? "bg-green-50 text-green-700 border-green-200" 
                             : "bg-red-50 text-red-700 border-red-200"
@@ -88,7 +84,7 @@ export default function ActivityLogsTable({ data }: ActivityLogsTableProps) {
                           onClick={() => setSelectedLog(item)}
                           className="!py-1.5 !px-3 text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-100 rounded-lg shadow-none mx-auto"
                         >
-                          Lihat Detail
+                          Lihat
                         </Button>
                       </TableCell>
                     </TableRow>

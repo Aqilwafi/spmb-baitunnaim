@@ -2,7 +2,9 @@
 
 import { getDashboardActivityLogs } from "@/features/logs/all";
 import ActivityLogsTable from "@/components/logs/LogsTable";
-import { Activity } from "lucide-react";
+import { Activity, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@bn/ui";
 
 interface PageProps {
     searchParams: Promise<{ page?: string }>;
@@ -11,12 +13,17 @@ interface PageProps {
 export default async function ActivityLogsPage({ searchParams }: PageProps) {
     const resolvedParams = await searchParams;
     const currentPage = Number(resolvedParams?.page) || 1;
+    const limit = 30;
 
     // Ambil data lewat business logic feature
     const { data: logs, pagination } = await getDashboardActivityLogs({
         page: currentPage,
-        limit: 30,
+        limit: limit,
     });
+
+    const totalPages = pagination?.totalPages || 1;
+    const hasPreviousPage = currentPage > 1;
+    const hasNextPage = currentPage < totalPages;
 
     return (
         <div className="flex flex-col gap-6 h-full overflow-hidden">
@@ -32,14 +39,57 @@ export default async function ActivityLogsPage({ searchParams }: PageProps) {
             </div>
 
             {/* Komponen Tabel & Modal */}
-            <div className="flex-1 overflow-hidden flex flex-col">
-                <ActivityLogsTable data={logs} />
+            <div className="flex-1 overflow-hidden flex flex-col gap-3">
+                <div className="flex-1 overflow-hidden">
+                    <ActivityLogsTable data={logs} />
+                </div>
                 
-                {/* Informasi Pagination Sederhana di Bawah */}
-                <div className="py-3 px-4 mt-3 bg-white rounded-xl border border-gray-200 text-xs text-gray-500 flex justify-between items-center shrink-0 shadow-sm">
+                {/* Bar Informasi & Kontrol Pagination */}
+                <div className="py-3 px-4 bg-white rounded-xl border border-gray-200 text-xs text-gray-500 flex justify-between items-center shrink-0 shadow-sm">
                     <span>
-                        Halaman <strong>{pagination.currentPage}</strong> dari <strong>{pagination.totalPages || 1}</strong> (Total: {pagination.totalData} data log)
+                        Halaman <strong>{currentPage}</strong> dari <strong>{totalPages}</strong> (Total: {pagination?.totalData || 0} data log)
                     </span>
+
+                    {/* Tombol Navigasi Pagination */}
+                    <div className="flex items-center gap-2">
+                        {hasPreviousPage ? (
+                            <Link href={`/dashboard/logs?page=${currentPage - 1}`}>
+                                <Button
+                                    variant="secondary"
+                                    className="!py-1.5 !px-3 text-xs flex items-center gap-1 rounded-lg border-gray-200 shadow-none hover:bg-gray-50"
+                                >
+                                    <ChevronLeft size={14} /> Sebelumnya
+                                </Button>
+                            </Link>
+                        ) : (
+                            <Button
+                                variant="secondary"
+                                disabled
+                                className="!py-1.5 !px-3 text-xs flex items-center gap-1 rounded-lg border-gray-200 opacity-50 cursor-not-allowed shadow-none"
+                            >
+                                <ChevronLeft size={14} /> Sebelumnya
+                            </Button>
+                        )}
+
+                        {hasNextPage ? (
+                            <Link href={`/dashboard/logs?page=${currentPage + 1}`}>
+                                <Button
+                                    variant="secondary"
+                                    className="!py-1.5 !px-3 text-xs flex items-center gap-1 rounded-lg border-gray-200 shadow-none hover:bg-gray-50"
+                                >
+                                    Selanjutnya <ChevronRight size={14} />
+                                </Button>
+                            </Link>
+                        ) : (
+                            <Button
+                                variant="secondary"
+                                disabled
+                                className="!py-1.5 !px-3 text-xs flex items-center gap-1 rounded-lg border-gray-200 opacity-50 cursor-not-allowed shadow-none"
+                            >
+                                Selanjutnya <ChevronRight size={14} />
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

@@ -13,15 +13,13 @@ import {
 import { Button } from "@bn/ui"; 
 import { formatDateTimeId } from "@bn/utils";
 import type { FormattedPembayaranList } from "@/features/spmb/pembayaran/pembayaran-list";
-import { useRouter } from "next/navigation"; 
 
 interface PembayaranTableProps {
   data: FormattedPembayaranList[];
+  onDetail: (item: FormattedPembayaranList) => void; // Callback untuk membuka modal
 }
 
-export default function PembayaranTable({ data }: PembayaranTableProps) {
-  const router = useRouter(); 
-
+export default function PembayaranTable({ data, onDetail }: PembayaranTableProps) {
   return (
     <div className="bg-white rounded-2xl max-h-screen border border-gray-200 overflow-hidden shadow-sm">
       {/* Container Scrollable Khusus untuk Tabel */}
@@ -97,7 +95,7 @@ export default function PembayaranTable({ data }: PembayaranTableProps) {
                     {/* Kolom Aksi / Tombol Detail */}
                     <TableCell className="py-3.5 px-4 text-center">
                       <Button
-                        onClick={() => router.push(`/dashboard/pembayaran/${item.id}`)}
+                        onClick={() => onDetail(item)}
                         className="!py-1.5 !px-3 text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 border border-blue-100 rounded-lg shadow-none mx-auto"
                       >
                         Lihat Detail

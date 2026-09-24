@@ -4,6 +4,7 @@ import type { Pembayaran, BiodataSiswa } from "@bn/types";
 
 export interface PembayaranList {
     id: Pembayaran['id'];
+    buktiBayar: Pembayaran['bukti_pembayaran_url'];
     namaLengkap: BiodataSiswa['nama_lengkap'];
     createdAt: Pembayaran['created_at'];
     status: Pembayaran['payment_status'];
@@ -24,6 +25,7 @@ export async function getPembayaranList(): Promise<PembayaranList[]> {
       ),
       pembayaran!inner (
         id,
+        bukti_pembayaran_url,
         created_at,
         payment_status,
         verified_at,
@@ -40,6 +42,7 @@ export async function getPembayaranList(): Promise<PembayaranList[]> {
     id: item.id,
     createdAt: item.pembayaran.created_at,
     namaLengkap: item.biodata_siswa.nama_lengkap,
+    buktiBayar: item.pembayaran.bukti_pembayaran_url,
     status: item.pembayaran.payment_status,
     verifiedAt: item.pembayaran.verified_at,
     verifiedBy: item.pembayaran.verified_by,
