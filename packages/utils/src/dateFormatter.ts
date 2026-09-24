@@ -51,3 +51,13 @@ export const formatDetailDateTimeId = (dateString: string | Date | null | undefi
 
   return `${formatted} WIB`;
 };
+
+export function getCurrentDate() {
+  const now = new Date();
+  return now.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}

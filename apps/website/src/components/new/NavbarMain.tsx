@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { links, lembagaLinks } from "@bn/constants";
+import { CompanyLogo } from "@bn/ui";
 
-export default function Navbar({ transparent = false }) {
+export default function NavbarMain({ transparent = false }) {
   const [open, setOpen] = useState(false);
   const [lembagaOpen, setLembagaOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname() || "/";
   const isActive = (href?: string) => href && pathname === href;
@@ -27,6 +28,26 @@ export default function Navbar({ transparent = false }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [transparent]);
 
+  // === CLOSE DROPDOWN ON OUTSIDE CLICK ===
+  useEffect(() => {
+    if (!lembagaOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setLembagaOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [lembagaOpen]);
+
+  // === CLOSE MENUS ON ROUTE CHANGE ===
+  useEffect(() => {
+    setOpen(false);
+    setLembagaOpen(false);
+  }, [pathname]);
+
   // === STYLE DINAMIS ===
   const activeStyle = transparent
     ? scrolled
@@ -42,19 +63,13 @@ export default function Navbar({ transparent = false }) {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 md:gap-3">
-          <Image
-            src="/logo_lpi.png"
-            alt="Logo"
-            width={50}
-            height={50}
-            className="object-contain"
-          />
+          <CompanyLogo />
           <span
-            className={`font-bold tracking-wide text-base sm:text-lg md:text-xl ${
+            className={`font-bold tracking-wide text-base sm:text-lg md:text-xl transition-colors duration-300 ${
               transparent && !scrolled ? "text-white" : "text-teal-800"
             }`}
           >
-            Baitun Na'im Full Day School
+            Baitun Na&apos;im Full Day School
           </span>
         </Link>
 
@@ -62,13 +77,10 @@ export default function Navbar({ transparent = false }) {
         <div className="hidden md:flex items-center space-x-1">
           {links.map((link) =>
             link.isDropdown ? (
-              <div
-                key="lembaga"
-                className="relative"
-                onMouseEnter={() => setLembagaOpen(true)}
-                onMouseLeave={() => setLembagaOpen(false)}
-              >
+              <div key="lembaga" className="relative" ref={dropdownRef}>
                 <button
+                  onClick={() => setLembagaOpen((v) => !v)}
+                  aria-expanded={lembagaOpen}
                   className={`flex items-center gap-1 px-2 py-1 cursor-pointer ${
                     lembagaLinks.some((l) => pathname === l.href)
                       ? "bg-teal-800 text-white"
@@ -77,7 +89,11 @@ export default function Navbar({ transparent = false }) {
                       : "hover:bg-teal-100 text-black"
                   }`}
                 >
-                  LEMBAGA <ChevronDown size={14} />
+                  LEMBAGA
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${lembagaOpen ? "rotate-180" : ""}`}
+                  />
                 </button>
 
                 {lembagaOpen && (
@@ -88,6 +104,7 @@ export default function Navbar({ transparent = false }) {
                       <Link
                         key={item.name}
                         href={item.href!}
+                        onClick={() => setLembagaOpen(false)}
                         className={`block px-2 py-1 hover:bg-teal-100 ${
                           isActive(item.href) ? "bg-teal-800 text-white" : ""
                         }`}
@@ -132,12 +149,13 @@ export default function Navbar({ transparent = false }) {
           )}
         </div>
 
-        {/* Mobile button */}
+        {/* Mobile button - Diberi background solid agar tidak ikut transparan saat di-scroll/di atas */}
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden flex items-center justify-center cursor-pointer"
+          aria-label={open ? "Close menu" : "Open menu"}
+          className="md:hidden flex items-center justify-center p-2 rounded-lg bg-white text-teal-800 shadow-md cursor-pointer transition-transform active:scale-95"
         >
-          {open ? <X size={28} /> : <Menu size={28} />}
+          {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 

@@ -18,6 +18,7 @@ import {
   PenLine,
   X,
   ShieldUser,
+  Logs
 } from "lucide-react";
 
 import LogoutButton from "@/components/buttons/LogoutButton";
@@ -34,6 +35,7 @@ type SidebarProps = {
   canSpmb: boolean;
   canPublikasi: boolean;
   canManage: boolean;
+  canLog: boolean;
   user?: User;
 };
 
@@ -51,7 +53,7 @@ type MenuGroup = {
 // todo: tambahkan halo nama! setelah Admin Panel
 // props tambahkan data username dari layout.tsx 
 
-export default function Sidebar({ canSpmb, canPublikasi, canManage, user, }: SidebarProps) {
+export default function Sidebar({ canSpmb, canPublikasi, canManage, canLog, user, }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
@@ -82,10 +84,16 @@ export default function Sidebar({ canSpmb, canPublikasi, canManage, user, }: Sid
       ],
     }] : []),
     ...(canManage ? [{
-      label: "Manage Akun",
+      label: "Kelola Akses",
       items: [
-        { name: "Pendaftar", path: "/dashboard/manage/users", icon: <CircleUser size={18} /> },
+        { name: "Pendaftar", path: "/dashboard/manage/pendaftar", icon: <CircleUser size={18} /> },
         { name: "Admin", path: "/dashboard/manage/admin", icon: <ShieldUser size={18} /> },
+      ],
+    }] : []),
+    ...(canLog ? [{
+      label: "Logs",
+      items: [
+        { name: "Activity Log", path: "/dashboard/logs", icon: <Logs size={18} /> },
       ],
     }] : []),
   ];

@@ -3,9 +3,8 @@ import { getDetailPendaftaranData } from "@/features/form/detail";
 import { computeStepStatus } from "@/helpers/step-rules";
 import { STEP_CONFIG } from "@/components/step/config/step-pages.config";
 import AccordionOrchestrator from "@/components/pendaftaran/AccordionOrchestrator";
-import ForbiddenScreen from "@/components/others/ForbiddenScreen";
+import ForbiddenScreen from "@/components/feedback/ForbiddenScreen";
 import NotFound from "@/app/not-found";
-import BackButton from "@/components/buttons/BackButton";
 import type { StepElement } from "@/types/step.types";
 import { getStepList } from "@/features/master/steps";
 

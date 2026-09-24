@@ -1,7 +1,8 @@
 "use client"
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { testimonials, Testimonial } from "@bn/constants"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { testimonials, Testimonial } from "@bn/constants";
+import { CompanyLogo } from "@bn/ui";
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -34,18 +35,34 @@ export default function KataMereka() {
 
   return (
     <section
-      className="py-10 bg-gradient-to-b from-gray-50 to-white overflow-hidden"
+      className="py-8 bg-gradient-to-b from-gray-50 to-white overflow-hidden"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <div className="container mx-auto text-center">
+      <div className="container mx-auto px-4 text-center">
 
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-green-800">
+        {/* Judul & Divider diperkecil jarak bawahnya */}
+        <h2 className="text-lg md:text-2xl font-bold mb-1 text-green-800">
           Kata Mereka
         </h2>
-        <div className="w-180 h-0.5 bg-teal-600 mx-auto mb-2"></div>
+        <div className="w-16 h-1 bg-teal-600 mx-auto rounded-full"></div>
 
-        <div className="relative w-full max-w-xl mx-auto min-h-[420px] flex justify-center items-center select-none">
+        {/* Min-height dikurangi agar tidak ada ruang kosong berlebih */}
+        <div className="relative w-full max-w-2xl mx-auto min-h-[320px] flex justify-center items-center select-none px-4">
+
+          {/* LEFT ARROW */}
+          <motion.button
+            onClick={() => paginate(-1)}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{
+              opacity: isHover ? 1 : 0,
+              x: isHover ? 0 : 20,
+            }}
+            transition={{ duration: 0.25 }}
+            className="hidden md:flex absolute left-0 z-20 bg-white text-teal-800 rounded-full p-3 shadow-lg hover:bg-teal-50 cursor-pointer items-center justify-center -translate-x-1/2"
+          >
+            ←
+          </motion.button>
 
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
@@ -56,7 +73,7 @@ export default function KataMereka() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="absolute"
+              className="absolute w-full flex justify-center"
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.75}
@@ -70,20 +87,6 @@ export default function KataMereka() {
             </motion.div>
           </AnimatePresence>
 
-          {/* LEFT ARROW */}
-          <motion.button
-            onClick={() => paginate(-1)}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{
-              opacity: isHover ? 1 : 0,
-              x: isHover ? 0 : 20,
-            }}
-            transition={{ duration: 0.25 }}
-            className="hidden md:flex absolute -left-16 z-20 bg-white rounded-full p-3 shadow-xl hover:bg-teal-50"
-          >
-            ←
-          </motion.button>
-
           {/* RIGHT ARROW */}
           <motion.button
             onClick={() => paginate(1)}
@@ -93,7 +96,7 @@ export default function KataMereka() {
               x: isHover ? 0 : -20,
             }}
             transition={{ duration: 0.25 }}
-            className="hidden md:flex absolute -right-16 z-20 bg-white rounded-full p-3 shadow-xl hover:bg-teal-50"
+            className="hidden md:flex absolute right-0 z-20 bg-white text-teal-800 rounded-full p-3 shadow-lg hover:bg-teal-50 cursor-pointer items-center justify-center translate-x-1/2"
           >
             →
           </motion.button>
@@ -107,27 +110,30 @@ export default function KataMereka() {
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <div className="flex flex-col items-center w-80 md:w-[420px] cursor-grab active:cursor-grabbing">
+    <div className="flex flex-col items-center w-full max-w-md md:max-w-lg cursor-grab active:cursor-grabbing px-2">
 
-      <motion.img
+      {/* Logo Container dengan margin negatif yang disesuaikan */}
+      <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        src={testimonial.imageUrl}
-        className="rounded-full border-4 border-white object-cover shadow-lg mb-4 w-28 h-28 md:w-32 md:h-32"
-      />
+        className="rounded-full border-4 border-white bg-white shadow-md mb-[-2.5rem] z-10 w-20 h-20 md:w-24 md:h-24 flex items-center justify-center p-2.5 overflow-hidden"
+      >
+        <CompanyLogo />
+      </motion.div>
 
+      {/* Card Content */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="bg-gradient-to-br from-green-800 to-green-700 text-white p-8 rounded-2xl shadow-lg"
+        className="bg-gradient-to-br from-green-800 to-green-700 text-white pt-14 pb-6 px-6 md:px-10 rounded-2xl shadow-xl w-full"
       >
-        <p className="italic mb-4 text-center">
+        <p className="text-xs md:text-sm italic mb-4 text-center leading-relaxed">
           "{testimonial.description}"
         </p>
-        <h3 className="font-bold text-center">{testimonial.name}</h3>
-        <p className="text-sm opacity-80 text-center mt-1">
+        <h3 className="font-bold text-sm md:text-base text-center">{testimonial.name}</h3>
+        <p className="text-[11px] md:text-xs opacity-80 text-center mt-0.5">
           {testimonial.title}
         </p>
       </motion.div>

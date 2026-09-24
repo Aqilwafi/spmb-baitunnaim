@@ -4,11 +4,11 @@ import BackButton from "@/components/buttons/BackButton";
 import { ShieldUser } from "lucide-react";
 import { getListUsers } from "@/features/users/list";
 import { getMasterRolesOptions } from "@/features/users/roles/role";
-import ManageAdminClient from "@/components/manage/ManageAdminClient";
+import ManagePendaftarClient from "@/components/manage/ManagePendaftarClient";
 
 export default async function ManageAdminPage() {
-  const users = await getListUsers([2, 4, 5]);
-  const roleList = await getMasterRolesOptions([4, 5]);
+  const users = await getListUsers([3]);
+  const roleList = await getMasterRolesOptions([3]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -22,17 +22,17 @@ export default async function ManageAdminPage() {
 
           <div>
             <h1 className="text-lg font-bold text-gray-900">
-              List Admin
+              List Akun Pendaftar
             </h1>
             <p className="text-xs text-gray-500">
-              Kelola akun Panitia SPMB, Publikator, dan undangan akses.
+              Kelola akun Pendaftar.
             </p>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <ManageAdminClient users={users} roleList={roleList} />
+      <ManagePendaftarClient users={users} roleList={roleList} />
     </div>
   );
 }

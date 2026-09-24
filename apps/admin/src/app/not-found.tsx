@@ -1,11 +1,19 @@
 "use client";
 
-import { MapPinned, Home, Search, RefreshCcw } from "lucide-react";
+import { Button } from "@bn/ui";
+import { Home, Search } from "lucide-react";
 import Link from "next/link";
+import BackButton from "@/components/buttons/BackButton"; 
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 p-6 min-h-screen">
+    <div className="relative flex flex-col items-center justify-center bg-gray-50 text-gray-800 p-6 min-h-screen">
+      
+      {/* BackButton di Pojok Kiri Atas */}
+      <div className="absolute top-6 left-6">
+        <BackButton />
+      </div>
+
       <div className="flex flex-col items-center gap-6 p-10 bg-white shadow-2xl rounded-[2.5rem] w-full max-w-lg text-center border border-gray-100">
         
         {/* Visual Element */}
@@ -33,21 +41,21 @@ export default function NotFound() {
 
         {/* Action Buttons */}
         <div className="w-full pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link
-            href="/"
-            className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all active:scale-95 shadow-lg shadow-blue-100"
-          >
-            <Home size={18} />
-            Dashboard
+          {/* Tombol Dashboard */}
+          <Link href="/dashboard" className="block w-full">
+            <Button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all active:scale-95 shadow-lg shadow-blue-100">
+              <Home size={18} />
+              Dashboard
+            </Button>
           </Link>
           
-          <button
-            onClick={() => window.location.reload()}
-            className="flex items-center justify-center gap-2 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl font-bold transition-all active:scale-95"
-          >
-            <RefreshCcw size={18} />
-            Muat Ulang
-          </button>
+          {/* Tombol Home Utama */}
+          <Link href="/" className="block w-full">
+            <Button variant="ghost" className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl font-bold transition-all active:scale-95">
+              <Home size={18} />
+              Home
+            </Button>
+          </Link>
         </div>
 
         <div className="mt-4 pt-6 border-t border-dashed border-gray-100 w-full">

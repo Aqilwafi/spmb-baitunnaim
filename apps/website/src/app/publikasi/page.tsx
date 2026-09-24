@@ -1,7 +1,7 @@
 // apps/web/src/app/publikasi/page.tsx
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PublikasiList from "@/components/PublikasiList";
+import Navbar from "@/components/new/NavbarMain";
+import Footer from "@/components/new/Footer";
+import PublikasiList from "@/components/old/PublikasiList";
 import { fetchPublishedPosts } from "@/features/posts";
 
 export default async function PublikasiPage() {

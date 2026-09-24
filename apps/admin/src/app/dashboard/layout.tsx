@@ -3,6 +3,7 @@
 import { getCurrentClaims } from "@bn/auth";
 import { validateAccess } from "@bn/auth/utils";
 import { Unauthorized, Forbidden, Button } from "@bn/ui";
+import ForbiddenScreen from "@/components/feedback/ForbiddenScreen";
 import { hasSpmbAccess, hasPublikasiAccess, hasManageAccess } from "@/helpers/policies";
 import Sidebar from "@/components/others/Sidebar";
 import Link from "next/link";
@@ -23,30 +24,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   );
 
   if (!hasAnyAccess) {
-    return (
-      <Forbidden
-        primaryAction={
-          <Link href="/" className="block w-full">
-            <Button className="w-full flex items-center justify-center gap-2">
-              <ArrowLeft size={18} />
-              Kembali
-            </Button>
-          </Link>
-        }
-        secondaryAction={
-          <Link href="/" className="block w-full">
-            <Button variant="ghost" className="w-full flex items-center justify-center gap-2 text-xs">
-              Hubungi Admin IT
-            </Button>
-          </Link>
-        }
-      />
-    );
+    return <ForbiddenScreen />
   }
 
   const canSpmb = validateAccess(claims, hasSpmbAccess);
   const canPublikasi = validateAccess(claims, hasPublikasiAccess);
   const canManage = validateAccess(claims, hasManageAccess);
+  const canLog = validateAccess(claims, hasManageAccess);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -54,6 +38,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         canSpmb={canSpmb}
         canPublikasi={canPublikasi}
         canManage={canManage}
+        canLog={canLog}
         user={user}
       />
       {/* Background dan padding global sudah dipegang oleh <main> ini */}

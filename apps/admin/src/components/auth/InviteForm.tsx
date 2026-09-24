@@ -13,7 +13,7 @@ interface InviteAdminFormProps {
   roleList: MasterData[];
 }
 
-export default function InviteAdminForm({ onSuccess, roleList }: InviteAdminFormProps) {
+export default function InviteForm({ onSuccess, roleList }: InviteAdminFormProps) {
   const [state, formAction, isPending] =
     useActionState(inviteAdminAction, null);
 

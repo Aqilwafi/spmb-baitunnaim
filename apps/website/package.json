@@ -11,6 +11,7 @@
   "dependencies": {
     "@bn/constants": "workspace:*",
     "@bn/services": "workspace:*",
+    "@bn/ui": "workspace:*",
     "@tiptap/react": "^3.23.5",
     "@tiptap/starter-kit": "^3.23.5",
     "framer-motion": "^12.23.24",
@@ -27,10 +28,6 @@
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
     "@bn/types": "workspace:*",
-    "@tailwindcss/postcss": "^4.3.2",
-    "@tailwindcss/typography": "^0.5.20",
-    "@types/node": "^25.9.3",
-    "eslint-config-next": "^16.2.3",
-    "tailwindcss": "^4.3.2"
+    "eslint-config-next": "^16.2.3"
   }
 }

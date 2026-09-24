@@ -17,7 +17,7 @@ export function Unauthorized({ link = "/login" }: { link?: string }) {
         </div>
 
         <p className="text-gray-500 text-sm leading-relaxed max-w-[280px] mx-auto">
-          Identitas Anda tidak terverifikasi atau sesi Anda telah berakhir. Silakan login kembali untuk melanjutkan.
+          Identitas Anda tidak terverifikasi atau sesi Anda telah berakhir. Silakan melakukan login kembali untuk melanjutkan.
         </p>
 
         <div className="w-full pt-4">

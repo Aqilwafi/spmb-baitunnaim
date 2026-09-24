@@ -1,6 +1,6 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ContactContent from "@/components/ContactContent";
+import Navbar from "@/components/new/NavbarMain";
+import Footer from "@/components/new/Footer";
+import ContactContent from "@/components/old/ContactContent";
 
 
 export default function AboutPage() {

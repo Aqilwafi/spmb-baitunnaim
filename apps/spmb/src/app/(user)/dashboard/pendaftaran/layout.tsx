@@ -3,10 +3,8 @@
 import { getCurrentClaims } from '@bn/auth';
 import { validateAccess } from '@bn/auth/utils';
 import { isPendaftar } from '@/helpers/policies';
-import DashboardHeader from '@/components/others/DashboardHeader';
-import { Forbidden, Unauthorized, Button } from '@bn/ui';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { Unauthorized } from '@bn/ui';
+import ForbiddenScreen from '@/components/feedback/ForbiddenScreen'; 
 
 export default async function DashboardPendaftaranLayout({ children }: { children: React.ReactNode }) {
   const claims = await getCurrentClaims();
@@ -14,29 +12,11 @@ export default async function DashboardPendaftaranLayout({ children }: { childre
   if (!claims) return <Unauthorized link="/login" />;
 
   const claimsData = claims;
-
   const isAllowed = validateAccess(claimsData, isPendaftar);
 
   if (!isAllowed) {
-    return (
-      <Forbidden
-        primaryAction={
-          <Link href="/login" className="block w-full">
-            <Button className="w-full flex items-center justify-center gap-2">
-              <ArrowLeft size={18} />
-              Kembali
-            </Button>
-          </Link>
-        }
-        secondaryAction={
-          <Link href="/" className="block w-full">
-            <Button variant="ghost" className="w-full flex items-center justify-center gap-2 text-xs">
-              Hubungi Admin IT
-            </Button>
-          </Link>
-        }
-      />
-    );
+    // Menggunakan ForbiddenScreen dengan kustomisasi sesuai kebutuhan layout pendaftaran
+    return <ForbiddenScreen backHref="/login" backLabel="Kembali" />;
   }
 
   return (

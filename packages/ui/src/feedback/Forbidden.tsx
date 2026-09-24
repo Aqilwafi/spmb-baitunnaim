@@ -1,6 +1,5 @@
 // packages/ui/src/Forbidden.tsx
-import { ShieldAlert, ArrowLeft, Lock } from "lucide-react";
-import { Button } from "../core/button";
+import { ShieldAlert, Lock } from "lucide-react";
 import type { ReactNode } from "react";
 
 export interface ForbiddenProps {
@@ -24,12 +23,12 @@ export function Forbidden({ primaryAction, secondaryAction, className }: Forbidd
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Akses Ditolak</h1>
-          <p className="text-[11px] uppercase tracking-[0.3em] font-bold text-red-500">Error 403: Forbidden</p>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Akses Tidak Diizinkan</h1>
+          <p className="text-[11px] uppercase tracking-[0.3em] font-bold text-red-500">Error 403: Forbidden Access</p>
         </div>
 
         <p className="text-gray-500 text-sm leading-relaxed max-w-[280px] mx-auto">
-          Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Hal ini bisa terjadi pembatasan hak akses keamanan.
+          Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. Hal ini bisa terjadi akibat pembatasan hak akses keamanan.
         </p>
 
         <div className="w-full pt-4 space-y-3">

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Card } from "@bn/ui"; // ← Import Card dari UI package Anda
-import SetPasswordForm from "@/components/auth/passwordForm";
+import SetPasswordForm from "@/components/auth/PasswordForm";
 
 export default function SetPasswordPage() {
   return (

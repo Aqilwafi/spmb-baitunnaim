@@ -1,7 +1,7 @@
 // apps/web/src/app/publikasi/[slug]/page.tsx
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PostDetail from "@/components/PostDetail";
+import Navbar from "@/components/new/NavbarMain";
+import Footer from "@/components/new/Footer";
+import PostDetail from "@/components/old/PostDetail";
 import { fetchPublishedPostBySlug } from "@/features/posts";
 
 interface Props {

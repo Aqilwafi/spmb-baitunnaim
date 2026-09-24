@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import BlogCard from "../components/BlogCard"
+import BlogCard from "..//old/BlogCard"
 import type { PostItem } from "@bn/types"
 
 interface Props {

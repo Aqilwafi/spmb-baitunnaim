@@ -1,7 +1,7 @@
-import Navbar from "@/components/Navbar";
-import Hero from '@/components/Hero';
-import Footer from "@/components/Footer";
-import PostDetail from "@/components/PostDetail";
+import Navbar from "@/components/new/NavbarMain";
+import Hero from '@/components/old/Hero';
+import Footer from "@/components/new/Footer";
+import PostDetail from "@/components/old/PostDetail";
 import { fetchPublishedPostBySlug } from "@/features/posts";
 
 interface Props {
