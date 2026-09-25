@@ -1,10 +1,6 @@
 // packages/utils/src/mappers.ts (atau lokasi yang sesuai)
 
-import type { MasterData, EnumStatusAdmisi } from '@bn/types';
-import type {
-  MasterStep,
-  MasterTahunAjaran,
-} from '@bn/types';
+import type { MasterData, EnumStatusAdmisi, MasterStep, MasterTahunAjaran, BiodataKeluarga } from '@bn/types';;
 
 type BasicMasterItem = {
   id: number;
@@ -91,4 +87,21 @@ const ADMISSION_STATUS_LABEL: Record<EnumStatusAdmisi, string> = {
 export function admissionStatusLabel(value: EnumStatusAdmisi | null | undefined): string {
   if (!value) return "-";
   return ADMISSION_STATUS_LABEL[value] ?? value;
+}
+
+// utils/badge-helper.ts
+
+export function getStatusHidupBadgeClass(status?: BiodataKeluarga['status_hidup']): string {
+    switch (status?.toUpperCase()) {
+        case "HIDUP":
+            // Biru
+            return "bg-green-50 text-green-700 border-green-200";
+        case "MENINGGAL":
+            // Merah
+            return "bg-red-50 text-red-700 border-red-200";
+        case "LAINNYA":
+        default:
+            // Kuning
+            return "bg-yellow-50 text-yellow-700 border-yellow-200";
+    }
 }

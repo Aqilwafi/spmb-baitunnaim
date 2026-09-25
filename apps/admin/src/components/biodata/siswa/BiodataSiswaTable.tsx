@@ -11,13 +11,13 @@ import {
   Button 
 } from "@bn/ui";
 import { Edit } from "lucide-react";
+import { BiodataClientProps } from "./BiodataSiswaClient";
 
-interface SiswaTableProps {
-  data: any[];
+interface SiswaTableProps extends BiodataClientProps {
   onEdit?: (siswa: any) => void;
 }
 
-export function BiodataTable({ data, onEdit }: SiswaTableProps) {
+export function BiodataSiswaTable({ data, onEdit }: SiswaTableProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto overflow-y-auto max-h-[500px] relative">

@@ -5,7 +5,7 @@ import { validateAccess } from "@bn/auth/utils";
 import { Unauthorized, Forbidden, Button } from "@bn/ui";
 import ForbiddenScreen from "@/components/feedback/ForbiddenScreen";
 import { hasSpmbAccess, hasPublikasiAccess, hasManageAccess } from "@/helpers/policies";
-import Sidebar from "@/components/others/Sidebar";
+import Sidebar from "@/components/layout/Sidebar";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 

@@ -72,11 +72,12 @@ insert into master_tinggal_bersama (code, label) values
 on conflict (code) do nothing;
 
 insert into master_roles (code, label, description) values
-('SUPERADMIN', 'Super Administrator', 'Full system access'),
-('ADMINISTRATOR', 'Administrator', 'Admin lintas domain SPMB & Publikasi'),
+    ('SUPERADMIN', 'Super Administrator', 'Full system access'),
+    ('ADMINISTRATOR', 'Administrator', 'Admin lintas domain SPMB & Publikasi'),
     ('PENDAFTAR', 'Pendaftar', 'Akun untuk melakukan pendaftaran siswa baru di SPMB Baitunnaim'),
     ('VERIFIKATOR', 'Verifikator', 'Verifikasi data dan dokumen pendaftaran'),
-    ('PUBLIKATOR', 'Publikator', 'Kelola konten publikasi')
+    ('PUBLIKATOR', 'Publikator', 'Kelola konten publikasi'),
+    ('STAFF', 'Staff', 'Staff lembaga atau sekolah. Mengelola data siswa.')
 on conflict (id) do nothing;
 
 -- ============================================================

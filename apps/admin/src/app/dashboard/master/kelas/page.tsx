@@ -1,13 +1,10 @@
 // apps/admin/src/app/dashboard/page.tsx
 import { Maintenance } from "@bn/ui";
-import { getListSiswa } from "@/services/biodata/siswa/list";
 import BackButton from "@/components/buttons/BackButton";
-import BiodataClient from "@/components/biodata/BiodataClient";
-
-export default function Page() {
+export default function MasterKelasPage() {
   return (
     <div className="flex flex-col items-center gap-4">
-      <h1>Ini Biodata</h1>
+      <h1>Ini Kelas</h1>
       <Maintenance />
       <BackButton />
     </div>

@@ -1,17 +1,13 @@
-// apps/admin/src/app/dashboard/pembayaran/[id]/page.tsx
+// apps/admin/src/app/dashboard/biodata/siswa/page.tsx
 
+import { ShieldUser } from "lucide-react";
+import { getSiswaListData } from "@/features/biodata/siswa";
 import BackButton from "@/components/buttons/BackButton";
-import { CreditCard, Wrench } from "lucide-react";
-import { Maintenance } from "@bn/ui";
+import BiodataSiswaClient from "@/components/biodata/siswa/BiodataSiswaClient";
 
-interface DetailPembayaranPageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
+export default async function BiodataSiswaPage() {
 
-export default async function DetailPembayaranPage({ params }: DetailPembayaranPageProps) {
-  const { id } = await params;
+  const listSiswa = await getSiswaListData();
 
   return (
     <div className="flex flex-col gap-6">
@@ -21,21 +17,21 @@ export default async function DetailPembayaranPage({ params }: DetailPembayaranP
           <div className="flex justify-start">
             <BackButton />
           </div>
-          <CreditCard className="w-6 h-6 text-blue-600 shrink-0" />
+          <ShieldUser className="w-6 h-6 text-blue-600 shrink-0" />
 
           <div>
             <h1 className="text-lg font-bold text-gray-900">
-              Detail & Verifikasi Pembayaran
+              Biodata Siswa
             </h1>
             <p className="text-xs text-gray-500">
-              ID Pembayaran: <span className="font-mono text-gray-700">{id}</span>
+              Biodata Siswa
             </p>
           </div>
         </div>
       </div>
 
-      
-     <Maintenance/>;
+      {/* Pembayaran Client (Berisi Tabel & Modal) */}
+      <BiodataSiswaClient data={listSiswa} />
     </div>
   );
 }

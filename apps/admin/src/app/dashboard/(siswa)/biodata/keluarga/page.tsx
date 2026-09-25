@@ -1,13 +1,11 @@
-// apps/admin/src/app/dashboard/biodata/siswa/page.tsx
-
-import { ShieldUser } from "lucide-react";
-import { getSiswaListData } from "@/features/biodata/siswa";
+// apps/admin/src/app/dashboard/page.tsx
+import { getKeluargaListData } from "@/features/biodata/keluarga"; 
 import BackButton from "@/components/buttons/BackButton";
-import BiodataClient from "@/components/biodata/BiodataClient";
+import BiodataKeluargaClient from "@/components/biodata/keluarga/BiodataKeluargaClient";
+import { HeartHandshake, ShieldUser } from "lucide-react";
 
-export default async function BiodataSiswaPage() {
-
-  const listSiswa = await getSiswaListData();
+export default async function BiodataKeluargaPage() {
+  const listKeluarga = await getKeluargaListData();
 
   return (
     <div className="flex flex-col gap-6">
@@ -17,21 +15,21 @@ export default async function BiodataSiswaPage() {
           <div className="flex justify-start">
             <BackButton />
           </div>
-          <ShieldUser className="w-6 h-6 text-blue-600 shrink-0" />
+          <HeartHandshake className="w-6 h-6 text-blue-600 shrink-0" />
 
           <div>
             <h1 className="text-lg font-bold text-gray-900">
-              Biodata Siswa
+              Biodata Keluarga
             </h1>
             <p className="text-xs text-gray-500">
-              Biodata Siswa
+              Biodata Keluarga Lengkap
             </p>
           </div>
         </div>
       </div>
 
       {/* Pembayaran Client (Berisi Tabel & Modal) */}
-      <BiodataClient list={listSiswa} />
+      <BiodataKeluargaClient data={listKeluarga} />
     </div>
   );
 }

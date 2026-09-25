@@ -5,7 +5,7 @@ import { ROUTES } from "@bn/constants";
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   // Tentukan aturan proteksi khusus SPMB
-  const shouldProtectSPMB = (pathname: string): boolean => {
+  const shouldProtectAdminPanel = (pathname: string): boolean => {
     // Lindungi dashboard user
     if (pathname.startsWith(ROUTES.ADMIN.DASHBOARD)) return true;
     // Lindungi halaman pendaftaran berbayar
@@ -15,7 +15,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   // Panggil shared updateSession dengan aturan SPMB
   return await updateSession(request, {
-    shouldProtect: shouldProtectSPMB,
+    shouldProtect: shouldProtectAdminPanel  ,
     loginUrl: ROUTES.ADMIN.HOME, // Misal: /login (beda dengan admin path?)
   });
 }

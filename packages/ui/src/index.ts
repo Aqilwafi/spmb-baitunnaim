@@ -16,3 +16,4 @@ export * from './feedback/Forbidden';
 export * from './feedback/Maintanance';
 export * from './feedback/Unauthorized';
 export * from './feedback/success-modal';
+export * from './inputs/NikInput';

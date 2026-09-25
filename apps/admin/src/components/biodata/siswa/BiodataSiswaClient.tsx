@@ -2,16 +2,17 @@
 "use client";
 
 import { useState } from "react";
-import { BiodataTable } from "./BiodataTable"; 
+import { BiodataSiswaTable } from "./BiodataSiswaTable"; 
 import type { FormattedListSiswa } from "@/features/biodata/siswa";
+import type { ListKeluarga } from "@/services/biodata/keluarga/list";
 
-interface BiodataClientProps {
-  list: FormattedListSiswa[] | any // | listKeluarga (nanti dulu);
+export interface BiodataClientProps {
+  data: FormattedListSiswa[] | ListKeluarga[];
 }
 
 // harus bisa untuk biodata siswa dan keluarga.
 
-export default function BiodataClient({ list }: BiodataClientProps) {
+export default function BiodataSiswaClient({ data }: BiodataClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
@@ -23,9 +24,8 @@ export default function BiodataClient({ list }: BiodataClientProps) {
   return (
     <div className="flex flex-col gap-6">
       {/* Tabel Data Pendaftar dengan tombol Edit aktif */}
-      <BiodataTable data={list} onEdit={handleOpenModal} />
+      <BiodataSiswaTable data={data} onEdit={handleOpenModal} />
 
-     
     </div>
   );
 }
