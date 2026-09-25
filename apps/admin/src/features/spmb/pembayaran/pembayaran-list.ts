@@ -1,5 +1,5 @@
-import { getPembayaranList, type PembayaranList } from "@/services/spmb/pembayaran/pembayaran-list";
-import { getPembayaranUrl } from "@/services/spmb/pembayaran/pembayaran-url";
+import { getPembayaranList, type PembayaranList } from "@/services/pembayaran/pembayaran-list";
+import { getPembayaranUrl } from "@/services/pembayaran/pembayaran-url";
 import { getUsernames } from "@/services/users/name";
 import { maskId } from "@bn/utils";
 

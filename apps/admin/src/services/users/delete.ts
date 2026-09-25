@@ -4,27 +4,22 @@ import "server-only";
 import { supabaseAdmin } from "@bn/supabase/admin";
 import type { BaseAuthResponse } from "@bn/types";
 
-export async function inviteUserByEmail(email: string, url: string, username: string | null): Promise<BaseAuthResponse> {
+export async function deleteUser(userId: string): Promise<BaseAuthResponse> {
   const supabase = supabaseAdmin;
   
-  const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: url,
-    data: {
-      username: username,
-    },
-  });
+  const { data, error } = await supabase.auth.admin.deleteUser(userId);
 
   if (error) {
     return {
       success: false,
       code: error.code,
-      credential: email
+      credential: userId
     };
   }
 
   return {
     success: true,
     id: data.user.id,
-    credential: data.user.email ?? email,
+    credential: data.user.email ?? userId,
   };
 }

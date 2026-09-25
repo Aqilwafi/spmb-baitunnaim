@@ -1,6 +1,9 @@
 // apps/admin/src/app/dashboard/page.tsx
 import { Maintenance } from "@bn/ui";
+import { getListSiswa } from "@/services/biodata/siswa/list";
 import BackButton from "@/components/buttons/BackButton";
+import BiodataClient from "@/components/biodata/BiodataClient";
+
 export default function Page() {
   return (
     <div className="flex flex-col items-center gap-4">

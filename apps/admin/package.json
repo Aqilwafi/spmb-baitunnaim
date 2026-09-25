@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@bn/auth": "workspace:*",
-    "@bn/utils": "workspace:*",
-    "@bn/services": "workspace:*",
     "@bn/constants": "workspace:*",
+    "@bn/services": "workspace:*",
     "@bn/supabase": "workspace:*",
     "@bn/ui": "workspace:*",
+    "@bn/utils": "workspace:*",
     "@bn/validators": "workspace:*",
     "@tailwindcss/postcss": "^4.3.2",
     "@tiptap/extension-image": "^3.31.3",
@@ -33,7 +33,8 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "server-only": "^0.0.1",
-    "tailwindcss": "^4.3.2"
+    "tailwindcss": "^4.3.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@bn/tsconfig": "workspace:*",
