@@ -77,7 +77,7 @@ export function InitFormPendaftaranModal({ lembaga, kelas }: InitFormPendaftaran
             ) : (
               <>
                 <Save size={20} />
-                <span>Simpan & Lanjutkan</span>
+                <span>Buat & Lanjutkan</span>
               </>
             )}
           </Button>

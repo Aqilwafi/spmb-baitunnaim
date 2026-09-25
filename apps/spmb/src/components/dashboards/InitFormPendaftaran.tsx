@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Input, Label, Select } from '@bn/ui';
+import { Input, Label, Select, NikInput } from '@bn/ui';
 import { User, School, GraduationCap, Lock, IdCard, MapPin, Calendar } from 'lucide-react';
 import { checkIsMI, isClassFieldLocked } from '@/helpers/biodata-rules';
 import { InitFormPendaftaranModalProps } from '@/types/form.types';
@@ -77,13 +77,10 @@ export function InitFormPendaftaran({
               {nik.length}/16 digit
             </span>
           </div>
-          <Input
+          <NikInput
             id="nik"
-            name="nik" // Tetap nik
-            type="text"
-            inputMode="numeric"
+            name="nik"
             required
-            maxLength={16}
             value={nik}
             onChange={handleNikChange}
             placeholder="Masukkan 16 digit NIK"

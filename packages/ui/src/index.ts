@@ -1,19 +1,13 @@
-export * from './core/stats';
-export * from "./core/button";
-export * from "./core/input";
-export * from "./core/textarea";
-export * from "./core/select";
-export * from "./core/radio";
-export * from "./core/checkbox";
-export * from "./core/label";
-export * from "./core/card";
-export * from "./core/modal";
-export * from "./core/table";
-export * from "./inputs/credential-input";
-export * from "./inputs/general";
-export * from "./images/company-logo";
-export * from './feedback/Forbidden';
-export * from './feedback/Maintanance';
-export * from './feedback/Unauthorized';
-export * from './feedback/success-modal';
-export * from './inputs/NikInput';
+// apps/admin/src/components/admin/index.ts (Root index UI)
+
+// 1. Ekspor seluruh komponen core
+export * from "./core";
+
+// 2. Ekspor seluruh komponen input spesifik (sudah termasuk NikInput & PhoneInput)
+export * from "./inputs";
+
+// 3. Ekspor komponen gambar/logo
+export * from "./images";
+
+// 4. Ekspor komponen feedback / status halaman
+export * from "./feedback";

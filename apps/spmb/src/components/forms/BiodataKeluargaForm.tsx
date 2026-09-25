@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AlertTriangle, AlertCircle } from "lucide-react";
-import { Button } from "@bn/ui";
+import { Button, NikInput, PhoneInput } from "@bn/ui";
 import type { BiodataKeluargaItemData } from "@/types/biodata.types";
 import type { EnumStatusHidup, EnumRelasiKeluarga } from "@bn/types";
 
@@ -169,23 +169,20 @@ export function BiodataKeluargaForm({
               <>
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">NIK</label>
-                  <input
-                    type="text"
+                  <NikInput
                     name="nik"
                     required={isHidup}
-                    maxLength={16}
                     value={formData.nik || ""}
                     onChange={(e) => setFormData({ ...formData, nik: e.target.value })}
                     className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
-                    placeholder="3201234567890001"
+                    placeholder="Masukan 16 digit NIK"
                   />
                   {renderFieldError(state?.errors?.nik)}
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">No. HP / WhatsApp</label>
-                  <input
-                    type="text"
+                  <PhoneInput
                     name="noHp"
                     required={isHidup}
                     value={formData.noHp || ""}
