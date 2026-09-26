@@ -45,7 +45,7 @@ export default function BiodataKeluargaClient({ data }: BiodataKeluargaClientPro
         data={selectedUser}
         isEdit={isEditMode}
         onSave={(updatedData) => {
-          console.log("Data tersimpan:", updatedData);
+          
           // Tambahkan logika update/refresh data di sini jika diperlukan
         }}
       />

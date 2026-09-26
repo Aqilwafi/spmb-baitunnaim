@@ -23,6 +23,6 @@ export async function activityLogger<T = Record<string, any>>({
       console.error("Gagal mencatat activity log:", error.message);
     }
   } catch (err) {
-    console.error("AuthLogger crash:", err);
+    console.error("Logger crash:", err);
   }
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, AlertCircle } from "lucide-react";
-import { Button, NikInput, PhoneInput } from "@bn/ui";
+import { AlertTriangle, AlertCircle, User } from "lucide-react";
+import { Button, NikInput, PhoneInput, NamaLengkapInput } from "@bn/ui";
 import type { BiodataKeluargaItemData } from "@/types/biodata.types";
 import type { EnumStatusHidup, EnumRelasiKeluarga } from "@bn/types";
 
@@ -49,8 +49,11 @@ export function BiodataKeluargaForm({
   const renderFieldError = (fieldError?: string | string[]) => {
     if (!fieldError) return null;
     const message = Array.isArray(fieldError) ? fieldError[0] : fieldError;
-    return <p className="text-[10px] text-red-500 mt-1">{message}</p>;
+    return <p className="text-[10px] text-red-500 mt-1 ml-1">{message}</p>;
   };
+
+  const inputBaseClass =
+    "w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500 bg-white";
 
   return (
     <div className="space-y-4">
@@ -142,24 +145,27 @@ export function BiodataKeluargaForm({
                   required
                   value={formData.detailRelationType || ""}
                   onChange={(e) => setFormData({ ...formData, detailRelationType: e.target.value })}
-                  className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                  className={inputBaseClass}
                   placeholder="Contoh: Kakek, Paman"
                 />
                 {renderFieldError(state?.errors?.detailRelationType)}
               </div>
             )}
 
-            {/* Input Nama Lengkap */}
+            {/* Input Nama Lengkap (Menggunakan NamaLengkapInput) */}
             <div className={relationType === "WALI" ? "" : "sm:col-span-2"}>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Nama Lengkap</label>
-              <input
-                type="text"
+              <label htmlFor="namaLengkap" className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 mb-1 flex items-center gap-2">
+                <User size={14} className="text-blue-600 shrink-0" />
+                <span>NAMA LENGKAP {labelMap[relationType].toUpperCase()}</span>
+              </label>
+              <NamaLengkapInput
+                id="namaLengkap"
                 name="namaLengkap"
                 required
                 value={formData.namaLengkap}
                 onChange={(e) => setFormData({ ...formData, namaLengkap: e.target.value })}
-                className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
-                placeholder="Sesuai KTP"
+                className={inputBaseClass}
+                placeholder="Masukkan nama sesuai KTP"
               />
               {renderFieldError(state?.errors?.namaLengkap)}
             </div>
@@ -174,7 +180,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.nik || ""}
                     onChange={(e) => setFormData({ ...formData, nik: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                     placeholder="Masukan 16 digit NIK"
                   />
                   {renderFieldError(state?.errors?.nik)}
@@ -187,7 +193,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.noHp || ""}
                     onChange={(e) => setFormData({ ...formData, noHp: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                     placeholder="081234567890"
                   />
                   {renderFieldError(state?.errors?.noHp)}
@@ -201,7 +207,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.tempatLahir || ""}
                     onChange={(e) => setFormData({ ...formData, tempatLahir: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                   />
                   {renderFieldError(state?.errors?.tempatLahir)}
                 </div>
@@ -214,7 +220,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.tanggalLahir || ""}
                     onChange={(e) => setFormData({ ...formData, tanggalLahir: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                   />
                   {renderFieldError(state?.errors?.tanggalLahir)}
                 </div>
@@ -227,7 +233,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.pendidikanTerakhir || ""}
                     onChange={(e) => setFormData({ ...formData, pendidikanTerakhir: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                     placeholder="SD / SMP / SMA"
                   />
                   {renderFieldError(state?.errors?.pendidikanTerakhir)}
@@ -241,7 +247,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.pekerjaan || ""}
                     onChange={(e) => setFormData({ ...formData, pekerjaan: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                     placeholder="Karyawan Swasta"
                   />
                   {renderFieldError(state?.errors?.pekerjaan)}
@@ -255,7 +261,7 @@ export function BiodataKeluargaForm({
                     required={isHidup}
                     value={formData.penghasilan || ""}
                     onChange={(e) => setFormData({ ...formData, penghasilan: e.target.value })}
-                    className="w-full text-sm p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500"
+                    className={inputBaseClass}
                     placeholder="Rp 3.000.000 - Rp 5.000.000"
                   />
                   {renderFieldError(state?.errors?.penghasilan)}

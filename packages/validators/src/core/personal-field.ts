@@ -30,7 +30,7 @@ export const namaLengkapField = z
   .string()
   .trim()
   .min(1, "Nama minimal harus 1 karakter")
-  .max(100, "Nama terlalu panjang");
+  .max(255, "Nama terlalu panjang");
 
 export const tempatLahirField = z
   .string()

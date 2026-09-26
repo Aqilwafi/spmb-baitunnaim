@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Input, Label, Select, NikInput } from '@bn/ui';
+import { Input, Label, Select, NikInput, NamaLengkapInput, TempatLahirInput } from '@bn/ui';
 import { User, School, GraduationCap, Lock, IdCard, MapPin, Calendar } from 'lucide-react';
 import { checkIsMI, isClassFieldLocked } from '@/helpers/biodata-rules';
 import { InitFormPendaftaranModalProps } from '@/types/form.types';
@@ -9,7 +9,6 @@ import { InitFormPendaftaranModalProps } from '@/types/form.types';
 interface InitFormPendaftaranProps extends InitFormPendaftaranModalProps {
   selectedLembagaId: number | undefined;
   onLembagaChange: (id: number) => void;
-  // Opsional: Untuk menampilkan error dari useActionState
   errors?: Record<string, string[]>; 
 }
 
@@ -21,6 +20,8 @@ export function InitFormPendaftaran({
   errors,
 }: InitFormPendaftaranProps) {
   const [nik, setNik] = useState('');
+  const [namaLengkap, setNamaLengkap] = useState(''); // State untuk Nama Lengkap
+  const [tempatLahir, setTempatLahir] = useState(''); // State untuk Tempat Lahir
 
   const isMI = useMemo(
     () => checkIsMI(selectedLembagaId),
@@ -35,6 +36,16 @@ export function InitFormPendaftaran({
   const handleNikChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitized = e.target.value.replace(/\D/g, '').slice(0, 16);
     setNik(sanitized);
+  };
+
+  // Handler untuk Nama Lengkap
+  const handleNamaLengkapChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNamaLengkap(e.target.value);
+  };
+
+  // Handler untuk Tempat Lahir
+  const handleTempatLahirChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempatLahir(e.target.value);
   };
 
   const isNikValid = nik.length === 16;
@@ -52,12 +63,13 @@ export function InitFormPendaftaran({
           <User size={14} className="text-blue-600 shrink-0" />
           <span>NAMA LENGKAP SISWA</span>
         </Label>
-        <Input
+        <NamaLengkapInput
           id="namaLengkap"
-          name="namaLengkap" // Ubah ke camelCase
-          type="text"
+          name="namaLengkap"
           required
-          placeholder="Masukkan nama sesuai akta"
+          value={namaLengkap}
+          onChange={handleNamaLengkapChange}
+          placeholder="Masukkan nama sesuai akta/KTP"
           className={inputBaseClass}
         />
         {errors?.namaLengkap && (
@@ -101,7 +113,7 @@ export function InitFormPendaftaran({
             JENIS KELAMIN
           </Label>
           <Select
-            name="gender" // Ubah ke camelCase (gender)
+            name="gender"
             required
             placeholder="Pilih"
             options={[
@@ -123,11 +135,12 @@ export function InitFormPendaftaran({
             <MapPin size={14} className="text-blue-600 shrink-0" />
             <span>TEMPAT LAHIR</span>
           </Label>
-          <Input
+          <TempatLahirInput
             id="tempatLahir"
-            name="tempatLahir" // Ubah ke camelCase
-            type="text"
+            name="tempatLahir"
             required
+            value={tempatLahir}
+            onChange={handleTempatLahirChange}
             placeholder="Kota/Kabupaten lahir"
             className={inputBaseClass}
           />
@@ -143,7 +156,7 @@ export function InitFormPendaftaran({
           </Label>
           <Input
             id="tanggalLahir"
-            name="tanggalLahir" // Ubah ke camelCase
+            name="tanggalLahir"
             type="date"
             required
             max={todayDate}
@@ -163,7 +176,7 @@ export function InitFormPendaftaran({
             <span>LEMBAGA TUJUAN</span>
           </Label>
           <Select
-            name="lembagaId" // Ubah ke camelCase
+            name="lembagaId"
             required
             placeholder="Pilih Lembaga"
             options={lembaga}
@@ -177,32 +190,29 @@ export function InitFormPendaftaran({
         </div>
 
         <div className="space-y-1.5 sm:space-y-2">
-        <Label className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
-          <GraduationCap size={14} className="text-blue-600 shrink-0" />
-          <span>KELAS</span>
-          {isLocked && <Lock size={12} className="text-amber-500 shrink-0" />}
-        </Label>
+          <Label className="text-xs sm:text-[13px] font-bold text-gray-600 ml-1 flex items-center gap-2">
+            <GraduationCap size={14} className="text-blue-600 shrink-0" />
+            <span>KELAS</span>
+            {isLocked && <Lock size={12} className="text-amber-500 shrink-0" />}
+          </Label>
 
-        {/* ❌ HAPUS BARIS INI: <input type="hidden" name="kelasId" value="1" /> */}
-
-        <Select
-          // Saat isLocked = true, name di-set undefined agar TIDAK ikut terkirim di FormData
-          name={isLocked ? undefined : 'kelasId'} 
-          required={!isLocked}
-          disabled={isLocked}
-          placeholder={isLocked ? 'Non-MI (Tanpa Kelas)' : 'Pilih Kelas'}
-          value={isLocked ? '' : undefined}
-          options={isLocked ? [] : kelas}
-          className={`${inputBaseClass} ${
-            isLocked
-              ? '!bg-gray-100 !text-gray-400 !border-gray-100 cursor-not-allowed italic'
-              : ''
-          }`}
-        />
-        {errors?.kelasId && (
-          <p className="text-[10px] text-red-500 ml-1">{errors.kelasId[0]}</p>
-        )}
-      </div>
+          <Select
+            name={isLocked ? undefined : 'kelasId'} 
+            required={!isLocked}
+            disabled={isLocked}
+            placeholder={isLocked ? 'Non-MI (Tanpa Kelas)' : 'Pilih Kelas'}
+            value={isLocked ? '' : undefined}
+            options={isLocked ? [] : kelas}
+            className={`${inputBaseClass} ${
+              isLocked
+                ? '!bg-gray-100 !text-gray-400 !border-gray-100 cursor-not-allowed italic'
+                : ''
+            }`}
+          />
+          {errors?.kelasId && (
+            <p className="text-[10px] text-red-500 ml-1">{errors.kelasId[0]}</p>
+          )}
+        </div>
       </div>
     </div>
   );

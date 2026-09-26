@@ -1,29 +1,22 @@
 'use server';
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { executeSharedLogout } from "@bn/auth";
 import type { BaseResponse } from "@bn/types";
 import { BaseErrorMessage, LogAuthEvent } from "@bn/constants";
+import { getHeaderData } from "@bn/utils";
 
 export async function logoutAction(): Promise<BaseResponse> {
   try {
 
-    const headersList = await headers();
-    const logData = {
-      ip: headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? headersList.get("x-real-ip") ?? null,
-      userAgent: headersList.get("user-agent"), 
-      forwardedFor: headersList.get("x-forwarded-for"),
-      realIp: headersList.get("x-real-ip"),
-    };
+    const logData = await getHeaderData();
     
     await executeSharedLogout({
       eventType: LogAuthEvent.ADMIN_LOGOUT,
       logData: logData
     });
     revalidatePath("/", "layout");
-    redirect("/");
 
   } catch (error) {
 
@@ -32,4 +25,5 @@ export async function logoutAction(): Promise<BaseResponse> {
       message: BaseErrorMessage.SERVER_ERROR,
     };
   }
+  redirect("/");
 }

@@ -12,7 +12,6 @@ export interface FormattedListSiswa extends ListSiswa {
 
 export async function getSiswaListData(): Promise<FormattedListSiswa[]> {
     const listSiswa = await getListSiswa();
-    console.log(listSiswa);
 
     if (!listSiswa || listSiswa.length === 0) {
         return [];

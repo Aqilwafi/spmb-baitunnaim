@@ -23,7 +23,6 @@ export default function PembayaranForm({
     startTransition(async () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log("Verifying pembayaran ID:", pembayaranData.id);
         setMessage({ success: true, text: "Pembayaran berhasil diverifikasi!" });
         
         if (onSuccess) {
@@ -42,7 +41,6 @@ export default function PembayaranForm({
     startTransition(async () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log("Rejecting pembayaran ID:", pembayaranData.id);
         setMessage({ success: true, text: "Pembayaran telah ditolak." });
         
         if (onSuccess) {

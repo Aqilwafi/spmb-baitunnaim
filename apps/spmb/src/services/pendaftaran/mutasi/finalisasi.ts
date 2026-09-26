@@ -7,7 +7,6 @@ import type { BaseRPCSubmitResponse, BaseRPCParams} from "@bn/types";
 
 export async function insertFinalisasi({formId}: BaseRPCParams): Promise<FormSubmitResult> {
   const supabase = await createSupabaseServer();
-  console.log(formId)
 
   const { data, error } = await supabase.rpc('fn_rpc_submit_finalisasi_form_pendaftaran', {
     p_form_id: formId,

@@ -34,7 +34,6 @@ export default function UserForm({ onSuccess, roleList = [], user, showRole = tr
       // Simulasi proses async / server action update
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      console.log("Updating user data:", formData);
       setMessage({
         success: true,
         text: "Berhasil memperbarui data!",
@@ -52,7 +51,6 @@ export default function UserForm({ onSuccess, roleList = [], user, showRole = tr
   const handleDummyAction = (actionName: string) => {
     startTransition(async () => {
       await new Promise((resolve) => setTimeout(resolve, 800));
-      console.log(`Action triggered: ${actionName} for user`, user?.username);
       setMessage({ success: true, text: `Berhasil melakukan: ${actionName}` });
     });
   };

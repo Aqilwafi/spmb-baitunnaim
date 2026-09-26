@@ -6,3 +6,4 @@ export * from "./NisnInput";
 export * from "./NoKkInput";
 export * from "./NamaLengkapInput"; 
 export * from './General';
+export * from './TempatLahirInput';
