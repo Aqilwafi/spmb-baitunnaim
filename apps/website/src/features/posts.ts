@@ -1,7 +1,7 @@
 // apps/web/src/features/publikasi/publikasi.feature.ts
 
 import { getPostsByStatus, getPublishedPostBySlug } from '@bn/services'
-import type { Posts, PostDetail } from '@bn/types'
+import type { Posts } from '@bn/types'
 
 const STSTUS = 'PUBLISHED';
 
