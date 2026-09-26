@@ -1,31 +1,69 @@
-// apps/admin/src/components/admin/ManagePendaftarClient.tsx
+// apps/admin/src/components/biodata/siswa/BiodataSiswaClient.tsx
 "use client";
 
 import { useState } from "react";
-import { BiodataSiswaTable } from "./BiodataSiswaTable"; 
+import { BiodataSiswaTable } from "@/components/biodata/siswa/BiodataSiswaTable"; 
+import { BiodataSiswaModal } from "@/components/biodata/siswa/BiodataSiswaModal";
 import type { FormattedListSiswa } from "@/features/biodata/siswa";
-import type { ListKeluarga } from "@/services/biodata/keluarga/list";
+import type { MasterData } from "@bn/types";
 
 export interface BiodataClientProps {
-  data: FormattedListSiswa[] | ListKeluarga[];
+  data: FormattedListSiswa[];
+  lembagaList?: MasterData[];
+  kelasList?: MasterData[];
+  statusRumahList?: MasterData[];
+  tinggalBersamaList?: MasterData[];
 }
 
-// harus bisa untuk biodata siswa dan keluarga.
-
-export default function BiodataSiswaClient({ data }: BiodataClientProps) {
+export default function BiodataSiswaClient({ 
+  data,
+  lembagaList,
+  kelasList,
+  statusRumahList,
+  tinggalBersamaList
+}: BiodataClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedSiswa, setSelectedSiswa] = useState<FormattedListSiswa | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
-  const handleOpenModal = (user: any) => {
-    setSelectedUser(user);
+  // Fungsi untuk membuka modal lihat detail (Mode Read-only)
+  const handleViewDetail = (siswa: FormattedListSiswa) => {
+    setSelectedSiswa(siswa);
+    setIsEditMode(false);
+    setIsModalOpen(true);
+  };
+
+  // Fungsi untuk membuka modal edit (Mode Editable)
+  const handleEdit = (siswa: FormattedListSiswa) => {
+    setSelectedSiswa(siswa);
+    setIsEditMode(true);
     setIsModalOpen(true);
   };
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Tabel Data Pendaftar dengan tombol Edit aktif */}
-      <BiodataSiswaTable data={data} onEdit={handleOpenModal} />
+      {/* Tabel Data Siswa dengan Tombol Aksi Lihat & Edit */}
+      <BiodataSiswaTable 
+        data={data} 
+        onViewDetail={handleViewDetail}
+        onEdit={handleEdit} 
+      />
 
+      {/* Modal Detail / Edit Siswa */}
+      <BiodataSiswaModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={selectedSiswa}
+        isEdit={isEditMode}
+        onSave={(updatedData) => {
+          // TODO: Tambahkan handler API/state update data jika diperlukan
+          console.log("Data siswa disimpan:", updatedData);
+        }}
+        lembagaList={lembagaList}
+        kelasList={kelasList}
+        statusRumahList={statusRumahList}
+        tinggalBersamaList={tinggalBersamaList}
+      />
     </div>
   );
 }

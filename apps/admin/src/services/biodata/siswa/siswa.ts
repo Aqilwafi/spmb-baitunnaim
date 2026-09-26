@@ -1,61 +1,31 @@
 import "server-only";
 import { createSupabaseServer } from "@bn/supabase/server";
-import type { BiodataSiswa, BiodataKeluarga, BiodataSiswaDetail, MasterLembaga, MasterKelas} from "@bn/types";
+import { Profiles } from "@bn/types";
 
-export interface LaporanSiswaMapped {
-  namaLengkap: BiodataSiswa['nama_lengkap'];
-  nisn: BiodataSiswa['nisn'];
-  nik: BiodataSiswa['nik'];
-  tempatLahir: BiodataSiswa['tempat_lahir'];
-  tanggalLahir: BiodataSiswa['tanggal_lahir'];
-  lembaga: MasterLembaga['label'];
-  kelas: MasterKelas['label'];
-  jenisKelamin: BiodataSiswa['jenis_kelamin'];
-  alamat: BiodataSiswaDetail['alamat'];
-  noTelepon: BiodataKeluarga['no_hp'];
-  kebutuhanKhusus: BiodataSiswa['catatan'];
-  namaAyahKandung: BiodataKeluarga['nama_lengkap'];
-  namaIbuKandung: BiodataKeluarga['nama_lengkap'];
-  namaWali: BiodataKeluarga['nama_lengkap'];
+interface ListEmailPemilikDataSiswa {
+  id: Profiles['id'];
+  email: Profiles['email'];
 }
 
-export async function getExportSiswa(paths: string[]): Promise<string[]> {
+export async function getEmailPemilikDataSiswa(ownerIds: string[]): Promise<ListEmailPemilikDataSiswa[]> {
+  // Guard clause: Jika array ID kosong, langsung return array kosong tanpa query ke DB
+  if (!ownerIds || ownerIds.length === 0) {
+    return [];
+  }
+
   const supabase = await createSupabaseServer();
 
-  // Jika array path kosong, langsung kembalikan array kosong
-  if (!paths || paths.length === 0) return [];
-
-  // Menggunakan createSignedUrls untuk mengambil URL dengan masa berlaku (misal: 60 detik)
   const { data, error } = await supabase
-    .from('biodata_siswa')
-    .select(`
-        nama_lengkap,
-        nisn,
-        nik,
-        tempat_lahir,
-        tanggal_lahir,
-        jenis_kelamin,
-        catatan,
-        master_lembaga (
-        label
-        ),
-        master_kelas (
-        label
-        ),
-        biodata_siswa_detail (
-        alamat
-        ),
-        biodata_keluarga (
-        nama_lengkap,
-        relation_type,
-        no_hp
-        )
-    `);
+    .from('profiles')
+    .select('id, email')
+    .in('id', ownerIds);
 
   if (error) throw error;
   if (!data) return [];
 
-  // Mapping hasil return menjadi array of string (signedUrl)
-  // Pastikan menyaring nilai yang signedUrl-nya tidak null
-  return [];
+  // Mapping hasil query ke interface ListEmailPemilikDataSiswa
+  return data.map((item) => ({
+    id: item.id,
+    email: item.email,
+  }));
 }

@@ -1,13 +1,17 @@
 // features
 
 import { getListSiswa, type ListSiswa } from "@/services/biodata/siswa/list";
-import { getMasterKelas, getMasterLembaga } from "@bn/services";
-import { MasterKelas, MasterLembaga } from "@bn/types";
+import { getEmailPemilikDataSiswa } from "@/services/biodata/siswa/siswa";
+import { getMasterKelas, getMasterLembaga, getMasterStatusRumah, getMasterTinggalBersama } from "@bn/services";
+import { MasterKelas, MasterLembaga, MasterStatusRumah, MasterTinggalBersama, Profiles } from "@bn/types";
 
 export interface FormattedListSiswa extends ListSiswa {
     kelas: string; // kelas adalah gabungan LembagaLabel - KelasLabel (jika MI) atau hanya LembagaLabel
     lembagaLabel: MasterLembaga['label'];
     kelasLabel: MasterKelas['label'];
+    email: Profiles['email'];
+    statusRumah: MasterStatusRumah['label'];
+    tinggalBersama: MasterTinggalBersama['label'];
 }
 
 export async function getSiswaListData(): Promise<FormattedListSiswa[]> {
@@ -17,30 +21,27 @@ export async function getSiswaListData(): Promise<FormattedListSiswa[]> {
         return [];
     }
 
-    // 1. Kumpulkan semua ID lembaga dan kelas yang unik (tipe number)
-    const lembagaIds = Array.from(
-        new Set(
-            listSiswa
-                .map((item) => item.lembagaId)
-                .filter((id): id is number => id !== null && id !== undefined)
-        )
-    );
+    // 1. Ambil daftar unique ID pemilik data (ownerIds) untuk di-query sekaligus
+    const ownerIds = Array.from(
+        new Set(listSiswa.map((item) => item.pemilikData).filter(Boolean))
+    ) as string[];
 
-    const kelasIds = Array.from(
-        new Set(
-            listSiswa
-                .map((item) => item.kelasId)
-                .filter((id): id is number => id !== null && id !== undefined)
-        )
-    );
-
-    // 2. Ambil data master lembaga dan kelas secara paralel
-    const [lembagaData, kelasData] = await Promise.all([
-        getMasterLembaga(), // Mengambil data lembaga (termasuk code dan label)
-        getMasterKelas()
+    // 2. Ambil data master dan email pemilik secara paralel agar efisien
+    const [
+        lembagaData, 
+        kelasData, 
+        statusRumahData, 
+        tinggalBersamaData, 
+        listEmail
+    ] = await Promise.all([
+        getMasterLembaga(),
+        getMasterKelas(),
+        getMasterStatusRumah(),
+        getMasterTinggalBersama(),
+        getEmailPemilikDataSiswa(ownerIds),
     ]);
 
-    // 3. Buat kamus (Lookup Map) dengan menyimpan label dan code lembaga
+    // 3. Buat kamus (Lookup Map) untuk pencarian data yang instan O(1)
     const lembagaMap = new Map(
         lembagaData.map((lembaga: MasterLembaga) => [
             lembaga.id, 
@@ -52,7 +53,19 @@ export async function getSiswaListData(): Promise<FormattedListSiswa[]> {
         kelasData.map((kelas: MasterKelas) => [kelas.id, kelas.label])
     );
 
-    // 4. Mapping data siswa
+    const statusRumahMap = new Map(
+        statusRumahData.map((item: MasterStatusRumah) => [item.id, item.label])
+    );
+
+    const tinggalBersamaMap = new Map(
+        tinggalBersamaData.map((item: MasterTinggalBersama) => [item.id, item.label])
+    );
+
+    const emailMap = new Map(
+        listEmail.map((item) => [item.id, item.email])
+    );
+
+    // 4. Mapping data siswa & format hasilnya
     return listSiswa.map((item) => {
         const lembagaInfo = item.lembagaId ? lembagaMap.get(item.lembagaId) : null;
         const lembagaLabel = lembagaInfo ? lembagaInfo.label : '-';
@@ -68,12 +81,20 @@ export async function getSiswaListData(): Promise<FormattedListSiswa[]> {
         // Penentuan nilai 'nisn' (jika null, fallback ke catatan dengan awalan, atau '-' jika keduanya kosong)
         const nisn = item.nisn || (item.catatan ? `Catatan: ${item.catatan}` : '-');
 
+        // Lookup data relasi tambahan
+        const email = item.pemilikData ? emailMap.get(item.pemilikData) || '-' : '-';
+        const statusRumah = item.statusRumahId ? statusRumahMap.get(item.statusRumahId) || '-' : '-';
+        const tinggalBersama = item.tinggalBersamaId ? tinggalBersamaMap.get(item.tinggalBersamaId) || '-' : '-';
+
         return {
             ...item,
             nisn,
             lembagaLabel,
             kelasLabel,
             kelas,
+            email,
+            statusRumah,
+            tinggalBersama,
         };
     });
 }

@@ -63,7 +63,7 @@ export function BiodataKeluargaTable({ data, onViewDetail, onEdit }: KeluargaTab
                             onClick={() => onViewDetail(item)}
                           >
                             <Eye className="w-4 h-4 mr-1" />
-                            Lihat Detail
+                            Lihat
                           </Button>
                         )}
 

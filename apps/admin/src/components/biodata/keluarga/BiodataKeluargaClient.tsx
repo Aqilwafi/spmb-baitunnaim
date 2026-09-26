@@ -1,9 +1,9 @@
-// apps/admin/src/components/admin/ManagePendaftarClient.tsx
+// apps/admin/src/components/admin/BiodataKeluargaClient.tsx
 "use client";
 
 import { useState } from "react";
 import { BiodataKeluargaTable } from "./BiodataKeluargaTable"; 
-import { BiodataKeluargaModal } from "./BiodataKeluargaModal"; // Impor modal yang sudah dibuat sebelumnya
+import { BiodataKeluargaModal } from "./BiodataKeluargaModal";
 import type { FormattedListKeluarga } from "@/features/biodata/keluarga";
 
 export interface BiodataKeluargaClientProps {
@@ -44,10 +44,7 @@ export default function BiodataKeluargaClient({ data }: BiodataKeluargaClientPro
         onClose={() => setIsModalOpen(false)}
         data={selectedUser}
         isEdit={isEditMode}
-        onSave={(updatedData) => {
-          
-          // Tambahkan logika update/refresh data di sini jika diperlukan
-        }}
+        onSave={(updatedData) => {}}
       />
     </div>
   );
